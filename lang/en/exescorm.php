@@ -150,7 +150,7 @@ $string['exescorm:forbiddenfileslist'] = 'Forbidden files RE list';
 $string['exescorm:forbiddenfileslist_desc'] = 'A forbidden files list can be cofigured here. Enter each forbidden file as a PHP regular expresion (RE) on a new line. For example:';
 $string['exescorm:onlinetypehelp'] = 'When you click on either save buttons at the bottom of this page, it\'ll take you to eXeLearning to create or edit there the package. When done, eXescorm will send the newly created/edited package back to Moodle.';
 $string['exescorm:sendtemplate'] = 'Send template';
-$string['exescorm:sendtemplate_desc'] = 'Sends default template to eXescorm when creating a new activity.';
+$string['exescorm:sendtemplate_desc'] = 'Sends default template to eXeLearning when creating a new activity.';
 $string['exescorm:mandatoryfileslist'] = ' Mandatory files RE list';
 $string['exescorm:mandatoryfileslist_desc'] = 'A mandatory files list can be cofigured here. Enter each mandatory file as a PHP regular expresion (RE) a new line.';
 $string['exescormloggingoff'] = 'API logging is off';
@@ -166,7 +166,7 @@ $string['exescormtype'] = 'Type';
 $string['exescormtype_help'] = 'This setting determines how the package is included in the course. There are up to 4 options:
 
 * Uploaded package - Enables an eXescorm package to be chosen via the file picker
-* Create with eXescorm - Creates the activity and takes you to eXeLearning to create the package. When done, eXescorm will send the newly created package back to Moodle.
+* Create with eXeLearning Online - Creates the activity and takes you to eXeLearning to create the package. When done, eXeLearning will send the newly created package back to Moodle.
 * External SCORM manifest - Enables an imsmanifest.xml URL to be specified. Note: If the URL has a different domain name than your site, then "Downloaded package" is a better option, since otherwise grades are not saved.
 * Downloaded package - Enables a package URL to be specified. The package will be unzipped and saved locally, and updated when the external package is updated.
 * External AICC URL - this URL is the launch URL for a single AICC Activity.  A psuedo package will be constructed around this.';
@@ -174,11 +174,11 @@ $string['exescorm:viewreport'] = 'View reports';
 $string['exescorm:viewscores'] = 'View scores';
 $string['exeonline:connectionsettings'] = 'eXescorm connection settings';
 $string['exeonline:baseuri'] = 'Remote URI';
-$string['exeonline:baseuri_desc'] = 'eXescorm URI';
+$string['exeonline:baseuri_desc'] = 'eXeLearning Online URL';
 $string['exeonline:hmackey1'] = 'Signing key';
-$string['exeonline:hmackey1_desc'] = 'Key used to sign data sent to the eXescorm server, so we can be sure it was originated in this server. Use up to 32 characters.';
+$string['exeonline:hmackey1_desc'] = 'Key used to sign data sent to the eXeLearning server, so we can be sure it was originated in this server. Use up to 32 characters.';
 $string['exeonline:tokenexpiration'] = 'Token expiration';
-$string['exeonline:tokenexpiration_desc'] = 'Max time (in seconds) to edit a package in eXescorm and get back to Moodle.';
+$string['exeonline:tokenexpiration_desc'] = 'Max time (in seconds) to edit a package in eXeLearning and get back to Moodle.';
 $string['exit'] = 'Exit course';
 $string['exitactivity'] = 'Exit activity';
 $string['expired'] = 'Sorry, this activity closed on {$a} and is no longer available';
@@ -452,8 +452,8 @@ $string['totaltime'] = 'Time';
 $string['trackingloose'] = 'WARNING: The tracking data of this package will be lost!';
 $string['type'] = 'Type';
 $string['typeaiccurl'] = 'External AICC URL';
-$string['typeexescormcreate'] = 'Create with eXescorm';
-$string['typeexescormedit'] = 'Edit with eXescorm';
+$string['typeexescormcreate'] = 'Create with eXeLearning';
+$string['typeexescormedit'] = 'Edit with eXeLearning';
 $string['typeexternal'] = 'External SCORM manifest';
 $string['typelocal'] = 'Uploaded package';
 $string['typelocalsync'] = 'Downloaded package';

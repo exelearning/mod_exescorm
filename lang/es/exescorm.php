@@ -150,7 +150,7 @@ $string['exescorm:forbiddenfileslist'] = 'Archivos prohibidos Lista RE';
 $string['exescorm:forbiddenfileslist_desc'] = 'Aquí puede cofigurar una lista de archivos prohibidos. Introduzca cada archivo prohibido como una expresión regular PHP (RE) en una nueva línea. Por ejemplo:';
 $string['exescorm:onlinetypehelp'] = 'Cuando haga clic en cualquiera de los botones de guardar en la parte inferior de esta página, le llevará a eXeLearning para crear o editar el contenido. Cuando termine, eXescorm lo enviará de vuelta a Moodle.';
 $string['exescorm:sendtemplate'] = 'Enviar plantilla';
-$string['exescorm:sendtemplate_desc'] = 'Envía la plantilla predeterminada a eXescorm al crear un nuevo contenido.';
+$string['exescorm:sendtemplate_desc'] = 'Envía la plantilla predeterminada a eXeLearning al crear un nuevo contenido.';
 $string['exescorm:mandatoryfileslist'] = ' Ficheros obligatorios Lista RE';
 $string['exescorm:mandatoryfileslist_desc'] = 'Aquí se puede cofigurar una lista de archivos obligatorios. Introduzca cada archivo obligatorio como una expresión regular PHP (RE) en una nueva línea.';
 $string['exescormloggingoff'] = 'El registro de la API está desactivado';
@@ -166,18 +166,19 @@ $string['exescormtype'] = 'Tipo';
 $string['exescormtype_help'] = 'Este ajuste determina cómo se incluye el paquete en el curso. Hay 4 opciones:
 
 * Paquete subido - Permite elegir SCORM creado con eXescorm por medio del selector de archivos
+* Crear con eXeLearning - Crea la actividad y te lleva a eXeLearning Online apra crear el paquete. Al terminar, eXeLearning enviará el recién creado paquete de vuelta a Moodle.
 * Manifiesto SCORM externo - Posibilita especificar una URL imsmanifest.xml. NOTA: Si la URL tiene un nombre de dominio distinto del de su sitio, la mejor opción es "Paquete bajado", puesto que en otro caso las calificaciones no se guardarán.
 * Paquete bajado - Posibilita especificar una URL del paquete. El paquete será descomprimido y guardado localmente, y actualizado cuando se actualice el paquete eXescorm externo.
-*URL AICC externa - esta URL es la URL de inicio de una actividad AICC única. Se construirá un pseudo paquete alrededor de la misma.';
+* URL AICC externa - esta URL es la URL de inicio de una actividad AICC única. Se construirá un pseudo paquete alrededor de la misma.';
 $string['exescorm:viewreport'] = 'Ver informes';
 $string['exescorm:viewscores'] = 'Ver puntuaciones';
 $string['exeonline:connectionsettings'] = 'Configuración de la conexión con eXescorm';
 $string['exeonline:baseuri'] = 'URI remoto';
-$string['exeonline:baseuri_desc'] = 'URL de eXescorm';
+$string['exeonline:baseuri_desc'] = 'URL de eXeLearning Online';
 $string['exeonline:hmackey1'] = 'Clave de firma';
-$string['exeonline:hmackey1_desc'] = 'Clave utilizada para firmar los datos enviados al servidor de eXescorm, de forma que podamos estar seguros de que se originaron en este servidor. Utilice un máximo de 32 caracteres.';
+$string['exeonline:hmackey1_desc'] = 'Clave utilizada para firmar los datos enviados al servidor de eXeLearning, de forma que podamos estar seguros de que se originaron en este servidor. Utilice un máximo de 32 caracteres.';
 $string['exeonline:tokenexpiration'] = 'Caducidad del token';
-$string['exeonline:tokenexpiration_desc'] = 'Tiempo máximo (en segundos) para editar el paquete en eXescorm y volver a Moodle.';
+$string['exeonline:tokenexpiration_desc'] = 'Tiempo máximo (en segundos) para editar el paquete en eXeLearning y volver a Moodle.';
 $string['exit'] = 'Salir del curso';
 $string['exitactivity'] = 'Salir de la actividad';
 $string['expired'] = 'Lo sentimos, esta actividad se cerró en {$a} y ya no está disponible';
@@ -450,8 +451,8 @@ $string['totaltime'] = 'Hora';
 $string['trackingloose'] = 'ATENCIÓN: ¡Los datos de rastreo de este paquete se perderán!';
 $string['type'] = 'Tipo';
 $string['typeaiccurl'] = 'URL AICC externa';
-$string['typeexescormcreate'] = 'Crear con eXescorm';
-$string['typeexescormedit'] = 'Editar con eXescorm';
+$string['typeexescormcreate'] = 'Crear con eXeLearning';
+$string['typeexescormedit'] = 'Editar con eXeLearning';
 $string['typeexternal'] = 'Manifiesto SCORM externo';
 $string['typelocal'] = 'Paquete subido';
 $string['typelocalsync'] = 'Paquete bajado';
