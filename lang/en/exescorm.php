@@ -31,7 +31,7 @@ $string['aiccuserid'] = 'AICC pass numeric user id';
 $string['aiccuserid_desc'] = 'The AICC standard for usernames is very restrictive compared with Moodle, and allows for alphanumeric characters, dash and underscore only. Periods, spaces and the @ symbol are not permitted. If enabled, user ID numbers are passed to the AICC package instead of usernames.';
 $string['activation'] = 'Activation';
 $string['activityloading'] = 'You will be automatically redirected to the activity in';
-$string['activityoverview'] = 'You have eXescorm packages that need attention';
+$string['activityoverview'] = 'You have eXeLearning packages that need attention';
 $string['activitypleasewait'] = 'Activity loading, please wait ...';
 $string['adminsettings'] = 'Admin settings';
 $string['advanced'] = 'Parameters';
@@ -67,7 +67,7 @@ $string['EXESCORM_AVERAGEATTEMPT'] = 'Average attempts';
 $string['badmanifest'] = 'Some manifest errors: see errors log';
 $string['badimsmanifestlocation'] = 'An imsmanifest.xml file was found but it was not in the root of your zip file, please re-package your SCORM (zip).';
 $string['badarchive'] = 'You must provide a valid zip file';
-$string['badexelearningpackage'] = 'The package does not comply with the eXescorm package rules defined for the site.';
+$string['badexelearningpackage'] = 'The package does not comply with the eXeLearning package rules defined for the site.';
 $string['browse'] = 'Preview';
 $string['browsed'] = 'Browsed';
 $string['browsemode'] = 'Preview mode';
@@ -89,14 +89,14 @@ $string['completiondetail:completionscore'] = 'Receive a score of {$a} or more';
 $string['completiondetail:allscos'] = 'Do all parts of this activity';
 $string['completionscorerequired'] = 'Require minimum score';
 $string['completionscorerequireddesc'] = 'Minimum score of {$a} is required for completion';
-$string['completionscorerequired_help'] = 'Enabling this setting will require a user to have at least the minimum score entered to be marked complete in this eXescorm activity, as well as any other Activity Completion requirements.';
+$string['completionscorerequired_help'] = 'Enabling this setting will require a user to have at least the minimum score entered to be marked complete in this eXeLearning activity, as well as any other Activity Completion requirements.';
 $string['completionstatus_passed'] = 'Passed';
 $string['completionstatus_completed'] = 'Completed';
 $string['completionstatusallscos'] = 'Require all scos to return completion status';
 $string['completionstatusallscos_help'] = 'Some SCORM packages contain multiple components or "scos" - when this is enabled all scos within the package must return the relevant lesson_status for this activity to be flagged complete.';
 $string['completionstatusrequired'] = 'Require status';
 $string['completionstatusrequireddesc'] = 'Student must achieve at least one of the following statuses: {$a}';
-$string['completionstatusrequired_help'] = 'Checking one or more statuses will require a user to achieve at least one of the checked statuses in order to be marked complete in this eXescorm activity, as well as any other Activity Completion requirements.';
+$string['completionstatusrequired_help'] = 'Checking one or more statuses will require a user to achieve at least one of the checked statuses in order to be marked complete in this eXeLearning activity, as well as any other Activity Completion requirements.';
 $string['confirmloosetracks'] = 'WARNING: The package seems to be changed or modified. If the package structure is changed, some users tracks may be lost during update process.';
 $string['contents'] = 'Contents';
 $string['coursepacket'] = 'Course package';
@@ -116,17 +116,17 @@ $string['directories'] = 'Show the directory links';
 $string['disabled'] = 'Disabled';
 $string['display'] = 'Display package';
 $string['displayattemptstatus'] = 'Display attempt status';
-$string['displayattemptstatus_help'] = 'This preference allows a summary of the users attempts to show in the course overview block in Dashboard and/or the eXescorm entry page.';
-$string['displayattemptstatusdesc'] = 'Whether a summary of the user\'s attempts is shown in the course overview block in Dashboard and/or the eXescorm entry page.';
+$string['displayattemptstatus_help'] = 'This preference allows a summary of the users attempts to show in the course overview block in Dashboard and/or the eXeLearning entry page.';
+$string['displayattemptstatusdesc'] = 'Whether a summary of the user\'s attempts is shown in the course overview block in Dashboard and/or the eXeLearning entry page.';
 $string['displaycoursestructure'] = 'Display course structure on entry page';
-$string['displaycoursestructure_help'] = 'If enabled, the table of contents is displayed on the eXescorm outline page.';
-$string['displaycoursestructuredesc'] = 'If enabled, the table of contents is displayed on the eXescorm outline page.';
-$string['displaydesc'] = 'Whether to display the eXescorm content in a new window.';
+$string['displaycoursestructure_help'] = 'If enabled, the table of contents is displayed on the eXeLearning outline page.';
+$string['displaycoursestructuredesc'] = 'If enabled, the table of contents is displayed on the eXeLearning outline page.';
+$string['displaydesc'] = 'Whether to display the eXeLearning content in a new window.';
 $string['displaysettings'] = 'Display settings';
-$string['dnduploadexescorm'] = 'Add an eXescorm SCORM package';
+$string['dnduploadexescorm'] = 'Add an eXeLearning SCORM package';
 $string['domxml'] = 'DOMXML external library';
-$string['editonlinebtnlabel'] = 'Edit';
-$string['editonlinebtnlabel_help'] = 'Send package to eXescorm for edition.';
+$string['editonlinebtnlabel' ] = 'Edit';
+$string['editonlinebtnlabel_help' ] = 'Send package to eXeLearning for edition.';
 $string['element'] = 'Element';
 $string['enter'] = 'Enter';
 $string['entercourse'] = 'Enter course';
@@ -143,13 +143,13 @@ $string['eventuserreportviewed'] = 'User report viewed';
 $string['everyday'] = 'Every day';
 $string['everytime'] = 'Every time it\'s used';
 $string['exceededmaxattempts'] = 'You have reached the maximum number of attempts.';
-$string['exescorm:addinstance'] = 'Add a new eXescorm package';
+$string['exescorm:addinstance'] = 'Add a new eXeLearning package';
 $string['exescormclose'] = 'Available to';
 $string['exescormcourse'] = 'Learning course';
 $string['exescorm:deleteresponses'] = 'Delete SCORM attempts';
 $string['exescorm:forbiddenfileslist'] = 'Forbidden files RE list';
 $string['exescorm:forbiddenfileslist_desc'] = 'A forbidden files list can be cofigured here. Enter each forbidden file as a PHP regular expresion (RE) on a new line. For example:';
-$string['exescorm:onlinetypehelp'] = 'When you click on either save buttons at the bottom of this page, it\'ll take you to eXeLearning to create or edit there the package. When done, eXescorm will send the newly created/edited package back to Moodle.';
+$string['exescorm:onlinetypehelp'] = 'When you click on either save buttons at the bottom of this page, it\'ll take you to eXeLearning to create or edit there the package. When done, eXeLearning will send the newly created/edited package back to Moodle.';
 $string['exescorm:sendtemplate'] = 'Send template';
 $string['exescorm:sendtemplate_desc'] = 'Sends default template to eXeLearning when creating a new activity.';
 $string['exescorm:mandatoryfileslist'] = ' Mandatory files RE list';
@@ -166,14 +166,14 @@ $string['exescorm:template_desc'] = 'Package ulpoaded here will be used as defau
 $string['exescormtype'] = 'Type';
 $string['exescormtype_help'] = 'This setting determines how the package is included in the course. There are up to 4 options:
 
-* Uploaded package - Enables an eXescorm package to be chosen via the file picker
+* Uploaded package - Enables an eXeLearning package to be chosen via the file picker
 * Create with eXeLearning Online - Creates the activity and takes you to eXeLearning to create the package. When done, eXeLearning will send the newly created package back to Moodle.
 * External SCORM manifest - Enables an imsmanifest.xml URL to be specified. Note: If the URL has a different domain name than your site, then "Downloaded package" is a better option, since otherwise grades are not saved.
 * Downloaded package - Enables a package URL to be specified. The package will be unzipped and saved locally, and updated when the external package is updated.
 * External AICC URL - this URL is the launch URL for a single AICC Activity.  A psuedo package will be constructed around this.';
 $string['exescorm:viewreport'] = 'View reports';
 $string['exescorm:viewscores'] = 'View scores';
-$string['exeonline:connectionsettings'] = 'eXescorm connection settings';
+$string['exeonline:connectionsettings'] = 'eXeLearning connection settings';
 $string['exeonline:baseuri'] = 'Remote URI';
 $string['exeonline:baseuri_desc'] = 'eXeLearning Online URL';
 $string['exeonline:hmackey1'] = 'Signing key';
@@ -202,7 +202,7 @@ $string['forcenewattempts_help'] = 'There are 3 options:
 $string['forceattemptalways'] = 'Always';
 $string['forceattemptoncomplete'] = 'When previous attempt completed, passed or failed';
 $string['forcejavascript'] = 'Force users to enable JavaScript';
-$string['forcejavascript_desc'] = 'If enabled (recommended) this prevents access to eXescorm objects when JavaScript is not supported/enabled in a users browser. If disabled the user may view the content but API communication will fail and no grade information will be saved.';
+$string['forcejavascript_desc'] = 'If enabled (recommended) this prevents access to eXeLearning objects when JavaScript is not supported/enabled in a users browser. If disabled the user may view the content but API communication will fail and no grade information will be saved.';
 $string['forcejavascriptmessage'] = 'JavaScript is required to view this object, please enable JavaScript in your browser and try again.';
 $string['found'] = 'Manifest found';
 $string['frameheight'] = 'The height of the stage frame or window.';
@@ -237,8 +237,8 @@ $string['hidebrowsedesc'] = 'Preview mode allows a student to browse an activity
 $string['hideexit'] = 'Hide exit link';
 $string['hidereview'] = 'Hide review button';
 $string['hidetoc'] = 'Display course structure in player';
-$string['hidetoc_help'] = 'How the table of contents is displayed in the eXescorm player';
-$string['hidetocdesc'] = 'This setting specifies how the table of contents is displayed in the eXescorm player.';
+$string['hidetoc_help'] = 'How the table of contents is displayed in the eXeLearning player';
+$string['hidetocdesc'] = 'This setting specifies how the table of contents is displayed in the eXeLearning player.';
 $string['EXESCORM_HIGHESTATTEMPT'] = 'Highest attempt';
 $string['chooseapacket'] = 'Choose or update a package';
 $string['identifier'] = 'Question identifier';
@@ -298,8 +298,8 @@ $string['last'] = 'Last accessed on';
 $string['lastaccess'] = 'Last access';
 $string['lastattempt'] = 'Last completed attempt';
 $string['lastattemptlock'] = 'Lock after final attempt';
-$string['lastattemptlock_help'] = 'If enabled, a student is prevented from launching the eXescorm player after using up all their allocated attempts.';
-$string['lastattemptlockdesc'] = 'If enabled, a student is prevented from launching the eXescorm player after using up all their allocated attempts.';
+$string['lastattemptlock_help'] = 'If enabled, a student is prevented from launching the eXeLearning player after using up all their allocated attempts.';
+$string['lastattemptlockdesc'] = 'If enabled, a student is prevented from launching the eXeLearning player after using up all their allocated attempts.';
 $string['location'] = 'Show the location bar';
 $string['max'] = 'Max score';
 $string['maximumattempts'] = 'Number of attempts';
@@ -312,29 +312,29 @@ $string['missing_attribute'] = 'Missing attribute {$a->attr} in tag {$a->tag}';
 $string['missingparam'] = 'A required parameter is missing or wrong';
 $string['missing_tag'] = 'Missing tag {$a->tag}';
 $string['mode'] = 'Mode';
-$string['modulename'] = 'eXescorm (SCORM)';
-$string['modulename_help'] = 'An eXescorm package is a collection of files which are packaged according to an agreed standard for learning objects. The eXescorm activity module enables eXescorm packages to be uploaded as a zip file and added to a course.
+$string['modulename'] = 'eXeLearning (SCORM)';
+$string['modulename_help'] = 'An eXeLearning package is a collection of files which are packaged according to an agreed standard for learning objects. The eXeLearning activity module enables eXeLearning packages to be uploaded as a zip file and added to a course.
 
-Content is usually displayed over several pages, with navigation between the pages. There are various options for displaying content in a pop-up window, with a table of contents, with navigation buttons etc. eXescorm activities generally include questions, with grades being recorded in the gradebook.
+Content is usually displayed over several pages, with navigation between the pages. There are various options for displaying content in a pop-up window, with a table of contents, with navigation buttons etc. eXeLearning activities generally include questions, with grades being recorded in the gradebook.
 
-eXescorm activities may be used
+eXeLearning activities may be used
 
 * For presenting multimedia content and animations
 * As an assessment tool';
 $string['modulename_link'] = 'mod/mod_exescorm/view';
-$string['modulenameplural'] = 'eXescorm SCORM packages';
+$string['modulenameplural'] = 'eXeLearning SCORM packages';
 $string['nav'] = 'Show Navigation';
 $string['nav_help'] = 'This setting specifies whether to show or hide the navigation buttons and their position.
 
 There are 3 options:
 
 * No - Navigation buttons are not shown
-* Under content - Navigation buttons are shown below the eXescorm content
+* Under content - Navigation buttons are shown below the eXeLearning content
 * Floating - Navigation buttons are shown floating, with the position from the top and from the left determined by the package.';
 $string['navdesc'] = 'This setting specifies whether to show or hide navigation buttons and their position.';
 $string['navpositionleft'] = 'Position of navigation buttons from left in pixels.';
 $string['navpositiontop'] = 'Position of navigation buttons from top in pixels.';
-$string['networkdropped'] = 'The eXescorm player has determined that your Internet connection is unreliable or has been interrupted. If you continue in this eXescorm activity, your progress may not be saved.<br />
+$string['networkdropped'] = 'The eXeLearning player has determined that your Internet connection is unreliable or has been interrupted. If you continue in this eXeLearning activity, your progress may not be saved.<br />
 You should exit the activity now, and return when you have a dependable Internet connection.';
 $string['newattempt'] = 'Start a new attempt';
 $string['next'] = 'Continue';
@@ -348,7 +348,7 @@ $string['nomanifest'] = 'Incorrect file package - missing imsmanifest.xml or AIC
 $string['noprerequisites'] = 'Sorry but you don\'t have the required prerequisites to access this activity.';
 $string['noreports'] = 'No report to display';
 $string['normal'] = 'Normal';
-$string['noscriptnoexescorm'] = 'Your browser does not support JavaScript or it has JavaScript support disabled. This eXescorm package may not play or save data correctly.';
+$string['noscriptnoexescorm'] = 'Your browser does not support JavaScript or it has JavaScript support disabled. This eXeLearning package may not play or save data correctly.';
 $string['notattempted'] = 'Not attempted';
 $string['not_corr_type'] = 'Type mismatch for tag {$a->tag}';
 $string['notopenyet'] = 'Sorry, this activity is not available until {$a}';
@@ -363,15 +363,15 @@ $string['optionsadv_desc'] = 'If checked the width and height will be listed as 
 $string['organization'] = 'Organisation';
 $string['organizations'] = 'Organisations';
 $string['othersettings'] = 'Additional settings';
-$string['page-mod-exescorm-x'] = 'Any eXescorm (SCORM) module page';
+$string['page-mod-exescorm-x'] = 'Any eXeLearning (SCORM) module page';
 $string['pagesize'] = 'Page size';
 $string['package'] = 'Package file';
-$string['package_help'] = 'The package file is a zip file containing and eXescorm content definition files.';
+$string['package_help'] = 'The package file is a zip file containing and eXeLearning content definition files.';
 $string['packagedir'] = 'Filesystem error: Can\'t create package directory';
 $string['packagefile'] = 'No package file specified';
 $string['packagehdr'] = 'Package';
 $string['packageurl'] = 'URL';
-$string['packageurl_help'] = 'This setting enables a URL for the eXescorm package to be specified, rather than choosing a file via the file picker.';
+$string['packageurl_help'] = 'This setting enables a URL for the eXeLearning package to be specified, rather than choosing a file via the file picker.';
 $string['passed'] = 'Passed';
 $string['php5'] = 'PHP 5 (DOMXML native library)';
 $string['player:next'] = 'Next';
@@ -380,13 +380,13 @@ $string['player:skipnext'] = 'Next within this level';
 $string['player:skipprev'] = 'Previous within this level';
 $string['player:toogleFullscreen'] = 'Toggle fullscreen';
 $string['player:up'] = 'Level up';
-$string['pluginadministration'] = 'eXescorm (SCORM) administration';
-$string['pluginname'] = 'eXescorm (SCORM)';
+$string['pluginadministration'] = 'eXeLearning (SCORM) administration';
+$string['pluginname'] = 'eXeLearning (SCORM)';
 $string['popup'] = 'New window';
-$string['popuplaunched'] = 'This eXescorm content has been launched in a popup window. If you have finished viewing this resource, click here to return to the course page.';
+$string['popuplaunched'] = 'This eXeLearning content has been launched in a popup window. If you have finished viewing this resource, click here to return to the course page.';
 $string['popupmenu'] = 'In a drop-down menu';
 $string['popupopen'] = 'Open package in a new window';
-$string['popupsblocked'] = 'It appears that popup windows are blocked, stopping this eXescorm content from playing. Please check your browser settings before trying again.';
+$string['popupsblocked'] = 'It appears that popup windows are blocked, stopping this eXeLearning content from playing. Please check your browser settings before trying again.';
 $string['position_error'] = 'The {$a->tag} tag can\'t be child of {$a->parent} tag';
 $string['preferencesuser'] = 'Preferences for this report';
 $string['preferencespage'] = 'Preferences just for this page';
@@ -404,9 +404,9 @@ $string['privacy:metadata:scoes_track:value'] = 'The value of the given element'
 $string['privacy:metadata:exescorm_aicc_session'] = 'The session information of the AICC HACP';
 $string['privacy:metadata:exescorm_scoes_track'] = 'The tracked data of the SCOes belonging to the activity';
 $string['privacy:metadata:timemodified'] = 'The time when the tracked element was last modified';
-$string['privacy:metadata:userid'] = 'The ID of the user who accessed the eXescorm activity';
+$string['privacy:metadata:userid'] = 'The ID of the user who accessed the eXeLearning activity';
 $string['protectpackagedownloads'] = 'Protect package downloads';
-$string['protectpackagedownloads_desc'] = 'If enabled, eXescorm packages can be downloaded only if the user has the course:manageactivities capability. If disabled, eXescorm packages can always be downloaded.';
+$string['protectpackagedownloads_desc'] = 'If enabled, eXeLearning packages can be downloaded only if the user has the course:manageactivities capability. If disabled, eXeLearning packages can always be downloaded.';
 $string['raw'] = 'Raw score';
 $string['regular'] = 'Regular manifest';
 $string['report'] = 'Report';
@@ -420,11 +420,11 @@ $string['review'] = 'Review';
 $string['reviewmode'] = 'Review mode';
 $string['rightanswer'] = 'Right answer';
 $string['exescormstandard'] = 'Standard mode';
-$string['exescormstandarddesc'] = 'When disabled, Moodle allows SCORM 1.2 packages to store more than the specification allows, and uses Moodle full name format settings when passing the users name to the eXescorm package.';
+$string['exescormstandarddesc'] = 'When disabled, Moodle allows SCORM 1.2 packages to store more than the specification allows, and uses Moodle full name format settings when passing the users name to the eXeLearning package.';
 $string['scoes'] = 'Learning objects';
 $string['score'] = 'Score';
 $string['scrollbars'] = 'Allow the window to be scrolled';
-$string['search:activity'] = 'eXescorm content - Activity information';
+$string['search:activity'] = 'eXeLearning content - Activity information';
 $string['selectall'] = 'Select all';
 $string['selectnone'] = 'Deselect all';
 $string['show'] = 'Show';
@@ -487,4 +487,4 @@ $string['youmustselectastatus'] = 'You must select a status to require';
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Display activity name';
-$string['displayactivityname_help'] = 'Whether or not to display the activity name above the eXescorm player.';
+$string['displayactivityname_help'] = 'Whether or not to display the activity name above the eXeLearning player.';
