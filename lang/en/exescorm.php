@@ -167,7 +167,7 @@ $string['exescormtype'] = 'Type';
 $string['exescormtype_help'] = 'This setting determines how the package is included in the course. There are up to 4 options:
 
 * Uploaded package - Enables an eXeLearning package to be chosen via the file picker
-* Create with eXeLearning Online - Creates the activity and takes you to eXeLearning to create the package. When done, eXeLearning will send the newly created package back to Moodle.
+* Create with eXeLearning - Creates the activity and takes you to eXeLearning to edit the content. When done, eXeLearning will send it back to Moodle.
 * External SCORM manifest - Enables an imsmanifest.xml URL to be specified. Note: If the URL has a different domain name than your site, then "Downloaded package" is a better option, since otherwise grades are not saved.
 * Downloaded package - Enables a package URL to be specified. The package will be unzipped and saved locally, and updated when the external package is updated.
 * External AICC URL - this URL is the launch URL for a single AICC Activity.  A psuedo package will be constructed around this.';
@@ -175,7 +175,7 @@ $string['exescorm:viewreport'] = 'View reports';
 $string['exescorm:viewscores'] = 'View scores';
 $string['exeonline:connectionsettings'] = 'eXeLearning connection settings';
 $string['exeonline:baseuri'] = 'Remote URI';
-$string['exeonline:baseuri_desc'] = 'eXeLearning Online URL';
+$string['exeonline:baseuri_desc'] = 'eXeLearning URL';
 $string['exeonline:hmackey1'] = 'Signing key';
 $string['exeonline:hmackey1_desc'] = 'Key used to sign data sent to the eXeLearning server, so we can be sure it was originated in this server. Use up to 32 characters.';
 $string['exeonline:tokenexpiration'] = 'Token expiration';
