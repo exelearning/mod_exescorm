@@ -1,0 +1,523 @@
+.path-mod-exescorm .top {
+    vertical-align: top;
+}
+
+.path-mod-exescorm .exescorm-left {
+    text-align: left;
+}
+
+.path-mod-exescorm .exescorm-right {
+    text-align: right;
+}
+
+.path-mod-exescorm .scoframe {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.ios #exescormpage #exescorm_content {
+    -webkit-overflow-scrolling: touch;
+    overflow: scroll;
+}
+
+#page-mod-exescorm-player #exescormtop {
+    position: relative;
+    width: 100%;
+    height: 30px;
+}
+
+#page-mod-exescorm-player #exescormbrowse {
+    position: absolute;
+    left: 5px;
+    top: 0;
+}
+
+#page-mod-exescorm-player #exescormnav {
+    position: absolute;
+    right: 5px;
+    text-align: center;
+    top: 3px;
+    width: 100%;
+}
+
+#page-mod-exescorm-player #exescormbox {
+    width: 74%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#page-mod-exescorm-player #exescormpage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#page-mod-exescorm-player #exescormpage.fullscreen {
+    overflow-y: auto;
+}
+
+#page-mod-exescorm-player #exescormpage.fullscreen div#exescorm_navpanel{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+	left: 0;
+}
+
+#page-mod-exescorm-player #exescormpage #toctree {
+    position: relative;
+    width: 100%;
+}
+
+#page-mod-exescorm-player #tocbox {
+    position: relative;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 0.8em;
+}
+
+#page-mod-exescorm-player #toctree {
+    overflow: visible;
+}
+
+#page-mod-exescorm-player #tochead {
+    position: relative;
+    text-align: center;
+    top: 3px;
+    height: 30px;
+}
+
+#page-mod-exescorm-player #exescormpage .scoframe {
+    border: 0;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_object {
+    border: none;
+    width: 98%;
+    height: 98%;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_object.exescorm_nav_under_content {
+    height: 95%;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_content {
+    height: 100%;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_toc {
+    position: relative;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_toc_title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_tree {
+    border-right: 5px solid rgb(239, 245, 255);
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_navpanel {
+    text-align: center;
+}
+
+#page-mod-exescorm-player .toc,
+#page-mod-exescorm-player .no-toc {
+    width: 100%;
+}
+
+#page-mod-exescorm-player .structlist {
+    list-style-type: none;
+    white-space: nowrap;
+}
+
+#page-mod-exescorm-player .structurelist {
+    position: relative;
+    list-style-type: none;
+    width: 96%;
+    margin: 0;
+    padding: 0;
+}
+
+#page-mod-exescorm-player .structurelist ul {
+    padding-left: 0.5em;
+    margin-left: 0.5em;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_toc.disabled,
+#page-mod-exescorm-player #exescormpage #exescorm_toc.loading,
+#page-mod-exescorm-player #exescormpage #exescorm_toc_toggle.disabled,
+#page-mod-exescorm-player #exescormpage #exescorm_toc_toggle.loading {
+    display: none;
+}
+
+#page-mod-exescorm-view .structurelist {
+    list-style-type: none;
+    white-space: nowrap;
+}
+
+#page-mod-exescorm-view .structurelist {
+    list-style-type: none;
+    white-space: nowrap;
+}
+
+#page-mod-exescorm-view .exceededmaxattempts {
+    color: #c00;
+}
+
+#page-mod-exescorm-player #altfinishlink {
+    font-size: 140%;
+    border: 0;
+    padding: 0;
+}
+
+#page-mod-exescorm-player #exescormmode {
+    float: left;
+    border: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+#page-mod-exescorm-player.pagelayout-popup #page-content .region-content {
+    padding: 0;
+}
+
+#page-mod-exescorm-player.pagelayout-popup #page-wrapper {
+    width: 100%;
+}
+
+#page-mod-exescorm-player .yui-layout-scroll div.yui-layout-bd {
+    overflow: visible;
+}
+
+#page-mod-exescorm-player .yui-layout-unit-left div.yui-layout-bd {
+    overflow: auto;
+}
+
+.path-mod-exescorm.forcejavascript .toc {
+    display: none;
+}
+
+.path-mod-exescorm.forcejavascript #exescormpage #tocbox {
+    display: none;
+}
+
+.path-mod-exescorm.jsenabled .forcejavascriptmessage {
+    display: none;
+}
+
+.path-mod-exescorm.jsenabled .toc {
+    display: block;
+}
+
+.path-mod-exescorm.jsenabled #exescormpage #tocbox {
+    display: block;
+}
+
+#page-mod-exescorm-report-userreporttracks table .c1 {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+#page-mod-exescorm-report .exescormattemptcounts {
+    clear: left;
+    text-align: center;
+    display: inline;
+    margin-left: 20%;
+}
+
+#page-mod-exescorm-player #exescormpage span.yui3-treeview-icon {
+    display: none;
+}
+
+#page-mod-exescorm-player #exescormpage li.yui3-treeview-has-children > div.yui3-treeview-row > span.yui3-treeview-icon {
+    display: block;
+}
+
+#page-mod-exescorm-player #exescormpage div.yui3-u-1,
+#page-mod-exescorm-player #exescormpage div.yui3-u-3-4,
+#page-mod-exescorm-player #exescormpage div.yui3-u-1-5,
+#page-mod-exescorm-player #exescormpage div.yui3-u-1-24 {
+    display: inline-block;
+    *display: inline; /* stylelint-disable-line */
+    zoom: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
+    vertical-align: top;
+    text-rendering: auto;
+}
+
+#page-mod-exescorm-player #exescormpage div.yui3-u-1 {
+    display: block;
+}
+
+#page-mod-exescorm-player #exescormpage div.yui3-u-3-4 {
+    width: 75%;
+}
+
+#page-mod-exescorm-player #exescormpage div.yui3-u-1-5 {
+    width: 20%;
+}
+
+#page-mod-exescorm-player #exescormpage div.yui3-u-1-24 {
+    width: 4.1666%;
+}
+
+#page-mod-exescorm-player #exescormpage div.yui3-g-r {
+    letter-spacing: normal;
+    word-spacing: -0.43em;
+}
+
+#exescorm_layout {
+    height: auto!important;
+}
+
+/**
+* Opera as of 12 on Windows needs word-spacing.
+* The ".opera-only" selector is used to prevent actual prefocus styling
+* and is not required in markup.
+*/
+#page-mod-exescorm-player .opera-only :-o-prefocus,
+#page-mod-exescorm-player #exescormpage div.yui3-g-r img {
+    max-width: 100%;
+}
+
+/* EXESCORM VISOR UPDATE */
+#page-mod-exescorm-player .tocbox_action-buttons {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: end;
+    padding-right: 40px;
+    margin-bottom: 5px;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_toc_title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: .5rem 0 0 0.5rem;
+    position: absolute;
+    top: -14px;
+}
+
+#page-mod-exescorm-player #exescormpage .btn-fullscreen {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background-image: url('[[pix:mod_exescorm|fullscreen]]');
+    background-size: 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#page-mod-exescorm-player #exescormpage .btn-fullscreen.actived {
+    background-image: url('[[pix:mod_exescorm|fullscreen2]]');
+}
+
+#page-mod-exescorm-player #exescormpage .btn-fullscreen img {
+    height: 18px;
+    padding: 0;
+    margin: 0;
+}
+
+#page-mod-exescorm-player #exescormpage .btn-fullscreen:hover {
+    transition: background-size 0.1s ease-out;
+    background-size: 22px;
+}
+
+#page-mod-exescorm-player .tocbox_action-buttons a.btn {
+    padding: 2px 8px;
+    color: black;
+    border-color: black;
+}
+
+#page-mod-exescorm-player .tocbox_action-buttons a.btn:hover {
+    color: #fff;
+    background-color: black;
+    border-color: black;
+}
+
+#page-mod-exescorm-player #exescormpage {
+    margin-top: 22px;
+    background-color: white;
+    padding-top: 11px;
+}
+
+#page-mod-exescorm-player button#exescorm_toc_toggle_btn {
+    border: none;
+    width: 30px;
+    height: 30px;
+    background-image: url('[[pix:mod_exescorm|prev]]');
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    position: absolute;
+    top: 2.5em;
+    margin-left: -4px;
+    border-radius: 0 5px 5px 0;
+}
+
+#page-mod-exescorm-player button#exescorm_toc_toggle_btn.collapsed {
+    background-image: url('[[pix:mod_exescorm|next]]');
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#page-mod-exescorm-player span#exescorm_nav button {
+    color: white;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    height: 35px;
+    width: 35px;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#page-mod-exescorm-player button#nav_skipprev {
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+    background-image: url('[[pix:mod_exescorm|skipprev]]') !important;
+}
+
+#page-mod-exescorm-player button#nav_skipnext {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+    background-image: url('[[pix:mod_exescorm|skipnext]]') !important;
+}
+
+#page-mod-exescorm-player button#nav_next {
+    background-image: url('[[pix:mod_exescorm|next]]') !important;
+}
+
+#page-mod-exescorm-player button#nav_prev {
+    background-image: url('[[pix:mod_exescorm|prev]]') !important;
+}
+
+#page-mod-exescorm-player button#nav_up {
+    background-image: url('[[pix:mod_exescorm|up]]') !important;
+}
+
+#page-mod-exescorm-player #exescormpage li.yui3-treeview-has-children > div.yui3-treeview-row > span.yui3-treeview-icon {
+    background-image: url('[[pix:mod_exescorm|folder]]');
+    width: 22px;
+    height: 25px;
+}
+
+#page-mod-exescorm-player .yui3-treeview-node[aria-expanded="true"] .yui3-treeview-indicator s {
+    border-left-color: transparent;
+    border-top-color: black;
+}
+
+#page-mod-exescorm-player .yui3-treeview-node[aria-expanded="false"] .yui3-treeview-indicator s {
+    border-left-color: black;
+    border-top-color: transparent;
+}
+
+.yui3-skin-sam .yui3-treeview-label {
+    padding: 5px 6px 5px;
+}
+
+.yui3-skin-sam .yui3-treeview-label .icon {
+    margin-right: 4px;
+}
+
+.yui3-skin-sam .yui3-treeview-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.yui3-skin-sam .yui3-treeview-label .icon {
+    background-size: 19px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    top: 3px;
+    width: 17px;
+    height: 16px;
+    left: 0;
+}
+
+.yui3-skin-sam .yui3-treeview-label .icon.fa-check-square-o {
+    background-image: url('[[pix:mod_exescorm|fa-check-square-o]]');
+}
+
+.yui3-skin-sam .yui3-treeview-label .icon.fa-pencil-square-o {
+    background-image: url('[[pix:mod_exescorm|fa-pencil-square-o]]');
+}
+
+.yui3-skin-sam .yui3-treeview-label .icon.fa-square-o {
+    background-image: url('[[pix:mod_exescorm|fa-square-o]]');
+}
+
+.yui3-skin-sam .yui3-treeview-label .icon.fa-pause {
+    background-image: url('[[pix:mod_exescorm|fa-pause]]');
+}
+
+.yui3-skin-sam .yui3-treeview-label .icon.fa-check-square-o:before,
+.yui3-skin-sam .yui3-treeview-label .icon.fa-pencil-square-o,
+.yui3-skin-sam .yui3-treeview-label .icon.fa-square-o,
+.yui3-skin-sam .yui3-treeview-label .icon.fa-pause:before {
+    content: inherit;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_tree {
+    border-right: 2px dotted rgb(231 231 231);
+    margin-right: 2px;
+}
+
+.yui3-skin-sam .yui3-treeview-selected > .yui3-treeview-row {
+    background-color: #f3f3f3;
+    border: 1px solid #e6e6e6;
+    background-image: none;
+    border-radius: 0;
+    border-right: none;
+}
+
+.yui3-skin-sam .yui3-treeview-selected:focus > .yui3-treeview-row,
+.yui3-skin-sam .yui3-treeview-children[aria-multiselectable="true"] .yui3-treeview-selected > .yui3-treeview-row,
+.yui3-skin-sam .yui3-treeview-selected > .yui3-treeview-row:hover {
+    background-color: #bdbdbd;
+    border-color: #9d9d9d;
+}
+
+.yui3-skin-sam .yui3-treeview-notouch .yui3-treeview-row:hover {
+    border: 1px solid #eee;
+    background-color: #f0f0f0;
+    background-image: none;
+}
+
+#page-mod-exescorm-player #exescormpage #exescorm_navpanel {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+#page-mod-exescorm-player a#exescorm-link-edit {
+    position: relative;
+    top: 67px;
+}
+#page-mod-exescorm-player .edit_exescorm_container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    position: absolute;
+    z-index: 20;
+    right: 145px;
+}
+

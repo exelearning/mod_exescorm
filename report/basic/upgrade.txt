@@ -1,0 +1,6 @@
+This files describes API changes in the mod exescorm basic report
+
+=== 3.6 ===
+
+* The following renamed classes have been completely removed:
+  - exescorm_basic_report (now: exescormreport_basic\report)
