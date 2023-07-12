@@ -1,0 +1,3 @@
+info,mod_exescorm
+displayactivityname,mod_exescorm
+displayactivityname_help,mod_exescorm
