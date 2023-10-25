@@ -46,7 +46,7 @@ class exescorm_package {
         foreach ($mandatoryfilesrearray as $mfre) {
             $found = preg_grep($mfre, $filepaths);
             if (empty($found)) {
-                $errors['packagefile'] = get_string('badexelarningpackage', 'exescorm');
+                $errors['packagefile'] = get_string('badexelearningpackage', 'exescorm');
                 return $errors;
             }
             // We unset mandatory files, so can be an exception for forbidden ones.
@@ -57,7 +57,7 @@ class exescorm_package {
         // Check for forbidden paths. Return as soon as any forbidden RE is found.
         foreach ($forbiddenfilesrearray as $ffre) {
             if (preg_grep($ffre, $filepaths)) {
-                $errors['packagefile'] = get_string('badexelarningpackage', 'exescorm');
+                $errors['packagefile'] = get_string('badexelearningpackage', 'exescorm');
                 return $errors;
             }
         }
