@@ -460,7 +460,7 @@ class report extends \mod_exescorm\report {
                                             ]
                                         );
                                         $row[] = $OUTPUT->pix_icon($trackdata->status, $strstatus, 'exescorm') . '<br>' .
-                                           \html_writer::link($url, $score, array('title' => get_string('details', 'mod_exescorm')));
+                                           \html_writer::link($url, $score, ['title' => get_string('details', 'mod_exescorm')]);
                                     } else {
                                         $row[] = $score;
                                     }

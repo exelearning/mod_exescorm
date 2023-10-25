@@ -213,7 +213,7 @@ class custom_completion_test extends advanced_testcase {
         if ($status != COMPLETION_COMPLETE) {
             $mockexescorm = (object) [
                 'id' => 1,
-                'version' =>EXESCORM_SCORM_13,
+                'version' => EXESCORM_SCORM_13,
                 'grademethod' => EXESCORM_GRADESCOES,
                 'maxattempt' => $maxattempts,
             ];

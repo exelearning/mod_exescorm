@@ -22,8 +22,13 @@
  * @package mod_exescorm
  */
 
+
+require_once("../../config.php");
+
+require_login();
+
 if (empty($exescorm)) {
-    print_error('cannotaccess', 'mod_exescorm');
+    throw new moodle_exception('cannotaccess', 'mod_exescorm');
 }
 if (!isset($currenttab)) {
     $currenttab = '';

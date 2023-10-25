@@ -876,7 +876,7 @@ function exescorm_reset_userdata($data) {
             exescorm_reset_gradebook($data->courseid);
         }
 
-        $status[] = array('component' => $componentstr, 'item' => get_string('deleteallattempts', 'mod_exescorm'), 'error' => false);
+        $status[] = ['component' => $componentstr, 'item' => get_string('deleteallattempts', 'mod_exescorm'), 'error' => false];
     }
 
     // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.

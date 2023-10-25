@@ -70,7 +70,7 @@ list($sco, $scolaunchurl) = exescorm_get_sco_and_launch_url($exescorm, $scoid, $
 
 if ($sco->exescormtype == 'asset') {
     $attempt = exescorm_get_last_attempt($exescorm->id, $USER->id);
-    $element = (exescorm_version_check($exescorm->version,EXESCORM_SCORM_13)) ? 'cmi.completion_status' : 'cmi.core.lesson_status';
+    $element = (exescorm_version_check($exescorm->version, EXESCORM_SCORM_13)) ? 'cmi.completion_status' : 'cmi.core.lesson_status';
     $value = 'completed';
     exescorm_insert_track($USER->id, $exescorm->id, $sco->id, $attempt, $element, $value);
 }
@@ -91,7 +91,7 @@ if ($sco->exescormtype == 'asset') {
 }
 
 // We expect a SCO: select which API are we looking for.
-$lmsapi = (exescorm_version_check($exescorm->version,EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'API' : 'API_1484_11';
+$lmsapi = (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'API' : 'API_1484_11';
 
 echo html_writer::start_tag('html');
 echo html_writer::start_tag('head');

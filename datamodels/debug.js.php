@@ -661,10 +661,10 @@ foreach ($lmselements as $element) {
         + '             id="commitButton"'
         + '             name="commitButton">'
         + '            <input type="button"'
-        + '             value="<?php echo exescorm_version_check($exescorm->version,EXESCORM_SCORM_12) ?
+        + '             value="<?php echo exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) ?
                                             'LMSFinish' : 'Terminate'; ?>()  "'
         + '             onclick="try'
-        + '             <?php echo exescorm_version_check($exescorm->version,EXESCORM_SCORM_12) ?
+        + '             <?php echo exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) ?
                                             'LMSFinish' : 'LMSTerminate'; ?>();"'
         + '             id="finishButton"'
         + '             name="finishButton">'

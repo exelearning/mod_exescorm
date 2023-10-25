@@ -54,7 +54,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('exescorm/sendtemplate',
         get_string('exescorm:sendtemplate', 'mod_exescorm'), get_string('exescorm:sendtemplate_desc', 'mod_exescorm'), 0));
 
-    // eXescorm package validation rules.
+    // The eXescorm package validation rules.
     $mandatoryfilesre = implode("\n", [
         '/^contentv[\d+]\.xml$/',
         '/^content\.xsd$/',

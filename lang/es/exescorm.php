@@ -110,7 +110,6 @@ $string['defaultothersettings'] = 'Otras configuraciones predeterminadas';
 $string['deleteattemptcheck'] = '¿Está totalmente seguro que quiere eliminar completamente estos intentos?';
 $string['deleteallattempts'] = 'Eliminar todos los intentos SCORM';
 $string['deleteselected'] = 'Eliminar los intentos seleccionados';
-$string['deleteattemptcheck'] = '¿Está totalmente seguro que quiere eliminar completamente estos intentos?';
 $string['details'] = 'Detalles del rastreo SCO';
 $string['directories'] = 'Mostrar enlaces de directorio';
 $string['disabled'] = 'Deshabilitado';

@@ -1353,7 +1353,7 @@ function exescorm_get_attempt_status($user, $exescorm, $cm = null) {
     }
     $result .= html_writer::end_tag('p');
     if ($attemptcount >= $exescorm->maxattempt && $exescorm->maxattempt > 0) {
-        $result .= html_writer::tag('p', get_string('exceededmaxattempts', 'mod_exescorm'), array('class' => 'exceededmaxattempts'));
+        $result .= html_writer::tag('p', get_string('exceededmaxattempts', 'mod_exescorm'), ['class' => 'exceededmaxattempts']);
     }
     if (!empty($cm)) {
         $context = context_module::instance($cm->id);
@@ -1954,8 +1954,7 @@ function exescorm_get_toc($user, $exescorm, $cmid, $toclink=EXESCORM_TOCJSLINK, 
     if ($tocheader) {
         $result->toc = html_writer::start_div('yui3-g-r', array('id' => 'exescorm_layout'));
         $result->toc .= html_writer::start_div('yui3-u-1-5 loading', array('id' => 'exescorm_toc'));
-        /*$result->toc .= html_writer::div('', '', array('id' => 'exescorm_toc_title'));*/
-        $result->toc .= html_writer::start_div('', array('id' => 'exescorm_tree'));
+        $result->toc .= html_writer::start_div('', ['id' => 'exescorm_tree']);
     }
 
     if (!empty($currentorg)) {
