@@ -38,7 +38,7 @@ M.mod_exescormform.init = function(Y) {
         }
         // Hide the intro and display a message to the user if the window is closed.
         var exescormintro = Y.one('#intro');
-        exescormintro.setHTML('<a href="' + course_url + '">' + M.util.get_string('popuplaunched', 'exescorm') + '</a>');
+        exescormintro.setHTML('<a href="' + course_url + '">' + M.util.get_string('popuplaunched', 'mod_exescorm') + '</a>');
     }
 
     // When pop-up is closed return to course homepage.
@@ -59,7 +59,7 @@ M.mod_exescormform.init = function(Y) {
         setTimeout(function() {
             if (!winobj) {
                 var exescormintro = Y.one('#intro');
-                exescormintro.setHTML(M.util.get_string('popupsblocked', 'exescorm'));
+                exescormintro.setHTML(M.util.get_string('popupsblocked', 'mod_exescorm'));
             }}, 800);
     }
 

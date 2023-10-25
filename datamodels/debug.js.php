@@ -73,11 +73,11 @@ function toggleLog () {
     if (getLoggingActive() == "A") {
         AppendToLog("Moodle Logging Deactivated", 0);
         setLoggingActive('N');
-        logButton.innerHTML = '-><?php echo addslashes_js(get_string('exescormloggingoff', 'exescorm')); ?>';
+        logButton.innerHTML = '-><?php echo addslashes_js(get_string('exescormloggingoff', 'mod_exescorm')); ?>';
     } else {
         setLoggingActive('A');
         AppendToLog("Moodle Logging Activated", 0);
-        logButton.innerHTML = '<?php echo addslashes_js(get_string('exescormloggingon', 'exescorm')); ?>';
+        logButton.innerHTML = '<?php echo addslashes_js(get_string('exescormloggingon', 'mod_exescorm')); ?>';
         logPopUpWindow.focus();
     }
 }
@@ -88,11 +88,11 @@ var logRow = 0;
 var logPopUpWindow = "N";
 var debugEXESCORMVersion = '<?php echo $exescorm->version; ?>';
 <?php
-$lmsprefix = (exescorm_version_check($exescorm->version,EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'LMS' : '';
-$lmsapi = (exescorm_version_check($exescorm->version,EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'API' : 'API_1484_11';
+$lmsprefix = (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'LMS' : '';
+$lmsapi = (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'API' : 'API_1484_11';
 
 $lmselements = array();
-if (exescorm_version_check($exescorm->version,EXESCORM_SCORM_12) || empty($exescorm->version)) {
+if (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exescorm->version)) {
     $lmselements = array(   'cmi.core._children',
                             'cmi.core.student_id',
                             'cmi.core.student_name',
@@ -766,9 +766,9 @@ if (!document.getElementById('mod-exescorm-log-toggle')) {
     logButton.name = 'logToggle';
     logButton.href = 'javascript:toggleLog();';
     if (getLoggingActive() == "A") {
-        logButton.innerHTML = '<?php echo addslashes_js(get_string('exescormloggingon', 'exescorm')); ?>';
+        logButton.innerHTML = '<?php echo addslashes_js(get_string('exescormloggingon', 'mod_exescorm')); ?>';
     } else {
-        logButton.innerHTML = '<?php echo addslashes_js(get_string('exescormloggingoff', 'exescorm')); ?>';
+        logButton.innerHTML = '<?php echo addslashes_js(get_string('exescormloggingoff', 'mod_exescorm')); ?>';
     }
     var content = safeGetElement(document, 'exescormpage');
     content.insertBefore(logButton, content.firstChild);

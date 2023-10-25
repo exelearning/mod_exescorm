@@ -40,10 +40,10 @@ $inactive = array();
 $activated = array();
 
 if (has_capability('mod/exescorm:savetrack', $contextmodule)) {
-    $row[] = new tabobject('info', "$CFG->wwwroot/mod/exescorm/view.php?id=$cm->id", get_string('modulename', 'exescorm'));
+    $row[] = new tabobject('info', "$CFG->wwwroot/mod/exescorm/view.php?id=$cm->id", get_string('modulename', 'mod_exescorm'));
 }
 if (has_capability('mod/exescorm:viewreport', $contextmodule)) {
-    $row[] = new tabobject('reports', "$CFG->wwwroot/mod/exescorm/report.php?id=$cm->id", get_string('reports', 'exescorm'));
+    $row[] = new tabobject('reports', "$CFG->wwwroot/mod/exescorm/report.php?id=$cm->id", get_string('reports', 'mod_exescorm'));
 }
 
 if (!($currenttab == 'info' && count($row) == 1)) {

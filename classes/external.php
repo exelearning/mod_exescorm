@@ -594,7 +594,7 @@ class mod_exescorm_external extends external_api {
                 'item' => 'attempt',
                 'itemid' => $params['attempt'],
                 'warningcode' => 'notattempted',
-                'message' => get_string('notattempted', 'exescorm')
+                'message' => get_string('notattempted', 'mod_exescorm')
             );
         }
 
@@ -697,7 +697,7 @@ class mod_exescorm_external extends external_api {
                             'item' => 'exescorm',
                             'itemid' => $exescorm->id,
                             'warningcode' => $warningkey,
-                            'message' => get_string($warningkey, 'exescorm', $warningdata)
+                            'message' => get_string($warningkey, 'mod_exescorm', $warningdata)
                         );
                     }
                 } else {

@@ -237,7 +237,7 @@ class lib_test extends \advanced_testcase {
         exescorm_require_available($this->exescorm, true, $this->context);
         // Now, expect exceptions.
         $this->expectException('moodle_exception');
-        $this->expectExceptionMessage(get_string("notopenyet", "exescorm", userdate($this->exescorm->timeopen)));
+        $this->expectExceptionMessage(get_string("notopenyet", "mod_exescorm", userdate($this->exescorm->timeopen)));
 
         // Now as student other condition.
         self::setUser($this->student);
@@ -245,7 +245,7 @@ class lib_test extends \advanced_testcase {
         $this->exescorm->timeclose = time() - DAYSECS;
 
         $this->expectException('moodle_exception');
-        $this->expectExceptionMessage(get_string("expired", "exescorm", userdate($this->exescorm->timeclose)));
+        $this->expectExceptionMessage(get_string("expired", "mod_exescorm", userdate($this->exescorm->timeclose)));
         exescorm_require_available($this->exescorm, false);
     }
 
@@ -284,7 +284,7 @@ class lib_test extends \advanced_testcase {
 
         // Confirm the event was decorated.
         $this->assertInstanceOf('\core_calendar\local\event\value_objects\action', $actionevent);
-        $this->assertEquals(get_string('enter', 'exescorm'), $actionevent->get_name());
+        $this->assertEquals(get_string('enter', 'mod_exescorm'), $actionevent->get_name());
         $this->assertInstanceOf('moodle_url', $actionevent->get_url());
         $this->assertEquals(1, $actionevent->get_item_count());
         $this->assertTrue($actionevent->is_actionable());
@@ -341,7 +341,7 @@ class lib_test extends \advanced_testcase {
 
         // Confirm the event was decorated.
         $this->assertInstanceOf('\core_calendar\local\event\value_objects\action', $actionevent);
-        $this->assertEquals(get_string('enter', 'exescorm'), $actionevent->get_name());
+        $this->assertEquals(get_string('enter', 'mod_exescorm'), $actionevent->get_name());
         $this->assertInstanceOf('moodle_url', $actionevent->get_url());
         $this->assertEquals(1, $actionevent->get_item_count());
         $this->assertFalse($actionevent->is_actionable());
@@ -374,7 +374,7 @@ class lib_test extends \advanced_testcase {
 
         // Confirm the event was decorated.
         $this->assertInstanceOf('\core_calendar\local\event\value_objects\action', $actionevent);
-        $this->assertEquals(get_string('enter', 'exescorm'), $actionevent->get_name());
+        $this->assertEquals(get_string('enter', 'mod_exescorm'), $actionevent->get_name());
         $this->assertInstanceOf('moodle_url', $actionevent->get_url());
         $this->assertEquals(1, $actionevent->get_item_count());
         $this->assertFalse($actionevent->is_actionable());
@@ -405,7 +405,7 @@ class lib_test extends \advanced_testcase {
 
         // Confirm the event was decorated.
         $this->assertInstanceOf('\core_calendar\local\event\value_objects\action', $actionevent);
-        $this->assertEquals(get_string('enter', 'exescorm'), $actionevent->get_name());
+        $this->assertEquals(get_string('enter', 'mod_exescorm'), $actionevent->get_name());
         $this->assertInstanceOf('moodle_url', $actionevent->get_url());
         $this->assertEquals(1, $actionevent->get_item_count());
         $this->assertTrue($actionevent->is_actionable());
@@ -553,9 +553,9 @@ class lib_test extends \advanced_testcase {
         $statusstring = implode(', ', $cvalues);
 
         $activeruledescriptions = [
-            get_string('completionstatusrequireddesc', 'exescorm', $statusstring),
-            get_string('completionscorerequireddesc', 'exescorm', $exescorm1->completionscorerequired),
-            get_string('completionstatusallscos', 'exescorm'),
+            get_string('completionstatusrequireddesc', 'mod_exescorm', $statusstring),
+            get_string('completionscorerequireddesc', 'mod_exescorm', $exescorm1->completionscorerequired),
+            get_string('completionstatusallscos', 'mod_exescorm'),
         ];
         $this->assertEquals(mod_exescorm_get_completion_active_rule_descriptions($cm1), $activeruledescriptions);
         $this->assertEquals(mod_exescorm_get_completion_active_rule_descriptions($cm2), []);

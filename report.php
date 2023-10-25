@@ -45,7 +45,7 @@ $url->param('id', $id);
 if (empty($mode)) {
     $mode = reset($reportlist);
 } else if (!in_array($mode, $reportlist)) {
-    throw new \moodle_exception('erroraccessingreport', 'exescorm');
+    throw new \moodle_exception('erroraccessingreport', 'mod_exescorm');
 }
 $url->param('mode', $mode);
 
@@ -81,8 +81,8 @@ if (!empty($download)) {
 }
 // Print the page header.
 if (empty($noheader)) {
-    $strreport = get_string('report', 'exescorm');
-    $strattempt = get_string('attempt', 'exescorm');
+    $strreport = get_string('report', 'mod_exescorm');
+    $strattempt = get_string('attempt', 'mod_exescorm');
 
     $PAGE->set_title("$course->shortname: ".format_string($exescorm->name));
     $PAGE->set_heading($course->fullname);

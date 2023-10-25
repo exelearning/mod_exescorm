@@ -131,6 +131,7 @@ $string['element'] = 'Element';
 $string['enter'] = 'Enter';
 $string['entercourse'] = 'Enter course';
 $string['errorlogs'] = 'Errors log';
+$string['erroraccessingreport'] = 'Error accessing report';
 $string['eventattemptdeleted'] = 'Attempt deleted';
 $string['eventinteractionsviewed'] = 'Interactions viewed';
 $string['eventreportviewed'] = 'Report viewed';

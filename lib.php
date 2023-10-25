@@ -76,7 +76,7 @@ function exescorm_status_options($withstrings = false) {
 
     if ($withstrings) {
         foreach ($options as $key => $value) {
-            $options[$key] = get_string('completionstatus_'.$value, 'exescorm');
+            $options[$key] = get_string('completionstatus_'.$value, 'mod_exescorm');
         }
     }
 
@@ -382,9 +382,9 @@ function exescorm_user_outline($course, $user, $mod, $exescorm) {
             'time' => grade_get_date_for_user_grade($grade, $user),
         ];
         if (!$grade->hidden || has_capability('moodle/grade:viewhidden', context_course::instance($course->id))) {
-            $result->info = get_string('gradenoun', 'exescorm') . ': ' . $grade->str_long_grade;
+            $result->info = get_string('gradenoun', 'mod_exescorm') . ': ' . $grade->str_long_grade;
         } else {
-            $result->info = get_string('gradenoun', 'exescorm') . ': ' . get_string('hidden', 'grades');
+            $result->info = get_string('gradenoun', 'mod_exescorm') . ': ' . get_string('hidden', 'grades');
         }
 
         return $result;
@@ -425,12 +425,12 @@ function exescorm_user_complete($course, $user, $mod, $exescorm) {
     if (!empty($grades->items[0]->grades)) {
         $grade = reset($grades->items[0]->grades);
         if (!$grade->hidden || has_capability('moodle/grade:viewhidden', context_course::instance($course->id))) {
-            echo $OUTPUT->container(get_string('gradenoun', 'exescorm') . ': ' . $grade->str_long_grade);
+            echo $OUTPUT->container(get_string('gradenoun', 'mod_exescorm') . ': ' . $grade->str_long_grade);
             if ($grade->str_feedback) {
                 echo $OUTPUT->container(get_string('feedback').': '.$grade->str_feedback);
             }
         } else {
-            echo $OUTPUT->container(get_string('gradenoun', 'exescorm') . ': ' . get_string('hidden', 'grades'));
+            echo $OUTPUT->container(get_string('gradenoun', 'mod_exescorm') . ': ' . get_string('hidden', 'grades'));
         }
     }
 
@@ -505,19 +505,19 @@ function exescorm_user_complete($course, $user, $mod, $exescorm) {
                             if ($usertrack->status == '') {
                                 $usertrack->status = 'notattempted';
                             }
-                            $strstatus = get_string($usertrack->status, 'exescorm');
+                            $strstatus = get_string($usertrack->status, 'mod_exescorm');
                             $report .= $OUTPUT->pix_icon($usertrack->status, $strstatus, 'exescorm');
                         } else {
                             if ($sco->exescormtype == 'sco') {
                                 $report .= $OUTPUT->pix_icon(
                                             'notattempted',
-                                            get_string('notattempted', 'exescorm'),
+                                            get_string('notattempted', 'mod_exescorm'),
                                             'exescorm'
                                         );
                             } else {
                                 $report .= $OUTPUT->pix_icon(
                                             'asset',
-                                            get_string('asset', 'exescorm'),
+                                            get_string('asset', 'mod_exescorm'),
                                             'exescorm'
                                         );
                             }
@@ -548,17 +548,17 @@ function exescorm_user_complete($course, $user, $mod, $exescorm) {
     if ($sometoreport) {
         if ($firstmodify < $now) {
             $timeago = format_time($now - $firstmodify);
-            echo get_string('firstaccess', 'exescorm') . ': ' . userdate($firstmodify) . ' (' . $timeago . ")"
+            echo get_string('firstaccess', 'mod_exescorm') . ': ' . userdate($firstmodify) . ' (' . $timeago . ")"
                 . html_writer::empty_tag('br');
         }
         if ($lastmodify > 0) {
             $timeago = format_time($now - $lastmodify);
-            echo get_string('lastaccess', 'exescorm').': '.userdate($lastmodify).' ('.$timeago.")".html_writer::empty_tag('br');
+            echo get_string('lastaccess', 'mod_exescorm').': '.userdate($lastmodify).' ('.$timeago.")".html_writer::empty_tag('br');
         }
-        echo get_string('report', 'exescorm').":".html_writer::empty_tag('br');
+        echo get_string('report', 'mod_exescorm').":".html_writer::empty_tag('br');
         echo $report;
     } else {
-        print_string('noactivity', 'exescorm');
+        print_string('noactivity', 'mod_exescorm');
     }
 
     return true;
@@ -814,8 +814,8 @@ function exescorm_option2text($exescorm) {
  * @param object $mform form passed by reference
  */
 function exescorm_reset_course_form_definition(&$mform) {
-    $mform->addElement('header', 'exescormheader', get_string('modulenameplural', 'exescorm'));
-    $mform->addElement('advcheckbox', 'reset_exescorm', get_string('deleteallattempts', 'exescorm'));
+    $mform->addElement('header', 'exescormheader', get_string('modulenameplural', 'mod_exescorm'));
+    $mform->addElement('advcheckbox', 'reset_exescorm', get_string('deleteallattempts', 'mod_exescorm'));
 }
 
 /**
@@ -861,7 +861,7 @@ function exescorm_reset_gradebook($courseid, $type='') {
 function exescorm_reset_userdata($data) {
     global $CFG, $DB;
 
-    $componentstr = get_string('modulenameplural', 'exescorm');
+    $componentstr = get_string('modulenameplural', 'mod_exescorm');
     $status = array();
 
     if (!empty($data->reset_exescorm)) {
@@ -876,7 +876,7 @@ function exescorm_reset_userdata($data) {
             exescorm_reset_gradebook($data->courseid);
         }
 
-        $status[] = array('component' => $componentstr, 'item' => get_string('deleteallattempts', 'exescorm'), 'error' => false);
+        $status[] = array('component' => $componentstr, 'item' => get_string('deleteallattempts', 'mod_exescorm'), 'error' => false);
     }
 
     // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
@@ -897,8 +897,8 @@ function exescorm_reset_userdata($data) {
  */
 function exescorm_get_file_areas($course, $cm, $context) {
     $areas = array();
-    $areas['content'] = get_string('areacontent', 'exescorm');
-    $areas['package'] = get_string('areapackage', 'exescorm');
+    $areas['content'] = get_string('areacontent', 'mod_exescorm');
+    $areas['package'] = get_string('areapackage', 'mod_exescorm');
     return $areas;
 }
 
@@ -1157,7 +1157,7 @@ function exescorm_debug_log_remove($type, $scoid) {
  * @param stdClass $currentcontext Current context of block
  */
 function exescorm_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    $modulepagetype = array('mod-exescorm-*' => get_string('page-mod-exescorm-x', 'exescorm'));
+    $modulepagetype = array('mod-exescorm-*' => get_string('page-mod-exescorm-x', 'mod_exescorm'));
     return $modulepagetype;
 }
 
@@ -1202,7 +1202,7 @@ function exescorm_version_check($exescormversion, $version='') {
  */
 function exescorm_dndupload_register() {
     return array('files' => array(
-        array('extension' => 'zip', 'message' => get_string('dnduploadexescorm', 'exescorm'))
+        array('extension' => 'zip', 'message' => get_string('dnduploadexescorm', 'mod_exescorm'))
     ));
 }
 
@@ -1286,7 +1286,7 @@ function exescorm_validate_package($file) {
     $filelist = $file->list_files($packer);
 
     if (!is_array($filelist)) {
-        $errors['packagefile'] = get_string('badarchive', 'exescorm');
+        $errors['packagefile'] = get_string('badarchive', 'mod_exescorm');
         return $errors;
     }
     $errors = \mod_exescorm\exescorm_package::validate_file_list($filelist);
@@ -1309,9 +1309,9 @@ function exescorm_validate_package($file) {
     }
     if (!$aiccfound) {
         if ($badmanifestpresent) {
-            $errors['packagefile'] = get_string('badimsmanifestlocation', 'exescorm');
+            $errors['packagefile'] = get_string('badimsmanifestlocation', 'mod_exescorm');
         } else {
-            $errors['packagefile'] = get_string('nomanifest', 'exescorm');
+            $errors['packagefile'] = get_string('nomanifest', 'mod_exescorm');
         }
     }
 
@@ -1621,7 +1621,7 @@ function mod_exescorm_core_calendar_provide_event_action(calendar_event $event,
     list($actionable, $warnings) = exescorm_get_availability_status($exescorm, false, null, $userid);
 
     return $factory->create_instance(
-        get_string('enter', 'exescorm'),
+        get_string('enter', 'mod_exescorm'),
         new \moodle_url('/mod/exescorm/view.php', array('id' => $cm->id)),
         1,
         $actionable
@@ -1700,17 +1700,17 @@ function mod_exescorm_get_completion_active_rule_descriptions($cm) {
                         }
                     }
                     $statusstring = implode(', ', $cvalues);
-                    $descriptions[] = get_string('completionstatusrequireddesc', 'exescorm', $statusstring);
+                    $descriptions[] = get_string('completionstatusrequireddesc', 'mod_exescorm', $statusstring);
                 }
                 break;
             case 'completionscorerequired':
                 if (!is_null($val)) {
-                    $descriptions[] = get_string('completionscorerequireddesc', 'exescorm', $val);
+                    $descriptions[] = get_string('completionscorerequireddesc', 'mod_exescorm', $val);
                 }
                 break;
             case 'completionstatusallscos':
                 if (!empty($val)) {
-                    $descriptions[] = get_string('completionstatusallscos', 'exescorm');
+                    $descriptions[] = get_string('completionstatusallscos', 'mod_exescorm');
                 }
                 break;
             default:
@@ -1817,7 +1817,7 @@ function mod_exescorm_core_calendar_get_valid_event_timestart_range(\calendar_ev
         if (!empty($instance->timeclose)) {
             $maxdate = [
                 $instance->timeclose,
-                get_string('openafterclose', 'exescorm')
+                get_string('openafterclose', 'mod_exescorm')
             ];
         }
     } else if ($event->eventtype == EXESCORM_EVENT_TYPE_CLOSE) {
@@ -1826,7 +1826,7 @@ function mod_exescorm_core_calendar_get_valid_event_timestart_range(\calendar_ev
         if (!empty($instance->timeopen)) {
             $mindate = [
                 $instance->timeopen,
-                get_string('closebeforeopen', 'exescorm')
+                get_string('closebeforeopen', 'mod_exescorm')
             ];
         }
     }
@@ -1865,7 +1865,7 @@ function mod_exescorm_get_path_from_pluginfile(string $filearea, array $args) : 
  * @return lang_string The event type lang string.
  */
 function mod_exescorm_core_calendar_get_event_action_string(string $eventtype): string {
-    $modulename = get_string('modulename', 'exescorm');
+    $modulename = get_string('modulename', 'mod_exescorm');
 
     switch ($eventtype) {
         case EXESCORM_EVENT_TYPE_OPEN:
@@ -1878,7 +1878,7 @@ function mod_exescorm_core_calendar_get_event_action_string(string $eventtype): 
             return get_string('requiresaction', 'calendar', $modulename);
     }
 
-    return get_string($identifier, 'exescorm', $modulename);
+    return get_string($identifier, 'mod_exescorm', $modulename);
 }
 
 /**
@@ -1906,6 +1906,6 @@ function exescorm_extend_settings_navigation(settings_navigation $settings, navi
 
     if (has_capability('mod/exescorm:viewreport', $page->cm->context)) {
         $url = new moodle_url('/mod/exescorm/report.php', ['id' => $page->cm->id]);
-        $exescormnode->add(get_string("reports", "exescorm"), $url, navigation_node::TYPE_CUSTOM, null, 'exescormreport');
+        $exescormnode->add(get_string("reports", "mod_exescorm"), $url, navigation_node::TYPE_CUSTOM, null, 'exescormreport');
     }
 }

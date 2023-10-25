@@ -131,6 +131,7 @@ $string['element'] = 'Elemento';
 $string['enter'] = 'Entrar';
 $string['entercourse'] = 'Introducir el curso eXescorm';
 $string['errorlogs'] = 'Registro de errores';
+$string['erroraccessingreport'] = 'Error accediendo al informe';
 $string['eventattemptdeleted'] = 'Intento eliminado';
 $string['eventinteractionsviewed'] = 'Interacciones visualizadas';
 $string['eventreportviewed'] = 'Reporte visualizado';

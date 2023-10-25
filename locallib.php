@@ -101,10 +101,10 @@ function exescorm_get_popup_options_array() {
  * @return array an array of what grade options
  */
 function exescorm_get_grade_method_array() {
-    return array (EXESCORM_GRADESCOES => get_string('gradescoes', 'exescorm'),
-                  EXESCORM_GRADEHIGHEST => get_string('gradehighest', 'exescorm'),
-                  EXESCORM_GRADEAVERAGE => get_string('gradeaverage', 'exescorm'),
-                  EXESCORM_GRADESUM => get_string('gradesum', 'exescorm'));
+    return array (EXESCORM_GRADESCOES => get_string('gradescoes', 'mod_exescorm'),
+                  EXESCORM_GRADEHIGHEST => get_string('gradehighest', 'mod_exescorm'),
+                  EXESCORM_GRADEAVERAGE => get_string('gradeaverage', 'mod_exescorm'),
+                  EXESCORM_GRADESUM => get_string('gradesum', 'mod_exescorm'));
 }
 
 /**
@@ -113,10 +113,10 @@ function exescorm_get_grade_method_array() {
  * @return array an array of what grade options
  */
 function exescorm_get_what_grade_array() {
-    return array (EXESCORM_HIGHESTATTEMPT => get_string('EXESCORM_HIGHESTATTEMPT', 'exescorm'),
-                  EXESCORM_AVERAGEATTEMPT => get_string('EXESCORM_AVERAGEATTEMPT', 'exescorm'),
-                  EXESCORM_FIRSTATTEMPT => get_string('firstattempt', 'exescorm'),
-                  EXESCORM_LASTATTEMPT => get_string('lastattempt', 'exescorm'));
+    return array (EXESCORM_HIGHESTATTEMPT => get_string('EXESCORM_HIGHESTATTEMPT', 'mod_exescorm'),
+                  EXESCORM_AVERAGEATTEMPT => get_string('EXESCORM_AVERAGEATTEMPT', 'mod_exescorm'),
+                  EXESCORM_FIRSTATTEMPT => get_string('firstattempt', 'mod_exescorm'),
+                  EXESCORM_LASTATTEMPT => get_string('lastattempt', 'mod_exescorm'));
 }
 
 /**
@@ -126,7 +126,7 @@ function exescorm_get_what_grade_array() {
  */
 function exescorm_get_skip_view_array() {
     return array(EXESCORM_SKIPVIEW_NEVER => get_string('never'),
-                 EXESCORM_SKIPVIEW_FIRST => get_string('firstaccess', 'exescorm'),
+                 EXESCORM_SKIPVIEW_FIRST => get_string('firstaccess', 'mod_exescorm'),
                  EXESCORM_SKIPVIEW_ALWAYS => get_string('always'));
 }
 
@@ -136,10 +136,10 @@ function exescorm_get_skip_view_array() {
  * @return array an array of hide table of contents options
  */
 function exescorm_get_hidetoc_array() {
-     return array(EXESCORM_TOC_SIDE => get_string('sided', 'exescorm'),
-                  EXESCORM_TOC_HIDDEN => get_string('hidden', 'exescorm'),
-                  EXESCORM_TOC_POPUP => get_string('popupmenu', 'exescorm'),
-                  EXESCORM_TOC_DISABLED => get_string('disabled', 'exescorm'));
+     return array(EXESCORM_TOC_SIDE => get_string('sided', 'mod_exescorm'),
+                  EXESCORM_TOC_HIDDEN => get_string('hidden', 'mod_exescorm'),
+                  EXESCORM_TOC_POPUP => get_string('popupmenu', 'mod_exescorm'),
+                  EXESCORM_TOC_DISABLED => get_string('disabled', 'mod_exescorm'));
 }
 
 /**
@@ -149,8 +149,8 @@ function exescorm_get_hidetoc_array() {
  */
 function exescorm_get_updatefreq_array() {
     return array(EXESCORM_UPDATE_NEVER => get_string('never'),
-                 EXESCORM_UPDATE_EVERYDAY => get_string('everyday', 'exescorm'),
-                 EXESCORM_UPDATE_EVERYTIME => get_string('everytime', 'exescorm'));
+                 EXESCORM_UPDATE_EVERYDAY => get_string('everyday', 'mod_exescorm'),
+                 EXESCORM_UPDATE_EVERYTIME => get_string('everytime', 'mod_exescorm'));
 }
 
 /**
@@ -159,8 +159,8 @@ function exescorm_get_updatefreq_array() {
  * @return array an array of popup display options
  */
 function exescorm_get_popup_display_array() {
-    return array(0 => get_string('currentwindow', 'exescorm'),
-                 1 => get_string('popup', 'exescorm'));
+    return array(0 => get_string('currentwindow', 'mod_exescorm'),
+                 1 => get_string('popup', 'mod_exescorm'));
 }
 
 /**
@@ -170,8 +170,8 @@ function exescorm_get_popup_display_array() {
  */
 function exescorm_get_navigation_display_array() {
     return array(EXESCORM_NAV_DISABLED => get_string('no'),
-                 EXESCORM_NAV_UNDER_CONTENT => get_string('undercontent', 'exescorm'),
-                 EXESCORM_NAV_FLOATING => get_string('floating', 'exescorm'));
+                 EXESCORM_NAV_UNDER_CONTENT => get_string('undercontent', 'mod_exescorm'),
+                 EXESCORM_NAV_FLOATING => get_string('floating', 'mod_exescorm'));
 }
 
 /**
@@ -180,11 +180,11 @@ function exescorm_get_navigation_display_array() {
  * @return array an array of attempt options
  */
 function exescorm_get_attempts_array() {
-    $attempts = array(0 => get_string('nolimit', 'exescorm'),
-                      1 => get_string('attempt1', 'exescorm'));
+    $attempts = array(0 => get_string('nolimit', 'mod_exescorm'),
+                      1 => get_string('attempt1', 'mod_exescorm'));
 
     for ($i = 2; $i <= 6; $i++) {
-        $attempts[$i] = get_string('attemptsx', 'exescorm', $i);
+        $attempts[$i] = get_string('attemptsx', 'mod_exescorm', $i);
     }
 
     return $attempts;
@@ -197,9 +197,9 @@ function exescorm_get_attempts_array() {
  */
 function exescorm_get_attemptstatus_array() {
     return array(EXESCORM_DISPLAY_ATTEMPTSTATUS_NO => get_string('no'),
-                 EXESCORM_DISPLAY_ATTEMPTSTATUS_ALL => get_string('attemptstatusall', 'exescorm'),
-                 EXESCORM_DISPLAY_ATTEMPTSTATUS_MY => get_string('attemptstatusmy', 'exescorm'),
-                 EXESCORM_DISPLAY_ATTEMPTSTATUS_ENTRY => get_string('attemptstatusentry', 'exescorm'));
+                 EXESCORM_DISPLAY_ATTEMPTSTATUS_ALL => get_string('attemptstatusall', 'mod_exescorm'),
+                 EXESCORM_DISPLAY_ATTEMPTSTATUS_MY => get_string('attemptstatusmy', 'mod_exescorm'),
+                 EXESCORM_DISPLAY_ATTEMPTSTATUS_ENTRY => get_string('attemptstatusentry', 'mod_exescorm'));
 }
 
 /**
@@ -209,8 +209,8 @@ function exescorm_get_attemptstatus_array() {
  */
 function exescorm_get_forceattempt_array() {
     return array(EXESCORM_FORCEATTEMPT_NO => get_string('no'),
-                 EXESCORM_FORCEATTEMPT_ONCOMPLETE => get_string('forceattemptoncomplete', 'exescorm'),
-                 EXESCORM_FORCEATTEMPT_ALWAYS => get_string('forceattemptalways', 'exescorm'));
+                 EXESCORM_FORCEATTEMPT_ONCOMPLETE => get_string('forceattemptoncomplete', 'mod_exescorm'),
+                 EXESCORM_FORCEATTEMPT_ALWAYS => get_string('forceattemptalways', 'mod_exescorm'));
 }
 
 /**
@@ -956,7 +956,7 @@ function exescorm_print_launch ($user, $exescorm, $action, $cm) {
 
     if ($exescorm->displaycoursestructure == 1) {
         echo $OUTPUT->box_start('generalbox boxaligncenter toc', 'toc');
-        echo html_writer::div(get_string('contents', 'exescorm'), 'structurehead');
+        echo html_writer::div(get_string('contents', 'mod_exescorm'), 'structurehead');
     }
     if (empty($organization)) {
         $organization = $exescorm->launch;
@@ -967,7 +967,7 @@ function exescorm_print_launch ($user, $exescorm, $action, $cm) {
                                          array($exescorm->id), 'sortorder, id', 'id,title')) {
         if (count($orgs) > 1) {
             $select = new single_select(new moodle_url($action), 'organization', $orgs, $organization, null);
-            $select->label = get_string('organizations', 'exescorm');
+            $select->label = get_string('organizations', 'mod_exescorm');
             $select->class = 'exescorm-center';
             echo $OUTPUT->render($select);
         }
@@ -1013,14 +1013,14 @@ function exescorm_print_launch ($user, $exescorm, $action, $cm) {
                                                         'method' => 'post',
                                                         'action' => $CFG->wwwroot.'/mod/exescorm/player.php'));
         if ($exescorm->hidebrowse == 0) {
-            echo html_writer::tag('button', get_string('browse', 'exescorm'),
+            echo html_writer::tag('button', get_string('browse', 'mod_exescorm'),
                     ['class' => 'btn btn-secondary mr-1', 'name' => 'mode',
                         'type' => 'submit', 'id' => 'b', 'value' => 'browse'])
                 . html_writer::end_tag('button');
         } else {
             echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'mode', 'value' => 'normal'));
         }
-        echo html_writer::tag('button', get_string('enter', 'exescorm'),
+        echo html_writer::tag('button', get_string('enter', 'mod_exescorm'),
                 ['class' => 'btn btn-primary mx-1', 'name' => 'mode',
                     'type' => 'submit', 'id' => 'n', 'value' => 'normal'])
              . html_writer::end_tag('button');
@@ -1036,7 +1036,7 @@ function exescorm_print_launch ($user, $exescorm, $action, $cm) {
         ) {
             echo html_writer::start_div('pt-1');
             echo html_writer::checkbox('newattempt', 'on', false, '', array('id' => 'a'));
-            echo html_writer::label(get_string('newattempt', 'exescorm'), 'a', true, ['class' => 'pl-1']);
+            echo html_writer::label(get_string('newattempt', 'mod_exescorm'), 'a', true, ['class' => 'pl-1']);
             echo html_writer::end_div();
         }
         if (!empty($exescorm->popup)) {
@@ -1286,42 +1286,42 @@ function exescorm_get_attempt_status($user, $exescorm, $cm = null) {
         $attemptcount = count($attempts);
     }
 
-    $result = html_writer::start_tag('p').get_string('noattemptsallowed', 'exescorm').': ';
+    $result = html_writer::start_tag('p').get_string('noattemptsallowed', 'mod_exescorm').': ';
     if ($exescorm->maxattempt > 0) {
         $result .= $exescorm->maxattempt . html_writer::empty_tag('br');
     } else {
         $result .= get_string('unlimited').html_writer::empty_tag('br');
     }
-    $result .= get_string('noattemptsmade', 'exescorm').': ' . $attemptcount . html_writer::empty_tag('br');
+    $result .= get_string('noattemptsmade', 'mod_exescorm').': ' . $attemptcount . html_writer::empty_tag('br');
 
     if ($exescorm->maxattempt == 1) {
         switch ($exescorm->grademethod) {
             case EXESCORM_GRADEHIGHEST:
-                $grademethod = get_string('gradehighest', 'exescorm');
+                $grademethod = get_string('gradehighest', 'mod_exescorm');
             break;
             case EXESCORM_GRADEAVERAGE:
-                $grademethod = get_string('gradeaverage', 'exescorm');
+                $grademethod = get_string('gradeaverage', 'mod_exescorm');
             break;
             case EXESCORM_GRADESUM:
-                $grademethod = get_string('gradesum', 'exescorm');
+                $grademethod = get_string('gradesum', 'mod_exescorm');
             break;
             case EXESCORM_GRADESCOES:
-                $grademethod = get_string('gradescoes', 'exescorm');
+                $grademethod = get_string('gradescoes', 'mod_exescorm');
             break;
         }
     } else {
         switch ($exescorm->whatgrade) {
             case EXESCORM_HIGHESTATTEMPT:
-                $grademethod = get_string('EXESCORM_HIGHESTATTEMPT', 'exescorm');
+                $grademethod = get_string('EXESCORM_HIGHESTATTEMPT', 'mod_exescorm');
             break;
             case EXESCORM_AVERAGEATTEMPT:
-                $grademethod = get_string('EXESCORM_AVERAGEATTEMPT', 'exescorm');
+                $grademethod = get_string('EXESCORM_AVERAGEATTEMPT', 'mod_exescorm');
             break;
             case EXESCORM_FIRSTATTEMPT:
-                $grademethod = get_string('firstattempt', 'exescorm');
+                $grademethod = get_string('firstattempt', 'mod_exescorm');
             break;
             case EXESCORM_LASTATTEMPT:
-                $grademethod = get_string('lastattempt', 'exescorm');
+                $grademethod = get_string('lastattempt', 'mod_exescorm');
             break;
         }
     }
@@ -1334,7 +1334,7 @@ function exescorm_get_attempt_status($user, $exescorm, $cm = null) {
                 $gradereported = $gradereported / $exescorm->maxgrade;
                 $gradereported = number_format($gradereported * 100, 0) .'%';
             }
-            $result .= get_string('gradeforattempt', 'exescorm').' ' . $i . ': ' . $gradereported .html_writer::empty_tag('br');
+            $result .= get_string('gradeforattempt', 'mod_exescorm').' ' . $i . ': ' . $gradereported .html_writer::empty_tag('br');
             $i++;
         }
     }
@@ -1343,17 +1343,17 @@ function exescorm_get_attempt_status($user, $exescorm, $cm = null) {
         $calculatedgrade = $calculatedgrade / $exescorm->maxgrade;
         $calculatedgrade = number_format($calculatedgrade * 100, 0) .'%';
     }
-    $result .= get_string('grademethod', 'exescorm'). ': ' . $grademethod;
+    $result .= get_string('grademethod', 'mod_exescorm'). ': ' . $grademethod;
     if (empty($attempts)) {
-        $result .= html_writer::empty_tag('br').get_string('gradereported', 'exescorm').
+        $result .= html_writer::empty_tag('br').get_string('gradereported', 'mod_exescorm').
                     ': '.get_string('none').html_writer::empty_tag('br');
     } else {
-        $result .= html_writer::empty_tag('br').get_string('gradereported', 'exescorm').
+        $result .= html_writer::empty_tag('br').get_string('gradereported', 'mod_exescorm').
                     ': '.$calculatedgrade.html_writer::empty_tag('br');
     }
     $result .= html_writer::end_tag('p');
     if ($attemptcount >= $exescorm->maxattempt && $exescorm->maxattempt > 0) {
-        $result .= html_writer::tag('p', get_string('exceededmaxattempts', 'exescorm'), array('class' => 'exceededmaxattempts'));
+        $result .= html_writer::tag('p', get_string('exceededmaxattempts', 'mod_exescorm'), array('class' => 'exceededmaxattempts'));
     }
     if (!empty($cm)) {
         $context = context_module::instance($cm->id);
@@ -1361,7 +1361,7 @@ function exescorm_get_attempt_status($user, $exescorm, $cm = null) {
             $DB->record_exists('exescorm_scoes_track', array('userid' => $user->id, 'exescormid' => $exescorm->id))) {
             // Check to see if any data is stored for this user.
             $deleteurl = new moodle_url($PAGE->url, array('action' => 'delete', 'sesskey' => sesskey()));
-            $result .= $OUTPUT->single_button($deleteurl, get_string('deleteallattempts', 'exescorm'));
+            $result .= $OUTPUT->single_button($deleteurl, get_string('deleteallattempts', 'mod_exescorm'));
         }
     }
 
@@ -1605,10 +1605,10 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
                         $usertrack = $usertracks[$sco->identifier];
 
                         // Check we have a valid status string identifier.
-                        if ($statusstringexists = get_string_manager()->string_exists($usertrack->status, 'exescorm')) {
-                            $strstatus = get_string($usertrack->status, 'exescorm');
+                        if ($statusstringexists = get_string_manager()->string_exists($usertrack->status, 'mod_exescorm')) {
+                            $strstatus = get_string($usertrack->status, 'mod_exescorm');
                         } else {
-                            $strstatus = get_string('invalidstatus', 'exescorm');
+                            $strstatus = get_string('invalidstatus', 'mod_exescorm');
                         }
 
                         if ($sco->exescormtype == 'sco') {
@@ -1616,7 +1616,7 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
                             $statusicon = $OUTPUT->pix_icon($statusstringexists ? $usertrack->status : 'incomplete',
                                 $strstatus, 'exescorm');
                         } else {
-                            $statusicon = $OUTPUT->pix_icon('asset', get_string('assetlaunched', 'exescorm'), 'exescorm');
+                            $statusicon = $OUTPUT->pix_icon('asset', get_string('assetlaunched', 'mod_exescorm'), 'mod_exescorm');
                         }
 
                         if (($usertrack->status == 'notattempted') ||
@@ -1628,7 +1628,7 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
                             }
                         }
 
-                        $strsuspended = get_string('suspended', 'exescorm');
+                        $strsuspended = get_string('suspended', 'mod_exescorm');
 
                         $exitvar = 'cmi.core.exit';
 
@@ -1649,17 +1649,17 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
 
                         if ($sco->exescormtype == 'sco') {
                             $statusicon = $OUTPUT->pix_icon('notattempted',
-                                                            get_string('notattempted', 'exescorm'),
+                                                            get_string('notattempted', 'mod_exescorm'),
                                                             'exescorm');
                         } else {
-                            $statusicon = $OUTPUT->pix_icon('asset', get_string('asset', 'exescorm'), 'exescorm');
+                            $statusicon = $OUTPUT->pix_icon('asset', get_string('asset', 'mod_exescorm'), 'mod_exescorm');
                         }
                     }
                 }
             }
 
             if (empty($statusicon)) {
-                $sco->statusicon = $OUTPUT->pix_icon('notattempted', get_string('notattempted', 'exescorm'), 'exescorm');
+                $sco->statusicon = $OUTPUT->pix_icon('notattempted', get_string('notattempted', 'mod_exescorm'), 'mod_exescorm');
             } else {
                 $sco->statusicon = $statusicon;
             }
@@ -1802,7 +1802,7 @@ function exescorm_format_toc_for_treeview($user, $exescorm, $scoes, $usertracks,
                 $viewscore = has_capability('mod/exescorm:viewscores', context_module::instance($cmid));
                 if (isset($usertracks[$sco->identifier]->score_raw) && $viewscore) {
                     if ($usertracks[$sco->identifier]->score_raw != '') {
-                        $score = '('.get_string('score', 'exescorm').':&nbsp;'.$usertracks[$sco->identifier]->score_raw.')';
+                        $score = '('.get_string('score', 'mod_exescorm').':&nbsp;'.$usertracks[$sco->identifier]->score_raw.')';
                     }
                 }
             }
@@ -2100,7 +2100,7 @@ function exescorm_check_url($url) {
     $cmsg = $curl->head($url);
     $info = $curl->get_info();
     if (empty($info['http_code']) || $info['http_code'] != 200) {
-        return get_string('invalidurlhttpcheck', 'exescorm', array('cmsg' => $cmsg));
+        return get_string('invalidurlhttpcheck', 'mod_exescorm', array('cmsg' => $cmsg));
     }
 
     return true;
@@ -2432,6 +2432,7 @@ function exescorm_eval_prerequisites($prerequisites, $usertracks) {
         }
         $stack[] = ' '.$element.' ';
     }
+    // phpcs:ignore
     return eval('return '.implode($stack).';');
 }
 
@@ -2456,7 +2457,7 @@ function exescorm_update_calendar(stdClass $exescorm, $cmid) {
         array('modulename' => 'exescorm', 'instance' => $exescorm->id, 'eventtype' => $event->eventtype))) {
         if ((!empty($exescorm->timeopen)) && ($exescorm->timeopen > 0)) {
             // Calendar event exists so update it.
-            $event->name = get_string('calendarstart', 'exescorm', $exescorm->name);
+            $event->name = get_string('calendarstart', 'mod_exescorm', $exescorm->name);
             $event->description = format_module_intro('exescorm', $exescorm, $cmid, false);
             $event->format = FORMAT_HTML;
             $event->timestart = $exescorm->timeopen;
@@ -2474,7 +2475,7 @@ function exescorm_update_calendar(stdClass $exescorm, $cmid) {
     } else {
         // Event doesn't exist so create one.
         if ((!empty($exescorm->timeopen)) && ($exescorm->timeopen > 0)) {
-            $event->name = get_string('calendarstart', 'exescorm', $exescorm->name);
+            $event->name = get_string('calendarstart', 'mod_exescorm', $exescorm->name);
             $event->description = format_module_intro('exescorm', $exescorm, $cmid, false);
             $event->format = FORMAT_HTML;
             $event->courseid = $exescorm->course;
@@ -2499,7 +2500,7 @@ function exescorm_update_calendar(stdClass $exescorm, $cmid) {
         array('modulename' => 'exescorm', 'instance' => $exescorm->id, 'eventtype' => $event->eventtype))) {
         if ((!empty($exescorm->timeclose)) && ($exescorm->timeclose > 0)) {
             // Calendar event exists so update it.
-            $event->name = get_string('calendarend', 'exescorm', $exescorm->name);
+            $event->name = get_string('calendarend', 'mod_exescorm', $exescorm->name);
             $event->description = format_module_intro('exescorm', $exescorm, $cmid, false);
             $event->format = FORMAT_HTML;
             $event->timestart = $exescorm->timeclose;
@@ -2517,7 +2518,7 @@ function exescorm_update_calendar(stdClass $exescorm, $cmid) {
     } else {
         // Event doesn't exist so create one.
         if ((!empty($exescorm->timeclose)) && ($exescorm->timeclose > 0)) {
-            $event->name = get_string('calendarend', 'exescorm', $exescorm->name);
+            $event->name = get_string('calendarend', 'mod_exescorm', $exescorm->name);
             $event->description = format_module_intro('exescorm', $exescorm, $cmid, false);
             $event->format = FORMAT_HTML;
             $event->courseid = $exescorm->course;

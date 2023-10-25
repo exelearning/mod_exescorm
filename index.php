@@ -37,11 +37,11 @@ $event = \mod_exescorm\event\course_module_instance_list_viewed::create(['contex
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$strexescorm = get_string("modulename", "exescorm");
-$strexescorms = get_string("modulenameplural", "exescorm");
+$strexescorm = get_string("modulename", "mod_exescorm");
+$strexescorms = get_string("modulenameplural", "mod_exescorm");
 $strname = get_string("name");
 $strsummary = get_string("summary");
-$strreport = get_string("report", 'exescorm');
+$strreport = get_string("report", 'mod_exescorm');
 $strlastmodified = get_string("lastmodified");
 
 $PAGE->set_title($strexescorms);
@@ -89,14 +89,14 @@ foreach ($exescorms as $exescorm) {
         $trackedusers = exescorm_get_count_users($exescorm->id, $exescorm->groupingid);
         if ($trackedusers > 0) {
             $reportshow = html_writer::link('report.php?id='.$exescorm->coursemodule,
-                                                get_string('viewallreports', 'exescorm', $trackedusers));
+                                                get_string('viewallreports', 'mod_exescorm', $trackedusers));
         } else {
-            $reportshow = get_string('noreports', 'exescorm');
+            $reportshow = get_string('noreports', 'mod_exescorm');
         }
     } else if (has_capability('mod/exescorm:viewscores', $context)) {
         require_once('locallib.php');
         $report = exescorm_grade_user($exescorm, $USER->id);
-        $reportshow = get_string('score', 'exescorm').": ".$report;
+        $reportshow = get_string('score', 'mod_exescorm').": ".$report;
     }
     $options = (object)array('noclean' => true);
     if (!$exescorm->visible) {
