@@ -63,8 +63,8 @@ class mod_exescorm_mod_form extends moodleform_mod {
                 $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormedit', 'mod_exescorm');
             } else {
                 $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormcreate', 'mod_exescorm');
+                $defaulttype = EXESCORM_TYPE_EXESCORMNET;
             }
-            $defaulttype = EXESCORM_TYPE_EXESCORMNET;
         }
         if ($cfgexescorm->allowtypeexternal) {
             $exescormtypes[EXESCORM_TYPE_EXTERNAL] = get_string('typeexternal', 'mod_exescorm');
@@ -80,9 +80,6 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         $nonfilepickertypes = [
                 EXESCORM_TYPE_EXESCORMNET,
-                EXESCORM_TYPE_EXTERNAL,
-                EXESCORM_TYPE_LOCALSYNC,
-                EXESCORM_TYPE_AICCURL,
             ];
         // Reference.
         $mform->addElement('select', 'exescormtype', get_string('exescormtype', 'mod_exescorm'), $exescormtypes);
