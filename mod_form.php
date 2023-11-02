@@ -30,7 +30,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         if (!$CFG->slasharguments) {
             $mform->addElement('static', '', '',
-                                $OUTPUT->notification(get_string('slashargs', 'exescorm'), 'notifyproblem'));
+                                $OUTPUT->notification(get_string('slashargs', 'mod_exescorm'), 'notifyproblem'));
         }
 
         $mform->addElement('header', 'general', get_string('general', 'form'));
@@ -49,54 +49,51 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $this->standard_intro_elements();
 
         // Package.
-        $mform->addElement('header', 'packagehdr', get_string('packagehdr', 'exescorm'));
+        $mform->addElement('header', 'packagehdr', get_string('packagehdr', 'mod_exescorm'));
         $mform->setExpanded('packagehdr', true);
 
         $editmode = !empty($this->_instance);
         // Package types.
         $exescormtypes = [
-            EXESCORM_TYPE_LOCAL => get_string('typelocal', 'exescorm'),
+            EXESCORM_TYPE_LOCAL => get_string('typelocal', 'mod_exescorm'),
         ];
         $defaulttype = EXESCORM_TYPE_LOCAL;
         if (!empty($cfgexescorm->exeonlinebaseuri) && !empty($cfgexescorm->hmackey1)) {
             if ($editmode) {
-                $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormedit', 'exescorm');
+                $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormedit', 'mod_exescorm');
             } else {
-                $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormcreate', 'exescorm');
+                $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormcreate', 'mod_exescorm');
+                $defaulttype = EXESCORM_TYPE_EXESCORMNET;
             }
-            $defaulttype = EXESCORM_TYPE_EXESCORMNET;
         }
         if ($cfgexescorm->allowtypeexternal) {
-            $exescormtypes[EXESCORM_TYPE_EXTERNAL] = get_string('typeexternal', 'exescorm');
+            $exescormtypes[EXESCORM_TYPE_EXTERNAL] = get_string('typeexternal', 'mod_exescorm');
         }
 
         if ($cfgexescorm->allowtypelocalsync) {
-            $exescormtypes[EXESCORM_TYPE_LOCALSYNC] = get_string('typelocalsync', 'exescorm');
+            $exescormtypes[EXESCORM_TYPE_LOCALSYNC] = get_string('typelocalsync', 'mod_exescorm');
         }
 
         if ($cfgexescorm->allowtypeexternalaicc) {
-            $exescormtypes[EXESCORM_TYPE_AICCURL] = get_string('typeaiccurl', 'exescorm');
+            $exescormtypes[EXESCORM_TYPE_AICCURL] = get_string('typeaiccurl', 'mod_exescorm');
         }
 
         $nonfilepickertypes = [
                 EXESCORM_TYPE_EXESCORMNET,
-                EXESCORM_TYPE_EXTERNAL,
-                EXESCORM_TYPE_LOCALSYNC,
-                EXESCORM_TYPE_AICCURL,
             ];
         // Reference.
-        $mform->addElement('select', 'exescormtype', get_string('exescormtype', 'exescorm'), $exescormtypes);
+        $mform->addElement('select', 'exescormtype', get_string('exescormtype', 'mod_exescorm'), $exescormtypes);
         $mform->setDefault('exescormtype', $defaulttype);
         $mform->setType('exescormtype', PARAM_ALPHA);
         $mform->addHelpButton('exescormtype', 'exescormtype', 'exescorm');
-        $mform->addElement('text', 'packageurl', get_string('packageurl', 'exescorm'), array('size' => 60));
+        $mform->addElement('text', 'packageurl', get_string('packageurl', 'mod_exescorm'), array('size' => 60));
         $mform->setType('packageurl', PARAM_RAW);
         $mform->addHelpButton('packageurl', 'packageurl', 'exescorm');
         $mform->hideIf('packageurl', 'exescormtype', 'in', [EXESCORM_TYPE_LOCAL, EXESCORM_TYPE_EXESCORMNET]);
         // Workarround to hide static element.
         $group = [];
         $staticelement = $mform->createElement('static', 'onlinetypehelp', '',
-                                                get_string('exescorm:onlinetypehelp', 'exescorm'));
+                                                get_string('exescorm:onlinetypehelp', 'mod_exescorm'));
         $staticelement->updateAttributes(['class' => 'font-weight-bold']);
         $group[] =& $staticelement;
         $mform->addGroup($group, 'typehelpgroup', '', ' ', false);
@@ -108,12 +105,12 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $filemanageroptions['maxfiles'] = 1;
         $filemanageroptions['subdirs'] = 0;
 
-        $mform->addElement('filemanager', 'packagefile', get_string('package', 'exescorm'), null, $filemanageroptions);
+        $mform->addElement('filemanager', 'packagefile', get_string('package', 'mod_exescorm'), null, $filemanageroptions);
         $mform->addHelpButton('packagefile', 'package', 'exescorm');
         $mform->hideIf('packagefile', 'exescormtype', 'in', $nonfilepickertypes);
 
         // Update packages timing.
-        $mform->addElement('select', 'updatefreq', get_string('updatefreq', 'exescorm'), exescorm_get_updatefreq_array());
+        $mform->addElement('select', 'updatefreq', get_string('updatefreq', 'mod_exescorm'), exescorm_get_updatefreq_array());
         $mform->setType('updatefreq', PARAM_INT);
         $mform->setDefault('updatefreq', $cfgexescorm->updatefreq);
         $mform->addHelpButton('updatefreq', 'updatefreq', 'exescorm');
@@ -123,19 +120,19 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->addElement('header', 'displaysettings', get_string('appearance'));
 
         // Framed / Popup Window.
-        $mform->addElement('select', 'popup', get_string('display', 'exescorm'), exescorm_get_popup_display_array());
+        $mform->addElement('select', 'popup', get_string('display', 'mod_exescorm'), exescorm_get_popup_display_array());
         $mform->setDefault('popup', $cfgexescorm->popup);
         $mform->setAdvanced('popup', $cfgexescorm->popup_adv);
 
         // Width.
-        $mform->addElement('text', 'width', get_string('width', 'exescorm'), 'maxlength="5" size="5"');
+        $mform->addElement('text', 'width', get_string('width', 'mod_exescorm'), 'maxlength="5" size="5"');
         $mform->setDefault('width', $cfgexescorm->framewidth);
         $mform->setType('width', PARAM_INT);
         $mform->setAdvanced('width', $cfgexescorm->framewidth_adv);
         $mform->hideIf('width', 'popup', 'eq', 0);
 
         // Height.
-        $mform->addElement('text', 'height', get_string('height', 'exescorm'), 'maxlength="5" size="5"');
+        $mform->addElement('text', 'height', get_string('height', 'mod_exescorm'), 'maxlength="5" size="5"');
         $mform->setDefault('height', $cfgexescorm->frameheight);
         $mform->setType('height', PARAM_INT);
         $mform->setAdvanced('height', $cfgexescorm->frameheight_adv);
@@ -144,48 +141,48 @@ class mod_exescorm_mod_form extends moodleform_mod {
         // Window Options.
         $winoptgrp = array();
         foreach (exescorm_get_popup_options_array() as $key => $value) {
-            $winoptgrp[] = &$mform->createElement('checkbox', $key, '', get_string($key, 'exescorm'));
+            $winoptgrp[] = &$mform->createElement('checkbox', $key, '', get_string($key, 'mod_exescorm'));
             $mform->setDefault($key, $value);
         }
-        $mform->addGroup($winoptgrp, 'winoptgrp', get_string('options', 'exescorm'), '<br />', false);
+        $mform->addGroup($winoptgrp, 'winoptgrp', get_string('options', 'mod_exescorm'), '<br />', false);
         $mform->hideIf('winoptgrp', 'popup', 'eq', 0);
         $mform->setAdvanced('winoptgrp', $cfgexescorm->winoptgrp_adv);
 
         // Skip view page.
         $skipviewoptions = exescorm_get_skip_view_array();
-        $mform->addElement('select', 'skipview', get_string('skipview', 'exescorm'), $skipviewoptions);
+        $mform->addElement('select', 'skipview', get_string('skipview', 'mod_exescorm'), $skipviewoptions);
         $mform->addHelpButton('skipview', 'skipview', 'exescorm');
         $mform->setDefault('skipview', $cfgexescorm->skipview);
         $mform->setAdvanced('skipview', $cfgexescorm->skipview_adv);
 
         // Hide Browse.
-        $mform->addElement('selectyesno', 'hidebrowse', get_string('hidebrowse', 'exescorm'));
+        $mform->addElement('selectyesno', 'hidebrowse', get_string('hidebrowse', 'mod_exescorm'));
         $mform->addHelpButton('hidebrowse', 'hidebrowse', 'exescorm');
         $mform->setDefault('hidebrowse', $cfgexescorm->hidebrowse);
         $mform->setAdvanced('hidebrowse', $cfgexescorm->hidebrowse_adv);
 
         // Display course structure.
-        $mform->addElement('selectyesno', 'displaycoursestructure', get_string('displaycoursestructure', 'exescorm'));
+        $mform->addElement('selectyesno', 'displaycoursestructure', get_string('displaycoursestructure', 'mod_exescorm'));
         $mform->addHelpButton('displaycoursestructure', 'displaycoursestructure', 'exescorm');
         $mform->setDefault('displaycoursestructure', $cfgexescorm->displaycoursestructure);
         $mform->setAdvanced('displaycoursestructure', $cfgexescorm->displaycoursestructure_adv);
 
         // Toc display.
-        $mform->addElement('select', 'hidetoc', get_string('hidetoc', 'exescorm'), exescorm_get_hidetoc_array());
+        $mform->addElement('select', 'hidetoc', get_string('hidetoc', 'mod_exescorm'), exescorm_get_hidetoc_array());
         $mform->addHelpButton('hidetoc', 'hidetoc', 'exescorm');
         $mform->setDefault('hidetoc', $cfgexescorm->hidetoc);
         $mform->setAdvanced('hidetoc', $cfgexescorm->hidetoc_adv);
         $mform->disabledIf('hidetoc', 'exescormtype', 'eq', EXESCORM_TYPE_AICCURL);
 
         // Navigation panel display.
-        $mform->addElement('select', 'nav', get_string('nav', 'exescorm'), exescorm_get_navigation_display_array());
+        $mform->addElement('select', 'nav', get_string('nav', 'mod_exescorm'), exescorm_get_navigation_display_array());
         $mform->addHelpButton('nav', 'nav', 'exescorm');
         $mform->setDefault('nav', $cfgexescorm->nav);
         $mform->setAdvanced('nav', $cfgexescorm->nav_adv);
         $mform->hideIf('nav', 'hidetoc', 'noteq', EXESCORM_TOC_SIDE);
 
         // Navigation panel position from left.
-        $mform->addElement('text', 'navpositionleft', get_string('fromleft', 'exescorm'), 'maxlength="5" size="5"');
+        $mform->addElement('text', 'navpositionleft', get_string('fromleft', 'mod_exescorm'), 'maxlength="5" size="5"');
         $mform->setDefault('navpositionleft', $cfgexescorm->navpositionleft);
         $mform->setType('navpositionleft', PARAM_INT);
         $mform->setAdvanced('navpositionleft', $cfgexescorm->navpositionleft_adv);
@@ -193,7 +190,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->hideIf('navpositionleft', 'nav', 'noteq', EXESCORM_NAV_FLOATING);
 
         // Navigation panel position from top.
-        $mform->addElement('text', 'navpositiontop', get_string('fromtop', 'exescorm'), 'maxlength="5" size="5"');
+        $mform->addElement('text', 'navpositiontop', get_string('fromtop', 'mod_exescorm'), 'maxlength="5" size="5"');
         $mform->setDefault('navpositiontop', $cfgexescorm->navpositiontop);
         $mform->setType('navpositiontop', PARAM_INT);
         $mform->setAdvanced('navpositiontop', $cfgexescorm->navpositiontop_adv);
@@ -201,7 +198,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->hideIf('navpositiontop', 'nav', 'noteq', EXESCORM_NAV_FLOATING);
 
         // Display attempt status.
-        $mform->addElement('select', 'displayattemptstatus', get_string('displayattemptstatus', 'exescorm'),
+        $mform->addElement('select', 'displayattemptstatus', get_string('displayattemptstatus', 'mod_exescorm'),
                            exescorm_get_attemptstatus_array());
         $mform->addHelpButton('displayattemptstatus', 'displayattemptstatus', 'exescorm');
         $mform->setDefault('displayattemptstatus', $cfgexescorm->displayattemptstatus);
@@ -211,15 +208,15 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->addElement('header', 'availability', get_string('availability'));
 
         $mform->addElement('date_time_selector', 'timeopen',
-                        get_string("exescormopen", "exescorm"), array('optional' => true));
+                        get_string("exescormopen", "mod_exescorm"), array('optional' => true));
         $mform->addElement('date_time_selector', 'timeclose',
-                        get_string("exescormclose", "exescorm"), array('optional' => true));
+                        get_string("exescormclose", "mod_exescorm"), array('optional' => true));
 
         // Grade Settings.
-        $mform->addElement('header', 'gradesettings', get_string('gradenoun', 'exescorm'));
+        $mform->addElement('header', 'gradesettings', get_string('gradenoun', 'mod_exescorm'));
 
         // Grade Method.
-        $mform->addElement('select', 'grademethod', get_string('grademethod', 'exescorm'), exescorm_get_grade_method_array());
+        $mform->addElement('select', 'grademethod', get_string('grademethod', 'mod_exescorm'), exescorm_get_grade_method_array());
         $mform->addHelpButton('grademethod', 'grademethod', 'exescorm');
         $mform->setDefault('grademethod', $cfgexescorm->grademethod);
 
@@ -232,50 +229,50 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->hideIf('maxgrade', 'grademethod', 'eq', EXESCORM_GRADESCOES);
 
         // Attempts management.
-        $mform->addElement('header', 'attemptsmanagementhdr', get_string('attemptsmanagement', 'exescorm'));
+        $mform->addElement('header', 'attemptsmanagementhdr', get_string('attemptsmanagement', 'mod_exescorm'));
 
         // Max Attempts.
-        $mform->addElement('select', 'maxattempt', get_string('maximumattempts', 'exescorm'), exescorm_get_attempts_array());
+        $mform->addElement('select', 'maxattempt', get_string('maximumattempts', 'mod_exescorm'), exescorm_get_attempts_array());
         $mform->addHelpButton('maxattempt', 'maximumattempts', 'exescorm');
         $mform->setDefault('maxattempt', $cfgexescorm->maxattempt);
 
         // What Grade.
-        $mform->addElement('select', 'whatgrade', get_string('whatgrade', 'exescorm'),  exescorm_get_what_grade_array());
+        $mform->addElement('select', 'whatgrade', get_string('whatgrade', 'mod_exescorm'),  exescorm_get_what_grade_array());
         $mform->hideIf('whatgrade', 'maxattempt', 'eq', 1);
         $mform->addHelpButton('whatgrade', 'whatgrade', 'exescorm');
         $mform->setDefault('whatgrade', $cfgexescorm->whatgrade);
 
         // Force new attempt.
         $newattemptselect = exescorm_get_forceattempt_array();
-        $mform->addElement('select', 'forcenewattempt', get_string('forcenewattempts', 'exescorm'), $newattemptselect);
+        $mform->addElement('select', 'forcenewattempt', get_string('forcenewattempts', 'mod_exescorm'), $newattemptselect);
         $mform->addHelpButton('forcenewattempt', 'forcenewattempts', 'exescorm');
         $mform->setDefault('forcenewattempt', $cfgexescorm->forcenewattempt);
 
         // Last attempt lock - lock the enter button after the last available attempt has been made.
-        $mform->addElement('selectyesno', 'lastattemptlock', get_string('lastattemptlock', 'exescorm'));
+        $mform->addElement('selectyesno', 'lastattemptlock', get_string('lastattemptlock', 'mod_exescorm'));
         $mform->addHelpButton('lastattemptlock', 'lastattemptlock', 'exescorm');
         $mform->setDefault('lastattemptlock', $cfgexescorm->lastattemptlock);
 
         // Compatibility settings.
-        $mform->addElement('header', 'compatibilitysettingshdr', get_string('compatibilitysettings', 'exescorm'));
+        $mform->addElement('header', 'compatibilitysettingshdr', get_string('compatibilitysettings', 'mod_exescorm'));
 
         // Force completed.
-        $mform->addElement('selectyesno', 'forcecompleted', get_string('forcecompleted', 'exescorm'));
+        $mform->addElement('selectyesno', 'forcecompleted', get_string('forcecompleted', 'mod_exescorm'));
         $mform->addHelpButton('forcecompleted', 'forcecompleted', 'exescorm');
         $mform->setDefault('forcecompleted', $cfgexescorm->forcecompleted);
 
         // Autocontinue.
-        $mform->addElement('selectyesno', 'auto', get_string('autocontinue', 'exescorm'));
+        $mform->addElement('selectyesno', 'auto', get_string('autocontinue', 'mod_exescorm'));
         $mform->addHelpButton('auto', 'autocontinue', 'exescorm');
         $mform->setDefault('auto', $cfgexescorm->auto);
 
         // Autocommit.
-        $mform->addElement('selectyesno', 'autocommit', get_string('autocommit', 'exescorm'));
+        $mform->addElement('selectyesno', 'autocommit', get_string('autocommit', 'mod_exescorm'));
         $mform->addHelpButton('autocommit', 'autocommit', 'exescorm');
         $mform->setDefault('autocommit', $cfgexescorm->autocommit);
 
         // Mastery score overrides status.
-        $mform->addElement('selectyesno', 'masteryoverride', get_string('masteryoverride', 'exescorm'));
+        $mform->addElement('selectyesno', 'masteryoverride', get_string('masteryoverride', 'mod_exescorm'));
         $mform->addHelpButton('masteryoverride', 'masteryoverride', 'exescorm');
         $mform->setDefault('masteryoverride', $cfgexescorm->masteryoverride);
 
@@ -433,7 +430,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
             $reference = $data['packageurl'];
             // Syntax check.
             if (!preg_match('/(http:\/\/|https:\/\/|www).*\/imsmanifest.xml$/i', $reference)) {
-                $errors['packageurl'] = get_string('invalidurl', 'exescorm');
+                $errors['packageurl'] = get_string('invalidurl', 'mod_exescorm');
             } else {
                 // Availability check.
                 $result = exescorm_check_url($reference);
@@ -446,7 +443,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
             $reference = $data['reference'];
             // Syntax check.
             if (!preg_match('/(http:\/\/|https:\/\/|www).*(\.zip|\.pif)$/i', $reference)) {
-                $errors['packageurl'] = get_string('invalidurl', 'exescorm');
+                $errors['packageurl'] = get_string('invalidurl', 'mod_exescorm');
             } else {
                 // Availability check.
                 $result = exescorm_check_url($reference);
@@ -459,7 +456,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
             $reference = $data['packageurl'];
             // Syntax check.
             if (!preg_match('/(http:\/\/|https:\/\/|www).*/', $reference)) {
-                $errors['packageurl'] = get_string('invalidurl', 'exescorm');
+                $errors['packageurl'] = get_string('invalidurl', 'mod_exescorm');
             } else {
                 // Availability check.
                 $result = exescorm_check_url($reference);
@@ -473,7 +470,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         // Validate availability dates.
         if ($data['timeopen'] && $data['timeclose']) {
             if ($data['timeopen'] > $data['timeclose']) {
-                $errors['timeclose'] = get_string('closebeforeopen', 'exescorm');
+                $errors['timeclose'] = get_string('closebeforeopen', 'mod_exescorm');
             }
         }
         if (!empty($data['completionstatusallscos'])) {
@@ -484,7 +481,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
                 }
             }
             if (!$requirestatus) {
-                $errors['completionstatusallscos'] = get_string('youmustselectastatus', 'exescorm');
+                $errors['completionstatusallscos'] = get_string('youmustselectastatus', 'mod_exescorm');
             }
         }
 
@@ -527,7 +524,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $group[] =& $mform->createElement('text', 'completionscorerequired', '', array('size' => 5));
         $group[] =& $mform->createElement('checkbox', 'completionscoredisabled', null, get_string('disable'));
         $mform->setType('completionscorerequired', PARAM_INT);
-        $mform->addGroup($group, 'completionscoregroup', get_string('completionscorerequired', 'exescorm'), '', false);
+        $mform->addGroup($group, 'completionscoregroup', get_string('completionscorerequired', 'mod_exescorm'), '', false);
         $mform->addHelpButton('completionscoregroup', 'completionscorerequired', 'exescorm');
         $mform->disabledIf('completionscorerequired', 'completionscoredisabled', 'checked');
         $mform->setDefault('completionscorerequired', 0);
@@ -541,7 +538,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
             $name = null;
             $key = 'completionstatusrequired['.$key.']';
             if ($first) {
-                $name = get_string('completionstatusrequired', 'exescorm');
+                $name = get_string('completionstatusrequired', 'mod_exescorm');
                 $first = false;
                 $firstkey = $key;
             }
@@ -551,7 +548,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         }
         $mform->addHelpButton($firstkey, 'completionstatusrequired', 'exescorm');
 
-        $mform->addElement('checkbox', 'completionstatusallscos', get_string('completionstatusallscos', 'exescorm'));
+        $mform->addElement('checkbox', 'completionstatusallscos', get_string('completionstatusallscos', 'mod_exescorm'));
         $mform->setType('completionstatusallscos', PARAM_BOOL);
         $mform->addHelpButton('completionstatusallscos', 'completionstatusallscos', 'exescorm');
         $mform->setDefault('completionstatusallscos', 0);

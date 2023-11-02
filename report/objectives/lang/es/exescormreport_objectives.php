@@ -15,15 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * exescorm version information.
+ * Strings for component 'exescorm_objectives' report plugin
  *
- * @package    mod_exescorm
- * @copyright  1999 onwards Martin Dougiamas  {@link http://moodle.com}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   exescormreport_objectives
+ * @author    Dan Marsden <dan@danmarsden.com>
+ * @copyright 2013 Dan Marsden
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2023073000;    // The current module version (Date: YYYYMMDDXX).
-$plugin->requires = 2020061500;    // Moodle 3.9 to 4.1.
-$plugin->component = 'mod_exescorm';   // Full name of the plugin (used for diagnostics).
+$string['objectivescore'] = 'Mostrar puntuación del objetivo';
+$string['objectivex'] = 'Objetivo {$a}';
+$string['pluginname'] = 'Informe de objetivos';
+$string['privacy:metadata:preference:scorm_report_objectives_score'] = 'Si mostrar el puntaje objetivo en el informe SCORM';
+$string['privacy:metadata:preference:scorm_report_pagesize'] = 'Número de usuarios para mostrar en los informes SCORM';
+$string['score'] = 'puntuación';
+$string['status'] = 'estado';

@@ -102,10 +102,10 @@ if (empty($collapsetocwinsize)) {
 
 require_login($course, false, $cm);
 
-$strexescorms = get_string('modulenameplural', 'exescorm');
-$strexescorm = get_string('modulename', 'exescorm');
-$strpopup = get_string('popup', 'exescorm');
-$strexit = get_string('exitactivity', 'exescorm');
+$strexescorms = get_string('modulenameplural', 'mod_exescorm');
+$strexescorm = get_string('modulename', 'mod_exescorm');
+$strpopup = get_string('popup', 'mod_exescorm');
+$strexit = get_string('exitactivity', 'mod_exescorm');
 
 $coursecontext = context_course::instance($course->id);
 
@@ -146,7 +146,7 @@ $result = exescorm_get_toc($USER, $exescorm, $cm->id, EXESCORM_TOCJSLINK, $curre
 $sco = $result->sco;
 if ($exescorm->lastattemptlock == 1 && $result->attemptleft == 0) {
     echo $OUTPUT->header();
-    echo $OUTPUT->notification(get_string('exceededmaxattempts', 'exescorm'));
+    echo $OUTPUT->notification(get_string('exceededmaxattempts', 'mod_exescorm'));
     echo $OUTPUT->footer();
     exit;
 }
@@ -206,11 +206,11 @@ if ($CFG->version >= 2022041900) { // Moodle 4+.
     $activityheader->set_attrs($headerconfig);
 }
 echo $OUTPUT->header();
-$PAGE->requires->string_for_js('navigation', 'exescorm');
-$PAGE->requires->string_for_js('toc', 'exescorm');
+$PAGE->requires->string_for_js('navigation', 'mod_exescorm');
+$PAGE->requires->string_for_js('toc', 'mod_exescorm');
 $PAGE->requires->string_for_js('hide', 'moodle');
 $PAGE->requires->string_for_js('show', 'moodle');
-$PAGE->requires->string_for_js('popupsblocked', 'exescorm');
+$PAGE->requires->string_for_js('popupsblocked', 'mod_exescorm');
 
 $name = false;
 
@@ -229,7 +229,7 @@ echo html_writer::div(html_writer::tag('script', '', array('id' => 'external-exe
 if ($exescorm->hidetoc == EXESCORM_TOC_POPUP || $mode == 'browse' || $mode == 'review') {
     echo html_writer::start_div('pl-2', array('id' => 'exescormtop'));
     if ($mode == 'browse' || $mode == 'review') {
-        echo html_writer::div(get_string("{$mode}mode", 'exescorm'), 'exescorm-left h3', ['id' => 'exescormmode']);
+        echo html_writer::div(get_string("{$mode}mode", 'mod_exescorm'), 'exescorm-left h3', ['id' => 'exescormmode']);
     }
     if ($exescorm->hidetoc == EXESCORM_TOC_POPUP) {
         echo html_writer::div($result->tocmenu, 'exescorm-right', array('id' => 'exescormnav'));
@@ -251,12 +251,12 @@ if (empty($exescorm->popup) || $displaymode == 'popup') {
     // Added incase javascript popups are blocked we don't provide a direct link
     // to the pop-up as JS communication can fail - the user must disable their pop-up blocker.
     $linkcourse = html_writer::link($CFG->wwwroot.'/course/view.php?id='.
-                    $exescorm->course, get_string('finishexescormlinkname', 'exescorm'));
-    echo $OUTPUT->box(get_string('finishexescorm', 'exescorm', $linkcourse), 'generalbox', 'altfinishlink');
+                    $exescorm->course, get_string('finishexescormlinkname', 'mod_exescorm'));
+    echo $OUTPUT->box(get_string('finishexescorm', 'mod_exescorm', $linkcourse), 'generalbox', 'altfinishlink');
 }
 echo html_writer::end_div(); // Toc tree ends.
 echo html_writer::end_div(); // Toc box ends.
-echo html_writer::tag('noscript', html_writer::div(get_string('noscriptnoexescorm', 'exescorm'), '', ['id' => 'noscript']));
+echo html_writer::tag('noscript', html_writer::div(get_string('noscriptnoexescorm', 'mod_exescorm'), '', ['id' => 'noscript']));
 
 if ($result->prerequisites) {
     if ($exescorm->popup != 0 && $displaymode !== 'popup') {
@@ -277,7 +277,7 @@ if ($result->prerequisites) {
                 'src' => 'loadSCO.php?id='.$cm->id.$scoidstr.$modestr)));
     }
 } else {
-    echo $OUTPUT->box(get_string('noprerequisites', 'exescorm'));
+    echo $OUTPUT->box(get_string('noprerequisites', 'mod_exescorm'));
 }
 echo html_writer::end_div(); // Scorm page ends.
 
@@ -286,7 +286,7 @@ $adlnav = exescorm_get_adlnav_json($scoes['scoes']);
 
 if (empty($exescorm->popup) || $displaymode == 'popup') {
     if (!isset($result->toctitle)) {
-        $result->toctitle = get_string('toc', 'exescorm');
+        $result->toctitle = get_string('toc', 'mod_exescorm');
     }
     $jsmodule = array(
         'name' => 'mod_exescorm',
@@ -299,7 +299,7 @@ if (empty($exescorm->popup) || $displaymode == 'popup') {
                         $name, $sco->id, $adlnav], false, $jsmodule);
 }
 if (!empty($forcejs)) {
-    $message = $OUTPUT->box(get_string("forcejavascriptmessage", "exescorm"),
+    $message = $OUTPUT->box(get_string("forcejavascriptmessage", "mod_exescorm"),
                             "generalbox boxaligncenter forcejavascriptmessage");
     echo html_writer::tag('noscript', $message);
 }

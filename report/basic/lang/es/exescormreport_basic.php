@@ -17,13 +17,12 @@
 /**
  * Strings for component 'exescorm_basic' report plugin
  *
- * @package    exescormreport_graphs
- * @copyright  2012 Ankit Kumar Agarwal
+ * @package    exescormreport
+ * @subpackage basic
+ * @author     Ankit Kumar Agarwal
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['invaliddata'] = 'Not enough data';
-$string['participants'] = 'Number of participants';
-$string['percent'] = 'Percent(%) secured';
-$string['pluginname'] = 'Graph report';
-$string['privacy:metadata'] = 'The Graph report only shows data stored in other locations.';
+ $string['pluginname'] = 'Informe básico';
+ $string['privacy:metadata:preference:scorm_report_detailed'] = 'Ya sea para realizar un seguimiento de los detalles en el informe básico de SCORM';
+ $string['privacy:metadata:preference:scorm_report_pagesize'] = 'Número de usuarios para mostrar en los informes SCORM';

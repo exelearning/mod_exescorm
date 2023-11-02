@@ -206,7 +206,7 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             if (window_name) {
                 var mine = window.open('','','width=1,height=1,left=0,top=0,scrollbars=no');
                 if(! mine) {
-                    alert(M.util.get_string('popupsblocked', 'exescorm'));
+                    alert(M.util.get_string('popupsblocked', 'mod_exescorm'));
                 }
                 mine.close();
             }
@@ -753,7 +753,7 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                 }
                 exescorm_nav_panel = new Y.Panel({
                     fillHeight: "body",
-                    headerContent: M.util.get_string('navigation', 'exescorm'),
+                    headerContent: M.util.get_string('navigation', 'mod_exescorm'),
                     visible: true,
                     xy: navposition,
                     zIndex: 999

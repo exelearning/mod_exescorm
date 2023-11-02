@@ -62,6 +62,12 @@ if (is_string($payload)) {
     exit(1);
 }
 
+if ($payload->pkgtype !== 'scorm') {
+    $resultmsg['description'] = 'KO. Invalid package type. Scorm required.';
+    echo json_encode($resultmsg);
+    exit(1);
+}
+
 // Validate payload course module and userid.
 if (! $cm = get_coursemodule_from_id('exescorm', $payload->cmid, 0, true)) {
     $resultmsg['description'] = 'KO. Invalid ode_id.';

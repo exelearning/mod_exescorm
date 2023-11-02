@@ -31,7 +31,7 @@ $string['aiccuserid'] = 'AICC pasa el número ID del usuario';
 $string['aiccuserid_desc'] = 'El estándar AICC para los nombres de usuario es muy restrictivo en comparación con Moodle, y sólo permite caracteres alfanuméricos, guiones y subrayado. No se permiten puntos, espacios y el símbolo @. Si está activado, los números ID de usuario se pasan al paquete AICC en lugar de los nombres de usuario.';
 $string['activation'] = 'Activación';
 $string['activityloading'] = 'Usted será automáticamente encaminado a la actividad en';
-$string['activityoverview'] = 'Hay paquetes eXescorm que requieren atención';
+$string['activityoverview'] = 'Hay paquetes eXeLearning que requieren atención';
 $string['activitypleasewait'] = 'Cargando actividad, espere por favor...';
 $string['adminsettings'] = 'Configuración de administración';
 $string['advanced'] = 'Parámetros';
@@ -58,7 +58,7 @@ $string['attemptsmanagement'] = 'Gestión de intentos';
 $string['attempt1'] = '1 intento';
 $string['attr_error'] = 'Valor incorrecto para el atributo ({$a->attr}) en la marca {$a->tag}.';
 $string['autocommit'] = 'Auto-guardado';
-$string['autocommit_help'] = 'Si está habilitado, los datos se guardan automáticamente en la base de datos. Útil para los objetos eXescorm que no guardan sus datos con regularidad.';
+$string['autocommit_help'] = 'Si está habilitado, los datos se guardan automáticamente en la base de datos. Útil para los objetos eXeLearning que no guardan sus datos con regularidad.';
 $string['autocommitdesc'] = 'Guardar automáticamente los datos si el paquete no ha sido guardado.';
 $string['autocontinue'] = 'Continuación automática';
 $string['autocontinue_help'] = 'Si se habilita, los objetos de aprendizaje subsecuentes son iniciados automáticamente sino el botón Continuar debe ser usado.';
@@ -67,7 +67,7 @@ $string['EXESCORM_AVERAGEATTEMPT'] = 'Intentos promedio';
 $string['badmanifest'] = 'Algunos Errores de manifiesto: ver registro de errores';
 $string['badimsmanifestlocation'] = 'Se encontró un archivo imsmanifest.xml pero no estaba en la raíz de su archivo zip. Por favor, revise el contenido.';
 $string['badarchive'] = 'Debe proporcionar un archivo zip válido';
-$string['badexelearningpackage'] = 'El paquete no cumple las normas de los contenidos eXescorm definidas para el sitio.';
+$string['badexelearningpackage'] = 'El paquete no cumple las normas de los contenidos eXeLearning definidas para el sitio.';
 $string['browse'] = 'Vista previa';
 $string['browsed'] = 'Navegado';
 $string['browsemode'] = 'Modo de presentación preliminar';
@@ -89,14 +89,14 @@ $string['completiondetail:completionscore'] = 'Obtener una calificación de {$a}
 $string['completiondetail:allscos'] = 'Hacer todas las partes de esta actividad';
 $string['completionscorerequired'] = 'Requiere puntuación mínima';
 $string['completionscorerequireddesc'] = 'Se requiere un puntaje mínimo de {$a} para completarse.';
-$string['completionscorerequired_help'] = 'Al habilitar este parámetro se requerirá que el usuario tenga al menos la puntuación mínima registrada para que se marque la actividad eXescorm como finalizada, así como cualquier otro requerimiento de Finalización de Actividad.';
+$string['completionscorerequired_help'] = 'Al habilitar este parámetro se requerirá que el usuario tenga al menos la puntuación mínima registrada para que se marque la actividad eXeLearning como finalizada, así como cualquier otro requerimiento de Finalización de Actividad.';
 $string['completionstatus_passed'] = 'Pasado';
 $string['completionstatus_completed'] = 'Finalizado';
 $string['completionstatusallscos'] = 'Requiere que todos los scos devuelvan el estado de finalización';
 $string['completionstatusallscos_help'] = 'Algunos paquetes SCORM contienen múltiples componentes o "scos": cuando está habilitado, todos los "scos" dentro del paquete deben devolver el "estado de la lección" correspondiente para que esta actividad se marque como completada.';
 $string['completionstatusrequired'] = 'Se requiere estado';
 $string['completionstatusrequireddesc'] = 'El estudiante debe alcanzar al menos uno de los siguientes estados: {$a}';
-$string['completionstatusrequired_help'] = 'Al comprobar uno o más estados se requerirá que el alumno cumpla al menos con uno de esos estados para que se marque como finalizada esta  actividad eXescorm, así como cualquier otro requerimiento de Finalización de Actividad';
+$string['completionstatusrequired_help'] = 'Al comprobar uno o más estados se requerirá que el alumno cumpla al menos con uno de esos estados para que se marque como finalizada esta  actividad eXeLearning, así como cualquier otro requerimiento de Finalización de Actividad';
 $string['confirmloosetracks'] = 'ATENCIÓN: El paquete parece haber sido cambiado o modificado. Si la estructura del paquete se ha cambiado, las pistas de algunos usuarios pueden haberse perdido durante el proceso de actualización.';
 $string['contents'] = 'Contenido';
 $string['coursepacket'] = 'Paquete de curso';
@@ -110,27 +110,27 @@ $string['defaultothersettings'] = 'Otras configuraciones predeterminadas';
 $string['deleteattemptcheck'] = '¿Está totalmente seguro que quiere eliminar completamente estos intentos?';
 $string['deleteallattempts'] = 'Eliminar todos los intentos SCORM';
 $string['deleteselected'] = 'Eliminar los intentos seleccionados';
-$string['deleteattemptcheck'] = '¿Está totalmente seguro que quiere eliminar completamente estos intentos?';
 $string['details'] = 'Detalles del rastreo SCO';
 $string['directories'] = 'Mostrar enlaces de directorio';
 $string['disabled'] = 'Deshabilitado';
 $string['display'] = 'Mostrar paquete';
 $string['displayattemptstatus'] = 'Mostrar estado de intentos';
-$string['displayattemptstatus_help'] = 'Esta preferencia permite mostrar un resumen de los intentos de los usuarios en el bloque Vista general del curso en Mi Tablero y/o en la página de entrada del eXescorm.';
-$string['displayattemptstatusdesc'] = 'Mostrar un resumen de los intentos del usuario en el bloque de descripción general del curso en el Tablero y / o la página de entrada eXescorm.';
+$string['displayattemptstatus_help'] = 'Esta preferencia permite mostrar un resumen de los intentos de los usuarios en el bloque Vista general del curso en Mi Tablero y/o en la página de entrada del eXeLearning.';
+$string['displayattemptstatusdesc'] = 'Mostrar un resumen de los intentos del usuario en el bloque de descripción general del curso en el Tablero y / o la página de entrada eXeLearning.';
 $string['displaycoursestructure'] = 'Mostrar estructura del curso en la página de entrada';
 $string['displaycoursestructure_help'] = 'Si está activado, la tabla de contenidos se mostrará en la página de resumen SCORM.';
 $string['displaycoursestructuredesc'] = 'Si está habilitado, la tabla de contenido se muestra en la página de esquema SCORM.';
 $string['displaydesc'] = 'Mostrar el contenido en una nueva ventana.';
 $string['displaysettings'] = 'Configuración de pantalla.';
-$string['dnduploadexescorm'] = 'Añadir un SCORM creado con eXescorm';
+$string['dnduploadexescorm'] = 'Añadir un SCORM creado con eXeLearning';
 $string['domxml'] = 'Librería externa DOMXML';
 $string['editonlinebtnlabel'] = 'Editar';
-$string['editonlinebtnlabel_help'] = 'Envíe el contenido a eXescorm para su edición.';
+$string['editonlinebtnlabel_help'] = 'Envíe el contenido a eXeLearning para su edición.';
 $string['element'] = 'Elemento';
 $string['enter'] = 'Entrar';
-$string['entercourse'] = 'Introducir el curso eXescorm';
+$string['entercourse'] = 'Introducir el curso eXeLearning';
 $string['errorlogs'] = 'Registro de errores';
+$string['erroraccessingreport'] = 'Error accediendo al informe';
 $string['eventattemptdeleted'] = 'Intento eliminado';
 $string['eventinteractionsviewed'] = 'Interacciones visualizadas';
 $string['eventreportviewed'] = 'Reporte visualizado';
@@ -142,13 +142,13 @@ $string['eventuserreportviewed'] = 'Reporte del usuario visualizado';
 $string['everyday'] = 'Todos los días';
 $string['everytime'] = 'Cada vez que se use';
 $string['exceededmaxattempts'] = 'Ha alcanzado el número máximo de intentos';
-$string['exescorm:addinstance'] = 'Añadir un SCORM creado con eXescorm';
+$string['exescorm:addinstance'] = 'Añadir un SCORM creado con eXeLearning';
 $string['exescormclose'] = 'Disponible para';
 $string['exescormcourse'] = 'Curso de aprendizaje';
 $string['exescorm:deleteresponses'] = 'Eliminar intentos SCORM';
 $string['exescorm:forbiddenfileslist'] = 'Archivos prohibidos Lista RE';
 $string['exescorm:forbiddenfileslist_desc'] = 'Aquí puede cofigurar una lista de archivos prohibidos. Introduzca cada archivo prohibido como una expresión regular PHP (RE) en una nueva línea. Por ejemplo:';
-$string['exescorm:onlinetypehelp'] = 'Cuando haga clic en cualquiera de los botones de guardar en la parte inferior de esta página, le llevará a eXeLearning para crear o editar el contenido. Cuando termine, eXescorm lo enviará de vuelta a Moodle.';
+$string['exescorm:onlinetypehelp'] = 'Cuando haga clic en cualquiera de los botones de guardar en la parte inferior de esta página, le llevará a eXeLearning para crear o editar el contenido. Cuando termine, eXeLearning lo enviará de vuelta a Moodle.';
 $string['exescorm:sendtemplate'] = 'Enviar plantilla';
 $string['exescorm:sendtemplate_desc'] = 'Envía la plantilla predeterminada a eXeLearning al crear un nuevo contenido.';
 $string['exescorm:mandatoryfileslist'] = ' Ficheros obligatorios Lista RE';
@@ -165,16 +165,16 @@ $string['exescorm:template_desc'] = 'El elp subido aquí se utilizará como paqu
 $string['exescormtype'] = 'Tipo';
 $string['exescormtype_help'] = 'Este ajuste determina cómo se incluye el paquete en el curso. Hay 4 opciones:
 
-* Paquete subido - Permite elegir SCORM creado con eXescorm por medio del selector de archivos
-* Crear con eXeLearning - Crea la actividad y te lleva a eXeLearning Online apra crear el paquete. Al terminar, eXeLearning enviará el recién creado paquete de vuelta a Moodle.
+* Paquete subido - Permite elegir el SCORM creado con eXeLearning por medio del selector de archivos.
+* Crear con eXeLearning - Crea la actividad y te lleva a eXeLearning para editar el contenido. Al terminar, eXeLearning lo enviará de vuelta a Moodle.
 * Manifiesto SCORM externo - Posibilita especificar una URL imsmanifest.xml. NOTA: Si la URL tiene un nombre de dominio distinto del de su sitio, la mejor opción es "Paquete bajado", puesto que en otro caso las calificaciones no se guardarán.
-* Paquete bajado - Posibilita especificar una URL del paquete. El paquete será descomprimido y guardado localmente, y actualizado cuando se actualice el paquete eXescorm externo.
+* Paquete bajado - Posibilita especificar una URL del paquete. El paquete será descomprimido y guardado localmente, y actualizado cuando se actualice el paquete eXeLearning externo.
 * URL AICC externa - esta URL es la URL de inicio de una actividad AICC única. Se construirá un pseudo paquete alrededor de la misma.';
 $string['exescorm:viewreport'] = 'Ver informes';
 $string['exescorm:viewscores'] = 'Ver puntuaciones';
-$string['exeonline:connectionsettings'] = 'Configuración de la conexión con eXescorm';
+$string['exeonline:connectionsettings'] = 'Configuración de la conexión con eXeLearning';
 $string['exeonline:baseuri'] = 'URI remoto';
-$string['exeonline:baseuri_desc'] = 'URL de eXeLearning Online';
+$string['exeonline:baseuri_desc'] = 'URL de eXeLearning';
 $string['exeonline:hmackey1'] = 'Clave de firma';
 $string['exeonline:hmackey1_desc'] = 'Clave utilizada para firmar los datos enviados al servidor de eXeLearning, de forma que podamos estar seguros de que se originaron en este servidor. Utilice un máximo de 32 caracteres.';
 $string['exeonline:tokenexpiration'] = 'Caducidad del token';
@@ -255,13 +255,13 @@ $string['indicator:socialbreadthdef_link'] = 'Learning_analytics_indicators#Soci
 
 $string['interactions'] = 'Interacciones';
 $string['masteryoverride'] = 'El puntaje de dominio anula el estado';
-$string['masteryoverride_help'] = 'Si está habilitado y se proporciona un puntaje de dominio, cuando se llama a LMSFinish y se ha establecido un puntaje neto, el estado se volverá a calcular utilizando el puntaje neto y el de dominio y se anulará cualquier estado proporcionado por eXescorm (incluido "incompleto").';
+$string['masteryoverride_help'] = 'Si está habilitado y se proporciona un puntaje de dominio, cuando se llama a LMSFinish y se ha establecido un puntaje neto, el estado se volverá a calcular utilizando el puntaje neto y el de dominio y se anulará cualquier estado proporcionado por eXeLearning (incluido "incompleto").';
 $string['masteryoverridedesc'] = 'Esta preferencia establece el valor por defecto de la nota mínima para aprobar sobrescribiendo el valor establecido.';
 $string['myattempts'] = 'Mis intentos';
 $string['myaiccsessions'] = 'Mis sesiones AICC';
 $string['repositorynotsupported'] = 'Este repositorio no soporta vincularse directamente hacia un fichero imsmanifest.xml';
 $string['trackid'] = 'ID';
-$string['trackid_help'] = 'Éste es el identificador establecido por tu paquete eXescorm para esta pregunta,';
+$string['trackid_help'] = 'Éste es el identificador establecido por tu paquete eXeLearning para esta pregunta,';
 $string['trackcorrectcount'] = 'Conteo correcto';
 $string['trackcorrectcount_help'] = 'Número de resultados correctos para la pregunta';
 $string['trackpattern'] = 'Patrón';
@@ -311,17 +311,17 @@ $string['missing_attribute'] = 'Falta atributo ({$a->attr}) en marca {$a->tag}';
 $string['missingparam'] = 'Un parámetro requerido falta o es incorrecto';
 $string['missing_tag'] = 'Falta marca {$a->tag}';
 $string['mode'] = 'Moda';
-$string['modulename'] = 'eXescorm (SCORM)';
-$string['modulename_help'] = 'Un SCORM creado con eXescorm es un conjunto de archivos que se empaquetan conforme a una norma estándar para los objetos de aprendizaje. El módulo de actividad eXescorm (SCORM) permite crear y editar estos SCORM.
+$string['modulename'] = 'eXeLearning (SCORM)';
+$string['modulename_help'] = 'Un SCORM creado con eXeLearning es un conjunto de archivos que se empaquetan conforme a una norma estándar para los objetos de aprendizaje. El módulo de actividad eXeLearning (SCORM) permite crear y editar estos SCORM.
 
-El contenido se muestra normalmente en varias páginas, con navegación entre las páginas. Hay varias opciones para la visualización de los contenidos, con ventanas pop-up, en tablas de contenidos, con botones de navegación, etc. Los contenidos de eXescorm muchas veces incluyen preguntas calificables, que se registra en el libro de calificaciones.
+El contenido se muestra normalmente en varias páginas, con navegación entre las páginas. Hay varias opciones para la visualización de los contenidos, con ventanas pop-up, en tablas de contenidos, con botones de navegación, etc. Los contenidos de eXeLearning muchas veces incluyen preguntas calificables, que se registra en el libro de calificaciones.
 
-Las actividades eXescorm se puede usar
+Las actividades eXeLearning se puede usar
 
 * Para la presentación de contenidos multimedia y animaciones
 * Como herramienta de evaluación';
 $string['modulename_link'] = 'mod/mod_exescorm/view';
-$string['modulenameplural'] = 'Contenidos eXescorm (SCORM)';
+$string['modulenameplural'] = 'Contenidos eXeLearning (SCORM)';
 $string['nav'] = 'Mostrar navegación';
 $string['nav_help'] = 'Este ajuste especifica si se han de mostrar/ocultar los botones de navegación y su posición.
 
@@ -333,7 +333,7 @@ Hay tres opciones:
 $string['navdesc'] = 'Este ajuste especifica si se han de mostrar/ocultar los botones de navegación y su posición.';
 $string['navpositionleft'] = 'Posición de los botones de navegación desde la izquierda en píxeles.';
 $string['navpositiontop'] = 'Posición de los botones de navegación desde arriba, en píxeles.';
-$string['networkdropped'] = 'El visor de eXescorm ha determinado que tu conexión a internet es inestable o ha sido interrumpida. Si continuas en esta actividad eXescorm, tu progreso puede no ser guardado.<br>
+$string['networkdropped'] = 'El visor de eXeLearning ha determinado que tu conexión a internet es inestable o ha sido interrumpida. Si continuas en esta actividad eXeLearning, tu progreso puede no ser guardado.<br>
 Debería cerrar la actividad ahora y volver cuando tenga una conexión a internet estable.';
 $string['newattempt'] = 'Comenzar un nuevo intento';
 $string['next'] = 'Continuar';
@@ -362,15 +362,15 @@ $string['optionsadv_desc'] = 'Si se selecciona, el ancho y el alto serán listad
 $string['organization'] = 'Organización';
 $string['organizations'] = 'Organizaciones';
 $string['othersettings'] = 'Ajustes adicionales';
-$string['page-mod-exescorm-x'] = 'Cualquier página del módulo eXescorm';
+$string['page-mod-exescorm-x'] = 'Cualquier página del módulo eXeLearning';
 $string['pagesize'] = 'Tamaño de la página';
 $string['package'] = 'Paquete';
-$string['package_help'] = 'El archivo del paquete es un archivo zip que contiene un SCORM generado con eXescorm.';
+$string['package_help'] = 'El archivo del paquete es un archivo zip que contiene un SCORM generado con eXeLearning.';
 $string['packagedir'] = 'Error de sistema: No se puede crear el directorio de paquetes';
 $string['packagefile'] = 'No se ha especificado paquete';
 $string['packagehdr'] = 'Paquete';
 $string['packageurl'] = 'URL';
-$string['packageurl_help'] = 'Este parámetro habilita una URL para especificar el contenido eXescorm en lugar de seleccionar un archivo a través del selector de archivos.';
+$string['packageurl_help'] = 'Este parámetro habilita una URL para especificar el contenido eXeLearning en lugar de seleccionar un archivo a través del selector de archivos.';
 $string['passed'] = 'Pasado';
 $string['php5'] = 'PHP 5 (librería nativa DOMXML)';
 $string['player:next'] = 'Siguiente';
@@ -379,8 +379,8 @@ $string['player:skipnext'] = 'Siguiente del mismo nivel';
 $string['player:skipprev'] = 'Anterior del mismo nivel';
 $string['player:toogleFullscreen'] = 'Alternar pantalla completa';
 $string['player:up'] = 'Subir nivel';
-$string['pluginadministration'] = 'Administración del contenido eXescorm';
-$string['pluginname'] = 'eXescorm (SCORM)';
+$string['pluginadministration'] = 'Administración del contenido eXeLearning';
+$string['pluginname'] = 'eXeLearning (SCORM)';
 $string['popup'] = 'Abrir Objetos de Aprendizaje en una ventana nueva';
 $string['popuplaunched'] = 'Este contenido se ha abierto en una nueva ventana. Si has terminado de ver este recurso, haz clic aquí para regresar a la página del curso.';
 $string['popupmenu'] = 'En un menú desplegable';
@@ -403,9 +403,9 @@ $string['privacy:metadata:scoes_track:value'] = 'El valor del elemento dado';
 $string['privacy:metadata:exescorm_aicc_session'] = 'La información de sesión del protocolo AICC HACP';
 $string['privacy:metadata:exescorm_scoes_track'] = 'Los datos rastreados de las SCOes pertenecientes a la actividad.';
 $string['privacy:metadata:timemodified'] = 'La hora en que el elemento rastreado se modificó por última vez';
-$string['privacy:metadata:userid'] = 'El ID del usuario que accedió al contenido eXescorm.';
+$string['privacy:metadata:userid'] = 'El ID del usuario que accedió al contenido eXeLearning.';
 $string['protectpackagedownloads'] = 'Descarga de paquete protegido';
-$string['protectpackagedownloads_desc'] = 'Si está habilitado, los paquetes eXescorm pueden ser descargados solo si el usuario tiene asignada capacidad en course:manageactivities. Si está deshabilitado, los paquetes eXescorm pueden ser siempre descargados.';
+$string['protectpackagedownloads_desc'] = 'Si está habilitado, los paquetes eXeLearning pueden ser descargados solo si el usuario tiene asignada capacidad en course:manageactivities. Si está deshabilitado, los paquetes eXeLearning pueden ser siempre descargados.';
 $string['raw'] = 'Puntuación bruta';
 $string['regular'] = 'Manifiesto regular';
 $string['report'] = 'Informe';
@@ -418,11 +418,11 @@ $string['review'] = 'Revisión';
 $string['reviewmode'] = 'Modo Revisión';
 $string['rightanswer'] = 'Respuesta correcta';
 $string['exescormstandard'] = 'Modo estándar';
-$string['exescormstandarddesc'] = 'Cuando está deshabilitado, Moodle permite que los paquetes SCORM 1.2 almacenen más de lo que permite la especificación, y utiliza la configuración de formato de nombre completo de Moodle cuando pasa el nombre de los usuarios al paquete eXescorm.';
+$string['exescormstandarddesc'] = 'Cuando está deshabilitado, Moodle permite que los paquetes SCORM 1.2 almacenen más de lo que permite la especificación, y utiliza la configuración de formato de nombre completo de Moodle cuando pasa el nombre de los usuarios al paquete eXeLearning.';
 $string['scoes'] = 'Objetos de aprendizaje';
 $string['score'] = 'Puntuación';
 $string['scrollbars'] = 'Permitir desplazamiento de la ventana';
-$string['search:activity'] = 'Paquete eXescorm (SCORM) - Información de actividad';
+$string['search:activity'] = 'Paquete eXeLearning (SCORM) - Información de actividad';
 $string['selectall'] = 'Seleccionar todo';
 $string['selectnone'] = 'Deseleccionar todo';
 $string['show'] = 'Mostrar';
@@ -485,4 +485,4 @@ $string['youmustselectastatus'] = 'Debe seleccionar un estado que será requerid
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Mostrar el nombre de la actividad';
-$string['displayactivityname_help'] = 'Mostrar o no mostrar el nombre de la actividad sobre el visor de eXescorm.';
+$string['displayactivityname_help'] = 'Mostrar o no mostrar el nombre de la actividad sobre el visor de eXeLearning.';

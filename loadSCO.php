@@ -70,7 +70,7 @@ list($sco, $scolaunchurl) = exescorm_get_sco_and_launch_url($exescorm, $scoid, $
 
 if ($sco->exescormtype == 'asset') {
     $attempt = exescorm_get_last_attempt($exescorm->id, $USER->id);
-    $element = (exescorm_version_check($exescorm->version,EXESCORM_SCORM_13)) ? 'cmi.completion_status' : 'cmi.core.lesson_status';
+    $element = (exescorm_version_check($exescorm->version, EXESCORM_SCORM_13)) ? 'cmi.completion_status' : 'cmi.core.lesson_status';
     $value = 'completed';
     exescorm_insert_track($USER->id, $exescorm->id, $sco->id, $attempt, $element, $value);
 }
@@ -85,13 +85,13 @@ if ($sco->exescormtype == 'asset') {
     header('Location: ' . $scolaunchurl);
     // Provide a short feedback in case of slow network connection.
     echo html_writer::start_tag('html');
-    echo html_writer::tag('body', html_writer::tag('p', get_string('activitypleasewait', 'exescorm')));
+    echo html_writer::tag('body', html_writer::tag('p', get_string('activitypleasewait', 'mod_exescorm')));
     echo html_writer::end_tag('html');
     exit;
 }
 
 // We expect a SCO: select which API are we looking for.
-$lmsapi = (exescorm_version_check($exescorm->version,EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'API' : 'API_1484_11';
+$lmsapi = (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'API' : 'API_1484_11';
 
 echo html_writer::start_tag('html');
 echo html_writer::start_tag('head');
@@ -139,7 +139,7 @@ echo html_writer::tag('title', 'LoadSCO');
             location = "<?php echo $scolaunchurl ?>";
         }
         else {
-            document.body.innerHTML = "<p><?php echo get_string('activityloading', 'exescorm');?>" +
+            document.body.innerHTML = "<p><?php echo get_string('activityloading', 'mod_exescorm');?>" +
                                         "<span id='countdown'><?php echo $delayseconds ?></span> " +
                                         "<?php echo get_string('numseconds', 'moodle', '');?>. &nbsp; " +
                                         "<?php echo addslashes($OUTPUT->pix_icon('wait', '', 'exescorm')); ?></p>";
@@ -151,7 +151,7 @@ echo html_writer::tag('title', 'LoadSCO');
                                             } else {
                                                 clearInterval(timer);
                                                 document.body.innerHTML =
-                                                    "<p><?php echo get_string('activitypleasewait', 'exescorm');?></p>";
+                                                    "<p><?php echo get_string('activitypleasewait', 'mod_exescorm');?></p>";
                                                 location = "<?php echo $scolaunchurl ?>";
                                             }
                                         }, 1000);
@@ -165,7 +165,7 @@ echo html_writer::tag('title', 'LoadSCO');
 <?php
 echo html_writer::end_tag('head');
 echo html_writer::tag('body',
-                        html_writer::tag('p', get_string('activitypleasewait', 'exescorm')),
+                        html_writer::tag('p', get_string('activitypleasewait', 'mod_exescorm')),
                         ['onload' => "doredirect();"]
                     );
 echo html_writer::end_tag('html');
