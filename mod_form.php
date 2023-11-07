@@ -297,7 +297,44 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         // Buttons.
         $this->add_action_buttons();
+        $mform->hideIf('buttonar', 'exescormtype', 'eq', EXESCORM_TYPE_EXESCORMNET);
+
+        $this->add_edit_online_buttons('editonlinearr');
+        $mform->hideIf('editonlinearr', 'exescormtype', 'noteq', EXESCORM_TYPE_EXESCORMNET);
     }
+
+
+    /**
+     * Generate buttons within a group with alternative texts.
+     *
+     * @param string $groupname
+     * @return void
+     */
+    public function add_edit_online_buttons($groupname) {
+        $submitlabel = get_string('exescorm:editonlineanddisplay', 'mod_exescorm');
+        $submit2label = get_string('exescorm:editonlineandreturntocourse', 'mod_exescorm');
+
+        $mform = $this->_form;
+
+        // Elements in a row need a group.
+        $buttonarray = array();
+
+        // Label for the submit button to return to the course.
+        // Ignore this button in single activity format because it is confusing.
+        if ($submit2label !== false && $this->courseformat->has_view_page()) {
+            $buttonarray[] = $mform->createElement('submit', 'exebutton2', $submit2label);
+        }
+
+        if ($submitlabel !== false) {
+            $buttonarray[] = $mform->createElement('submit', 'exebutton', $submitlabel);
+        }
+
+        $buttonarray[] = $mform->createElement('cancel');
+
+        $mform->addGroup($buttonarray, $groupname, '', array(' '), false);
+        $mform->setType($groupname, PARAM_RAW);
+    }
+
 
     public function data_preprocessing(&$defaultvalues) {
         global $CFG, $COURSE;
@@ -374,6 +411,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
             $defaultvalues['completionscoredisabled'] = 1;
         }
     }
+
 
     public function validation($data, $files) {
         global $CFG, $USER;
@@ -606,15 +644,15 @@ class mod_exescorm_mod_form extends moodleform_mod {
         // Exescorm hack to get redirected to eXeLearning Online to edit package.
         if ($data->exescormtype === EXESCORM_TYPE_EXESCORMNET ) {
             if (! isset($data->showgradingmanagement)) {
-                if (isset($data->submitbutton)) {
+                if (isset($data->exebutton)) {
                     // Return to activity. If it this a new activity we don't have a coursemodule yet. We'll fix it in redirector.
                     $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $data->coursemodule, 'forceview' => 1]);
-
                 } else {
                     // Return to course.
-                    $data->submitbutton = true;
                     $returnto = course_get_url($data->course, $data->coursesection ?? null, array('sr' => $data->sr));
                 }
+                // Set this becouse modedit.php expects it.
+                $data->submitbutton = true;
                 // If send template is true, we'll always make an edition. On new activities,
                 // It will send default/uploaded template to eXeLearning.
                 $sendtemplate = get_config('exescorm', 'sendtemplate');

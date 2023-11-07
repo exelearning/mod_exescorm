@@ -162,6 +162,8 @@ $string['exescorm:savetrack'] = 'Guardar pistas';
 $string['exescorm:skipview'] = 'Saltar resumen';
 $string['exescorm:template'] = 'Nueva plantilla de paquete.';
 $string['exescorm:template_desc'] = 'El elp subido aquí se utilizará como paquete por defecto para los nuevos contenidos. Se mostrará hasta que sea sustituido por el enviado por eXeLearning.';
+$string['exescorm:editonlineanddisplay'] = 'Ir eXeLearning y mostrar';
+$string['exescorm:editonlineandreturntocourse'] = 'Ir a eXeLearning y volver al curso';
 $string['exescormtype'] = 'Tipo';
 $string['exescormtype_help'] = 'Este ajuste determina cómo se incluye el paquete en el curso. Hay 4 opciones:
 

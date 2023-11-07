@@ -163,6 +163,8 @@ $string['exescorm:savetrack'] = 'Save tracks';
 $string['exescorm:skipview'] = 'Skip overview';
 $string['exescorm:template'] = 'New package template.';
 $string['exescorm:template_desc'] = 'Package ulpoaded here will be used as default package for new activities. It will be show until replaced by the one sent by eXeLearning.';
+$string['exescorm:editonlineanddisplay'] = 'Edit on eXeLearning and display';
+$string['exescorm:editonlineandreturntocourse'] = 'Edit on eXeLearning and return to course';
 $string['exescormtype'] = 'Type';
 $string['exescormtype_help'] = 'This setting determines how the package is included in the course. There are up to 4 options:
 
