@@ -167,7 +167,7 @@ $string['exescorm:skipview'] = 'Saltar resum';
 $string['exescorm:template'] = 'Nova plantilla de paquet.';
 $string['exescorm:template_desc'] = 'El elp pujat aquí s\'utilizarà com paquet per defecte pels nou continguts. Es mostrarà fins que sigui substituit per l\'enviat per eXeLearning.';
 $string['exescormtype'] = 'Tipus';
-$string['exescormtype_help'] = 'Aquest ajustament determina com s\'inclou el paquet en el curs. Hi ha 4 opcions:
+$string['exescormtype_help'] = 'Aquest ajustament determina com s\'inclou el paquet en el curs. Hi ha 2 opcions:
 
 * Paquete pujat - Permet escollir l\' SCORM creat amb eXeLearning mitjançant el selector de fitxers.
 * Editar amb eXeLearning - Crea l\'activitat i et porta a eXeLearning per editar el contingut. En finalitzar, eXeLearning el retornarà a Moodle.';

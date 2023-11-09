@@ -164,7 +164,7 @@ $string['exescorm:skipview'] = 'Saltar resumo';
 $string['exescorm:template'] = 'Novo modelo de paquete.';
 $string['exescorm:template_desc'] = 'O elp subido aquí utilizarase como paquete por defecto para os novos contidos. Amosarase ata que sexa substituído polo enviado por eXeLearning.';
 $string['exescormtype'] = 'Tipo';
-$string['exescormtype_help'] = 'Este axuste determina como se inclúe o paquete no curso. Hai 4 opcións:
+$string['exescormtype_help'] = 'Este axuste determina como se inclúe o paquete no curso. Hai 2 opcións:
 
 * Paquete subido - Permite elixir o SCORM creado con eXeLearning por medio do selector de ficheiros.
 * Editar con eXeLearning - Crea a actividade e lévate a eXeLearning para editar o contido. Ao rematar, eXeLearning enviarao de volta a Moodle.';

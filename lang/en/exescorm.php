@@ -166,7 +166,7 @@ $string['exescorm:template_desc'] = 'Package ulpoaded here will be used as defau
 $string['exescorm:editonlineanddisplay'] = 'Edit on eXeLearning and display';
 $string['exescorm:editonlineandreturntocourse'] = 'Edit on eXeLearning and return to course';
 $string['exescormtype'] = 'Type';
-$string['exescormtype_help'] = 'This setting determines how the package is included in the course. There are up to 4 options:
+$string['exescormtype_help'] = 'This setting determines how the package is included in the course. There are up to 2 options:
 
 * Uploaded package - Enables an eXeLearning package to be chosen via the file picker
 * Edit with eXeLearning - Creates the activity and takes you to eXeLearning to edit the content. When done, eXeLearning will send it back to Moodle.';

@@ -166,7 +166,7 @@ $string['exescorm:template_desc'] = 'El elp subido aquí se utilizará como paqu
 $string['exescorm:editonlineanddisplay'] = 'Ir eXeLearning y mostrar';
 $string['exescorm:editonlineandreturntocourse'] = 'Ir a eXeLearning y volver al curso';
 $string['exescormtype'] = 'Tipo';
-$string['exescormtype_help'] = 'Este ajuste determina cómo se incluye el paquete en el curso. Hay 4 opciones:
+$string['exescormtype_help'] = 'Este ajuste determina cómo se incluye el paquete en el curso. Hay 2 opciones:
 
 * Paquete subido - Permite elegir el SCORM creado con eXeLearning por medio del selector de archivos.
 * Editar con eXeLearning - Crea la actividad y te lleva a eXeLearning para editar el contenido. Al terminar, eXeLearning lo enviará de vuelta a Moodle.';
