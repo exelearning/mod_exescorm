@@ -110,6 +110,7 @@ $string['defaultothersettings'] = 'Outras configuracións predeterminadas';
 $string['deleteattemptcheck'] = 'Está totalmente seguro que quere eliminar completamente estes intentos?';
 $string['deleteallattempts'] = 'Eliminar tódolos intentos SCORM';
 $string['deleteselected'] = 'Eliminar os intentos seleccionados';
+$string['deleteuserattemptcheck'] = 'Está totalmente seguro de que quere eliminar completamente os seus intentos?';
 $string['deleteattemptcheck'] = 'Está totalmente seguro de que quere eliminar completamente estes intentos?';
 $string['details'] = 'Detalles do rastrexo SCO';
 $string['directories'] = 'Amosar ligazóns de directorio';
@@ -166,10 +167,7 @@ $string['exescormtype'] = 'Tipo';
 $string['exescormtype_help'] = 'Este axuste determina como se inclúe o paquete no curso. Hai 4 opcións:
 
 * Paquete subido - Permite elixir o SCORM creado con eXeLearning por medio do selector de ficheiros.
-* Crear con eXeLearning - Crea a actividade e lévate a eXeLearning para editar o contido. Ao rematar, eXeLearning enviarao de volta a Moodle.
-* Manifesto SCORM externo - Posibilita especificar un URL imsmanifest.xml. NOTA: Se o URL ten un nome de dominio distinto ao do seu sitio, a mellor opción é "Paquete descargado", dado que noutro caso as cualificacións non se gardarán.
-* Paquete descargado - Posibilita especificar un URL do paquete. O paquete será descomprimido e gardado localmente, e actualizado cando se actualice o paquete eXeLearning externo.
-* URL AICC externo - este URL é o URL de inicio dunha actividade AICC única. Construirase un pseudopaquete arredor da mesma.';
+* Editar con eXeLearning - Crea a actividade e lévate a eXeLearning para editar o contido. Ao rematar, eXeLearning enviarao de volta a Moodle.';
 $string['exescorm:viewreport'] = 'Ver informes';
 $string['exescorm:viewscores'] = 'Ver puntuacións';
 $string['exeonline:connectionsettings'] = 'Configuración da conexión con eXeLearning';

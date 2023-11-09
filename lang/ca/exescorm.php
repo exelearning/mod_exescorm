@@ -113,6 +113,7 @@ $string['defaultothersettings'] = 'Altres configuracions predeterminades';
 $string['deleteattemptcheck'] = 'Està completament segur de que vol eliminar aquests intents?';
 $string['deleteallattempts'] = 'Suprimeix tots els intents SCORM';
 $string['deleteselected'] = 'Suprimeix els intents seleccionats';
+$string['deleteuserattemptcheck'] = 'Està completament segur de que vol eliminar els seus intents?';
 $string['deleteattemptcheck'] = 'Està completament segur de que vol eliminar aquests intents?';
 $string['details'] = 'Detalls de seguiment';
 $string['directories'] = 'Mostra els enllaços del directori';
@@ -169,10 +170,7 @@ $string['exescormtype'] = 'Tipus';
 $string['exescormtype_help'] = 'Aquest ajustament determina com s\'inclou el paquet en el curs. Hi ha 4 opcions:
 
 * Paquete pujat - Permet escollir l\' SCORM creat amb eXeLearning mitjançant el selector de fitxers.
-* Crear amb eXeLearning - Crea l\'activitat i et porta a eXeLearning per editar el contingut. En finalitzar, eXeLearning el retornarà a Moodle.
-* Manifest SCORM extern - Possibilita especificar una URL imsmanifest.xml. NOTA: Si la URL té un nom de domini diferent del del seu lloc, la millor opció és "Paquet baixat", ja que en altra cas les qualificacions no es desaran.
-* Paquet baixat - Possibilita especificar una URL del paquet. El paquet serà descomprimit i guardat localment, i actualitzat quan s\'actualitzi el paquet eXeLearning extern.
-* URL AICC externa - aquesta URL és la URL d\'inici d\'una activitat AICC única. Es construirà un pseudo paquet al voltant d\'aquesta.';
+* Editar amb eXeLearning - Crea l\'activitat i et porta a eXeLearning per editar el contingut. En finalitzar, eXeLearning el retornarà a Moodle.';
 $string['exescorm:viewreport'] = 'Veure informes';
 $string['exescorm:viewscores'] = 'Veure puntuacions';
 $string['exeonline:connectionsettings'] = 'Configuració de la connexió amb eXeLearning';
@@ -414,6 +412,7 @@ $string['protectpackagedownloads_desc'] = 'Si s\'habilita, els paquets eXeLearni
 $string['raw'] = 'Puntuació bruta';
 $string['regular'] = 'Manifest normal';
 $string['report'] = 'Informe';
+$string['reports'] = 'Informes';
 $string['reportcountallattempts'] = '{$a->nbattempts} intents de {$a->nbusers} usuaris, d\'un total de {$a->nbresults} resultats';
 $string['reportcountattempts'] = '{$a->nbresults} resultats ({$a->nbusers} users)';
 $string['response'] = 'Resposta';

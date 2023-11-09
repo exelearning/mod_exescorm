@@ -107,9 +107,10 @@ $string['datadir'] = 'Error del sistema de archivos: No se puede crear el direct
 $string['defaultdisplaysettings'] = 'Configuración de pantalla predeterminada';
 $string['defaultgradesettings'] = 'Configuración de calificación predeterminada';
 $string['defaultothersettings'] = 'Otras configuraciones predeterminadas';
-$string['deleteattemptcheck'] = '¿Está totalmente seguro que quiere eliminar completamente estos intentos?';
+$string['deleteattemptcheck'] = '¿Está totalmente seguro de que quiere eliminar completamente estos intentos?';
 $string['deleteallattempts'] = 'Eliminar todos los intentos SCORM';
 $string['deleteselected'] = 'Eliminar los intentos seleccionados';
+$string['deleteuserattemptcheck'] = '¿Está totalmente seguro de que quiere eliminar completamente sus intentos?';
 $string['details'] = 'Detalles del rastreo SCO';
 $string['directories'] = 'Mostrar enlaces de directorio';
 $string['disabled'] = 'Deshabilitado';
@@ -168,10 +169,7 @@ $string['exescormtype'] = 'Tipo';
 $string['exescormtype_help'] = 'Este ajuste determina cómo se incluye el paquete en el curso. Hay 4 opciones:
 
 * Paquete subido - Permite elegir el SCORM creado con eXeLearning por medio del selector de archivos.
-* Crear con eXeLearning - Crea la actividad y te lleva a eXeLearning para editar el contenido. Al terminar, eXeLearning lo enviará de vuelta a Moodle.
-* Manifiesto SCORM externo - Posibilita especificar una URL imsmanifest.xml. NOTA: Si la URL tiene un nombre de dominio distinto del de su sitio, la mejor opción es "Paquete bajado", puesto que en otro caso las calificaciones no se guardarán.
-* Paquete bajado - Posibilita especificar una URL del paquete. El paquete será descomprimido y guardado localmente, y actualizado cuando se actualice el paquete eXeLearning externo.
-* URL AICC externa - esta URL es la URL de inicio de una actividad AICC única. Se construirá un pseudo paquete alrededor de la misma.';
+* Editar con eXeLearning - Crea la actividad y te lleva a eXeLearning para editar el contenido. Al terminar, eXeLearning lo enviará de vuelta a Moodle.';
 $string['exescorm:viewreport'] = 'Ver informes';
 $string['exescorm:viewscores'] = 'Ver puntuaciones';
 $string['exeonline:connectionsettings'] = 'Configuración de la conexión con eXeLearning';
@@ -411,6 +409,7 @@ $string['protectpackagedownloads_desc'] = 'Si está habilitado, los paquetes eXe
 $string['raw'] = 'Puntuación bruta';
 $string['regular'] = 'Manifiesto regular';
 $string['report'] = 'Informe';
+$string['reports'] = 'Informes';
 $string['reportcountallattempts'] = '{$a->nbattempts} intentos de {$a->nbusers} usuarios, de un total de {$a->nbresults} resultados';
 $string['reportcountattempts'] = '{$a->nbresults} resultados ({$a->nbusers} users)';
 $string['response'] = 'Respuesta';
