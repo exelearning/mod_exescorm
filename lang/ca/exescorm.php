@@ -113,7 +113,7 @@ $string['defaultothersettings'] = 'Altres configuracions predeterminades';
 $string['deleteattemptcheck'] = 'Està completament segur de que vol eliminar aquests intents?';
 $string['deleteallattempts'] = 'Suprimeix tots els intents SCORM';
 $string['deleteselected'] = 'Suprimeix els intents seleccionats';
-$string['deleteuserattemptcheck'] = 'Està completament segur de que vol eliminar els seus intents?';
+$string['deleteuserattemptcheck'] = 'Esteu totalment segur de voler eliminar completament els vostres intents?';
 $string['deleteattemptcheck'] = 'Està completament segur de que vol eliminar aquests intents?';
 $string['details'] = 'Detalls de seguiment';
 $string['directories'] = 'Mostra els enllaços del directori';
@@ -166,6 +166,8 @@ $string['exescorm:savetrack'] = 'Guardar pistes';
 $string['exescorm:skipview'] = 'Saltar resum';
 $string['exescorm:template'] = 'Nova plantilla de paquet.';
 $string['exescorm:template_desc'] = 'El elp pujat aquí s\'utilizarà com paquet per defecte pels nou continguts. Es mostrarà fins que sigui substituit per l\'enviat per eXeLearning.';
+$string['exescorm:editonlineanddisplay'] = 'Anar a eXeLearning i mostrar';
+$string['exescorm:editonlineandreturntocourse'] = 'Anar a eXeLearning i tornar al curs';
 $string['exescormtype'] = 'Tipus';
 $string['exescormtype_help'] = 'Aquest ajustament determina com s\'inclou el paquet en el curs. Hi ha 2 opcions:
 

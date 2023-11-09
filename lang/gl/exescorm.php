@@ -110,7 +110,7 @@ $string['defaultothersettings'] = 'Outras configuracións predeterminadas';
 $string['deleteattemptcheck'] = 'Está totalmente seguro que quere eliminar completamente estes intentos?';
 $string['deleteallattempts'] = 'Eliminar tódolos intentos SCORM';
 $string['deleteselected'] = 'Eliminar os intentos seleccionados';
-$string['deleteuserattemptcheck'] = 'Está totalmente seguro de que quere eliminar completamente os seus intentos?';
+$string['deleteuserattemptcheck'] = 'Estás totalmente seguro de querer eliminar completamente os teus intentos?';
 $string['deleteattemptcheck'] = 'Está totalmente seguro de que quere eliminar completamente estes intentos?';
 $string['details'] = 'Detalles do rastrexo SCO';
 $string['directories'] = 'Amosar ligazóns de directorio';
@@ -163,6 +163,8 @@ $string['exescorm:savetrack'] = 'Gardar pistas';
 $string['exescorm:skipview'] = 'Saltar resumo';
 $string['exescorm:template'] = 'Novo modelo de paquete.';
 $string['exescorm:template_desc'] = 'O elp subido aquí utilizarase como paquete por defecto para os novos contidos. Amosarase ata que sexa substituído polo enviado por eXeLearning.';
+$string['exescorm:editonlineanddisplay'] = 'Ir a eXeLearning e amosar';
+$string['exescorm:editonlineandreturntocourse'] = 'Ir a eXeLearning e volver ao curso';
 $string['exescormtype'] = 'Tipo';
 $string['exescormtype_help'] = 'Este axuste determina como se inclúe o paquete no curso. Hai 2 opcións:
 
