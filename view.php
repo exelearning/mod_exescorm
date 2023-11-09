@@ -110,8 +110,8 @@ if (!empty($exescorm->popup)) {
                                                            'cwidth' => $exescorm->width,
                                                            'cheight' => $exescorm->height,
                                                            'popupoptions' => $exescorm->options), true);
-    $PAGE->requires->string_for_js('popupsblocked', 'exescorm');
-    $PAGE->requires->string_for_js('popuplaunched', 'exescorm');
+    $PAGE->requires->string_for_js('popupsblocked', 'mod_exescorm');
+    $PAGE->requires->string_for_js('popuplaunched', 'mod_exescorm');
     $PAGE->requires->js('/mod/exescorm/view.js', true);
 }
 
@@ -119,8 +119,8 @@ if (isset($SESSION->exescorm)) {
     unset($SESSION->exescorm);
 }
 
-$strexescorms = get_string("modulenameplural", "exescorm");
-$strexescorm = get_string("modulename", "exescorm");
+$strexescorms = get_string("modulenameplural", "mod_exescorm");
+$strexescorm = get_string("modulename", "mod_exescorm");
 
 $shortname = format_string($course->shortname, true, array('context' => $context));
 $pagetitle = strip_tags($shortname.': '.format_string($exescorm->name));
@@ -150,14 +150,14 @@ echo $OUTPUT->header();
 if (!empty($action) && confirm_sesskey() && has_capability('mod/exescorm:deleteownresponses', $contextmodule)) {
     if ($action == 'delete') {
         $confirmurl = new moodle_url($PAGE->url, array('action' => 'deleteconfirm'));
-        echo $OUTPUT->confirm(get_string('deleteuserattemptcheck', 'exescorm'), $confirmurl, $PAGE->url);
+        echo $OUTPUT->confirm(get_string('deleteuserattemptcheck', 'mod_exescorm'), $confirmurl, $PAGE->url);
         echo $OUTPUT->footer();
         exit;
     } else if ($action == 'deleteconfirm') {
         // Delete this users attempts.
         $DB->delete_records('exescorm_scoes_track', array('userid' => $USER->id, 'exescormid' => $exescorm->id));
         exescorm_update_grades($exescorm, $USER->id, true);
-        echo $OUTPUT->notification(get_string('exescormresponsedeleted', 'exescorm'), 'notifysuccess');
+        echo $OUTPUT->notification(get_string('exescormresponsedeleted', 'mod_exescorm'), 'notifysuccess');
     }
 }
 if ($CFG->version < 2022041900) { // Moodle prior to 4.
@@ -183,7 +183,7 @@ if ($available && empty($launch)) {
 echo $OUTPUT->box($attemptstatus);
 
 if (!empty($forcejs)) {
-    $message = $OUTPUT->box(get_string("forcejavascriptmessage", "exescorm"), "forcejavascriptmessage");
+    $message = $OUTPUT->box(get_string("forcejavascriptmessage", "mod_exescorm"), "forcejavascriptmessage");
     echo html_writer::tag('noscript', $message);
 }
 

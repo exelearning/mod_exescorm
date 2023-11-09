@@ -53,7 +53,7 @@ class report extends \mod_exescorm\report {
 
         if ($action == 'delete' && has_capability('mod/exescorm:deleteresponses', $contextmodule) && confirm_sesskey()) {
             if (exescorm_delete_responses($attemptids, $exescorm)) { // Delete responses.
-                echo $OUTPUT->notification(get_string('exescormresponsedeleted', 'exescorm'), 'notifysuccess');
+                echo $OUTPUT->notification(get_string('exescormresponsedeleted', 'mod_exescorm'), 'notifysuccess');
             }
         }
         // Find out current groups mode.
@@ -147,13 +147,13 @@ class report extends \mod_exescorm\report {
                 $headers[] = \core_user\fields::get_display_name($field);
             }
             $columns[] = 'attempt';
-            $headers[] = get_string('attempt', 'exescorm');
+            $headers[] = get_string('attempt', 'mod_exescorm');
             $columns[] = 'start';
-            $headers[] = get_string('started', 'exescorm');
+            $headers[] = get_string('started', 'mod_exescorm');
             $columns[] = 'finish';
-            $headers[] = get_string('last', 'exescorm');
+            $headers[] = get_string('last', 'mod_exescorm');
             $columns[] = 'score';
-            $headers[] = get_string('score', 'exescorm');
+            $headers[] = get_string('score', 'mod_exescorm');
             $scoes = $DB->get_records('exescorm_scoes', array("exescorm" => $exescorm->id), 'sortorder, id');
             foreach ($scoes as $sco) {
                 if ($sco->launch != '') {
@@ -275,7 +275,7 @@ class report extends \mod_exescorm\report {
                 // Sending HTTP headers.
                 $workbook->send($filename);
                 // Creating the first worksheet.
-                $sheettitle = get_string('report', 'exescorm');
+                $sheettitle = get_string('report', 'mod_exescorm');
                 $myxls = $workbook->add_worksheet($sheettitle);
                 // Format types.
                 $format = $workbook->add_format();
@@ -314,7 +314,7 @@ class report extends \mod_exescorm\report {
                 // Sending HTTP headers.
                 $workbook->send($filename);
                 // Creating the first worksheet.
-                $sheettitle = get_string('report', 'exescorm');
+                $sheettitle = get_string('report', 'mod_exescorm');
                 $myxls = $workbook->add_worksheet($sheettitle);
                 // Format types.
                 $format = $workbook->add_format();
@@ -383,9 +383,9 @@ class report extends \mod_exescorm\report {
 
                 echo \html_writer::start_div('exescormattemptcounts');
                 if ( $count->nbresults == $count->nbattempts ) {
-                    echo get_string('reportcountattempts', 'exescorm', $count);
+                    echo get_string('reportcountattempts', 'mod_exescorm', $count);
                 } else if ( $count->nbattempts > 0 ) {
-                    echo get_string('reportcountallattempts', 'exescorm', $count);
+                    echo get_string('reportcountallattempts', 'mod_exescorm', $count);
                 } else {
                     echo $count->nbusers.' '.get_string('users');
                 }
@@ -399,7 +399,7 @@ class report extends \mod_exescorm\report {
                 echo \html_writer::start_div('', array('id' => 'exescormtablecontainer'));
                 if ($candelete) {
                     // Start form.
-                    $strreallydel = addslashes_js(get_string('deleteattemptcheck', 'exescorm'));
+                    $strreallydel = addslashes_js(get_string('deleteattemptcheck', 'mod_exescorm'));
                     echo \html_writer::start_tag('form', array('id' => 'attemptsform', 'method' => 'post',
                                                                 'action' => $PAGE->url->out(false),
                                                                 'onsubmit' => 'return confirm("'.$strreallydel.'");'));
@@ -481,7 +481,7 @@ class report extends \mod_exescorm\report {
                                 if ($trackdata->status == '') {
                                     $trackdata->status = 'notattempted';
                                 }
-                                $strstatus = get_string($trackdata->status, 'exescorm');
+                                $strstatus = get_string($trackdata->status, 'mod_exescorm');
                                 // If raw score exists, print it.
                                 if ($trackdata->score_raw != '') {
                                     $score = $trackdata->score_raw;
@@ -497,7 +497,7 @@ class report extends \mod_exescorm\report {
                                         'scoid' => $sco->id, 'user' => $scouser->userid, 'attempt' => $scouser->attempt,
                                         'mode' => 'interactions'));
                                     $row[] = $OUTPUT->pix_icon($trackdata->status, $strstatus, 'exescorm') . '<br>' .
-                                        \html_writer::link($url, $score, array('title' => get_string('details', 'exescorm')));
+                                        \html_writer::link($url, $score, array('title' => get_string('details', 'mod_exescorm')));
                                 } else {
                                     $row[] = $score;
                                 }
@@ -549,7 +549,7 @@ class report extends \mod_exescorm\report {
                                 // End of interaction data.
                             } else {
                                 // If we don't have track data, we haven't attempted yet.
-                                $strstatus = get_string('notattempted', 'exescorm');
+                                $strstatus = get_string('notattempted', 'mod_exescorm');
                                 if (!$download) {
                                     $row[] = $OUTPUT->pix_icon('notattempted', $strstatus, 'exescorm') . '<br>' . $strstatus;
                                 } else {
@@ -609,7 +609,7 @@ class report extends \mod_exescorm\report {
                 exit;
             }
         } else {
-            echo $OUTPUT->notification(get_string('noactivity', 'exescorm'));
+            echo $OUTPUT->notification(get_string('noactivity', 'mod_exescorm'));
         }
     }// Function ends.
 }

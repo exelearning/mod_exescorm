@@ -382,10 +382,10 @@ class externallib_test extends externallib_advanced_testcase {
         $found = 0;
         foreach ($result['data'] as $scodata) {
             foreach ($scodata['userdata'] as $userdata) {
-                if ($userdata['element'] == 'cmi.core.lesson_status' and $userdata['value'] == 'completed') {
+                if ($userdata['element'] == 'cmi.core.lesson_status' && $userdata['value'] == 'completed') {
                     $found++;
                 }
-                if ($userdata['element'] == 'cmi.core.score.raw' and $userdata['value'] == '80') {
+                if ($userdata['element'] == 'cmi.core.score.raw' && $userdata['value'] == '80') {
                     $found++;
                 }
             }
@@ -533,10 +533,10 @@ class externallib_test extends externallib_advanced_testcase {
         // Find our tracking data.
         $found = 0;
         foreach ($result['data']['tracks'] as $userdata) {
-            if ($userdata['element'] == 'cmi.core.lesson_status' and $userdata['value'] == 'completed') {
+            if ($userdata['element'] == 'cmi.core.lesson_status' && $userdata['value'] == 'completed') {
                 $found++;
             }
-            if ($userdata['element'] == 'cmi.core.score.raw' and $userdata['value'] == '80') {
+            if ($userdata['element'] == 'cmi.core.score.raw' && $userdata['value'] == '80') {
                 $found++;
             }
         }

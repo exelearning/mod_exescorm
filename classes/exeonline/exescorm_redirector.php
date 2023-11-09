@@ -71,10 +71,11 @@ class exescorm_redirector {
         // Get remote URL from config.
         $exeonlineurl = get_config('exescorm', 'exeonlinebaseuri');
         $payload = [
-            'userid' => $USER->id,
-            'cmid' => $cmid,
             'action' => $target,
+            'cmid' => $cmid,
+            'pkgtype' => 'scorm',
             'returnurl' => $returnto->out(false),
+            'userid' => $USER->id,
         ];
         $jwttoken = token_manager::get_jwt_token($payload);
         $params = [

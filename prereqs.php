@@ -72,7 +72,8 @@ if (confirm_sesskey() && (!empty($scoid))) {
     $result = true;
     $request = null;
     if (has_capability('mod/exescorm:savetrack', context_module::instance($cm->id))) {
-        $result = exescorm_get_toc($USER, $exescorm, $cm->id, EXESCORM_TOCJSLINK, $currentorg, $scoid, $mode, $attempt, true, false);
+        $result = exescorm_get_toc($USER, $exescorm, $cm->id, EXESCORM_TOCJSLINK, $currentorg,
+                                    $scoid, $mode, $attempt, true, false);
         echo $result->toc;
     }
 }

@@ -73,8 +73,8 @@ $event->add_record_snapshot('exescorm', $exescorm);
 $event->trigger();
 
 // Print the page header.
-$strreport = get_string('report', 'exescorm');
-$strattempt = get_string('attempt', 'exescorm');
+$strreport = get_string('report', 'mod_exescorm');
+$strattempt = get_string('attempt', 'mod_exescorm');
 
 $PAGE->set_title("$course->shortname: ".format_string($exescorm->name));
 $PAGE->set_heading($course->fullname);
@@ -101,10 +101,10 @@ if ($scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->i
     // Print general score data.
     $table = new html_table();
     $table->head = array(
-            get_string('title', 'exescorm'),
-            get_string('status', 'exescorm'),
-            get_string('time', 'exescorm'),
-            get_string('score', 'exescorm'),
+            get_string('title', 'mod_exescorm'),
+            get_string('status', 'mod_exescorm'),
+            get_string('time', 'mod_exescorm'),
+            get_string('score', 'mod_exescorm'),
             '');
     $table->align = array('left', 'center', 'center', 'right', 'left');
     $table->wrap = array('nowrap', 'nowrap', 'nowrap', 'nowrap', 'nowrap');
@@ -126,16 +126,16 @@ if ($scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->i
                     }
                 }
                 $tracksurl->param('scoid', $sco->id);
-                $detailslink = html_writer::link($tracksurl, get_string('details', 'exescorm'));
+                $detailslink = html_writer::link($tracksurl, get_string('details', 'mod_exescorm'));
             } else {
                 $trackdata = new stdClass();
                 $trackdata->status = 'notattempted';
                 $trackdata->total_time = '&nbsp;';
                 $detailslink = '&nbsp;';
             }
-            $strstatus = get_string($trackdata->status, 'exescorm');
+            $strstatus = get_string($trackdata->status, 'mod_exescorm');
             $row[] = $OUTPUT->pix_icon($trackdata->status, $strstatus, 'exescorm') . '&nbsp;'.format_string($sco->title);
-            $row[] = get_string($trackdata->status, 'exescorm');
+            $row[] = get_string($trackdata->status, 'mod_exescorm');
             $row[] = exescorm_format_duration($trackdata->total_time);
             $row[] = $score;
             $row[] = $detailslink;

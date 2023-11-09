@@ -594,7 +594,7 @@ class mod_exescorm_external extends external_api {
                 'item' => 'attempt',
                 'itemid' => $params['attempt'],
                 'warningcode' => 'notattempted',
-                'message' => get_string('notattempted', 'exescorm')
+                'message' => get_string('notattempted', 'mod_exescorm')
             );
         }
 
@@ -697,7 +697,7 @@ class mod_exescorm_external extends external_api {
                             'item' => 'exescorm',
                             'itemid' => $exescorm->id,
                             'warningcode' => $warningkey,
-                            'message' => get_string($warningkey, 'exescorm', $warningdata)
+                            'message' => get_string($warningkey, 'mod_exescorm', $warningdata)
                         );
                     }
                 } else {
@@ -768,8 +768,9 @@ class mod_exescorm_external extends external_api {
                         [
                             'packagesize' => new external_value(PARAM_INT, 'EXESCORM zip package size', VALUE_OPTIONAL),
                             'packageurl' => new external_value(PARAM_URL, 'EXESCORM zip package URL', VALUE_OPTIONAL),
-                            'version' => new external_value(PARAM_NOTAGS, 'EXESCORM version EXESCORM_SCORM_12,EXESCORM_SCORM_13,EXESCORM_SCORM_AICC)',
-                                                            VALUE_OPTIONAL),
+                            'version' => new external_value(PARAM_NOTAGS,
+                                        'EXESCORM version EXESCORM_SCORM_12,EXESCORM_SCORM_13,EXESCORM_SCORM_AICC)',
+                                        VALUE_OPTIONAL),
                             'maxgrade' => new external_value(PARAM_INT, 'Max grade', VALUE_OPTIONAL),
                             'grademethod' => new external_value(PARAM_INT, 'Grade method', VALUE_OPTIONAL),
                             'whatgrade' => new external_value(PARAM_INT, 'What grade', VALUE_OPTIONAL),

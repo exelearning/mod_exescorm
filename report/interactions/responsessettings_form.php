@@ -31,24 +31,24 @@ class mod_exescorm_report_interactions_settings extends moodleform {
         global $COURSE;
         $mform    =& $this->_form;
         // -------------------------------------------------------------------------------
-        $mform->addElement('header', 'preferencespage', get_string('preferencespage', 'exescorm'));
+        $mform->addElement('header', 'preferencespage', get_string('preferencespage', 'mod_exescorm'));
 
         $options = array();
         if ($COURSE->id != SITEID) {
-            $options[EXESCORM_REPORT_ATTEMPTS_ALL_STUDENTS] = get_string('optallstudents', 'exescorm');
-            $options[EXESCORM_REPORT_ATTEMPTS_STUDENTS_WITH] = get_string('optattemptsonly', 'exescorm');
-            $options[EXESCORM_REPORT_ATTEMPTS_STUDENTS_WITH_NO] = get_string('optnoattemptsonly', 'exescorm');
+            $options[EXESCORM_REPORT_ATTEMPTS_ALL_STUDENTS] = get_string('optallstudents', 'mod_exescorm');
+            $options[EXESCORM_REPORT_ATTEMPTS_STUDENTS_WITH] = get_string('optattemptsonly', 'mod_exescorm');
+            $options[EXESCORM_REPORT_ATTEMPTS_STUDENTS_WITH_NO] = get_string('optnoattemptsonly', 'mod_exescorm');
         }
-        $mform->addElement('select', 'attemptsmode', get_string('show', 'exescorm'), $options);
+        $mform->addElement('select', 'attemptsmode', get_string('show', 'mod_exescorm'), $options);
         $mform->addElement('advcheckbox', 'qtext', '', get_string('summaryofquestiontext', 'exescormreport_interactions'));
         $mform->addElement('advcheckbox', 'resp', '', get_string('summaryofresponse', 'exescormreport_interactions'));
         $mform->addElement('advcheckbox', 'right', '', get_string('summaryofrightanswer', 'exescormreport_interactions'));
         $mform->addElement('advcheckbox', 'result', '', get_string('summaryofresult', 'exescormreport_interactions'));
 
         // -------------------------------------------------------------------------------
-        $mform->addElement('header', 'preferencesuser', get_string('preferencesuser', 'exescorm'));
+        $mform->addElement('header', 'preferencesuser', get_string('preferencesuser', 'mod_exescorm'));
 
-        $mform->addElement('text', 'pagesize', get_string('pagesize', 'exescorm'));
+        $mform->addElement('text', 'pagesize', get_string('pagesize', 'mod_exescorm'));
         $mform->setType('pagesize', PARAM_INT);
 
         $this->add_action_buttons(false, get_string('savepreferences'));

@@ -69,15 +69,15 @@ $event->add_record_snapshot('exescorm', $exescorm);
 $event->trigger();
 
 // Print the page header.
-$strreport = get_string('report', 'exescorm');
-$strattempt = get_string('attempt', 'exescorm');
+$strreport = get_string('report', 'mod_exescorm');
+$strattempt = get_string('attempt', 'mod_exescorm');
 
 $PAGE->set_title("$course->shortname: ".format_string($exescorm->name));
 $PAGE->set_heading($course->fullname);
 $PAGE->navbar->add($strreport, new moodle_url('/mod/exescorm/report.php', array('id' => $cm->id)));
 $PAGE->navbar->add("$strattempt $attempt - ".fullname($user),
     new moodle_url('/mod/exescorm/report/userreport.php', array('id' => $id, 'user' => $userid, 'attempt' => $attempt)));
-$PAGE->navbar->add($selsco->title . ' - '. get_string('details', 'exescorm'));
+$PAGE->navbar->add($selsco->title . ' - '. get_string('details', 'mod_exescorm'));
 // Moodle 4.0+ only.
 if ($CFG->version >= 2022041900) {
     $PAGE->set_secondary_active_tab('exescormreport');
@@ -95,7 +95,7 @@ if ($trackdata = exescorm_get_tracks($selsco->id, $userid, $attempt)) {
 
 $courseshortname = format_string($course->shortname, true,
     array('context' => context_course::instance($course->id)));
-$exportfilename = $courseshortname . '-' . format_string($exescorm->name, true) . '-' . get_string('details', 'exescorm');
+$exportfilename = $courseshortname . '-' . format_string($exescorm->name, true) . '-' . get_string('details', 'mod_exescorm');
 
 $table = new flexible_table('mod_exescorm-userreporttracks');
 
@@ -111,11 +111,11 @@ if (!$table->is_downloading($download, $exportfilename)) {
     echo $renderer->user_report_actionbar($useractionreport);
     echo $OUTPUT->box_start('generalbox boxaligncenter');
     echo $OUTPUT->heading("$strattempt $attempt - ". fullname($user).': '.
-    format_string($selsco->title). ' - '. get_string('details', 'exescorm'), 3);
+    format_string($selsco->title). ' - '. get_string('details', 'mod_exescorm'), 3);
 }
 $table->define_baseurl($PAGE->url);
 $table->define_columns(array('element', 'value'));
-$table->define_headers(array(get_string('element', 'exescorm'), get_string('value', 'exescorm')));
+$table->define_headers(array(get_string('element', 'mod_exescorm'), get_string('value', 'mod_exescorm')));
 $table->set_attribute('class', 'generaltable generalbox boxaligncenter exescormtrackreport');
 $table->show_download_buttons_at(array(TABLE_P_BOTTOM));
 $table->setup();
@@ -157,7 +157,7 @@ foreach ($trackdata as $element => $value) {
         if (empty($string) || $table->is_downloading()) {
             $row[] = s($element);
         } else {
-            $row[] = s($element) . $OUTPUT->help_icon($string, 'exescorm');
+            $row[] = s($element) . $OUTPUT->help_icon($string, 'mod_exescorm');
         }
         if (strpos($element, '_time') === false) {
             $row[] = s($value);

@@ -244,7 +244,6 @@
 #page-mod-exescorm-player #exescormpage div.yui3-u-1-5,
 #page-mod-exescorm-player #exescormpage div.yui3-u-1-24 {
     display: inline-block;
-    *display: inline; /* stylelint-disable-line */
     zoom: 1;
     letter-spacing: normal;
     word-spacing: normal;

@@ -82,7 +82,7 @@ $questioncount = get_exescorm_question_count($exescorm->id);
 $courseshortname = format_string($course->shortname, true,
     array('context' => context_course::instance($course->id)));
 $exportfilename = $courseshortname . '-' . format_string($exescorm->name, true) . '-'
-                . get_string('interactions', 'exescorm');
+                . get_string('interactions', 'mod_exescorm');
 
 
 // Set up the table.
@@ -90,8 +90,8 @@ $table = new flexible_table('mod-exescorm-userreport-interactions');
 if (!$table->is_downloading($download, $exportfilename)) {
 
     // Print the page header.
-    $strattempt = get_string('attempt', 'exescorm');
-    $strreport = get_string('report', 'exescorm');
+    $strattempt = get_string('attempt', 'mod_exescorm');
+    $strreport = get_string('report', 'mod_exescorm');
 
     $PAGE->set_title("$course->shortname: ".format_string($exescorm->name));
     $PAGE->set_heading($course->fullname);
@@ -120,9 +120,9 @@ if (!$table->is_downloading($download, $exportfilename)) {
 }
 $table->define_baseurl($PAGE->url);
 $table->define_columns(array('id', 'studentanswer', 'correctanswer', 'result', 'calcweight'));
-$table->define_headers(array(get_string('trackid', 'exescorm'), get_string('response', 'exescorm'),
-    get_string('rightanswer', 'exescorm'), get_string('result', 'exescorm'),
-    get_string('calculatedweight', 'exescorm')));
+$table->define_headers(array(get_string('trackid', 'mod_exescorm'), get_string('response', 'mod_exescorm'),
+    get_string('rightanswer', 'mod_exescorm'), get_string('result', 'mod_exescorm'),
+    get_string('calculatedweight', 'mod_exescorm')));
 $table->set_attribute('class', 'generaltable generalbox boxaligncenter boxwidthwide');
 
 $table->show_download_buttons_at(array(TABLE_P_BOTTOM));

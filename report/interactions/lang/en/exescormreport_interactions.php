@@ -39,4 +39,3 @@ $string['summaryofquestiontext'] = 'Summary of question';
 $string['summaryofresponse'] = 'Summary of responses';
 $string['summaryofrightanswer'] = 'Summary of right answer';
 $string['summaryofresult'] = 'Summary of result';
-

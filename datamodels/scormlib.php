@@ -559,7 +559,7 @@ function exescorm_get_manifest($blocks, $scoes) {
             define('DEBUGGING_PRINTED', 1);
         }
         echo $OUTPUT->notification(
-            get_string('invalidmanifestresource', 'exescorm') . ' ' . implode(', ', $manifestresourcesnotfound)
+            get_string('invalidmanifestresource', 'mod_exescorm') . ' ' . implode(', ', $manifestresourcesnotfound)
         );
     }
     return $scoes;

@@ -62,8 +62,8 @@ class report {
         global $OUTPUT;
 
         // Build the select/deselect all control.
-        $selectalltext = get_string('selectall', 'exescorm');
-        $deselectalltext = get_string('selectnone', 'exescorm');
+        $selectalltext = get_string('selectall', 'mod_exescorm');
+        $deselectalltext = get_string('selectnone', 'mod_exescorm');
         $mastercheckbox = new \core\output\checkbox_toggleall('exescorm-attempts', true, [
             'name' => 'exescorm-selectall-attempts',
             'value' => 1,
@@ -99,7 +99,7 @@ class report {
     protected function generate_delete_selected_button(): string {
         $deleteselectedparams = array(
             'type' => 'submit',
-            'value' => get_string('deleteselected', 'exescorm'),
+            'value' => get_string('deleteselected', 'mod_exescorm'),
             'class' => 'btn btn-secondary',
             'data-action' => 'toggle',
             'data-togglegroup' => 'exescorm-attempts',
