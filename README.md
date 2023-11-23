@@ -58,7 +58,7 @@ Go to the URL:
     * Sends uploaded (or default) template to eXeLearning when creating a new activity.
 
   * Mandatory files RE list: *exescorm | mandatoryfileslist*
-    * A mandatory files list can be configurad here. Enter each mandatory file as a PHP regular expression (RE) a new line.
+    * A mandatory files list can be configurad here. Enter each mandatory file as a PHP regular expression (RE) on a new line.
 
   * Forbidden files RE list: *exescorm | forbiddenfileslist*
 
