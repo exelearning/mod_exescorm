@@ -37,7 +37,15 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
 
 $response = curl_exec($ch);
 $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+if (curl_errno($ch)) {
+    $error_msg = curl_error($ch);
+    curl_close($ch);
+    throw new moodle_exception('proxyerror', 'mod_exescorm', '', $error_msg);
+}
+
 curl_close($ch);
 
 http_response_code($httpcode);
+header('Content-Type: application/json');
 echo $response;
