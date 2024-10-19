@@ -4,12 +4,16 @@ services:
 
   exelearning-web:
     image: ghcr.io/exelearning/exelearning-web:latest
+    # build: ${EXELEARNING_WEB_PATH} # Source code of exe-learning
     ports:
       - 8080:8080
     restart: unless-stopped  # Restart the container unless it is stopped manually
     volumes:
       - mnt-data:/mnt/data:rw  # Mount the volume for persistent data
     environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      XDEBUG_MODE: off
       PRE_CONFIGURE_COMMANDS:
       POST_CONFIGURE_COMMANDS: |
         echo "this is a test line 1"
@@ -30,6 +34,7 @@ services:
       DB_USER: root
       DB_PASS: moodle
       DB_PREFIX: mdl_
+      DEBUG: true
       MOODLE_EMAIL: test@exelearning.net
       MOODLE_LANGUAGE: es
       MOODLE_SITENAME: New-Site
@@ -39,7 +44,8 @@ services:
         echo 'This is a pre-configure command'
       POST_CONFIGURE_COMMANDS: |
         echo 'This is a post-configure command'
-        php admin/cli/install_plugin.php --pluginsource=/var/www/html/mod/exescorm
+        echo 'Forcing upgrade to re-install exe plugin...'
+        php admin/cli/upgrade.php --non-interactive
         php admin/cli/cfg.php --component=exescorm --name=exeonlinebaseuri --set=exelearning-web:8080
         php admin/cli/cfg.php --component=exescorm --name=hmackey1 --set=PLEASE_CHANGEME_API_KEY
     ports:
@@ -47,7 +53,7 @@ services:
     volumes:
       - moodledata:/var/www/moodledata
       - moodlehtml:/var/www/html
-      - ./mod_exescorm:/var/www/html/mod/exescorm:rw  # Mount local plugin on the container
+      - ./:/var/www/html/mod/exescorm:rw  # Mount local plugin on the container
 
     depends_on:
       - db

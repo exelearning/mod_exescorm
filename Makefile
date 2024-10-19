@@ -63,9 +63,9 @@ pull: check-docker
 build: check-docker
 	docker compose build
 
-# Open a shell inside the exelearning-web container
+# Open a shell inside the moodle container
 shell: check-docker
-	docker compose run exelearning-web sh
+	docker compose exec moodle sh
 
 # Clean up and stop Docker containers, removing volumes and orphan containers
 clean: check-docker

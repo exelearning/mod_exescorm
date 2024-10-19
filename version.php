@@ -27,3 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->version = 2023120400;    // The current module version (Date: YYYYMMDDXX).
 $plugin->requires = 2020061500;    // Moodle 3.9 to 4.1.
 $plugin->component = 'mod_exescorm';   // Full name of the plugin (used for diagnostics).
+
+$plugin->maturity  = MATURITY_BETA;   // This is a stable version.
+$plugin->release   = 'v3.0.0';            // This is the first release of this version.
+
