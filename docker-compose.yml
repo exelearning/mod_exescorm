@@ -1,0 +1,82 @@
+---
+version: "3"
+services:
+
+  exelearning-web:
+    image: ghcr.io/exelearning/exelearning-web:latest
+    ports:
+      - 8080:8080
+    restart: unless-stopped  # Restart the container unless it is stopped manually
+    volumes:
+      - mnt-data:/mnt/data:rw  # Mount the volume for persistent data
+    environment:
+      PRE_CONFIGURE_COMMANDS:
+      POST_CONFIGURE_COMMANDS: |
+        echo "this is a test line 1"
+        echo "this is a test line 2"
+        php bin/console app:create-user test@exelearning.net testpassword testuser --no-fail
+
+  moodle:
+    image: erseco/alpine-moodle
+    restart: unless-stopped
+    environment:
+      LANG: es_ES.UTF-8
+      LANGUAGE: es_ES:es
+      SITE_URL: http://localhost
+      DB_TYPE: mariadb
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: moodle
+      DB_USER: root
+      DB_PASS: moodle
+      DB_PREFIX: mdl_
+      MOODLE_EMAIL: test@exelearning.net
+      MOODLE_LANGUAGE: es
+      MOODLE_SITENAME: New-Site
+      MOODLE_USERNAME: testuser
+      MOODLE_PASSWORD: testpassword
+      PRE_CONFIGURE_COMMANDS: |
+        echo 'This is a pre-configure command'
+      POST_CONFIGURE_COMMANDS: |
+        echo 'This is a post-configure command'
+        php admin/cli/install_plugin.php --pluginsource=/var/www/html/mod/exescorm
+        php admin/cli/cfg.php --component=exescorm --name=exeonlinebaseuri --set=exelearning-web:8080
+        php admin/cli/cfg.php --component=exescorm --name=hmackey1 --set=PLEASE_CHANGEME_API_KEY
+    ports:
+      - 80:8080
+    volumes:
+      - moodledata:/var/www/moodledata
+      - moodlehtml:/var/www/html
+      - ./mod_exescorm:/var/www/html/mod/exescorm:rw  # Mount local plugin on the container
+
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.6.7
+    restart: unless-stopped  # Restart the container unless it is stopped manually
+    environment:
+      MYSQL_DATABASE: moodle
+      MYSQL_ROOT_PASSWORD: moodle
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8002:80  # Maps the host's port 8002 to the container's port 80
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: moodle
+      UPLOAD_LIMIT: 300M
+    depends_on:
+      - db
+
+volumes:
+  dbdata:
+  mnt-data:    
+  moodledata: null
+  moodlehtml: null
+
+
