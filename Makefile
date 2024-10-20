@@ -71,6 +71,23 @@ shell: check-docker
 clean: check-docker
 	docker compose down -v --remove-orphans
 
+install-deps:
+	COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --prefer-dist --optimize-autoloader --no-progress
+
+lint:
+	composer lint
+
+fix:
+	composer fix
+
+test:
+	composer test
+
+phpmd:
+	composer phpmd
+
+behat:
+	composer behat
 # Display help with available commands
 help:
 	@echo "Available commands:"
