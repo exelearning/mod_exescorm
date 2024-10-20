@@ -32,17 +32,17 @@ if (!empty($id)) {
     if (! $cm = get_coursemodule_from_id('exescorm', $id, 0, true)) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
+    if (! $course = $DB->get_record("course", ["id" => $cm->course])) {
         throw new \moodle_exception('coursemisconf');
     }
-    if (! $exescorm = $DB->get_record("exescorm", array("id" => $cm->instance))) {
+    if (! $exescorm = $DB->get_record("exescorm", ["id" => $cm->instance])) {
         throw new \moodle_exception('invalidcoursemodule');
     }
 } else if (!empty($a)) {
-    if (! $exescorm = $DB->get_record("exescorm", array("id" => $a))) {
+    if (! $exescorm = $DB->get_record("exescorm", ["id" => $a])) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record("course", array("id" => $exescorm->course))) {
+    if (! $course = $DB->get_record("course", ["id" => $exescorm->course])) {
         throw new \moodle_exception('coursemisconf');
     }
     if (! $cm = get_coursemodule_from_instance("exescorm", $exescorm->id, $course->id, true)) {
@@ -54,7 +54,7 @@ if (!empty($id)) {
 
 // PARAM_RAW is used for $currentorg, validate it against records stored in the table.
 if (!empty($currentorg)) {
-    if (!$DB->record_exists('exescorm_scoes', array('exescorm' => $exescorm->id, 'identifier' => $currentorg))) {
+    if (!$DB->record_exists('exescorm_scoes', ['exescorm' => $exescorm->id, 'identifier' => $currentorg])) {
         $currentorg = '';
     }
 }
@@ -69,7 +69,7 @@ if (!empty($scoid)) {
     $scoid = exescorm_check_launchable_sco($exescorm, $scoid);
 }
 
-$url = new moodle_url('/mod/exescorm/player.php', array('scoid' => $scoid, 'cm' => $cm->id));
+$url = new moodle_url('/mod/exescorm/player.php', ['scoid' => $scoid, 'cm' => $cm->id]);
 if ($mode !== 'normal') {
     $url->param('mode', $mode);
 }
@@ -112,7 +112,7 @@ $coursecontext = context_course::instance($course->id);
 if ($displaymode == 'popup') {
     $PAGE->set_pagelayout('embedded');
 } else {
-    $shortname = format_string($course->shortname, true, array('context' => $coursecontext));
+    $shortname = format_string($course->shortname, true, ['context' => $coursecontext]);
     $pagetitle = strip_tags("$shortname: ".format_string($exescorm->name));
     $PAGE->set_title($pagetitle);
     $PAGE->set_heading($course->fullname);
@@ -178,16 +178,16 @@ if (empty($exescorm->popup) || $displaymode == 'popup') {
 }
 
 // Print the page header.
-$stringforjs = ['player:next', 'player:prev', 'player:skipnext', 'player:skipprev', 'player:toogleFullscreen', 'player:up', ];
+$stringforjs = ['player:next', 'player:prev', 'player:skipnext', 'player:skipprev', 'player:toogleFullscreen', 'player:up' ];
 $PAGE->requires->strings_for_js($stringforjs, 'mod_exescorm');
-$PAGE->requires->data_for_js('exescormplayerdata', Array('launch' => false,
+$PAGE->requires->data_for_js('exescormplayerdata', ['launch' => false,
                                                        'currentorg' => '',
                                                        'sco' => 0,
                                                        'exescorm' => 0,
                                                        'courseid' => $exescorm->course,
                                                        'cwidth' => $exescorm->width,
                                                        'cheight' => $exescorm->height,
-                                                       'popupoptions' => $exescorm->options), true);
+                                                       'popupoptions' => $exescorm->options], true);
 $PAGE->requires->js('/mod/exescorm/request.js', true);
 $PAGE->requires->js('/lib/cookies.js', true);
 
@@ -200,7 +200,7 @@ if ($CFG->version >= 2022041900) { // Moodle 4+.
     $activityheader = $PAGE->activityheader;
     $headerconfig = [
         'description' => '',
-        'hidecompletion' => true
+        'hidecompletion' => true,
     ];
 
     $activityheader->set_attrs($headerconfig);
@@ -220,30 +220,30 @@ if ($displaymode !== 'popup') {
     echo $renderer->generate_editexitbar($exiturl, $cm);
 }
 
-echo html_writer::start_div('', array('id' => 'exescormpage'));
-echo html_writer::start_div('', array('id' => 'tocbox'));
-echo html_writer::div(html_writer::tag('script', '', array('id' => 'external-exescormapi', 'type' => 'text/JavaScript')), '',
-                        array('id' => 'exescormapi-parent'));
+echo html_writer::start_div('', ['id' => 'exescormpage']);
+echo html_writer::start_div('', ['id' => 'tocbox']);
+echo html_writer::div(html_writer::tag('script', '', ['id' => 'external-exescormapi', 'type' => 'text/JavaScript']), '',
+                        ['id' => 'exescormapi-parent']);
 
 
 if ($exescorm->hidetoc == EXESCORM_TOC_POPUP || $mode == 'browse' || $mode == 'review') {
-    echo html_writer::start_div('pl-2', array('id' => 'exescormtop'));
+    echo html_writer::start_div('pl-2', ['id' => 'exescormtop']);
     if ($mode == 'browse' || $mode == 'review') {
         echo html_writer::div(get_string("{$mode}mode", 'mod_exescorm'), 'exescorm-left h3', ['id' => 'exescormmode']);
     }
     if ($exescorm->hidetoc == EXESCORM_TOC_POPUP) {
-        echo html_writer::div($result->tocmenu, 'exescorm-right', array('id' => 'exescormnav'));
+        echo html_writer::div($result->tocmenu, 'exescorm-right', ['id' => 'exescormnav']);
     }
     echo html_writer::end_div();
 }
 
-echo html_writer::start_div('', array('id' => 'toctree'));
+echo html_writer::start_div('', ['id' => 'toctree']);
 
 // ADD actions button.
 echo $renderer->generate_tocbox_action_buttons();
 
 
-echo html_writer::div('', '', array('id' => 'exescorm_toc_title'));
+echo html_writer::div('', '', ['id' => 'exescorm_toc_title']);
 
 if (empty($exescorm->popup) || $displaymode == 'popup') {
     echo $result->toc;
@@ -267,14 +267,14 @@ if ($result->prerequisites) {
         }
         $name = 'exescorm_'.$name;
         echo html_writer::script('', $CFG->wwwroot.'/mod/exescorm/player.js');
-        $url = new moodle_url($PAGE->url, array('scoid' => $sco->id, 'display' => 'popup', 'mode' => $mode));
+        $url = new moodle_url($PAGE->url, ['scoid' => $sco->id, 'display' => 'popup', 'mode' => $mode]);
         echo html_writer::script(
-            js_writer::function_call('exescorm_openpopup', Array($url->out(false),
+            js_writer::function_call('exescorm_openpopup', [$url->out(false),
                                                        $name, $exescorm->options,
-                                                       $exescorm->width, $exescorm->height)));
+                                                       $exescorm->width, $exescorm->height]));
         echo html_writer::tag('noscript', html_writer::tag('iframe', '',
-                array('id' => 'main', 'class' => 'scoframe', 'name' => 'main',
-                'src' => 'loadSCO.php?id='.$cm->id.$scoidstr.$modestr)));
+                ['id' => 'main', 'class' => 'scoframe', 'name' => 'main',
+                'src' => 'loadSCO.php?id='.$cm->id.$scoidstr.$modestr]));
     }
 } else {
     echo $OUTPUT->box(get_string('noprerequisites', 'mod_exescorm'));
@@ -288,11 +288,11 @@ if (empty($exescorm->popup) || $displaymode == 'popup') {
     if (!isset($result->toctitle)) {
         $result->toctitle = get_string('toc', 'mod_exescorm');
     }
-    $jsmodule = array(
+    $jsmodule = [
         'name' => 'mod_exescorm',
         'fullpath' => '/mod/exescorm/module.js',
-        'requires' => array('json'),
-    );
+        'requires' => ['json'],
+    ];
     $exescorm->nav = intval($exescorm->nav);
     $PAGE->requires->js_init_call('M.mod_exescorm.init', [$exescorm->nav, $exescorm->navpositionleft,
                         $exescorm->navpositiontop, $exescorm->hidetoc, $collapsetocwinsize, $result->toctitle,

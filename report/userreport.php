@@ -31,17 +31,17 @@ $attempt = optional_param('attempt', 1, PARAM_INT); // Attempt number.
 $mode = optional_param('mode', '', PARAM_ALPHA); // Scorm mode from which reached here.
 
 // Building the url to use for links.+ data details buildup.
-$url = new moodle_url('/mod/exescorm/report/userreport.php', array('id' => $id,
+$url = new moodle_url('/mod/exescorm/report/userreport.php', ['id' => $id,
     'user' => $userid,
-    'attempt' => $attempt));
-$tracksurl = new moodle_url('/mod/exescorm/report/userreporttracks.php', array('id' => $id,
+    'attempt' => $attempt]);
+$tracksurl = new moodle_url('/mod/exescorm/report/userreporttracks.php', ['id' => $id,
     'user' => $userid,
     'attempt' => $attempt,
-     'mode' => $mode));
+     'mode' => $mode]);
 $cm = get_coursemodule_from_id('exescorm', $id, 0, false, MUST_EXIST);
 $course = get_course($cm->course);
-$exescorm = $DB->get_record('exescorm', array('id' => $cm->instance), '*', MUST_EXIST);
-$user = $DB->get_record('user', array('id' => $userid), implode(',', \core_user\fields::get_picture_fields()), MUST_EXIST);
+$exescorm = $DB->get_record('exescorm', ['id' => $cm->instance], '*', MUST_EXIST);
+$user = $DB->get_record('user', ['id' => $userid], implode(',', \core_user\fields::get_picture_fields()), MUST_EXIST);
 // Get list of attempts this user has made.
 $attemptids = exescorm_get_all_attempts($exescorm->id, $userid);
 
@@ -63,11 +63,11 @@ if (!groups_user_groups_visible($course, $userid, $cm)) {
 }
 
 // Trigger a user report viewed event.
-$event = \mod_exescorm\event\user_report_viewed::create(array(
+$event = \mod_exescorm\event\user_report_viewed::create([
     'context' => $contextmodule,
     'relateduserid' => $userid,
-    'other' => array('attemptid' => $attempt, 'instanceid' => $exescorm->id)
-));
+    'other' => ['attemptid' => $attempt, 'instanceid' => $exescorm->id],
+]);
 $event->add_record_snapshot('course_modules', $cm);
 $event->add_record_snapshot('exescorm', $exescorm);
 $event->trigger();
@@ -78,11 +78,11 @@ $strattempt = get_string('attempt', 'mod_exescorm');
 
 $PAGE->set_title("$course->shortname: ".format_string($exescorm->name));
 $PAGE->set_heading($course->fullname);
-$PAGE->navbar->add($strreport, new moodle_url('/mod/exescorm/report.php', array('id' => $cm->id)));
+$PAGE->navbar->add($strreport, new moodle_url('/mod/exescorm/report.php', ['id' => $cm->id]));
 $PAGE->navbar->add(fullname($user). " - $strattempt $attempt");
 $PAGE->activityheader->set_attrs([
     'hidecompletion' => true,
-    'description' => ''
+    'description' => '',
 ]);
 echo $OUTPUT->header();
 
@@ -97,22 +97,22 @@ echo $renderer->user_report_actionbar($useractionreport);
 $output = $PAGE->get_renderer('mod_exescorm');
 echo $output->view_user_heading($user, $course, $PAGE->url, $attempt, $attemptids);
 
-if ($scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id), 'sortorder, id')) {
+if ($scoes = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id], 'sortorder, id')) {
     // Print general score data.
     $table = new html_table();
-    $table->head = array(
+    $table->head = [
             get_string('title', 'mod_exescorm'),
             get_string('status', 'mod_exescorm'),
             get_string('time', 'mod_exescorm'),
             get_string('score', 'mod_exescorm'),
-            '');
-    $table->align = array('left', 'center', 'center', 'right', 'left');
-    $table->wrap = array('nowrap', 'nowrap', 'nowrap', 'nowrap', 'nowrap');
+            ''];
+    $table->align = ['left', 'center', 'center', 'right', 'left'];
+    $table->wrap = ['nowrap', 'nowrap', 'nowrap', 'nowrap', 'nowrap'];
     $table->width = '80%';
-    $table->size = array('*', '*', '*', '*', '*');
+    $table->size = ['*', '*', '*', '*', '*'];
     foreach ($scoes as $sco) {
         if ($sco->launch != '') {
-            $row = array();
+            $row = [];
             $score = '&nbsp;';
             if ($trackdata = exescorm_get_tracks($sco->id, $userid, $attempt)) {
                 if ($trackdata->score_raw != '') {
@@ -140,7 +140,7 @@ if ($scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->i
             $row[] = $score;
             $row[] = $detailslink;
         } else {
-            $row = array(format_string($sco->title), '&nbsp;', '&nbsp;', '&nbsp;', '&nbsp;');
+            $row = [format_string($sco->title), '&nbsp;', '&nbsp;', '&nbsp;', '&nbsp;'];
         }
         $table->data[] = $row;
     }

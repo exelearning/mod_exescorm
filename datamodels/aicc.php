@@ -26,7 +26,7 @@ if (!isset($currentorg)) {
     $currentorg = '';
 }
 
-if ($scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id), 'sortorder, id')) {
+if ($scoes = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id], 'sortorder, id')) {
     // Drop keys so that it is a simple array.
     $scoes = array_values($scoes);
     foreach ($scoes as $sco) {

@@ -55,7 +55,7 @@ class lib_test extends \advanced_testcase {
 
         // Setup test data.
         $this->course = $this->getDataGenerator()->create_course();
-        $this->exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $this->course->id));
+        $this->exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $this->course->id]);
         $this->context = \context_module::instance($this->exescorm->cmid);
         $this->cm = get_coursemodule_from_instance('exescorm', $this->exescorm->id);
 
@@ -64,8 +64,8 @@ class lib_test extends \advanced_testcase {
         $this->teacher = self::getDataGenerator()->create_user();
 
         // Users enrolments.
-        $this->studentrole = $DB->get_record('role', array('shortname' => 'student'));
-        $this->teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
+        $this->studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $this->teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
         $this->getDataGenerator()->enrol_user($this->student->id, $this->course->id, $this->studentrole->id, 'manual');
         $this->getDataGenerator()->enrol_user($this->teacher->id, $this->course->id, $this->teacherrole->id, 'manual');
     }
@@ -131,7 +131,7 @@ class lib_test extends \advanced_testcase {
         // Checking that the event contains the expected values.
         $this->assertInstanceOf('\mod_exescorm\event\course_module_viewed', $event);
         $this->assertEquals($this->context, $event->get_context());
-        $url = new \moodle_url('/mod/exescorm/view.php', array('id' => $this->cm->id));
+        $url = new \moodle_url('/mod/exescorm/view.php', ['id' => $this->cm->id]);
         $this->assertEquals($url, $event->get_url());
         $this->assertEventContextNotUsed($event);
         $this->assertNotEmpty($event->get_name());
@@ -267,8 +267,8 @@ class lib_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
 
         // Create a exescorm activity.
-        $exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $course->id,
-            'timeopen' => time() - DAYSECS, 'timeclose' => time() + DAYSECS));
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $course->id,
+            'timeopen' => time() - DAYSECS, 'timeclose' => time() + DAYSECS]);
 
         // Create a calendar event.
         $event = $this->create_action_event($course->id, $exescorm->id, EXESCORM_EVENT_TYPE_OPEN);
@@ -299,8 +299,8 @@ class lib_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
 
         // Create a exescorm activity.
-        $exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $course->id,
-            'timeclose' => time() - DAYSECS));
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $course->id,
+            'timeclose' => time() - DAYSECS]);
 
         // Create a calendar event.
         $event = $this->create_action_event($course->id, $exescorm->id, EXESCORM_EVENT_TYPE_OPEN);
@@ -324,8 +324,8 @@ class lib_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
 
         // Create a exescorm activity.
-        $exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $course->id,
-            'timeopen' => time() + DAYSECS));
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $course->id,
+            'timeopen' => time() + DAYSECS]);
 
         // Create a calendar event.
         $event = $this->create_action_event($course->id, $exescorm->id, EXESCORM_EVENT_TYPE_OPEN);
@@ -356,8 +356,8 @@ class lib_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
 
         // Create a exescorm activity.
-        $exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $course->id,
-            'timeopen' => time() + DAYSECS));
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $course->id,
+            'timeopen' => time() + DAYSECS]);
 
         // Create a calendar event.
         $event = $this->create_action_event($course->id, $exescorm->id, EXESCORM_EVENT_TYPE_OPEN);
@@ -389,7 +389,7 @@ class lib_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
 
         // Create a exescorm activity.
-        $exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $course->id));
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $course->id]);
 
         // Create a calendar event.
         $event = $this->create_action_event($course->id, $exescorm->id, EXESCORM_EVENT_TYPE_OPEN);
@@ -417,9 +417,9 @@ class lib_test extends \advanced_testcase {
         $this->setAdminUser();
 
         // Create the activity.
-        $course = $this->getDataGenerator()->create_course(array('enablecompletion' => 1));
-        $exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $course->id),
-            array('completion' => 2, 'completionview' => 1, 'completionexpected' => time() + DAYSECS));
+        $course = $this->getDataGenerator()->create_course(['enablecompletion' => 1]);
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $course->id],
+            ['completion' => 2, 'completionview' => 1, 'completionexpected' => time() + DAYSECS]);
 
         // Get some additional data.
         $cm = get_coursemodule_from_instance('exescorm', $exescorm->id);
@@ -448,9 +448,9 @@ class lib_test extends \advanced_testcase {
         $this->setAdminUser();
 
         // Create the activity.
-        $course = $this->getDataGenerator()->create_course(array('enablecompletion' => 1));
-        $exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $course->id),
-            array('completion' => 2, 'completionview' => 1, 'completionexpected' => time() + DAYSECS));
+        $course = $this->getDataGenerator()->create_course(['enablecompletion' => 1]);
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $course->id],
+            ['completion' => 2, 'completionview' => 1, 'completionexpected' => time() + DAYSECS]);
 
         // Enrol a student in the course.
         $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
@@ -520,14 +520,14 @@ class lib_test extends \advanced_testcase {
             'completion' => 2,
             'completionstatusrequired' => 6,
             'completionscorerequired' => 5,
-            'completionstatusallscos' => 1
+            'completionstatusallscos' => 1,
         ]);
         $exescorm2 = $this->getDataGenerator()->create_module('exescorm', [
             'course' => $course->id,
             'completion' => 2,
             'completionstatusrequired' => null,
             'completionscorerequired' => null,
-            'completionstatusallscos' => null
+            'completionstatusallscos' => null,
         ]);
         $cm1 = \cm_info::create(get_coursemodule_from_instance('exescorm', $exescorm1->id));
         $cm2 = \cm_info::create(get_coursemodule_from_instance('exescorm', $exescorm2->id));
@@ -539,12 +539,12 @@ class lib_test extends \advanced_testcase {
         $moddefaults->customdata = ['customcompletionrules' => [
             'completionstatusrequired' => 6,
             'completionscorerequired' => 5,
-            'completionstatusallscos' => 1
+            'completionstatusallscos' => 1,
         ]];
         $moddefaults->completion = 2;
 
         // Determine the selected statuses using a bitwise operation.
-        $cvalues = array();
+        $cvalues = [];
         foreach (exescorm_status_options(true) as $key => $value) {
             if (($exescorm1->completionstatusrequired & $key) == $key) {
                 $cvalues[] = $value;
@@ -595,7 +595,7 @@ class lib_test extends \advanced_testcase {
             'eventtype' => EXESCORM_EVENT_TYPE_OPEN . "SOMETHING ELSE",
             'timestart' => 1,
             'timeduration' => 86400,
-            'visible' => 1
+            'visible' => 1,
         ]);
 
         mod_exescorm_core_calendar_event_timestart_updated($event, $exescorm);
@@ -641,7 +641,7 @@ class lib_test extends \advanced_testcase {
             'eventtype' => EXESCORM_EVENT_TYPE_OPEN,
             'timestart' => $newtimeopen,
             'timeduration' => 86400,
-            'visible' => 1
+            'visible' => 1,
         ]);
 
         // Trigger and capture the event when adding a contact.
@@ -702,7 +702,7 @@ class lib_test extends \advanced_testcase {
             'eventtype' => EXESCORM_EVENT_TYPE_CLOSE,
             'timestart' => $newtimeclose,
             'timeduration' => 86400,
-            'visible' => 1
+            'visible' => 1,
         ]);
 
         // Trigger and capture the event when adding a contact.
@@ -757,7 +757,7 @@ class lib_test extends \advanced_testcase {
             'eventtype' => EXESCORM_EVENT_TYPE_OPEN . "SOMETHING ELSE",
             'timestart' => 1,
             'timeduration' => 86400,
-            'visible' => 1
+            'visible' => 1,
         ]);
 
         list ($min, $max) = mod_exescorm_core_calendar_get_valid_event_timestart_range($event, $exescorm);
@@ -795,7 +795,7 @@ class lib_test extends \advanced_testcase {
             'eventtype' => EXESCORM_EVENT_TYPE_OPEN,
             'timestart' => 1,
             'timeduration' => 86400,
-            'visible' => 1
+            'visible' => 1,
         ]);
 
         // The max limit should be bounded by the timeclose value.
@@ -842,7 +842,7 @@ class lib_test extends \advanced_testcase {
             'eventtype' => EXESCORM_EVENT_TYPE_CLOSE,
             'timestart' => 1,
             'timeduration' => 86400,
-            'visible' => 1
+            'visible' => 1,
         ]);
 
         // The max limit should be bounded by the timeclose value.
@@ -874,11 +874,11 @@ class lib_test extends \advanced_testcase {
         // Create an instance as a user without the calendar capabilities.
         $this->setUser($user);
         $time = time();
-        $params = array(
+        $params = [
             'course' => $course->id,
             'timeopen' => $time + 200,
             'timeclose' => $time + 2000,
-        );
+        ];
         $generator->create_instance($params);
     }
 }

@@ -12,23 +12,24 @@
         "moodlehq/moodle-cs": "^3.4.10"
     },
     "scripts": {
-        "lint": [ // Run PHP CodeSniffer to check for coding standard violations
+        "lint": [
             "phpcs --standard=moodle --extensions=php --ignore=vendor/* -p -w -s --no-cache --colors --report-full --report-width=132 --encoding=utf-8 ."
 
         ],
-        "fix": [ // Automatically fix coding standard violations using PHP Code Beautifier and Fixer
+        "fix": [
             "phpcbf --standard=moodle --extensions=php --ignore=vendor/* -p -w -s --no-cache --colors --report-full --report-width=132 --encoding=utf-8 ."
 
         ],
-        "test": [ // Run PHPUnit tests and check/fix coding standards
+        "test": [
             "phpunit",
             "phpcs --standard=moodle --extensions=php --ignore=vendor/,node_modules/ .",
             "phpcbf --standard=moodle --extensions=php --ignore=vendor/,node_modules/ ."
         ],
-        "phpmd": [ // Run PHP Mess Detector to find potential problems in the code
-            "phpmd src text cleancode,codesize,controversial,design,naming,unusedcode"
+        "phpmd": [
+            "curl -o phpmd-rules.xml https://raw.githubusercontent.com/moodlehq/moodle-plugin-ci/refs/heads/main/res/config/phpmd.xml",
+            "phpmd . text phpmd-rules.xml"
         ],
-        "behat": [ // Run Behat tests for behavior-driven development
+        "behat": [
             "vendor/bin/behat --config behat.yml"
         ]
     },

@@ -79,19 +79,19 @@ class actionbar implements renderable, templatable {
             if ($mode === 'basic') {
                 $options = [
                     'id' => $this->id, 'mode' => $mode,
-                    'attemptsmode' => $this->attemptsmode, 'sesskey' => $sesskey
+                    'attemptsmode' => $this->attemptsmode, 'sesskey' => $sesskey,
                 ];
             } else if ($mode === 'interactions') {
                 $options = [
                     'id' => $this->id, 'mode' => $mode, 'qtext' => '0',
                     'resp' => '1', 'right' => '0', 'result' => '0',
-                    'attemptsmode' => $this->attemptsmode, 'sesskey' => $sesskey
+                    'attemptsmode' => $this->attemptsmode, 'sesskey' => $sesskey,
                 ];
             } else if ($mode === 'objectives') {
                 $options = [
                     'id' => $this->id, 'mode' => $mode,
                     'attemptsmode' => $this->attemptsmode, 'objectivescore' => '0',
-                    'sesskey' => $sesskey
+                    'sesskey' => $sesskey,
                 ];
             }
 
@@ -115,7 +115,7 @@ class actionbar implements renderable, templatable {
             'candownload' => $this->download,
             'downloadods' => ($this->download) ? $downloadodslink->out(false) : '',
             'downloadexcel' => ($this->download) ? $downloadexcellink->out(false) : '',
-            'downloadtext' => ($this->download) ? $downloadtextlink->out(false) : ''
+            'downloadtext' => ($this->download) ? $downloadtextlink->out(false) : '',
         ];
         return $data;
     }

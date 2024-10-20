@@ -32,7 +32,7 @@ class restore_exescorm_activity_structure_step extends restore_activity_structur
 
     protected function define_structure() {
 
-        $paths = array();
+        $paths = [];
         $userinfo = $this->get_setting_value('userinfo');
 
         $paths[] = new restore_path_element('exescorm', '/activity/exescorm');
@@ -208,12 +208,12 @@ class restore_exescorm_activity_structure_step extends restore_activity_structur
 
         // Fix launch param in exescorm table to use new sco id.
         $exescormid = $this->get_new_parentid('exescorm');
-        $exescorm = $DB->get_record('exescorm', array('id' => $exescormid));
+        $exescorm = $DB->get_record('exescorm', ['id' => $exescormid]);
         $exescorm->launch = $this->get_mappingid('exescorm_sco', $exescorm->launch, '');
 
         if (!empty($exescorm->launch)) {
             // Check that this sco has a valid launch value.
-            $scolaunch = $DB->get_field('exescorm_scoes', 'launch', array('id' => $exescorm->launch));
+            $scolaunch = $DB->get_field('exescorm_scoes', 'launch', ['id' => $exescorm->launch]);
             if (empty($scolaunch)) {
                 // This is not a valid sco - set to empty so we can find a valid launch sco.
                 $exescorm->launch = '';
@@ -224,7 +224,7 @@ class restore_exescorm_activity_structure_step extends restore_activity_structur
             // This exescorm has an invalid launch param - we need to calculate it and get the first launchable sco.
             $sqlselect = 'exescorm = ? AND '.$DB->sql_isnotempty('exescorm_scoes', 'launch', false, true);
             // We use get_records here as we need to pass a limit in the query that works cross db.
-            $scoes = $DB->get_records_select('exescorm_scoes', $sqlselect, array($exescormid), 'sortorder', 'id', 0, 1);
+            $scoes = $DB->get_records_select('exescorm_scoes', $sqlselect, [$exescormid], 'sortorder', 'id', 0, 1);
             if (!empty($scoes)) {
                 $sco = reset($scoes); // We only care about the first record - the above query only returns one.
                 $exescorm->launch = $sco->id;
