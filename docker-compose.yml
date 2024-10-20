@@ -4,7 +4,7 @@ services:
 
   exelearning-web:
     image: ghcr.io/exelearning/exelearning-web:latest
-    # build: ${EXELEARNING_WEB_PATH} # Source code of exe-learning
+    build: ${EXELEARNING_WEB_PATH:-} # If EXELEARNING_WEB_PATH is not defined, skip build
     ports:
       - 8080:8080
     restart: unless-stopped  # Restart the container unless it is stopped manually

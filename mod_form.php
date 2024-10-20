@@ -465,13 +465,13 @@ class mod_exescorm_mod_form extends moodleform_mod {
                 $errors['updatefreq'] = get_string('updatefreq_error', 'mod_exescorm');
             }
         } else if ($type === EXESCORM_TYPE_EXTERNAL) {
-            $reference = new moodle_url('/mod/exescorm/proxy.php', ['endpoint' => 'imsmanifest.xml', 'url' => $data['packageurl']]);
+            $reference = $data['packageurl'];
             // Syntax check.
-            if (!preg_match('/(http:\/\/|https:\/\/|www).*\/imsmanifest.xml$/i', $reference->out())) {
+            if (!preg_match('/(http:\/\/|https:\/\/|www).*\/imsmanifest.xml$/i', $reference)) {
                 $errors['packageurl'] = get_string('invalidurl', 'mod_exescorm');
             } else {
                 // Availability check.
-                $result = exescorm_check_url($reference->out());
+                $result = exescorm_check_url($reference);
                 if (is_string($result)) {
                     $errors['packageurl'] = $result;
                 }
