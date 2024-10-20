@@ -114,6 +114,12 @@ help:
 	@echo "  pull              - Pull the latest images from the registry"
 	@echo "  clean             - Clean up and stop Docker containers, removing volumes and orphan containers"
 	@echo "  shell             - Open a shell inside the exelearning-web container"
+	@echo "  install-deps      - Install PHP dependencies using Composer"
+	@echo "  lint              - Run code linting using Composer"
+	@echo "  fix               - Automatically fix code style issues using Composer"
+	@echo "  test              - Run tests using Composer"
+	@echo "  phpmd             - Run PHP Mess Detector using Composer"
+	@echo "  behat             - Run Behat tests using Composer"
 	@echo "  help              - Display this help with available commands"
 
 
