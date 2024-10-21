@@ -1,5 +1,10 @@
 # Makefile to facilitate the use of Docker in the exelearning-web project
 
+# Get the host IP (works for Unix/macOS, adjust for Windows if needed)
+# HOST_IP = $(shell hostname -I | awk '{print $$1}')
+# Get the host IP using ifconfig (for macOS/Linux)
+HOST_IP = $(shell ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $$2}'
+
 # Detect the operating system
 ifeq ($(OS),Windows_NT)
 	# We are on Windows
@@ -12,11 +17,25 @@ ifeq ($(OS),Windows_NT)
 	else
 		# Not in MinGW or Cygwin
 		SYSTEM_OS := windows
-
 	endif
 else
 	# Not Windows, assuming Unix
 	SYSTEM_OS := unix
+endif
+
+# Get the host IP based on the operating system
+ifeq ($(SYSTEM_OS),windows)
+	# For Windows, use ipconfig and findstr to extract the IP
+	HOST_IP := $(shell for /F "tokens=2 delims=[]" %i in ('ping -n 1 -4 %COMPUTERNAME%') do @echo %i)
+else
+	# For Unix-like systems, use ifconfig or ip (adjust for macOS/Linux)
+	ifeq ($(shell uname), Darwin)
+		# For macOS, use ipconfig
+		HOST_IP := $(shell ipconfig getifaddr en0)
+	else
+		# For Linux, use ifconfig or ip to get the IP address
+		HOST_IP := $(shell hostname -I | cut -d' ' -f1)
+	endif
 endif
 
 # Check if Docker is running
@@ -45,15 +64,19 @@ else
 	fi
 endif
 
+# Show the host ip address
+ip:
+	@echo "The host ip address is: ${HOST_IP}"
+
 # Start Docker containers in interactive mode
 # This target builds and starts the Docker containers, allowing interaction with the terminal.
 up: check-docker
-	docker compose up --build
+	HOST_IP=$(HOST_IP) docker compose up --build
 
 # Start Docker containers in background mode (daemon)
 # This target builds and starts the Docker containers in the background.
 upd: check-docker
-	docker compose up -d    
+	HOST_IP=$(HOST_IP) docker compose up -d    
 
 # Stop and remove Docker containers
 # This target stops and removes all running Docker containers.
