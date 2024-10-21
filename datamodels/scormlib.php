@@ -23,7 +23,7 @@
  */
 
 function exescorm_get_resources($blocks) {
-    $resources = array();
+    $resources = [];
     foreach ($blocks as $block) {
         if ($block['name'] == 'RESOURCES' && isset($block['children'])) {
             foreach ($block['children'] as $resource) {
@@ -38,13 +38,13 @@ function exescorm_get_resources($blocks) {
 
 function exescorm_get_manifest($blocks, $scoes) {
     global $OUTPUT;
-    static $parents = array();
+    static $parents = [];
     static $resources;
 
     static $manifest;
     static $organization;
 
-    $manifestresourcesnotfound = array();
+    $manifestresourcesnotfound = [];
     if (count($blocks) > 0) {
         foreach ($blocks as $block) {
             switch ($block['name']) {
@@ -72,7 +72,7 @@ function exescorm_get_manifest($blocks, $scoes) {
                 case 'MANIFEST':
                     $manifest = $block['attrs']['IDENTIFIER'];
                     $organization = '';
-                    $resources = array();
+                    $resources = [];
                     $resources = exescorm_get_resources($block['children']);
                     $scoes = exescorm_get_manifest($block['children'], $scoes);
                     if (empty($scoes->elements) || count($scoes->elements) <= 0) {
@@ -106,7 +106,7 @@ function exescorm_get_manifest($blocks, $scoes) {
                     $scoes->elements[$manifest][$organization][$identifier]->launch = '';
                     $scoes->elements[$manifest][$organization][$identifier]->exescormtype = '';
 
-                    $parents = array();
+                    $parents = [];
                     $parent = new stdClass();
                     $parent->identifier = $identifier;
                     $parent->organization = $organization;
@@ -331,7 +331,7 @@ function exescorm_get_manifest($blocks, $scoes) {
                                 }
                             }
                             if ($sequencing['name'] == 'IMSSS:OBJECTIVES') {
-                                $objectives = array();
+                                $objectives = [];
                                 foreach ($sequencing['children'] as $objective) {
                                     $objectivedata = new stdClass();
                                     $objectivedata->primaryobj = 0;
@@ -350,7 +350,7 @@ function exescorm_get_manifest($blocks, $scoes) {
                                             }
                                             $objectivedata->minnormalizedmeasure = 1.0;
                                             if (!empty($objective['children'])) {
-                                                $mapinfos = array();
+                                                $mapinfos = [];
                                                 foreach ($objective['children'] as $objectiveparam) {
                                                     if ($objectiveparam['name'] == 'IMSSS:MINNORMALIZEDMEASURE') {
                                                         if (isset($objectiveparam['tagData'])) {
@@ -429,7 +429,7 @@ function exescorm_get_manifest($blocks, $scoes) {
                                 }
 
                                 if (!empty($sequencing['children'])) {
-                                    $rolluprules = array();
+                                    $rolluprules = [];
                                     foreach ($sequencing['children'] as $sequencingrolluprule) {
                                         if ($sequencingrolluprule['name'] == 'IMSSS:ROLLUPRULE' ) {
                                             $rolluprule = new stdClass();
@@ -448,7 +448,7 @@ function exescorm_get_manifest($blocks, $scoes) {
                                             if (!empty($sequencingrolluprule['children'])) {
                                                 foreach ($sequencingrolluprule['children'] as $rolluproleconditions) {
                                                     if ($rolluproleconditions['name'] == 'IMSSS:ROLLUPCONDITIONS') {
-                                                        $conditions = array();
+                                                        $conditions = [];
                                                         $rolluprule->conditioncombination = 'all';
                                                         if (isset($rolluproleconditions['attrs']['CONDITIONCOMBINATION'])) {
                                                             $rolluprule->CONDITIONCOMBINATION =
@@ -485,7 +485,7 @@ function exescorm_get_manifest($blocks, $scoes) {
 
                             if ($sequencing['name'] == 'IMSSS:SEQUENCINGRULES') {
                                 if (!empty($sequencing['children'])) {
-                                    $sequencingrules = array();
+                                    $sequencingrules = [];
                                     foreach ($sequencing['children'] as $conditionrules) {
                                         $conditiontype = -1;
                                         switch($conditionrules['name']) {
@@ -503,7 +503,7 @@ function exescorm_get_manifest($blocks, $scoes) {
                                             $sequencingrule = new stdClass();
                                             foreach ($conditionrules['children'] as $conditionrule) {
                                                 if ($conditionrule['name'] == 'IMSSS:RULECONDITIONS') {
-                                                    $ruleconditions = array();
+                                                    $ruleconditions = [];
                                                     $sequencingrule->conditioncombination = 'all';
                                                     if (isset($conditionrule['attrs']['CONDITIONCOMBINATION'])) {
                                                         $sequencingrule->conditioncombination =
@@ -595,10 +595,10 @@ function exescorm_parse_scorm(&$exescorm, $manifest) {
     $scoes = new stdClass();
     $scoes->version = '';
     $scoes = exescorm_get_manifest($manifests, $scoes);
-    $newscoes = array();
+    $newscoes = [];
     $sortorder = 0;
     if (!empty($scoes->elements) && is_iterable($scoes->elements)) {
-        $olditems = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id));
+        $olditems = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id]);
         foreach ($scoes->elements as $manifest => $organizations) {
             foreach ($organizations as $organization => $items) {
                 foreach ($items as $identifier => $item) {
@@ -609,7 +609,7 @@ function exescorm_parse_scorm(&$exescorm, $manifest) {
                     $newitem->manifest = $manifest;
                     $newitem->organization = $organization;
                     $newitem->sortorder = $sortorder;
-                    $standarddatas = array('parent', 'identifier', 'launch', 'exescormtype', 'title');
+                    $standarddatas = ['parent', 'identifier', 'launch', 'exescormtype', 'title'];
                     foreach ($standarddatas as $standarddata) {
                         if (isset($item->$standarddata)) {
                             $newitem->$standarddata = $item->$standarddata;
@@ -632,13 +632,13 @@ function exescorm_parse_scorm(&$exescorm, $manifest) {
                         $DB->update_record('exescorm_scoes', $newitem);
                         $id = $olditemid;
                         // Remove all old data so we don't duplicate it.
-                        $DB->delete_records('exescorm_scoes_data', array('scoid' => $olditemid));
-                        $DB->delete_records('exescorm_seq_objective', array('scoid' => $olditemid));
-                        $DB->delete_records('exescorm_seq_mapinfo', array('scoid' => $olditemid));
-                        $DB->delete_records('exescorm_seq_ruleconds', array('scoid' => $olditemid));
-                        $DB->delete_records('exescorm_seq_rulecond', array('scoid' => $olditemid));
-                        $DB->delete_records('exescorm_seq_rolluprule', array('scoid' => $olditemid));
-                        $DB->delete_records('exescorm_seq_rllprlcond', array('scoid' => $olditemid));
+                        $DB->delete_records('exescorm_scoes_data', ['scoid' => $olditemid]);
+                        $DB->delete_records('exescorm_seq_objective', ['scoid' => $olditemid]);
+                        $DB->delete_records('exescorm_seq_mapinfo', ['scoid' => $olditemid]);
+                        $DB->delete_records('exescorm_seq_ruleconds', ['scoid' => $olditemid]);
+                        $DB->delete_records('exescorm_seq_rulecond', ['scoid' => $olditemid]);
+                        $DB->delete_records('exescorm_seq_rolluprule', ['scoid' => $olditemid]);
+                        $DB->delete_records('exescorm_seq_rllprlcond', ['scoid' => $olditemid]);
 
                         // Now remove this SCO from the olditems object as we have dealt with it.
                         unset($olditems[$olditemid]);
@@ -740,21 +740,21 @@ function exescorm_parse_scorm(&$exescorm, $manifest) {
         }
         if (!empty($olditems)) {
             foreach ($olditems as $olditem) {
-                $DB->delete_records('exescorm_scoes', array('id' => $olditem->id));
-                $DB->delete_records('exescorm_scoes_data', array('scoid' => $olditem->id));
-                $DB->delete_records('exescorm_scoes_track', array('scoid' => $olditem->id));
-                $DB->delete_records('exescorm_seq_objective', array('scoid' => $olditem->id));
-                $DB->delete_records('exescorm_seq_mapinfo', array('scoid' => $olditem->id));
-                $DB->delete_records('exescorm_seq_ruleconds', array('scoid' => $olditem->id));
-                $DB->delete_records('exescorm_seq_rulecond', array('scoid' => $olditem->id));
-                $DB->delete_records('exescorm_seq_rolluprule', array('scoid' => $olditem->id));
-                $DB->delete_records('exescorm_seq_rllprlcond', array('scoid' => $olditem->id));
+                $DB->delete_records('exescorm_scoes', ['id' => $olditem->id]);
+                $DB->delete_records('exescorm_scoes_data', ['scoid' => $olditem->id]);
+                $DB->delete_records('exescorm_scoes_track', ['scoid' => $olditem->id]);
+                $DB->delete_records('exescorm_seq_objective', ['scoid' => $olditem->id]);
+                $DB->delete_records('exescorm_seq_mapinfo', ['scoid' => $olditem->id]);
+                $DB->delete_records('exescorm_seq_ruleconds', ['scoid' => $olditem->id]);
+                $DB->delete_records('exescorm_seq_rulecond', ['scoid' => $olditem->id]);
+                $DB->delete_records('exescorm_seq_rolluprule', ['scoid' => $olditem->id]);
+                $DB->delete_records('exescorm_seq_rllprlcond', ['scoid' => $olditem->id]);
             }
         }
         if (empty($scoes->version)) {
             $scoes->version = 'SCORM_1.2';
         }
-        $DB->set_field('exescorm', 'version', $scoes->version, array('id' => $exescorm->id));
+        $DB->set_field('exescorm', 'version', $scoes->version, ['id' => $exescorm->id]);
         $exescorm->version = $scoes->version;
     }
     $exescorm->launch = 0;
@@ -776,7 +776,7 @@ function exescorm_parse_scorm(&$exescorm, $manifest) {
         // No valid Launch is specified - find the first launchable sco instead.
         $sqlselect = 'exescorm = ? AND '.$DB->sql_isnotempty('exescorm_scoes', 'launch', false, true);
         // We use get_records here as we need to pass a limit in the query that works cross db.
-        $scoes = $DB->get_records_select('exescorm_scoes', $sqlselect, array($exescorm->id), 'sortorder', 'id', 0, 1);
+        $scoes = $DB->get_records_select('exescorm_scoes', $sqlselect, [$exescorm->id], 'sortorder', 'id', 0, 1);
         if (!empty($scoes)) {
             $sco = reset($scoes); // We only care about the first record - the above query only returns one.
             $exescorm->launch = $sco->id;
@@ -787,8 +787,8 @@ function exescorm_parse_scorm(&$exescorm, $manifest) {
 }
 
 function exescorm_optionals_data($item, $standarddata) {
-    $result = array();
-    $sequencingdata = array('sequencingrules', 'rolluprules', 'objectives');
+    $result = [];
+    $sequencingdata = ['sequencingrules', 'rolluprules', 'objectives'];
     foreach ($item as $element => $value) {
         if (! in_array($element, $standarddata)) {
             if (! in_array($element, $sequencingdata)) {
@@ -880,7 +880,7 @@ function exescorm_get_siblings($sco) {
 }
 // Get an array that contains all the parent scos for this sco.
 function exescorm_get_ancestors($sco) {
-    $ancestors = array();
+    $ancestors = [];
     $continue = true;
     while ($continue) {
         $ancestor = exescorm_get_parent($sco);
@@ -897,7 +897,7 @@ function exescorm_get_ancestors($sco) {
     return $ancestors;
 }
 
-function exescorm_get_preorder(&$preorder = array(), $sco = null) {
+function exescorm_get_preorder(&$preorder = [], $sco = null) {
     if ($sco != null) {
         array_push($preorder, $sco);
         if ($children = exescorm_get_children($sco)) {
@@ -929,7 +929,7 @@ function exescorm_find_common_ancestor($ancestors, $sco) {
 */
 class xml2Array {
 
-    public $arroutput = array();
+    public $arroutput = [];
     public $resparser;
     public $strxmldata;
 
@@ -943,7 +943,7 @@ class xml2Array {
         global $CFG;
 
         $entities = '';
-        $values = array();
+        $values = [];
         $lookingfor = 1;
 
         return $str;
@@ -975,7 +975,7 @@ class xml2Array {
     }
 
     public function tagopen($parser, $name, $attrs) {
-        $tag = array("name" => $name, "attrs" => $attrs);
+        $tag = ["name" => $name, "attrs" => $attrs];
         array_push($this->arroutput, $tag);
     }
 

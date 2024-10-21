@@ -82,7 +82,7 @@ function exescorm_add_time($a, $b) {
 function exescorm_get_aicc_columns($row, $mastername='system_id') {
     $tok = strtok(strtolower($row), "\",\n\r");
     $result = new stdClass();
-    $result->columns = array();
+    $result->columns = [];
     $result->mastercol = 0;
     $i = 0;
     while ($tok) {
@@ -138,9 +138,9 @@ function exescorm_parse_aicc(&$exescorm) {
     $files = $fs->get_area_files($context->id, 'mod_exescorm', 'content', 0, 'sortorder, itemid, filepath, filename', false);
 
     $version = 'AICC';
-    $ids = array();
-    $courses = array();
-    $extaiccfiles = array('crs', 'des', 'au', 'cst', 'ort', 'pre', 'cmp');
+    $ids = [];
+    $courses = [];
+    $extaiccfiles = ['crs', 'des', 'au', 'cst', 'ort', 'pre', 'cmp'];
 
     foreach ($files as $file) {
         $filename = $file->get_filename();
@@ -275,7 +275,7 @@ function exescorm_parse_aicc(&$exescorm) {
         }
     }
 
-    $oldscoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id));
+    $oldscoes = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id]);
     $sortorder = 0;
     $launch = 0;
     if (isset($courses)) {
@@ -291,8 +291,8 @@ function exescorm_parse_aicc(&$exescorm) {
             $sco->exescormtype = '';
             $sco->sortorder = $sortorder;
 
-            if ($ss = $DB->get_record('exescorm_scoes', array('exescorm' => $exescorm->id,
-                                                           'identifier' => $sco->identifier))) {
+            if ($ss = $DB->get_record('exescorm_scoes', ['exescorm' => $exescorm->id,
+                                                           'identifier' => $sco->identifier])) {
                 $id = $ss->id;
                 $sco->id = $id;
                 $DB->update_record('exescorm_scoes', $sco);
@@ -334,7 +334,7 @@ function exescorm_parse_aicc(&$exescorm) {
                         $sco->id = $oldscoid;
                         $DB->update_record('exescorm_scoes', $sco);
                         $id = $oldscoid;
-                        $DB->delete_records('exescorm_scoes_data', array('scoid' => $oldscoid));
+                        $DB->delete_records('exescorm_scoes_data', ['scoid' => $oldscoid]);
                         unset($oldscoes[$oldscoid]);
                     } else {
                         $id = $DB->insert_record('exescorm_scoes', $sco);
@@ -382,15 +382,15 @@ function exescorm_parse_aicc(&$exescorm) {
     }
     if (!empty($oldscoes)) {
         foreach ($oldscoes as $oldsco) {
-            $DB->delete_records('exescorm_scoes', array('id' => $oldsco->id));
-            $DB->delete_records('exescorm_scoes_track', array('scoid' => $oldsco->id));
+            $DB->delete_records('exescorm_scoes', ['id' => $oldsco->id]);
+            $DB->delete_records('exescorm_scoes_track', ['scoid' => $oldsco->id]);
         }
     }
 
     // Find first launchable object.
     $sqlselect = 'exescorm = ? AND '.$DB->sql_isnotempty('exescorm_scoes', 'launch', false, true);
     // We use get_records here as we need to pass a limit in the query that works cross db.
-    $scoes = $DB->get_records_select('exescorm_scoes', $sqlselect, array($exescorm->id), 'sortorder', 'id', 0, 1);
+    $scoes = $DB->get_records_select('exescorm_scoes', $sqlselect, [$exescorm->id], 'sortorder', 'id', 0, 1);
     if (!empty($scoes)) {
         $sco = reset($scoes); // We only care about the first record - the above query only returns one.
         $exescorm->launch = $sco->id;
@@ -443,7 +443,7 @@ function exescorm_aicc_confirm_hacp_session($hacpsession) {
     }
     $time = time() - ($cfgexescorm->aicchacptimeout * 60);
     $sql = "hacpsession = ? AND timemodified > ?";
-    $hacpsession = $DB->get_record_select('exescorm_aicc_session', $sql, array($hacpsession, $time));
+    $hacpsession = $DB->get_record_select('exescorm_aicc_session', $sql, [$hacpsession, $time]);
     if (!empty($hacpsession)) { // Update timemodified as this is still an active session - resets the timeout.
         $hacpsession->timemodified = time();
         $DB->update_record('exescorm_aicc_session', $hacpsession);
@@ -461,7 +461,7 @@ function exescorm_aicc_confirm_hacp_session($hacpsession) {
 function exescorm_aicc_generate_simple_sco($exescorm) {
     global $DB;
     // Find the oldest one.
-    $scos = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id), 'id');
+    $scos = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id], 'id');
     if (!empty($scos)) {
         $sco = array_shift($scos);
     } else {
@@ -469,8 +469,8 @@ function exescorm_aicc_generate_simple_sco($exescorm) {
     }
     // Get rid of old ones.
     foreach ($scos as $oldsco) {
-        $DB->delete_records('exescorm_scoes', array('id' => $oldsco->id));
-        $DB->delete_records('exescorm_scoes_track', array('scoid' => $oldsco->id));
+        $DB->delete_records('exescorm_scoes', ['id' => $oldsco->id]);
+        $DB->delete_records('exescorm_scoes_track', ['scoid' => $oldsco->id]);
     }
 
     $sco->identifier = 'A1';
@@ -556,7 +556,7 @@ function get_exescorm_default (&$userdata, $exescorm, $scoid, $attempt, $mode) {
         }
     }
 
-    $def = array();
+    $def = [];
     $def['cmi.core.student_id'] = $userdata->student_id;
     $def['cmi.core.student_name'] = $userdata->student_name;
     $def['cmi.core.credit'] = $userdata->credit;

@@ -107,10 +107,10 @@ class provider_test extends provider_testcase {
         $this->export_context_data_for_user($this->student0->id, $this->context, 'mod_exescorm');
         $subcontextattempt1 = [
             get_string('myattempts', 'mod_exescorm'),
-            get_string('attempt', 'mod_exescorm'). " 1"
+            get_string('attempt', 'mod_exescorm'). " 1",
         ];
         $subcontextaicc = [
-            get_string('myaiccsessions', 'mod_exescorm')
+            get_string('myaiccsessions', 'mod_exescorm'),
         ];
         $data = $writer->get_data($subcontextattempt1);
         $this->assertEmpty($data);
@@ -132,14 +132,14 @@ class provider_test extends provider_testcase {
         $this->assertCount(2, (array) reset($data));
         $subcontextattempt2 = [
             get_string('myattempts', 'mod_exescorm'),
-            get_string('attempt', 'mod_exescorm'). " 2"
+            get_string('attempt', 'mod_exescorm'). " 2",
         ];
         $data = (array)$writer->get_data($subcontextattempt2);
         $this->assertCount(2, (array) reset($data));
         // The student1 has only 2 scoes_track attempts.
         $subcontextattempt3 = [
             get_string('myattempts', 'mod_exescorm'),
-            get_string('attempt', 'mod_exescorm'). " 3"
+            get_string('attempt', 'mod_exescorm'). " 3",
         ];
         $data = $writer->get_data($subcontextattempt3);
         $this->assertEmpty($data);
@@ -281,12 +281,12 @@ class provider_test extends provider_testcase {
 
         // Setup test data.
         $course = $this->getDataGenerator()->create_course();
-        $params = array('course' => $course->id, 'name' => 'EXESCORM1');
+        $params = ['course' => $course->id, 'name' => 'EXESCORM1'];
         $exescorm = $this->getDataGenerator()->create_module('exescorm', $params);
         $this->context = \context_module::instance($exescorm->cmid);
 
         // Users enrolments.
-        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
 
         // Create student0 withot any EXESCORM attempt.
         $this->student0 = self::getDataGenerator()->create_user();
@@ -329,7 +329,7 @@ class provider_test extends provider_testcase {
             'hacpsession' => random_string(20),
             'userid' => $userid,
             'timecreated' => $now,
-            'timemodified' => $now
+            'timemodified' => $now,
         ];
         $DB->insert_record('exescorm_aicc_session', $hacpsession);
     }

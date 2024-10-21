@@ -29,17 +29,17 @@ if (!empty($id)) {
     if (! $cm = get_coursemodule_from_id('exescorm', $id, 0, true)) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
+    if (! $course = $DB->get_record("course", ["id" => $cm->course])) {
         throw new \moodle_exception('coursemisconf');
     }
-    if (! $exescorm = $DB->get_record("exescorm", array("id" => $cm->instance))) {
+    if (! $exescorm = $DB->get_record("exescorm", ["id" => $cm->instance])) {
         throw new \moodle_exception('invalidcoursemodule');
     }
 } else if (!empty($a)) {
-    if (! $exescorm = $DB->get_record("exescorm", array("id" => $a))) {
+    if (! $exescorm = $DB->get_record("exescorm", ["id" => $a])) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record("course", array("id" => $exescorm->course))) {
+    if (! $course = $DB->get_record("course", ["id" => $exescorm->course])) {
         throw new \moodle_exception('coursemisconf');
     }
     if (! $cm = get_coursemodule_from_instance("exescorm", $exescorm->id, $course->id, true)) {
@@ -49,7 +49,7 @@ if (!empty($id)) {
     throw new \moodle_exception('missingparameter');
 }
 
-$url = new moodle_url('/mod/exescorm/view.php', array('id' => $cm->id));
+$url = new moodle_url('/mod/exescorm/view.php', ['id' => $cm->id]);
 if ($organization !== '') {
     $url->param('organization', $organization);
 }
@@ -98,18 +98,18 @@ if (!empty($exescorm->popup)) {
 
     $courseformat = course_get_format($course)->get_course();
     if ($courseformat->format == 'singleactivity') {
-        $courseurl = $url->out(false, array('preventskip' => '1'));
+        $courseurl = $url->out(false, ['preventskip' => '1']);
     } else {
         $courseurl = course_get_url($course, $cm->sectionnum)->out(false);
     }
-    $PAGE->requires->data_for_js('exescormplayerdata', Array('launch' => $launch,
+    $PAGE->requires->data_for_js('exescormplayerdata', ['launch' => $launch,
                                                            'currentorg' => $orgidentifier,
                                                            'sco' => $scoid,
                                                            'exescorm' => $exescorm->id,
                                                            'courseurl' => $courseurl,
                                                            'cwidth' => $exescorm->width,
                                                            'cheight' => $exescorm->height,
-                                                           'popupoptions' => $exescorm->options), true);
+                                                           'popupoptions' => $exescorm->options], true);
     $PAGE->requires->string_for_js('popupsblocked', 'mod_exescorm');
     $PAGE->requires->string_for_js('popuplaunched', 'mod_exescorm');
     $PAGE->requires->js('/mod/exescorm/view.js', true);
@@ -122,7 +122,7 @@ if (isset($SESSION->exescorm)) {
 $strexescorms = get_string("modulenameplural", "mod_exescorm");
 $strexescorm = get_string("modulename", "mod_exescorm");
 
-$shortname = format_string($course->shortname, true, array('context' => $context));
+$shortname = format_string($course->shortname, true, ['context' => $context]);
 $pagetitle = strip_tags($shortname.': '.format_string($exescorm->name));
 
 // Trigger module viewed event.
@@ -149,13 +149,13 @@ if ($CFG->version >= 2022041900) { // Moodle 4+.
 echo $OUTPUT->header();
 if (!empty($action) && confirm_sesskey() && has_capability('mod/exescorm:deleteownresponses', $contextmodule)) {
     if ($action == 'delete') {
-        $confirmurl = new moodle_url($PAGE->url, array('action' => 'deleteconfirm'));
+        $confirmurl = new moodle_url($PAGE->url, ['action' => 'deleteconfirm']);
         echo $OUTPUT->confirm(get_string('deleteuserattemptcheck', 'mod_exescorm'), $confirmurl, $PAGE->url);
         echo $OUTPUT->footer();
         exit;
     } else if ($action == 'deleteconfirm') {
         // Delete this users attempts.
-        $DB->delete_records('exescorm_scoes_track', array('userid' => $USER->id, 'exescormid' => $exescorm->id));
+        $DB->delete_records('exescorm_scoes_track', ['userid' => $USER->id, 'exescormid' => $exescorm->id]);
         exescorm_update_grades($exescorm, $USER->id, true);
         echo $OUTPUT->notification(get_string('exescormresponsedeleted', 'mod_exescorm'), 'notifysuccess');
     }

@@ -36,7 +36,7 @@ class backup_exescorm_activity_structure_step extends backup_activity_structure_
         $userinfo = $this->get_setting_value('userinfo');
 
         // Define each element separated.
-        $exescorm = new backup_nested_element('exescorm', array('id'), array(
+        $exescorm = new backup_nested_element('exescorm', ['id'], [
             'name', 'exescormtype', 'reference', 'intro',
             'introformat', 'version', 'maxgrade', 'grademethod',
             'whatgrade', 'maxattempt', 'forcecompleted', 'forcenewattempt',
@@ -47,56 +47,56 @@ class backup_exescorm_activity_structure_step extends backup_activity_structure_
             'height', 'timeopen', 'timeclose', 'timemodified',
             'completionstatusrequired', 'completionscorerequired',
             'completionstatusallscos',
-            'autocommit'));
+            'autocommit']);
 
         $scoes = new backup_nested_element('scoes');
 
-        $sco = new backup_nested_element('sco', array('id'), array(
+        $sco = new backup_nested_element('sco', ['id'], [
             'manifest', 'organization', 'parent', 'identifier',
-            'launch', 'exescormtype', 'title', 'sortorder'));
+            'launch', 'exescormtype', 'title', 'sortorder']);
 
         $scodatas = new backup_nested_element('sco_datas');
 
-        $scodata = new backup_nested_element('sco_data', array('id'), array(
-            'name', 'value'));
+        $scodata = new backup_nested_element('sco_data', ['id'], [
+            'name', 'value']);
 
         $seqruleconds = new backup_nested_element('seq_ruleconds');
 
-        $seqrulecond = new backup_nested_element('seq_rulecond', array('id'), array(
-            'conditioncombination', 'ruletype', 'action'));
+        $seqrulecond = new backup_nested_element('seq_rulecond', ['id'], [
+            'conditioncombination', 'ruletype', 'action']);
 
         $seqrulecondsdatas = new backup_nested_element('seq_rulecond_datas');
 
-        $seqrulecondsdata = new backup_nested_element('seq_rulecond_data', array('id'), array(
-            'refrencedobjective', 'measurethreshold', 'operator', 'cond'));
+        $seqrulecondsdata = new backup_nested_element('seq_rulecond_data', ['id'], [
+            'refrencedobjective', 'measurethreshold', 'operator', 'cond']);
 
         $seqrolluprules = new backup_nested_element('seq_rolluprules');
 
-        $seqrolluprule = new backup_nested_element('seq_rolluprule', array('id'), array(
+        $seqrolluprule = new backup_nested_element('seq_rolluprule', ['id'], [
             'childactivityset', 'minimumcount', 'minimumpercent', 'conditioncombination',
-            'action'));
+            'action']);
 
         $seqrollupruleconds = new backup_nested_element('seq_rllprlconds');
 
-        $seqrolluprulecond = new backup_nested_element('seq_rllprlcond', array('id'), array(
-            'cond', 'operator'));
+        $seqrolluprulecond = new backup_nested_element('seq_rllprlcond', ['id'], [
+            'cond', 'operator']);
 
         $seqobjectives = new backup_nested_element('seq_objectives');
 
-        $seqobjective = new backup_nested_element('seq_objective', array('id'), array(
-            'primaryobj', 'objectiveid', 'satisfiedbymeasure', 'minnormalizedmeasure'));
+        $seqobjective = new backup_nested_element('seq_objective', ['id'], [
+            'primaryobj', 'objectiveid', 'satisfiedbymeasure', 'minnormalizedmeasure']);
 
         $seqmapinfos = new backup_nested_element('seq_mapinfos');
 
-        $seqmapinfo = new backup_nested_element('seq_mapinfo', array('id'), array(
+        $seqmapinfo = new backup_nested_element('seq_mapinfo', ['id'], [
             'targetobjectiveid', 'readsatisfiedstatus', 'readnormalizedmeasure', 'writesatisfiedstatus',
-            'writenormalizedmeasure'));
+            'writenormalizedmeasure']);
 
         $scotracks = new backup_nested_element('sco_tracks');
 
-        $scotrack = new backup_nested_element('sco_track', array('id'), array(
+        $scotrack = new backup_nested_element('sco_track', ['id'], [
             'userid', 'attempt', 'element', 'value',
-            'timemodified'));
+            'timemodified']);
 
         // Build the tree.
         $exescorm->add_child($scoes);
@@ -127,24 +127,24 @@ class backup_exescorm_activity_structure_step extends backup_activity_structure_
         $scotracks->add_child($scotrack);
 
         // Define sources.
-        $exescorm->set_source_table('exescorm', array('id' => backup::VAR_ACTIVITYID));
+        $exescorm->set_source_table('exescorm', ['id' => backup::VAR_ACTIVITYID]);
 
         // Order is important for several EXESCORM calls (especially exescorm_scoes)
         // in the following calls to set_source_table.
-        $sco->set_source_table('exescorm_scoes', array('exescorm' => backup::VAR_PARENTID), 'sortorder, id');
-        $scodata->set_source_table('exescorm_scoes_data', array('scoid' => backup::VAR_PARENTID), 'id ASC');
-        $seqrulecond->set_source_table('exescorm_seq_ruleconds', array('scoid' => backup::VAR_PARENTID), 'id ASC');
+        $sco->set_source_table('exescorm_scoes', ['exescorm' => backup::VAR_PARENTID], 'sortorder, id');
+        $scodata->set_source_table('exescorm_scoes_data', ['scoid' => backup::VAR_PARENTID], 'id ASC');
+        $seqrulecond->set_source_table('exescorm_seq_ruleconds', ['scoid' => backup::VAR_PARENTID], 'id ASC');
         $seqrulecondsdata->set_source_table(
-            'exescorm_seq_rulecond', array('ruleconditionsid' => backup::VAR_PARENTID), 'id ASC'
+            'exescorm_seq_rulecond', ['ruleconditionsid' => backup::VAR_PARENTID], 'id ASC'
         );
-        $seqrolluprule->set_source_table('exescorm_seq_rolluprule', array('scoid' => backup::VAR_PARENTID), 'id ASC');
-        $seqrolluprulecond->set_source_table('exescorm_seq_rllprlcond', array('rollupruleid' => backup::VAR_PARENTID), 'id ASC');
-        $seqobjective->set_source_table('exescorm_seq_objective', array('scoid' => backup::VAR_PARENTID), 'id ASC');
-        $seqmapinfo->set_source_table('exescorm_seq_mapinfo', array('objectiveid' => backup::VAR_PARENTID), 'id ASC');
+        $seqrolluprule->set_source_table('exescorm_seq_rolluprule', ['scoid' => backup::VAR_PARENTID], 'id ASC');
+        $seqrolluprulecond->set_source_table('exescorm_seq_rllprlcond', ['rollupruleid' => backup::VAR_PARENTID], 'id ASC');
+        $seqobjective->set_source_table('exescorm_seq_objective', ['scoid' => backup::VAR_PARENTID], 'id ASC');
+        $seqmapinfo->set_source_table('exescorm_seq_mapinfo', ['objectiveid' => backup::VAR_PARENTID], 'id ASC');
 
         // All the rest of elements only happen if we are including user info.
         if ($userinfo) {
-            $scotrack->set_source_table('exescorm_scoes_track', array('scoid' => backup::VAR_PARENTID), 'id ASC');
+            $scotrack->set_source_table('exescorm_scoes_track', ['scoid' => backup::VAR_PARENTID], 'id ASC');
         }
 
         // Define id annotations.

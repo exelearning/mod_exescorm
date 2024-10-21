@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * @package    mod_exescorm
  * @author     Ankit Kumar Agarwal
@@ -97,15 +98,15 @@ class report {
      * Generates an action button that deletes the selected attempts.
      */
     protected function generate_delete_selected_button(): string {
-        $deleteselectedparams = array(
+        $deleteselectedparams = [
             'type' => 'submit',
             'value' => get_string('deleteselected', 'mod_exescorm'),
             'class' => 'btn btn-secondary',
             'data-action' => 'toggle',
             'data-togglegroup' => 'exescorm-attempts',
             'data-toggle' => 'action',
-            'disabled' => true
-        );
+            'disabled' => true,
+        ];
         return \html_writer::empty_tag('input', $deleteselectedparams);
     }
 }

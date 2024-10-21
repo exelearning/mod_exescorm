@@ -75,12 +75,12 @@ class tracks_viewed extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        $params = array(
+        $params = [
             'id' => $this->contextinstanceid,
             'user' => $this->relateduserid,
             'attempt' => $this->other['attemptid'],
-            'scoid' => $this->other['scoid']
-        );
+            'scoid' => $this->other['scoid'],
+        ];
         return new \moodle_url('/mod/exescorm/userreporttracks.php', $params);
     }
 
@@ -93,7 +93,7 @@ class tracks_viewed extends \core\event\base {
         return [
             $this->courseid, 'exescorm', 'userreporttracks', 'report/userreporttracks.php?id=' . $this->contextinstanceid
             . '&user=' . $this->relateduserid . '&attempt=' . $this->other['attemptid'] . '&scoid=' . $this->other['scoid']
-            . '&mode=' . $this->other['mode'], $this->other['instanceid'], $this->contextinstanceid
+            . '&mode=' . $this->other['mode'], $this->other['instanceid'], $this->contextinstanceid,
         ];
     }
 
@@ -121,9 +121,9 @@ class tracks_viewed extends \core\event\base {
     }
 
     public static function get_other_mapping() {
-        $othermapped = array();
-        $othermapped['instanceid'] = array('db' => 'exescorm', 'restore' => 'exescorm');
-        $othermapped['scoid'] = array('db' => 'exescorm_scoes', 'restore' => 'exescorm_scoe');
+        $othermapped = [];
+        $othermapped['instanceid'] = ['db' => 'exescorm', 'restore' => 'exescorm'];
+        $othermapped['scoid'] = ['db' => 'exescorm_scoes', 'restore' => 'exescorm_scoe'];
 
         return $othermapped;
     }
