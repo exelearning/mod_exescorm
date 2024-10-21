@@ -14,7 +14,7 @@ services:
       APP_ENV: prod
       APP_DEBUG: 0
       XDEBUG_MODE: off
-      APP_SECRET: PLEASE_CHANGEME_API_KEY
+      APP_SECRET: CHANGE_THIS_TO_A_SECRET
       PRE_CONFIGURE_COMMANDS:
       POST_CONFIGURE_COMMANDS: |
         echo "this is a test line 1"
@@ -48,7 +48,7 @@ services:
         echo 'Forcing upgrade to re-install exe plugin...'
         php admin/cli/upgrade.php --non-interactive
         php admin/cli/cfg.php --component=exescorm --name=exeonlinebaseuri --set=http://${HOST_IP}:8080
-        php admin/cli/cfg.php --component=exescorm --name=hmackey1 --set=PLEASE_CHANGEME_API_KEY
+        php admin/cli/cfg.php --component=exescorm --name=hmackey1 --set=CHANGE_THIS_TO_A_SECRET
     ports:
       - 80:8080
     volumes:
