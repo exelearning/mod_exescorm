@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * Sets up $userdata array and default values for SCORM 1.2 .
  *
@@ -77,7 +76,7 @@ function get_exescorm_default (&$userdata, $exescorm, $scoid, $attempt, $mode) {
         $userdata->credit = 'no-credit';
     }
 
-    $def = array();
+    $def = [];
     $def['cmi.core.student_id'] = $userdata->student_id;
     $def['cmi.core.student_name'] = $userdata->student_name;
     $def['cmi.core.credit'] = $userdata->credit;

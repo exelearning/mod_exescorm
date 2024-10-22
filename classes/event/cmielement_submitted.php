@@ -70,7 +70,7 @@ abstract class cmielement_submitted extends \core\event\base {
      */
     public function get_url() {
         return new \moodle_url('/mod/exescorm/report/userreport.php',
-                array('id' => $this->contextinstanceid, 'user' => $this->userid, 'attempt' => $this->other['attemptid']));
+                ['id' => $this->contextinstanceid, 'user' => $this->userid, 'attempt' => $this->other['attemptid']]);
     }
 
     /**

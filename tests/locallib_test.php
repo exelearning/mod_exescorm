@@ -55,10 +55,10 @@ class locallib_test extends \advanced_testcase {
         // Create a exescorm activity.
         $time = time();
         $exescorm = $this->getDataGenerator()->create_module('exescorm',
-            array(
+            [
                 'course' => $course->id,
-                'timeopen' => $time
-            )
+                'timeopen' => $time,
+            ]
         );
 
         // Check that there is now an event in the database.
@@ -88,10 +88,10 @@ class locallib_test extends \advanced_testcase {
         // Create a exescorm activity.
         $time = time();
         $exescorm = $this->getDataGenerator()->create_module('exescorm',
-            array(
+            [
                 'course' => $course->id,
-                'timeopen' => $time
-            )
+                'timeopen' => $time,
+            ]
         );
 
         // Set the time open and update the event.
@@ -123,15 +123,15 @@ class locallib_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
 
         // Create a exescorm activity.
-        $exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $course->id));
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $course->id]);
 
         // Create a exescorm activity.
         $time = time();
         $exescorm = $this->getDataGenerator()->create_module('exescorm',
-            array(
+            [
                 'course' => $course->id,
-                'timeopen' => $time
-            )
+                'timeopen' => $time,
+            ]
         );
 
         // Set the time open to 0 and update the event.
@@ -153,10 +153,10 @@ class locallib_test extends \advanced_testcase {
         // Create a exescorm activity.
         $time = time();
         $exescorm = $this->getDataGenerator()->create_module('exescorm',
-            array(
+            [
                 'course' => $course->id,
-                'timeclose' => $time
-            )
+                'timeclose' => $time,
+            ]
         );
 
         // Check that there is now an event in the database.
@@ -186,10 +186,10 @@ class locallib_test extends \advanced_testcase {
         // Create a exescorm activity.
         $time = time();
         $exescorm = $this->getDataGenerator()->create_module('exescorm',
-            array(
+            [
                 'course' => $course->id,
-                'timeclose' => $time
-            )
+                'timeclose' => $time,
+            ]
         );
 
         // Set the time close and update the event.
@@ -222,10 +222,10 @@ class locallib_test extends \advanced_testcase {
 
         // Create a exescorm activity.
         $exescorm = $this->getDataGenerator()->create_module('exescorm',
-            array(
+            [
                 'course' => $course->id,
-                'timeclose' => time()
-            )
+                'timeclose' => time(),
+            ]
         );
 
         // Set the time close to 0 and update the event.

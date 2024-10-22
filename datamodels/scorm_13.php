@@ -29,7 +29,7 @@ if (!isset($currentorg)) {
     $currentorg = '';
 }
 
-if ($scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id), 'sortorder, id')) {
+if ($scoes = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id], 'sortorder, id')) {
     // Drop keys so that it is a simple array.
     $scoes = array_values($scoes);
     foreach ($scoes as $sco) {
@@ -39,22 +39,22 @@ if ($scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->i
 
         // Reconstitute objectives, comments_from_learner and comments_from_lms.
         $cmiobj->{($sco->id)} = exescorm_reconstitute_array_element($exescorm->version, $userdata->{($sco->id)},
-                                                                    'cmi.objectives', array('score'));
+                                                                    'cmi.objectives', ['score']);
         $cmiint->{($sco->id)} = exescorm_reconstitute_array_element($exescorm->version, $userdata->{($sco->id)},
-                                                                    'cmi.interactions', array('objectives', 'correct_responses'));
+                                                                    'cmi.interactions', ['objectives', 'correct_responses']);
         $cmicommentsuser->{($sco->id)} = exescorm_reconstitute_array_element($exescorm->version, $userdata->{($sco->id)},
-                                                                    'cmi.comments_from_learner', array());
+                                                                    'cmi.comments_from_learner', []);
         $cmicommentslms->{($sco->id)} = exescorm_reconstitute_array_element($exescorm->version, $userdata->{($sco->id)},
-                                                                    'cmi.comments_from_lms', array());
+                                                                    'cmi.comments_from_lms', []);
     }
 }
 
 $exescorm->autocommit = ($exescorm->autocommit === "1") ? true : false;
 $PAGE->requires->js_init_call(
                                 'M.exescorm_api.init',
-                                 array($def, $cmiobj, $cmiint, $cmicommentsuser, $cmicommentslms,
+                                 [$def, $cmiobj, $cmiint, $cmicommentsuser, $cmicommentslms,
                                 exescorm_debugging($exescorm), $exescorm->auto, $exescorm->id, $CFG->wwwroot,
-                                sesskey(), $scoid, $attempt, $mode, $id, $currentorg, $exescorm->autocommit)
+                                sesskey(), $scoid, $attempt, $mode, $id, $currentorg, $exescorm->autocommit]
                             );
 
 

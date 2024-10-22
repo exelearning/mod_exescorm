@@ -51,9 +51,9 @@ class mod_exescorm_external extends external_api {
      */
     public static function view_exescorm_parameters() {
         return new external_function_parameters(
-            array(
-                'exescormid' => new external_value(PARAM_INT, 'exescorm instance id')
-            )
+            [
+                'exescormid' => new external_value(PARAM_INT, 'exescorm instance id'),
+            ]
         );
     }
 
@@ -70,13 +70,13 @@ class mod_exescorm_external extends external_api {
         require_once($CFG->dirroot . '/mod/exescorm/lib.php');
 
         $params = self::validate_parameters(self::view_exescorm_parameters(),
-                                            array(
-                                                'exescormid' => $exescormid
-                                            ));
-        $warnings = array();
+                                            [
+                                                'exescormid' => $exescormid,
+                                            ]);
+        $warnings = [];
 
         // Request and permission validation.
-        $exescorm = $DB->get_record('exescorm', array('id' => $params['exescormid']), '*', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $params['exescormid']], '*', MUST_EXIST);
         list($course, $cm) = get_course_and_cm_from_instance($exescorm, 'exescorm');
 
         $context = context_module::instance($cm->id);
@@ -85,7 +85,7 @@ class mod_exescorm_external extends external_api {
         // Call the exescorm/lib API.
         exescorm_view($exescorm, $course, $cm, $context);
 
-        $result = array();
+        $result = [];
         $result['status'] = true;
         $result['warnings'] = $warnings;
         return $result;
@@ -99,10 +99,10 @@ class mod_exescorm_external extends external_api {
      */
     public static function view_exescorm_returns() {
         return new external_single_structure(
-            array(
+            [
                 'status' => new external_value(PARAM_BOOL, 'status: true if success'),
-                'warnings' => new external_warnings()
-            )
+                'warnings' => new external_warnings(),
+            ]
         );
     }
 
@@ -114,13 +114,13 @@ class mod_exescorm_external extends external_api {
      */
     public static function get_exescorm_attempt_count_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'exescormid' => new external_value(PARAM_INT, 'EXESCORM instance id'),
                 'userid' => new external_value(PARAM_INT, 'User id'),
                 'ignoremissingcompletion' => new external_value(PARAM_BOOL,
                                                 'Ignores attempts that haven\'t reported a grade/completion',
                                                 VALUE_DEFAULT, false),
-            )
+            ]
         );
     }
 
@@ -137,13 +137,13 @@ class mod_exescorm_external extends external_api {
         global $USER, $DB;
 
         $params = self::validate_parameters(self::get_exescorm_attempt_count_parameters(),
-                                            array('exescormid' => $exescormid, 'userid' => $userid,
-                                                'ignoremissingcompletion' => $ignoremissingcompletion));
+                                            ['exescormid' => $exescormid, 'userid' => $userid,
+                                                'ignoremissingcompletion' => $ignoremissingcompletion]);
 
-        $attempts = array();
-        $warnings = array();
+        $attempts = [];
+        $warnings = [];
 
-        $exescorm = $DB->get_record('exescorm', array('id' => $params['exescormid']), '*', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $params['exescormid']], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance('exescorm', $exescorm->id);
 
         $context = context_module::instance($cm->id);
@@ -162,7 +162,7 @@ class mod_exescorm_external extends external_api {
 
         $attemptscount = exescorm_get_attempt_count($user->id, $exescorm, false, $params['ignoremissingcompletion']);
 
-        $result = array();
+        $result = [];
         $result['attemptscount'] = $attemptscount;
         $result['warnings'] = $warnings;
         return $result;
@@ -177,10 +177,10 @@ class mod_exescorm_external extends external_api {
     public static function get_exescorm_attempt_count_returns() {
 
         return new external_single_structure(
-            array(
+            [
                 'attemptscount' => new external_value(PARAM_INT, 'Attempts count'),
                 'warnings' => new external_warnings(),
-            )
+            ]
         );
     }
 
@@ -192,10 +192,10 @@ class mod_exescorm_external extends external_api {
      */
     public static function get_exescorm_scoes_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'exescormid' => new external_value(PARAM_INT, 'exescorm instance id'),
-                'organization' => new external_value(PARAM_RAW, 'organization id', VALUE_DEFAULT, '')
-            )
+                'organization' => new external_value(PARAM_RAW, 'organization id', VALUE_DEFAULT, ''),
+            ]
         );
     }
 
@@ -211,12 +211,12 @@ class mod_exescorm_external extends external_api {
         global $DB;
 
         $params = self::validate_parameters(self::get_exescorm_scoes_parameters(),
-                                            array('exescormid' => $exescormid, 'organization' => $organization));
+                                            ['exescormid' => $exescormid, 'organization' => $organization]);
 
-        $scoes = array();
-        $warnings = array();
+        $scoes = [];
+        $warnings = [];
 
-        $exescorm = $DB->get_record('exescorm', array('id' => $params['exescormid']), '*', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $params['exescormid']], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance('exescorm', $exescorm->id);
 
         $context = context_module::instance($cm->id);
@@ -227,25 +227,25 @@ class mod_exescorm_external extends external_api {
 
         if (!$scoes = exescorm_get_scoes($exescorm->id, $params['organization'])) {
             // Function exescorm_get_scoes return false, not an empty array.
-            $scoes = array();
+            $scoes = [];
         } else {
             $scoreturnstructure = self::get_exescorm_scoes_returns();
             foreach ($scoes as $sco) {
-                $extradata = array();
+                $extradata = [];
                 foreach ($sco as $element => $value) {
                     // Check if the element is extra data (not a basic SCO element).
                     if (!isset($scoreturnstructure->keys['scoes']->content->keys[$element])) {
-                        $extradata[] = array(
+                        $extradata[] = [
                             'element' => $element,
-                            'value' => $value
-                        );
+                            'value' => $value,
+                        ];
                     }
                 }
                 $sco->extradata = $extradata;
             }
         }
 
-        $result = array();
+        $result = [];
         $result['scoes'] = $scoes;
         $result['warnings'] = $warnings;
         return $result;
@@ -260,10 +260,10 @@ class mod_exescorm_external extends external_api {
     public static function get_exescorm_scoes_returns() {
 
         return new external_single_structure(
-            array(
+            [
                 'scoes' => new external_multiple_structure(
                     new external_single_structure(
-                        array(
+                        [
                             'id' => new external_value(PARAM_INT, 'sco id'),
                             'exescorm' => new external_value(PARAM_INT, 'exescorm id'),
                             'manifest' => new external_value(PARAM_NOTAGS, 'manifest id'),
@@ -276,17 +276,17 @@ class mod_exescorm_external extends external_api {
                             'sortorder' => new external_value(PARAM_INT, 'sort order'),
                             'extradata' => new external_multiple_structure(
                                 new external_single_structure(
-                                    array(
+                                    [
                                         'element' => new external_value(PARAM_RAW, 'element name'),
-                                        'value' => new external_value(PARAM_RAW, 'element value')
-                                    )
+                                        'value' => new external_value(PARAM_RAW, 'element value'),
+                                    ]
                                 ), 'Additional SCO data', VALUE_OPTIONAL
-                            )
-                        ), 'EXESCORM SCO data'
+                            ),
+                        ], 'EXESCORM SCO data'
                     )
                 ),
                 'warnings' => new external_warnings(),
-            )
+            ]
         );
     }
 
@@ -298,10 +298,10 @@ class mod_exescorm_external extends external_api {
      */
     public static function get_exescorm_user_data_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'exescormid' => new external_value(PARAM_INT, 'exescorm instance id'),
-                'attempt' => new external_value(PARAM_INT, 'attempt number')
-            )
+                'attempt' => new external_value(PARAM_INT, 'attempt number'),
+            ]
         );
     }
 
@@ -318,12 +318,12 @@ class mod_exescorm_external extends external_api {
         global $CFG, $DB;
 
         $params = self::validate_parameters(self::get_exescorm_user_data_parameters(),
-                                            array('exescormid' => $exescormid, 'attempt' => $attempt));
+                                            ['exescormid' => $exescormid, 'attempt' => $attempt]);
 
-        $data = array();
-        $warnings = array();
+        $data = [];
+        $warnings = [];
 
-        $exescorm = $DB->get_record('exescorm', array('id' => $params['exescormid']), '*', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $params['exescormid']], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance('exescorm', $exescorm->id);
 
         $context = context_module::instance($cm->id);
@@ -347,31 +347,31 @@ class mod_exescorm_external extends external_api {
                 // We force mode normal, this can be override by the client at any time.
                 $def->{$sco->id} = get_exescorm_default($user->{$sco->id}, $exescorm, $sco->id, $params['attempt'], 'normal');
 
-                $userdata = array();
-                $defaultdata = array();
+                $userdata = [];
+                $defaultdata = [];
 
                 foreach ((array) $user->{$sco->id} as $key => $val) {
-                    $userdata[] = array(
+                    $userdata[] = [
                         'element' => $key,
-                        'value' => $val
-                    );
+                        'value' => $val,
+                    ];
                 }
                 foreach ($def->{$sco->id} as $key => $val) {
-                    $defaultdata[] = array(
+                    $defaultdata[] = [
                         'element' => $key,
-                        'value' => $val
-                    );
+                        'value' => $val,
+                    ];
                 }
 
-                $data[] = array(
+                $data[] = [
                     'scoid' => $sco->id,
                     'userdata' => $userdata,
                     'defaultdata' => $defaultdata,
-                );
+                ];
             }
         }
 
-        $result = array();
+        $result = [];
         $result['data'] = $data;
         $result['warnings'] = $warnings;
         return $result;
@@ -386,32 +386,32 @@ class mod_exescorm_external extends external_api {
     public static function get_exescorm_user_data_returns() {
 
         return new external_single_structure(
-            array(
+            [
                 'data' => new external_multiple_structure(
                     new external_single_structure(
-                        array(
+                        [
                             'scoid' => new external_value(PARAM_INT, 'sco id'),
                             'userdata' => new external_multiple_structure(
                                             new external_single_structure(
-                                                array(
+                                                [
                                                     'element' => new external_value(PARAM_RAW, 'element name'),
-                                                    'value' => new external_value(PARAM_RAW, 'element value')
-                                                )
+                                                    'value' => new external_value(PARAM_RAW, 'element value'),
+                                                ]
                                             )
                                           ),
                             'defaultdata' => new external_multiple_structure(
                                                 new external_single_structure(
-                                                    array(
+                                                    [
                                                         'element' => new external_value(PARAM_RAW, 'element name'),
-                                                        'value' => new external_value(PARAM_RAW, 'element value')
-                                                    )
+                                                        'value' => new external_value(PARAM_RAW, 'element value'),
+                                                    ]
                                                 )
                                              ),
-                        ), 'SCO data'
+                        ], 'SCO data'
                     )
                 ),
                 'warnings' => new external_warnings(),
-            )
+            ]
         );
     }
 
@@ -423,18 +423,18 @@ class mod_exescorm_external extends external_api {
      */
     public static function insert_exescorm_tracks_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'scoid' => new external_value(PARAM_INT, 'SCO id'),
                 'attempt' => new external_value(PARAM_INT, 'attempt number'),
                 'tracks' => new external_multiple_structure(
                     new external_single_structure(
-                        array(
+                        [
                             'element' => new external_value(PARAM_RAW, 'element name'),
-                            'value' => new external_value(PARAM_RAW, 'element value')
-                        )
+                            'value' => new external_value(PARAM_RAW, 'element value'),
+                        ]
                     )
                 ),
-            )
+            ]
         );
     }
 
@@ -454,17 +454,17 @@ class mod_exescorm_external extends external_api {
         global $USER, $DB;
 
         $params = self::validate_parameters(self::insert_exescorm_tracks_parameters(),
-                                            array('scoid' => $scoid, 'attempt' => $attempt, 'tracks' => $tracks));
+                                            ['scoid' => $scoid, 'attempt' => $attempt, 'tracks' => $tracks]);
 
-        $trackids = array();
-        $warnings = array();
+        $trackids = [];
+        $warnings = [];
 
         $sco = exescorm_get_sco($params['scoid'], EXESCORM_SCO_ONLY);
         if (!$sco) {
             throw new moodle_exception('cannotfindsco', 'exescorm');
         }
 
-        $exescorm = $DB->get_record('exescorm', array('id' => $sco->exescorm), '*', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $sco->exescorm], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance('exescorm', $exescorm->id);
 
         $context = context_module::instance($cm->id);
@@ -485,16 +485,16 @@ class mod_exescorm_external extends external_api {
             if ($trackid) {
                 $trackids[] = $trackid;
             } else {
-                $warnings[] = array(
+                $warnings[] = [
                     'item' => 'exescorm',
                     'itemid' => $exescorm->id,
                     'warningcode' => 1,
-                    'message' => 'Element: ' . $element . ' was not saved'
-                );
+                    'message' => 'Element: ' . $element . ' was not saved',
+                ];
             }
         }
 
-        $result = array();
+        $result = [];
         $result['trackids'] = $trackids;
         $result['warnings'] = $warnings;
         return $result;
@@ -509,10 +509,10 @@ class mod_exescorm_external extends external_api {
     public static function insert_exescorm_tracks_returns() {
 
         return new external_single_structure(
-            array(
+            [
                 'trackids' => new external_multiple_structure(new external_value(PARAM_INT, 'track id')),
                 'warnings' => new external_warnings(),
-            )
+            ]
         );
     }
 
@@ -524,11 +524,11 @@ class mod_exescorm_external extends external_api {
      */
     public static function get_exescorm_sco_tracks_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'scoid' => new external_value(PARAM_INT, 'sco id'),
                 'userid' => new external_value(PARAM_INT, 'user id'),
-                'attempt' => new external_value(PARAM_INT, 'attempt number (0 for last attempt)', VALUE_DEFAULT, 0)
-            )
+                'attempt' => new external_value(PARAM_INT, 'attempt number (0 for last attempt)', VALUE_DEFAULT, 0),
+            ]
         );
     }
 
@@ -545,17 +545,17 @@ class mod_exescorm_external extends external_api {
         global $USER, $DB;
 
         $params = self::validate_parameters(self::get_exescorm_sco_tracks_parameters(),
-                                            array('scoid' => $scoid, 'userid' => $userid, 'attempt' => $attempt));
+                                            ['scoid' => $scoid, 'userid' => $userid, 'attempt' => $attempt]);
 
-        $tracks = array();
-        $warnings = array();
+        $tracks = [];
+        $warnings = [];
 
         $sco = exescorm_get_sco($params['scoid'], EXESCORM_SCO_ONLY);
         if (!$sco) {
             throw new moodle_exception('cannotfindsco', 'exescorm');
         }
 
-        $exescorm = $DB->get_record('exescorm', array('id' => $sco->exescorm), '*', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $sco->exescorm], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance('exescorm', $exescorm->id);
 
         $context = context_module::instance($cm->id);
@@ -581,24 +581,24 @@ class mod_exescorm_external extends external_api {
             if ($exescormtracks->status != '') {
                 $attempted = true;
                 foreach ($exescormtracks as $element => $value) {
-                    $tracks[] = array(
+                    $tracks[] = [
                         'element' => $element,
                         'value' => $value,
-                    );
+                    ];
                 }
             }
         }
 
         if (!$attempted) {
-            $warnings[] = array(
+            $warnings[] = [
                 'item' => 'attempt',
                 'itemid' => $params['attempt'],
                 'warningcode' => 'notattempted',
-                'message' => get_string('notattempted', 'mod_exescorm')
-            );
+                'message' => get_string('notattempted', 'mod_exescorm'),
+            ];
         }
 
-        $result = array();
+        $result = [];
         $result['data']['attempt'] = $params['attempt'];
         $result['data']['tracks'] = $tracks;
         $result['warnings'] = $warnings;
@@ -614,22 +614,22 @@ class mod_exescorm_external extends external_api {
     public static function get_exescorm_sco_tracks_returns() {
 
         return new external_single_structure(
-            array(
+            [
                 'data' => new external_single_structure(
-                    array(
+                    [
                         'attempt' => new external_value(PARAM_INT, 'Attempt number'),
                         'tracks' => new external_multiple_structure(
                             new external_single_structure(
-                                array(
+                                [
                                     'element' => new external_value(PARAM_RAW, 'Element name'),
-                                    'value' => new external_value(PARAM_RAW, 'Element value')
-                                ), 'Tracks data'
+                                    'value' => new external_value(PARAM_RAW, 'Element value'),
+                                ], 'Tracks data'
                             )
                         ),
-                    ), 'SCO data'
+                    ], 'SCO data'
                 ),
                 'warnings' => new external_warnings(),
-            )
+            ]
         );
     }
 
@@ -641,11 +641,11 @@ class mod_exescorm_external extends external_api {
      */
     public static function get_exescorms_by_courses_parameters() {
         return new external_function_parameters (
-            array(
+            [
                 'courseids' => new external_multiple_structure(
-                    new external_value(PARAM_INT, 'course id'), 'Array of course ids', VALUE_DEFAULT, array()
+                    new external_value(PARAM_INT, 'course id'), 'Array of course ids', VALUE_DEFAULT, []
                 ),
-            )
+            ]
         );
     }
 
@@ -657,15 +657,15 @@ class mod_exescorm_external extends external_api {
      * @return array the exescorm details
      * @since Moodle 3.0
      */
-    public static function get_exescorms_by_courses($courseids = array()) {
+    public static function get_exescorms_by_courses($courseids = []) {
         global $CFG;
 
-        $returnedexescorms = array();
-        $warnings = array();
+        $returnedexescorms = [];
+        $warnings = [];
 
-        $params = self::validate_parameters(self::get_exescorms_by_courses_parameters(), array('courseids' => $courseids));
+        $params = self::validate_parameters(self::get_exescorms_by_courses_parameters(), ['courseids' => $courseids]);
 
-        $courses = array();
+        $courses = [];
         if (empty($params['courseids'])) {
             $courses = enrol_get_my_courses();
             $params['courseids'] = array_keys($courses);
@@ -693,12 +693,12 @@ class mod_exescorm_external extends external_api {
 
                 if (!$open) {
                     foreach ($openwarnings as $warningkey => $warningdata) {
-                        $warnings[] = array(
+                        $warnings[] = [
                             'item' => 'exescorm',
                             'itemid' => $exescorm->id,
                             'warningcode' => $warningkey,
-                            'message' => get_string($warningkey, 'mod_exescorm', $warningdata)
-                        );
+                            'message' => get_string($warningkey, 'mod_exescorm', $warningdata),
+                        ];
                     }
                 } else {
                     $module['packagesize'] = 0;
@@ -724,16 +724,16 @@ class mod_exescorm_external extends external_api {
 
                     $module['protectpackagedownloads'] = get_config('exescorm', 'protectpackagedownloads');
 
-                    $viewablefields = array('version', 'maxgrade', 'grademethod', 'whatgrade', 'maxattempt', 'forcecompleted',
+                    $viewablefields = ['version', 'maxgrade', 'grademethod', 'whatgrade', 'maxattempt', 'forcecompleted',
                                             'forcenewattempt', 'lastattemptlock', 'displayattemptstatus', 'displaycoursestructure',
                                             'sha1hash', 'md5hash', 'revision', 'launch', 'skipview', 'hidebrowse', 'hidetoc', 'nav',
                                             'navpositionleft', 'navpositiontop', 'auto', 'popup', 'width', 'height', 'timeopen',
-                                            'timeclose', 'exescormtype', 'reference');
+                                            'timeclose', 'exescormtype', 'reference'];
 
                     // Check additional permissions for returning optional private settings.
                     if (has_capability('moodle/course:manageactivities', $context)) {
-                        $additionalfields = array('updatefreq', 'options', 'completionstatusrequired', 'completionscorerequired',
-                                                  'completionstatusallscos', 'autocommit', 'timemodified');
+                        $additionalfields = ['updatefreq', 'options', 'completionstatusrequired', 'completionscorerequired',
+                                                  'completionstatusallscos', 'autocommit', 'timemodified'];
                         $viewablefields = array_merge($viewablefields, $additionalfields);
                     }
 
@@ -746,7 +746,7 @@ class mod_exescorm_external extends external_api {
             }
         }
 
-        $result = array();
+        $result = [];
         $result['exescorms'] = $returnedexescorms;
         $result['warnings'] = $warnings;
         return $result;
@@ -761,7 +761,7 @@ class mod_exescorm_external extends external_api {
     public static function get_exescorms_by_courses_returns() {
 
         return new external_single_structure(
-            array(
+            [
                 'exescorms' => new external_multiple_structure(
                     new external_single_structure(array_merge(
                         helper_for_get_mods_by_courses::standard_coursemodule_elements_returns(),
@@ -821,7 +821,7 @@ class mod_exescorm_external extends external_api {
                     ), 'EXESCORM')
                 ),
                 'warnings' => new external_warnings(),
-            )
+            ]
         );
     }
 
@@ -833,10 +833,10 @@ class mod_exescorm_external extends external_api {
      */
     public static function launch_sco_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'exescormid' => new external_value(PARAM_INT, 'EXESCORM instance id'),
-                'scoid' => new external_value(PARAM_INT, 'SCO id (empty for launching the first SCO)', VALUE_DEFAULT, 0)
-            )
+                'scoid' => new external_value(PARAM_INT, 'SCO id (empty for launching the first SCO)', VALUE_DEFAULT, 0),
+            ]
         );
     }
 
@@ -855,14 +855,14 @@ class mod_exescorm_external extends external_api {
         require_once($CFG->libdir . '/completionlib.php');
 
         $params = self::validate_parameters(self::launch_sco_parameters(),
-                                            array(
+                                            [
                                                 'exescormid' => $exescormid,
-                                                'scoid' => $scoid
-                                            ));
-        $warnings = array();
+                                                'scoid' => $scoid,
+                                            ]);
+        $warnings = [];
 
         // Request and permission validation.
-        $exescorm = $DB->get_record('exescorm', array('id' => $params['exescormid']), '*', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $params['exescormid']], '*', MUST_EXIST);
         list($course, $cm) = get_course_and_cm_from_instance($exescorm, 'exescorm');
 
         $context = context_module::instance($cm->id);
@@ -883,7 +883,7 @@ class mod_exescorm_external extends external_api {
         // Trigger the SCO launched event.
         exescorm_launch_sco($exescorm, $sco, $cm, $context, $scolaunchurl);
 
-        $result = array();
+        $result = [];
         $result['status'] = true;
         $result['warnings'] = $warnings;
         return $result;
@@ -897,10 +897,10 @@ class mod_exescorm_external extends external_api {
      */
     public static function launch_sco_returns() {
         return new external_single_structure(
-            array(
+            [
                 'status' => new external_value(PARAM_BOOL, 'status: true if success'),
-                'warnings' => new external_warnings()
-            )
+                'warnings' => new external_warnings(),
+            ]
         );
     }
 
@@ -912,9 +912,9 @@ class mod_exescorm_external extends external_api {
      */
     public static function get_exescorm_access_information_parameters() {
         return new external_function_parameters (
-            array(
-                'exescormid' => new external_value(PARAM_INT, 'exescorm instance id.')
-            )
+            [
+                'exescormid' => new external_value(PARAM_INT, 'exescorm instance id.'),
+            ]
         );
     }
 
@@ -934,13 +934,13 @@ class mod_exescorm_external extends external_api {
                                         );
 
         // Request and permission validation.
-        $exescorm = $DB->get_record('exescorm', array('id' => $params['exescormid']), '*', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $params['exescormid']], '*', MUST_EXIST);
         list($course, $cm) = get_course_and_cm_from_instance($exescorm, 'exescorm');
 
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
-        $result = array();
+        $result = [];
         // Return all the available capabilities.
         $capabilities = load_capability_def('mod_exescorm');
         foreach ($capabilities as $capname => $capdata) {
@@ -949,7 +949,7 @@ class mod_exescorm_external extends external_api {
             $result[$field] = has_capability($capname, $context);
         }
 
-        $result['warnings'] = array();
+        $result['warnings'] = [];
         return $result;
     }
 
@@ -961,9 +961,9 @@ class mod_exescorm_external extends external_api {
      */
     public static function get_exescorm_access_information_returns() {
 
-        $structure = array(
-            'warnings' => new external_warnings()
-        );
+        $structure = [
+            'warnings' => new external_warnings(),
+        ];
 
         $capabilities = load_capability_def('mod_exescorm');
         foreach ($capabilities as $capname => $capdata) {

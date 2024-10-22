@@ -69,10 +69,10 @@ require_once(__DIR__ . '/deprecatedlib.php');
  */
 function exescorm_status_options($withstrings = false) {
     // Id's are important as they are bits.
-    $options = array(
+    $options = [
         2 => 'passed',
-        4 => 'completed'
-    );
+        4 => 'completed',
+    ];
 
     if ($withstrings) {
         foreach ($options as $key => $value) {
@@ -131,10 +131,10 @@ function exescorm_add_instance($exescorm, $mform=null) {
     $id = $DB->insert_record('exescorm', $exescorm);
 
     // Update course module record - from now on this instance properly exists and all function may be used.
-    $DB->set_field('course_modules', 'instance', $id, array('id' => $cmid));
+    $DB->set_field('course_modules', 'instance', $id, ['id' => $cmid]);
 
     // Reload exescorm instance.
-    $record = $DB->get_record('exescorm', array('id' => $id));
+    $record = $DB->get_record('exescorm', ['id' => $id]);
 
     if ($exescorm->exescormtype === EXESCORM_TYPE_EXESCORMNET) {
         $record->exescormtype = EXESCORM_TYPE_LOCAL;
@@ -177,7 +177,7 @@ function exescorm_add_instance($exescorm, $mform=null) {
             $fs = get_file_storage();
             $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
             file_save_draft_area_files($exescorm->packagefile, $context->id, 'mod_exescorm', 'package',
-                0, array('subdirs' => 0, 'maxfiles' => 1));
+                0, ['subdirs' => 0, 'maxfiles' => 1]);
             // Get filename of zip that was uploaded.
             $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', 0, '', false);
             $file = reset($files);
@@ -264,7 +264,7 @@ function exescorm_update_instance($exescorm, $mform=null) {
             $fs = get_file_storage();
             $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
             file_save_draft_area_files($exescorm->packagefile, $context->id, 'mod_exescorm', 'package',
-                0, array('subdirs' => 0, 'maxfiles' => 1));
+                0, ['subdirs' => 0, 'maxfiles' => 1]);
             // Get filename of zip that was uploaded.
             $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', 0, '', false);
             $file = reset($files);
@@ -298,7 +298,7 @@ function exescorm_update_instance($exescorm, $mform=null) {
     // We need to find this out before we blow away the form data.
     $completionexpected = (!empty($exescorm->completionexpected)) ? $exescorm->completionexpected : null;
 
-    $exescorm = $DB->get_record('exescorm', array('id' => $exescorm->id));
+    $exescorm = $DB->get_record('exescorm', ['id' => $exescorm->id]);
 
     // Extra fields required in grade related functions.
     $exescorm->course = $courseid;
@@ -328,29 +328,29 @@ function exescorm_update_instance($exescorm, $mform=null) {
 function exescorm_delete_instance($id) {
     global $CFG, $DB;
 
-    if (! $exescorm = $DB->get_record('exescorm', array('id' => $id))) {
+    if (! $exescorm = $DB->get_record('exescorm', ['id' => $id])) {
         return false;
     }
 
     $result = true;
 
     // Delete any dependent records.
-    if (! $DB->delete_records('exescorm_scoes_track', array('exescormid' => $exescorm->id))) {
+    if (! $DB->delete_records('exescorm_scoes_track', ['exescormid' => $exescorm->id])) {
         $result = false;
     }
-    if ($scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id))) {
+    if ($scoes = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id])) {
         foreach ($scoes as $sco) {
-            if (! $DB->delete_records('exescorm_scoes_data', array('scoid' => $sco->id))) {
+            if (! $DB->delete_records('exescorm_scoes_data', ['scoid' => $sco->id])) {
                 $result = false;
             }
         }
-        $DB->delete_records('exescorm_scoes', array('exescorm' => $exescorm->id));
+        $DB->delete_records('exescorm_scoes', ['exescorm' => $exescorm->id]);
     }
 
     exescorm_grade_item_delete($exescorm);
 
     // We must delete the module record after we delete the grade item.
-    if (! $DB->delete_records('exescorm', array('id' => $exescorm->id))) {
+    if (! $DB->delete_records('exescorm', ['id' => $exescorm->id])) {
         $result = false;
     }
 
@@ -437,24 +437,24 @@ function exescorm_user_complete($course, $user, $mod, $exescorm) {
     if ($orgs = $DB->get_records_select('exescorm_scoes', 'exescorm = ? AND '.
                                          $DB->sql_isempty('exescorm_scoes', 'launch', false, true).' AND '.
                                          $DB->sql_isempty('exescorm_scoes', 'organization', false, false),
-                                         array($exescorm->id), 'sortorder, id', 'id, identifier, title')) {
+                                         [$exescorm->id], 'sortorder, id', 'id, identifier, title')) {
         if (count($orgs) <= 1) {
             unset($orgs);
-            $orgs = array();
+            $orgs = [];
             $org = new stdClass();
             $org->identifier = '';
             $orgs[] = $org;
         }
         $report .= html_writer::start_div('mod-exescorm');
         foreach ($orgs as $org) {
-            $conditions = array();
+            $conditions = [];
             $currentorg = '';
             if (!empty($org->identifier)) {
                 $report .= html_writer::div($org->title, 'orgtitle');
                 $currentorg = $org->identifier;
                 $conditions['organization'] = $currentorg;
             }
-            $report .= html_writer::start_tag('ul', array('id' => '0', 'class' => $liststyle));
+            $report .= html_writer::start_tag('ul', ['id' => '0', 'class' => $liststyle]);
                 $conditions['exescorm'] = $exescorm->id;
             if ($scoes = $DB->get_records('exescorm_scoes', $conditions, "sortorder, id")) {
                 // Drop keys so that we can access array sequentially.
@@ -476,7 +476,7 @@ function exescorm_user_complete($course, $user, $mod, $exescorm) {
                             }
                             if (($i == 0) && ($sco->parent != $currentorg)) {
                                 $report .= html_writer::start_tag('li');
-                                $report .= html_writer::start_tag('ul', array('id' => $sublist, 'class' => $liststyle));
+                                $report .= html_writer::start_tag('ul', ['id' => $sublist, 'class' => $liststyle]);
                                 $level++;
                             } else {
                                 $report .= $closelist;
@@ -495,7 +495,7 @@ function exescorm_user_complete($course, $user, $mod, $exescorm) {
                             (($level == 0) || (($level > 0) && ($nextsco->parent == $sco->identifier)))) {
                         $sublist++;
                     } else {
-                        $report .= $OUTPUT->spacer(array("height" => "12", "width" => "13"));
+                        $report .= $OUTPUT->spacer(["height" => "12", "width" => "13"]);
                     }
 
                     if ($sco->launch) {
@@ -525,7 +525,7 @@ function exescorm_user_complete($course, $user, $mod, $exescorm) {
                         $report .= "&nbsp;$sco->title $score$totaltime".html_writer::end_tag('li');
                         if ($usertrack !== false) {
                             $sometoreport = true;
-                            $report .= html_writer::start_tag('li').html_writer::start_tag('ul', array('class' => $liststyle));
+                            $report .= html_writer::start_tag('li').html_writer::start_tag('ul', ['class' => $liststyle]);
                             foreach ($usertrack as $element => $value) {
                                 if (substr($element, 0, 3) == 'cmi') {
                                     $report .= html_writer::tag('li', s($element) . ' => ' . s($value));
@@ -594,7 +594,7 @@ function exescorm_cron_scheduled_task () {
 
         mtrace('Updating exescorm packages which require daily update');// We are updating.
 
-        $exescormsupdate = $DB->get_records('exescorm', array('updatefreq' => EXESCORM_UPDATE_EVERYDAY));
+        $exescormsupdate = $DB->get_records('exescorm', ['updatefreq' => EXESCORM_UPDATE_EVERYDAY]);
         foreach ($exescormsupdate as $exescormupdate) {
             exescorm_parse($exescormupdate, true);
         }
@@ -603,7 +603,7 @@ function exescorm_cron_scheduled_task () {
         $cfgexescorm = get_config('exescorm');
         if (!empty($cfgexescorm->allowaicchacp)) {
             $expiretime = time() - ($cfgexescorm->aicchacpkeepsessiondata * 24 * 60 * 60);
-            $DB->delete_records_select('exescorm_aicc_session', 'timemodified < ?', array($expiretime));
+            $DB->delete_records_select('exescorm_aicc_session', 'timemodified < ?', [$expiretime]);
         }
     }
 
@@ -623,10 +623,10 @@ function exescorm_get_user_grades($exescorm, $userid=0) {
     global $CFG, $DB;
     require_once($CFG->dirroot.'/mod/exescorm/locallib.php');
 
-    $grades = array();
+    $grades = [];
     if (empty($userid)) {
         $scousers = $DB->get_records_select('exescorm_scoes_track', "exescormid=? GROUP BY userid",
-                                            array($exescorm->id), "", "userid,null");
+                                            [$exescorm->id], "", "userid,null");
         if ($scousers) {
             foreach ($scousers as $scouser) {
                 $grades[$scouser->userid] = new stdClass();
@@ -640,7 +640,7 @@ function exescorm_get_user_grades($exescorm, $userid=0) {
 
     } else {
         $preattempt = $DB->get_records_select('exescorm_scoes_track', "exescormid=? AND userid=? GROUP BY userid",
-                                                array($exescorm->id, $userid), "", "userid,null");
+                                                [$exescorm->id, $userid], "", "userid,null");
         if (!$preattempt) {
             return false; // No attempt yet.
         }
@@ -699,14 +699,14 @@ function exescorm_grade_item_update($exescorm, $grades=null) {
         require_once($CFG->libdir.'/gradelib.php');
     }
 
-    $params = array('itemname' => $exescorm->name);
+    $params = ['itemname' => $exescorm->name];
     if (isset($exescorm->cmidnumber)) {
         $params['idnumber'] = $exescorm->cmidnumber;
     }
 
     if ($exescorm->grademethod == EXESCORM_GRADESCOES) {
         $maxgrade = $DB->count_records_select('exescorm_scoes', 'exescorm = ? AND '
-                    . $DB->sql_isnotempty('exescorm_scoes', 'launch', false, true), array($exescorm->id));
+                    . $DB->sql_isnotempty('exescorm_scoes', 'launch', false, true), [$exescorm->id]);
         if ($maxgrade) {
             $params['gradetype'] = GRADE_TYPE_VALUE;
             $params['grademax'] = $maxgrade;
@@ -747,7 +747,7 @@ function exescorm_grade_item_delete($exescorm) {
         $exescorm->id,
         0,
         null,
-        array('deleted' => 1)
+        ['deleted' => 1]
     );
 }
 
@@ -762,7 +762,7 @@ function exescorm_grade_item_delete($exescorm) {
  * @return array
  */
 function exescorm_get_view_actions() {
-    return array('pre-view', 'view', 'view all', 'report');
+    return ['pre-view', 'view', 'view all', 'report'];
 }
 
 /**
@@ -776,7 +776,7 @@ function exescorm_get_view_actions() {
  * @return array
  */
 function exescorm_get_post_actions() {
-    return array();
+    return [];
 }
 
 /**
@@ -788,7 +788,7 @@ function exescorm_option2text($exescorm) {
 
     if (isset($exescorm->popup)) {
         if ($exescorm->popup == 1) {
-            $optionlist = array();
+            $optionlist = [];
             foreach ($exescormpopoupoptions as $name => $option) {
                 if (isset($exescorm->$name)) {
                     $optionlist[] = $name.'='.$exescorm->$name;
@@ -824,7 +824,7 @@ function exescorm_reset_course_form_definition(&$mform) {
  * @return array
  */
 function exescorm_reset_course_form_defaults($course) {
-    return array('reset_exescorm' => 1);
+    return ['reset_exescorm' => 1];
 }
 
 /**
@@ -842,7 +842,7 @@ function exescorm_reset_gradebook($courseid, $type='') {
               FROM {exescorm} s, {course_modules} cm, {modules} m
              WHERE m.name='exescorm' AND m.id=cm.module AND cm.instance=s.id AND s.course=?";
 
-    if ($exescorms = $DB->get_records_sql($sql, array($courseid))) {
+    if ($exescorms = $DB->get_records_sql($sql, [$courseid])) {
         foreach ($exescorms as $exescorm) {
             exescorm_grade_item_update($exescorm, 'reset');
         }
@@ -862,14 +862,14 @@ function exescorm_reset_userdata($data) {
     global $CFG, $DB;
 
     $componentstr = get_string('modulenameplural', 'mod_exescorm');
-    $status = array();
+    $status = [];
 
     if (!empty($data->reset_exescorm)) {
         $exescormssql = "SELECT s.id
                          FROM {exescorm} s
                         WHERE s.course=?";
 
-        $DB->delete_records_select('exescorm_scoes_track', "exescormid IN ($exescormssql)", array($data->courseid));
+        $DB->delete_records_select('exescorm_scoes_track', "exescormid IN ($exescormssql)", [$data->courseid]);
 
         // Remove all grades from gradebook.
         if (empty($data->reset_gradebook_grades)) {
@@ -881,8 +881,8 @@ function exescorm_reset_userdata($data) {
 
     // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
     // See MDL-9367.
-    shift_course_mod_dates('exescorm', array('timeopen', 'timeclose'), $data->timeshift, $data->courseid);
-    $status[] = array('component' => $componentstr, 'item' => get_string('datechanged'), 'error' => false);
+    shift_course_mod_dates('exescorm', ['timeopen', 'timeclose'], $data->timeshift, $data->courseid);
+    $status[] = ['component' => $componentstr, 'item' => get_string('datechanged'), 'error' => false];
 
     return $status;
 }
@@ -896,7 +896,7 @@ function exescorm_reset_userdata($data) {
  * @return array
  */
 function exescorm_get_file_areas($course, $cm, $context) {
-    $areas = array();
+    $areas = [];
     $areas['content'] = get_string('areacontent', 'mod_exescorm');
     $areas['package'] = get_string('areapackage', 'mod_exescorm');
     return $areas;
@@ -983,7 +983,7 @@ function exescorm_get_file_info($browser, $areas, $course, $cm, $context, $filea
  * @param array $options additional options affecting the file serving
  * @return bool false if file not found, does not return if found - just send the file
  */
-function exescorm_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+function exescorm_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=[]) {
     global $CFG, $DB;
 
     if ($context->contextlevel != CONTEXT_MODULE) {
@@ -999,7 +999,7 @@ function exescorm_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
     if (!$canmanageactivity) {
         require_once($CFG->dirroot.'/mod/exescorm/locallib.php');
 
-        $exescorm = $DB->get_record('exescorm', array('id' => $cm->instance), 'id, timeopen, timeclose', MUST_EXIST);
+        $exescorm = $DB->get_record('exescorm', ['id' => $cm->instance], 'id, timeopen, timeclose', MUST_EXIST);
         list($available, $warnings) = exescorm_get_availability_status($exescorm);
         if (!$available) {
             return false;
@@ -1157,7 +1157,7 @@ function exescorm_debug_log_remove($type, $scoid) {
  * @param stdClass $currentcontext Current context of block
  */
 function exescorm_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    $modulepagetype = array('mod-exescorm-*' => get_string('page-mod-exescorm-x', 'mod_exescorm'));
+    $modulepagetype = ['mod-exescorm-*' => get_string('page-mod-exescorm-x', 'mod_exescorm')];
     return $modulepagetype;
 }
 
@@ -1201,9 +1201,9 @@ function exescorm_version_check($exescormversion, $version='') {
  * @return array containing details of the files / types the mod can handle
  */
 function exescorm_dndupload_register() {
-    return array('files' => array(
-        array('extension' => 'zip', 'message' => get_string('dnduploadexescorm', 'mod_exescorm'))
-    ));
+    return ['files' => [
+        ['extension' => 'zip', 'message' => get_string('dnduploadexescorm', 'mod_exescorm')],
+    ]];
 }
 
 /**
@@ -1247,7 +1247,7 @@ function exescorm_dndupload_handle($uploadinfo) {
  * @param int $completionstate Completion state
  * @param array $grades grades array of users with grades - used when $userid = 0
  */
-function exescorm_set_completion($exescorm, $userid, $completionstate = COMPLETION_COMPLETE, $grades = array()) {
+function exescorm_set_completion($exescorm, $userid, $completionstate = COMPLETION_COMPLETE, $grades = []) {
     $course = new stdClass();
     $course->id = $exescorm->course;
     $completion = new completion_info($course);
@@ -1347,7 +1347,7 @@ function exescorm_check_mode($exescorm, &$newattempt, &$attempt, $userid, &$mode
         if ($attempt == 1) {
             // Check if the user has any existing data or if this is really the first attempt.
             $exists = $DB->record_exists(
-                'exescorm_scoes_track', array('userid' => $userid, 'exescormid' => $exescorm->id)
+                'exescorm_scoes_track', ['userid' => $userid, 'exescormid' => $exescorm->id]
             );
             if (!$exists) {
                 // No records yet - Attempt should == 1.
@@ -1367,11 +1367,11 @@ function exescorm_check_mode($exescorm, &$newattempt, &$attempt, $userid, &$mode
     // This means the values 'passed' or 'failed' will never be reported for a track inEXESCORM_SCORM_13 and
     // the only status that will be treated as complete is 'completed'.
 
-    $completionelements = array(
+    $completionelements = [
        EXESCORM_SCORM_12 => 'cmi.core.lesson_status',
        EXESCORM_SCORM_13 => 'cmi.completion_status',
-       EXESCORM_SCORM_AICC => 'cmi.core.lesson_status'
-    );
+       EXESCORM_SCORM_AICC => 'cmi.core.lesson_status',
+    ];
     $exescormversion = exescorm_version_check($exescorm->version);
     if ($exescormversion === false) {
         $exescormversion = EXESCORM_SCORM_12;
@@ -1383,7 +1383,7 @@ function exescorm_check_mode($exescorm, &$newattempt, &$attempt, $userid, &$mode
          LEFT JOIN {exescorm_scoes_track} t ON sc.exescorm = t.exescormid AND sc.id = t.scoid
                    AND t.element = ? AND t.userid = ? AND t.attempt = ?
              WHERE sc.exescormtype = 'sco' AND sc.exescorm = ?";
-    $tracks = $DB->get_recordset_sql($sql, array($completionelement, $userid, $attempt, $exescorm->id));
+    $tracks = $DB->get_recordset_sql($sql, [$completionelement, $userid, $attempt, $exescorm->id]);
 
     foreach ($tracks as $track) {
         if (($track->value == 'completed') || ($track->value == 'passed') || ($track->value == 'failed')) {
@@ -1428,10 +1428,10 @@ function exescorm_check_mode($exescorm, &$newattempt, &$attempt, $userid, &$mode
 function exescorm_view($exescorm, $course, $cm, $context) {
 
     // Trigger course_module_viewed event.
-    $params = array(
+    $params = [
         'context' => $context,
-        'objectid' => $exescorm->id
-    );
+        'objectid' => $exescorm->id,
+    ];
 
     $event = \mod_exescorm\event\course_module_viewed::create($params);
     $event->add_record_snapshot('course_modules', $cm);
@@ -1449,21 +1449,21 @@ function exescorm_view($exescorm, $course, $cm, $context) {
  * @return stdClass an object with the different type of areas indicating if they were updated or not
  * @since Moodle 3.2
  */
-function exescorm_check_updates_since(cm_info $cm, $from, $filter = array()) {
+function exescorm_check_updates_since(cm_info $cm, $from, $filter = []) {
     global $DB, $USER, $CFG;
     require_once($CFG->dirroot . '/mod/exescorm/locallib.php');
 
-    $exescorm = $DB->get_record($cm->modname, array('id' => $cm->instance), '*', MUST_EXIST);
+    $exescorm = $DB->get_record($cm->modname, ['id' => $cm->instance], '*', MUST_EXIST);
     $updates = new stdClass();
     list($available, $warnings) = exescorm_get_availability_status($exescorm, true, $cm->context);
     if (!$available) {
         return $updates;
     }
-    $updates = course_check_module_updates_since($cm, $from, array('package'), $filter);
+    $updates = course_check_module_updates_since($cm, $from, ['package'], $filter);
 
-    $updates->tracks = (object) array('updated' => false);
+    $updates->tracks = (object) ['updated' => false];
     $select = 'exescormid = ? AND userid = ? AND timemodified > ?';
-    $params = array($exescorm->id, $USER->id, $from);
+    $params = [$exescorm->id, $USER->id, $from];
     $tracks = $DB->get_records_select('exescorm_scoes_track', $select, $params, '', 'id');
     if (!empty($tracks)) {
         $updates->tracks->updated = true;
@@ -1473,7 +1473,7 @@ function exescorm_check_updates_since(cm_info $cm, $from, $filter = array()) {
     // Now, teachers should see other students updates.
     if (has_capability('mod/exescorm:viewreport', $cm->context)) {
         $select = 'exescormid = ? AND timemodified > ?';
-        $params = array($exescorm->id, $from);
+        $params = [$exescorm->id, $from];
 
         if (groups_get_activity_groupmode($cm) == SEPARATEGROUPS) {
             $groupusers = array_keys(groups_get_activity_shared_group_members($cm));
@@ -1485,7 +1485,7 @@ function exescorm_check_updates_since(cm_info $cm, $from, $filter = array()) {
             $params = array_merge($params, $inparams);
         }
 
-        $updates->usertracks = (object) array('updated' => false);
+        $updates->usertracks = (object) ['updated' => false];
         $tracks = $DB->get_records_select('exescorm_scoes_track', $select, $params, '', 'id');
         if (!empty($tracks)) {
             $updates->usertracks->updated = true;
@@ -1536,11 +1536,11 @@ function exescorm_refresh_events($courseid = 0, $instance = null, $cm = null) {
     // If we have instance information then we can just update the one event instead of updating all events.
     if (isset($instance)) {
         if (!is_object($instance)) {
-            $instance = $DB->get_record('exescorm', array('id' => $instance), '*', MUST_EXIST);
+            $instance = $DB->get_record('exescorm', ['id' => $instance], '*', MUST_EXIST);
         }
         if (isset($cm)) {
             if (!is_object($cm)) {
-                $cm = (object)array('id' => $cm);
+                $cm = (object)['id' => $cm];
             }
         } else {
             $cm = get_coursemodule_from_instance('exescorm', $instance->id);
@@ -1554,7 +1554,7 @@ function exescorm_refresh_events($courseid = 0, $instance = null, $cm = null) {
         if (!is_numeric($courseid)) {
             return false;
         }
-        if (!$exescorms = $DB->get_records('exescorm', array('course' => $courseid))) {
+        if (!$exescorms = $DB->get_records('exescorm', ['course' => $courseid])) {
             return false;
         }
     } else {
@@ -1622,7 +1622,7 @@ function mod_exescorm_core_calendar_provide_event_action(calendar_event $event,
 
     return $factory->create_instance(
         get_string('enter', 'mod_exescorm'),
-        new \moodle_url('/mod/exescorm/view.php', array('id' => $cm->id)),
+        new \moodle_url('/mod/exescorm/view.php', ['id' => $cm->id]),
         1,
         $actionable
     );
@@ -1693,7 +1693,7 @@ function mod_exescorm_get_completion_active_rule_descriptions($cm) {
             case 'completionstatusrequired':
                 if (!is_null($val)) {
                     // Determine the selected statuses using a bitwise operation.
-                    $cvalues = array();
+                    $cvalues = [];
                     foreach (exescorm_status_options(true) as $bit => $string) {
                         if (($val & $bit) == $bit) {
                             $cvalues[] = $string;
@@ -1817,7 +1817,7 @@ function mod_exescorm_core_calendar_get_valid_event_timestart_range(\calendar_ev
         if (!empty($instance->timeclose)) {
             $maxdate = [
                 $instance->timeclose,
-                get_string('openafterclose', 'mod_exescorm')
+                get_string('openafterclose', 'mod_exescorm'),
             ];
         }
     } else if ($event->eventtype == EXESCORM_EVENT_TYPE_CLOSE) {
@@ -1826,7 +1826,7 @@ function mod_exescorm_core_calendar_get_valid_event_timestart_range(\calendar_ev
         if (!empty($instance->timeopen)) {
             $mindate = [
                 $instance->timeopen,
-                get_string('closebeforeopen', 'mod_exescorm')
+                get_string('closebeforeopen', 'mod_exescorm'),
             ];
         }
     }
@@ -1841,7 +1841,7 @@ function mod_exescorm_core_calendar_get_valid_event_timestart_range(\calendar_ev
  * @param  array  $args The path (the part after the filearea and before the filename).
  * @return array The itemid and the filepath inside the $args path, for the defined filearea.
  */
-function mod_exescorm_get_path_from_pluginfile(string $filearea, array $args) : array {
+function mod_exescorm_get_path_from_pluginfile(string $filearea, array $args): array {
     // EXESCORM never has an itemid (the number represents the revision but it's not stored in database).
     array_shift($args);
 

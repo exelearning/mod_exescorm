@@ -1,0 +1,10 @@
+.aider*
+.env
+
+# mess detector rules
+phpmd-rules.xml
+
+# Composer ignores
+/vendor/
+/composer.lock
+/composer.phar

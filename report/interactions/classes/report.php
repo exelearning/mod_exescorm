@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Core Report class of basic reporting plugin
  * @package   exescormreport
@@ -40,9 +41,9 @@ class report extends \mod_exescorm\report {
 
         $contextmodule = \context_module::instance($cm->id);
         $action = optional_param('action', '', PARAM_ALPHA);
-        $attemptids = optional_param_array('attemptid', array(), PARAM_RAW);
+        $attemptids = optional_param_array('attemptid', [], PARAM_RAW);
         $attemptsmode = optional_param('attemptsmode', EXESCORM_REPORT_ATTEMPTS_ALL_STUDENTS, PARAM_INT);
-        $PAGE->set_url(new \moodle_url($PAGE->url, array('attemptsmode' => $attemptsmode)));
+        $PAGE->set_url(new \moodle_url($PAGE->url, ['attemptsmode' => $attemptsmode]));
 
         // Scorm action bar for report.
         if ($download === '') {
@@ -84,20 +85,20 @@ class report extends \mod_exescorm\report {
         }
 
         // Select group menu.
-        $displayoptions = array();
+        $displayoptions = [];
         $displayoptions['attemptsmode'] = $attemptsmode;
         $displayoptions['qtext'] = $includeqtext;
         $displayoptions['resp'] = $includeresp;
         $displayoptions['right'] = $includeright;
         $displayoptions['result'] = $includeresult;
 
-        $mform->set_data($displayoptions + array('pagesize' => $pagesize));
+        $mform->set_data($displayoptions + ['pagesize' => $pagesize]);
         if ($groupmode = groups_get_activity_groupmode($cm)) {   // Groups are being used.
             if (!$download) {
                 groups_print_activity_menu($cm, new \moodle_url($PAGE->url, $displayoptions));
             }
         }
-        $formattextoptions = array('context' => \context_course::instance($course->id));
+        $formattextoptions = ['context' => \context_course::instance($course->id)];
 
         // We only want to show the checkbox to delete attempts
         // if the user has permissions and if the report mode is showing attempts.
@@ -127,8 +128,8 @@ class report extends \mod_exescorm\report {
             }
 
             // Define table columns.
-            $columns = array();
-            $headers = array();
+            $columns = [];
+            $headers = [];
             if (!$download && $candelete) {
                 $columns[] = 'checkbox';
                 $headers[] = $this->generate_master_checkbox();
@@ -154,7 +155,7 @@ class report extends \mod_exescorm\report {
             $headers[] = get_string('last', 'mod_exescorm');
             $columns[] = 'score';
             $headers[] = get_string('score', 'mod_exescorm');
-            $scoes = $DB->get_records('exescorm_scoes', array("exescorm" => $exescorm->id), 'sortorder, id');
+            $scoes = $DB->get_records('exescorm_scoes', ["exescorm" => $exescorm->id], 'sortorder, id');
             foreach ($scoes as $sco) {
                 if ($sco->launch != '') {
                     $columns[] = 'scograde'.$sco->id;
@@ -396,16 +397,16 @@ class report extends \mod_exescorm\report {
             if (!$download) {
                 $attempts = $DB->get_records_sql($select.$from.$where.$sort, $params,
                 $table->get_page_start(), $table->get_page_size());
-                echo \html_writer::start_div('', array('id' => 'exescormtablecontainer'));
+                echo \html_writer::start_div('', ['id' => 'exescormtablecontainer']);
                 if ($candelete) {
                     // Start form.
                     $strreallydel = addslashes_js(get_string('deleteattemptcheck', 'mod_exescorm'));
-                    echo \html_writer::start_tag('form', array('id' => 'attemptsform', 'method' => 'post',
+                    echo \html_writer::start_tag('form', ['id' => 'attemptsform', 'method' => 'post',
                                                                 'action' => $PAGE->url->out(false),
-                                                                'onsubmit' => 'return confirm("'.$strreallydel.'");'));
-                    echo \html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'action', 'value' => 'delete'));
-                    echo \html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()));
-                    echo \html_writer::start_div('', array('style' => 'display: none;'));
+                                                                'onsubmit' => 'return confirm("'.$strreallydel.'");']);
+                    echo \html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'action', 'value' => 'delete']);
+                    echo \html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+                    echo \html_writer::start_div('', ['style' => 'display: none;']);
                     echo \html_writer::input_hidden_params($PAGE->url);
                     echo \html_writer::end_div();
                     echo \html_writer::start_div();
@@ -416,7 +417,7 @@ class report extends \mod_exescorm\report {
             }
             if ($attempts) {
                 foreach ($attempts as $scouser) {
-                    $row = array();
+                    $row = [];
                     if (!empty($scouser->attempt)) {
                         $timetracks = exescorm_get_sco_runtime($exescorm->id, false, $scouser->userid, $scouser->attempt);
                     } else {
@@ -434,10 +435,10 @@ class report extends \mod_exescorm\report {
                         $additionalfields = explode(',', implode(',', \core_user\fields::get_picture_fields()));
                         $user = username_load_fields_from_object($user, $scouser, null, $additionalfields);
                         $user->id = $scouser->userid;
-                        $row[] = $OUTPUT->user_picture($user, array('courseid' => $course->id));
+                        $row[] = $OUTPUT->user_picture($user, ['courseid' => $course->id]);
                     }
                     if (!$download) {
-                        $url = new \moodle_url('/user/view.php', array('id' => $scouser->userid, 'course' => $course->id));
+                        $url = new \moodle_url('/user/view.php', ['id' => $scouser->userid, 'course' => $course->id]);
                         $row[] = \html_writer::link($url, fullname($scouser));
                     } else {
                         $row[] = fullname($scouser);
@@ -453,10 +454,10 @@ class report extends \mod_exescorm\report {
                     } else {
                         if (!$download) {
                             $url = new \moodle_url('/mod/exescorm/report/userreport.php',
-                                array('id' => $cm->id,
+                                ['id' => $cm->id,
                                     'user' => $scouser->userid,
                                     'attempt' => $scouser->attempt,
-                                    'mode' => 'interactions'));
+                                    'mode' => 'interactions']);
                             $row[] = \html_writer::link($url, $scouser->attempt);
                         } else {
                             $row[] = $scouser->attempt;
@@ -493,11 +494,11 @@ class report extends \mod_exescorm\report {
                                     $score = $strstatus;
                                 }
                                 if (!$download) {
-                                    $url = new \moodle_url('/mod/exescorm/report/userreporttracks.php', array('id' => $cm->id,
+                                    $url = new \moodle_url('/mod/exescorm/report/userreporttracks.php', ['id' => $cm->id,
                                         'scoid' => $sco->id, 'user' => $scouser->userid, 'attempt' => $scouser->attempt,
-                                        'mode' => 'interactions'));
+                                        'mode' => 'interactions']);
                                     $row[] = $OUTPUT->pix_icon($trackdata->status, $strstatus, 'exescorm') . '<br>' .
-                                        \html_writer::link($url, $score, array('title' => get_string('details', 'mod_exescorm')));
+                                        \html_writer::link($url, $score, ['title' => get_string('details', 'mod_exescorm')]);
                                 } else {
                                     $row[] = $score;
                                 }
@@ -579,7 +580,7 @@ class report extends \mod_exescorm\report {
                 if (!$download) {
                     $table->finish_output();
                     if ($candelete) {
-                        echo \html_writer::start_tag('table', array('id' => 'commands'));
+                        echo \html_writer::start_tag('table', ['id' => 'commands']);
                         echo \html_writer::start_tag('tr').\html_writer::start_tag('td');
                         echo $this->generate_delete_selected_button();
                         echo \html_writer::end_tag('td').\html_writer::end_tag('tr').\html_writer::end_tag('table');
