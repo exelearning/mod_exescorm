@@ -1,47 +1,23 @@
 # Makefile to facilitate the use of Docker in the exelearning-web project
 
-# Get the host IP (works for Unix/macOS, adjust for Windows if needed)
-# HOST_IP = $(shell hostname -I | awk '{print $$1}')
-# Get the host IP using ifconfig (for macOS/Linux)
-HOST_IP = $(shell ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $$2}'
-
-# Detect the operating system
+# Detect the operating system and shell environment
 ifeq ($(OS),Windows_NT)
-	# We are on Windows
-	ifdef MSYSTEM
-		# MSYSTEM is defined, we are in MinGW or MSYS
-		SYSTEM_OS := unix
-	else ifdef CYGWIN
-		# CYGWIN is defined, we are in Cygwin
-		SYSTEM_OS := unix
-	else
-		# Not in MinGW or Cygwin
-		SYSTEM_OS := windows
-	endif
+    # Initially assume Windows shell
+    SHELLTYPE := windows
+    # Check if we are in Cygwin or MSYS (e.g., Git Bash)
+    ifdef MSYSTEM
+        SHELLTYPE := unix
+    else ifdef CYGWIN
+        SHELLTYPE := unix
+    endif
 else
-	# Not Windows, assuming Unix
-	SYSTEM_OS := unix
-endif
-
-# Get the host IP based on the operating system
-ifeq ($(SYSTEM_OS),windows)
-	# For Windows, use ipconfig and findstr to extract the IP
-	HOST_IP := $(shell for /F "tokens=2 delims=[]" %i in ('ping -n 1 -4 %COMPUTERNAME%') do @echo %i)
-else
-	# For Unix-like systems, use ifconfig or ip (adjust for macOS/Linux)
-	ifeq ($(shell uname), Darwin)
-		# For macOS, use ipconfig
-		HOST_IP := $(shell ipconfig getifaddr en0)
-	else
-		# For Linux, use ifconfig or ip to get the IP address
-		HOST_IP := $(shell hostname -I | cut -d' ' -f1)
-	endif
+    SHELLTYPE := unix
 endif
 
 # Check if Docker is running
 # This target verifies if Docker is installed and running on the system.
 check-docker:
-ifeq ($(SYSTEM_OS),windows)
+ifeq ($(SHELLTYPE),windows)
 	@echo "Detected system: Windows (cmd, powershell)"
 	@docker version > NUL 2>&1 || (echo. & echo Error: Docker is not running. Please make sure Docker is installed and running. & echo. & exit 1)
 else
@@ -52,7 +28,7 @@ endif
 # Check if the .env file exists, if not, copy from .env.dist
 # This target ensures that the .env file is present by copying it from .env.dist if it doesn't exist.
 check-env:
-ifeq ($(SYSTEM_OS),windows)
+ifeq ($(SHELLTYPE),windows)
 	@if not exist .env ( \
 		echo The .env file does not exist. Copying from .env.dist... && \
 		copy .env.dist .env \
@@ -64,19 +40,15 @@ else
 	fi
 endif
 
-# Show the host ip address
-ip:
-	@echo "The host ip address is: ${HOST_IP}"
-
 # Start Docker containers in interactive mode
 # This target builds and starts the Docker containers, allowing interaction with the terminal.
 up: check-docker
-	HOST_IP=$(HOST_IP) docker compose up --build
+	docker compose up --build
 
 # Start Docker containers in background mode (daemon)
 # This target builds and starts the Docker containers in the background.
 upd: check-docker
-	HOST_IP=$(HOST_IP) docker compose up -d    
+	docker compose up -d    
 
 # Stop and remove Docker containers
 # This target stops and removes all running Docker containers.
