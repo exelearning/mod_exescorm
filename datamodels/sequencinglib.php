@@ -64,7 +64,7 @@ function exescorm_seq_post_cond_rules($seq, $userid) {
 
 
 function exescorm_seq_evaluate_rollupcond($sco, $conditioncombination, $rollupruleconds, $userid) {
-    $bag = Array();
+    $bag = [];
     $con = "";
     $val = false;
     $unk = false;
@@ -242,7 +242,7 @@ function exescorm_seq_start_sequencing($scoid, $userid, $seq) {
         $seq->exception = 'SB.2.5-1';
         return $seq;
     }
-    $sco = $DB->get_record('exescorm_scoes', array('scoid' => $scoid, 'userid' => $userid));
+    $sco = $DB->get_record('exescorm_scoes', ['scoid' => $scoid, 'userid' => $userid]);
     if (($sco->parent == '/') && exescorm_is_leaf($sco)) { // If the activity is the root and is leaf.
         $seq->delivery = $sco;
     } else {
@@ -270,7 +270,7 @@ function exescorm_seq_resume_all_sequencing($scoid, $userid, $seq) {
         return $seq;
     }
     // We assign the sco to the delivery.
-    $seq->delivery = $DB->get_record('exescorm_scoes', array('scoid' => $scoid, 'userid' => $userid));
+    $seq->delivery = $DB->get_record('exescorm_scoes', ['scoid' => $scoid, 'userid' => $userid]);
 }
 
 function exescorm_seq_continue_sequencing($scoid, $userid, $seq) {
@@ -373,7 +373,7 @@ function exescorm_seq_retry_sequencing($scoid, $userid, $seq) {
 
 function exescorm_seq_choice_sequencing($sco, $userid, $seq) {
 
-    $avchildren = Array ();
+    $avchildren = [];
     $comancestor = null;
     $traverse = null;
 
@@ -546,7 +546,7 @@ function exescorm_seq_choice_sequencing($sco, $userid, $seq) {
             }
             $seq = exescorm_seq_choice_flow($constrained, $traverse, $seq);
             $actconsider = $seq->identifiedactivity;
-            $avdescendents = Array();
+            $avdescendents = [];
             $avdescendents = exescorm_get_available_descendents($actconsider);
             if (array_search ($avdescendents, $sco) !== false && $sco->id != $actconsider->id && $constrained->id != $sco->id ) {
                 $seq->delivery = null;
@@ -755,9 +755,9 @@ function exescorm_content_delivery_environment($seq, $userid) {
         $seq->exception = 'DB.2-1';
         return $seq;
     }
-    $track = $DB->get_record('exescorm_scoes_track', array('scoid' => $act->id,
+    $track = $DB->get_record('exescorm_scoes_track', ['scoid' => $act->id,
                                                         'userid' => $userid,
-                                                        'element' => 'suspendedactivity'));
+                                                        'element' => 'suspendedactivity']);
     if ($track != null) {
         $seq = exescorm_clear_suspended_activity($seq->delivery, $seq, $userid);
 
@@ -770,9 +770,9 @@ function exescorm_content_delivery_environment($seq, $userid) {
         if (!exescorm_seq_is('active', $activity->id, $userid)) {
             if (!isset($activity->tracked) || ($activity->tracked == 1)) {
                 if (!exescorm_seq_is('suspended', $activity->id, $userid)) {
-                    $r = $DB->get_record('exescorm_scoes_track', array('scoid' => $activity->id,
+                    $r = $DB->get_record('exescorm_scoes_track', ['scoid' => $activity->id,
                                                                     'userid' => $userid,
-                                                                    'element' => 'activityattemptcount'));
+                                                                    'element' => 'activityattemptcount']);
                     $r->value = ($r->value) + 1;
                     $DB->update_record('exescorm_scoes_track', $r);
                     if ($r->value == 1) {
@@ -809,12 +809,12 @@ function exescorm_content_delivery_environment($seq, $userid) {
 
     if (isset($activity->tracked) || ($activity->tracked == 0)) {
         // How should I track the info and what should I do to not record the information for the activity during delivery?
-        $atabsdur = $DB->get_record('exescorm_scoes_track', array('scoid' => $activity->id,
+        $atabsdur = $DB->get_record('exescorm_scoes_track', ['scoid' => $activity->id,
                                                                 'userid' => $userid,
-                                                                'element' => 'attemptabsoluteduration'));
-        $atexpdur = $DB->get_record('exescorm_scoes_track', array('scoid' => $activity->id,
+                                                                'element' => 'attemptabsoluteduration']);
+        $atexpdur = $DB->get_record('exescorm_scoes_track', ['scoid' => $activity->id,
                                                                 'userid' => $userid,
-                                                                'element' => 'attemptexperiencedduration'));
+                                                                'element' => 'attemptexperiencedduration']);
     }
     return $seq;
 }
@@ -822,9 +822,9 @@ function exescorm_content_delivery_environment($seq, $userid) {
 function exescorm_clear_suspended_activity($act, $seq, $userid) {
     global $DB;
     $currentact = $seq->currentactivity;
-    $track = $DB->get_record('exescorm_scoes_track', array('scoid' => $currentact->id,
+    $track = $DB->get_record('exescorm_scoes_track', ['scoid' => $currentact->id,
                                                         'userid' => $userid,
-                                                        'element' => 'suspendedactivity'));
+                                                        'element' => 'suspendedactivity']);
     if ($track != null) {
         $ancestors = exescorm_get_ancestors($act);
         $commonpos = exescorm_find_common_ancestor($ancestors, $currentact);
@@ -861,9 +861,9 @@ function exescorm_select_children_process($scoid, $userid) {
     $sco = exescorm_get_sco($scoid);
     if (!exescorm_is_leaf($sco)) {
         if (!exescorm_seq_is('suspended', $scoid, $userid) && !exescorm_seq_is('active', $scoid, $userid)) {
-            $r = $DB->get_record('exescorm_scoes_track', array('scoid' => $scoid,
+            $r = $DB->get_record('exescorm_scoes_track', ['scoid' => $scoid,
                                                             'userid' => $userid,
-                                                            'element' => 'selectiontiming'));
+                                                            'element' => 'selectiontiming']);
 
             switch ($r->value) {
                 case 'oneachnewattempt':
@@ -874,9 +874,9 @@ function exescorm_select_children_process($scoid, $userid) {
                     if (!exescorm_seq_is('activityprogressstatus', $scoid, $userid)) {
                         if (exescorm_seq_is('selectioncountsstatus', $scoid, $userid)) {
                             $childlist = '';
-                            $res = $DB->get_record('exescorm_scoes_track', array('scoid' => $scoid,
+                            $res = $DB->get_record('exescorm_scoes_track', ['scoid' => $scoid,
                                                                                 'userid' => $userid,
-                                                                                'element' => 'selectioncount'));
+                                                                                'element' => 'selectioncount']);
                             $i = ($res->value) - 1;
                             $children = exescorm_get_children($sco);
 
@@ -904,9 +904,9 @@ function exescorm_randomize_children_process($scoid, $userid) {
     $sco = exescorm_get_sco($scoid);
     if (!exescorm_is_leaf($sco)) {
         if (!exescorm_seq_is('suspended', $scoid, $userid) && !exescorm_seq_is('active', $scoid, $userid)) {
-            $r = $DB->get_record('exescorm_scoes_track', array('scoid' => $scoid,
+            $r = $DB->get_record('exescorm_scoes_track', ['scoid' => $scoid,
                                                             'userid' => $userid,
-                                                            'element' => 'randomizationtiming'));
+                                                            'element' => 'randomizationtiming']);
 
             switch ($r->value) {
                 case 'never':
@@ -916,7 +916,7 @@ function exescorm_randomize_children_process($scoid, $userid) {
                 case 'once':
                     if (!exescorm_seq_is('activityprogressstatus', $scoid, $userid)) {
                         if (exescorm_seq_is('randomizechildren', $scoid, $userid)) {
-                            $childlist = array();
+                            $childlist = [];
                             $res = exescorm_get_available_children($sco);
                             $i = count($res) - 1;
                             $children = $res->value;

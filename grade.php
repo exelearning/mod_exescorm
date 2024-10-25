@@ -31,11 +31,11 @@ if (! $cm = get_coursemodule_from_id('exescorm', $id)) {
     throw new \moodle_exception('invalidcoursemodule');
 }
 
-if (! $exescorm = $DB->get_record('exescorm', array('id' => $cm->instance))) {
+if (! $exescorm = $DB->get_record('exescorm', ['id' => $cm->instance])) {
     throw new \moodle_exception('invalidcoursemodule');
 }
 
-if (! $course = $DB->get_record('course', array('id' => $exescorm->course))) {
+if (! $course = $DB->get_record('course', ['id' => $exescorm->course])) {
     throw new \moodle_exception('coursemisconf');
 }
 

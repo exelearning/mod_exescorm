@@ -39,7 +39,7 @@ $aiccdata = optional_param('aicc_data', '', PARAM_RAW);
 
 $cfgexescorm = get_config('exescorm');
 
-$url = new moodle_url('/mod/exescorm/aicc.php', array('command' => $command, 'session_id' => $sessionid));
+$url = new moodle_url('/mod/exescorm/aicc.php', ['command' => $command, 'session_id' => $sessionid]);
 if ($aiccdata !== 0) {
     $url->param('aicc_data', $aiccdata);
 }
@@ -57,7 +57,7 @@ if (empty($cfgexescorm->allowaicchacp)) {
     if (empty($exescormsession)) {
         throw new \moodle_exception('invalidhacpsession', 'exescorm');
     }
-    $aiccuser = $DB->get_record('user', array('id' => $exescormsession->userid), 'id,username,lastname,firstname', MUST_EXIST);
+    $aiccuser = $DB->get_record('user', ['id' => $exescormsession->userid], 'id,username,lastname,firstname', MUST_EXIST);
 }
 
 if (!empty($command)) {
@@ -83,7 +83,7 @@ if (!empty($command)) {
     }
 
     if ($sco = exescorm_get_sco($scoid, EXESCORM_SCO_ONLY)) {
-        if (!$exescorm = $DB->get_record('exescorm', array('id' => $sco->exescorm))) {
+        if (!$exescorm = $DB->get_record('exescorm', ['id' => $sco->exescorm])) {
             throw new \moodle_exception('cannotcallscript');
         }
     } else {
@@ -99,7 +99,7 @@ if (!empty($command)) {
     exescorm_debug_log_write("aicc", "HACP Request:\r\n$aiccrequest", $scoid);
     ob_start();
 
-    if ($exescorm = $DB->get_record('exescorm', array('id' => $sco->exescorm))) {
+    if ($exescorm = $DB->get_record('exescorm', ['id' => $sco->exescorm])) {
         switch ($command) {
             case 'getparam':
                 if ($status == 'Not Initialized') {
@@ -233,7 +233,7 @@ if (!empty($command)) {
                                                                         $attempt, $element, $value);
                                         break;
                                         case 'cmi.core.lesson_status':
-                                            $statuses = array(
+                                            $statuses = [
                                                        'passed' => 'passed',
                                                        'completed' => 'completed',
                                                        'failed' => 'failed',
@@ -245,16 +245,16 @@ if (!empty($command)) {
                                                        'f' => 'failed',
                                                        'i' => 'incomplete',
                                                        'b' => 'browsed',
-                                                       'n' => 'not attempted'
-                                                       );
-                                            $exites = array(
+                                                       'n' => 'not attempted',
+                                                       ];
+                                            $exites = [
                                                        'logout' => 'logout',
                                                        'time-out' => 'time-out',
                                                        'suspend' => 'suspend',
                                                        'l' => 'logout',
                                                        't' => 'time-out',
                                                        's' => 'suspend',
-                                                       );
+                                                       ];
                                             $values = explode(',', $value);
                                             $value = '';
                                             if (count($values) > 1) {
@@ -402,11 +402,11 @@ if (!empty($command)) {
             case 'exitau':
                 if ($status == 'Running') {
                     if (isset($exescormsession->sessiontime) && ($exescormsession->sessiontime != '')) {
-                        if ($track = $DB->get_record('exescorm_scoes_track', array("userid" => $aiccuser->id,
+                        if ($track = $DB->get_record('exescorm_scoes_track', ["userid" => $aiccuser->id,
                                                                                 "exescormid" => $exescorm->id,
                                                                                 "scoid" => $sco->id,
                                                                                 "attempt" => $attempt,
-                                                                                "element" => 'cmi.core.total_time'))) {
+                                                                                "element" => 'cmi.core.total_time'])) {
                             // Add session_time to total_time.
                             $value = exescorm_add_time($track->value, $exescormsession->sessiontime);
                             $track->value = $value;

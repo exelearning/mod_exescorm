@@ -44,7 +44,7 @@ function exescorm_get_completion_state($course, $cm, $userid, $type) {
     $result = $type;
 
     // Get exescorm.
-    if (!$exescorm = $DB->get_record('exescorm', array('id' => $cm->instance))) {
+    if (!$exescorm = $DB->get_record('exescorm', ['id' => $cm->instance])) {
         throw new \moodle_exception('cannotfindexescorm');
     }
     // Only check for existence of tracks and return false if completionstatusrequired or completionscorerequired
@@ -72,7 +72,7 @@ function exescorm_get_completion_state($course, $cm, $userid, $type) {
                 'cmi.score.raw'
             )
             ",
-            array($exescorm->id, $userid)
+            [$exescorm->id, $userid]
         );
 
         if (!$tracks) {
@@ -87,9 +87,9 @@ function exescorm_get_completion_state($course, $cm, $userid, $type) {
         $statuses = array_flip(exescorm_status_options());
         $nstatus = 0;
         // Check any track for these values.
-        $scostatus = array();
+        $scostatus = [];
         foreach ($tracks as $track) {
-            if (!in_array($track->element, array('cmi.core.lesson_status', 'cmi.completion_status', 'cmi.success_status'))) {
+            if (!in_array($track->element, ['cmi.core.lesson_status', 'cmi.completion_status', 'cmi.success_status'])) {
                 continue;
             }
             if (array_key_exists($track->value, $statuses)) {
@@ -100,7 +100,7 @@ function exescorm_get_completion_state($course, $cm, $userid, $type) {
 
         if (!empty($exescorm->completionstatusallscos)) {
             // Iterate over all scos and make sure each has a lesson_status.
-            $scos = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id, 'exescormtype' => 'sco'));
+            $scos = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id, 'exescormtype' => 'sco']);
             foreach ($scos as $sco) {
                 if (empty($scostatus[$sco->id])) {
                     return completion_info::aggregate_completion_states($type, $result, false);
@@ -119,7 +119,7 @@ function exescorm_get_completion_state($course, $cm, $userid, $type) {
         $maxscore = -1;
 
         foreach ($tracks as $track) {
-            if (!in_array($track->element, array('cmi.core.score.raw', 'cmi.score.raw'))) {
+            if (!in_array($track->element, ['cmi.core.score.raw', 'cmi.score.raw'])) {
                 continue;
             }
 

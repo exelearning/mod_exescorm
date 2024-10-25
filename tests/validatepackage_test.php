@@ -39,14 +39,14 @@ class validatepackage_test extends \advanced_testcase {
      */
     protected function create_stored_file_from_path($filepath) {
         $syscontext = \context_system::instance();
-        $filerecord = array(
+        $filerecord = [
             'contextid' => $syscontext->id,
             'component' => 'mod_exescorm',
             'filearea'  => 'unittest',
             'itemid'    => 0,
             'filepath'  => '/',
-            'filename'  => basename($filepath)
-        );
+            'filename'  => basename($filepath),
+        ];
 
         $fs = get_file_storage();
         return $fs->create_file_from_pathname($filerecord, $filepath);

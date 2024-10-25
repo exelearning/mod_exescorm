@@ -27,17 +27,17 @@ if (!empty($id)) {
     if (! $cm = get_coursemodule_from_id('exescorm', $id)) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
+    if (! $course = $DB->get_record('course', ['id' => $cm->course])) {
         throw new \moodle_exception('coursemisconf');
     }
-    if (! $exescorm = $DB->get_record('exescorm', array('id' => $cm->instance))) {
+    if (! $exescorm = $DB->get_record('exescorm', ['id' => $cm->instance])) {
         throw new \moodle_exception('invalidcoursemodule');
     }
 } else if (!empty($a)) {
-    if (! $exescorm = $DB->get_record('exescorm', array('id' => $a))) {
+    if (! $exescorm = $DB->get_record('exescorm', ['id' => $a])) {
         throw new \moodle_exception('coursemisconf');
     }
-    if (! $course = $DB->get_record('course', array('id' => $exescorm->course))) {
+    if (! $course = $DB->get_record('course', ['id' => $exescorm->course])) {
         throw new \moodle_exception('coursemisconf');
     }
     if (! $cm = get_coursemodule_from_instance('exescorm', $exescorm->id, $course->id)) {
@@ -47,7 +47,7 @@ if (!empty($id)) {
     throw new \moodle_exception('missingparameter');
 }
 
-$PAGE->set_url('/mod/exescorm/loadSCO.php', array('scoid' => $scoid, 'id' => $cm->id));
+$PAGE->set_url('/mod/exescorm/loadSCO.php', ['scoid' => $scoid, 'id' => $cm->id]);
 
 if (!isloggedin()) { // Prevent login page from being shown in iframe.
     // Using simple html instead of exceptions here as shown inside iframe/object.

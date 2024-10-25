@@ -39,10 +39,10 @@ if (!isset($cm)) {
 
 $contextmodule = context_module::instance($cm->id);
 
-$tabs = array();
-$row = array();
-$inactive = array();
-$activated = array();
+$tabs = [];
+$row = [];
+$inactive = [];
+$activated = [];
 
 if (has_capability('mod/exescorm:savetrack', $contextmodule)) {
     $row[] = new tabobject('info', "$CFG->wwwroot/mod/exescorm/view.php?id=$cm->id", get_string('modulename', 'mod_exescorm'));
@@ -56,7 +56,7 @@ if (!($currenttab == 'info' && count($row) == 1)) {
 }
 
 if ($currenttab == 'reports' && !empty($reportlist) && count($reportlist) > 1) {
-    $row2 = array();
+    $row2 = [];
     foreach ($reportlist as $rep) {
         $row2[] = new tabobject('exescorm_'.$rep, $CFG->wwwroot."/mod/exescorm/report.php?id=$cm->id&mode=$rep",
                                 get_string('pluginname', 'exescormreport_'.$rep));

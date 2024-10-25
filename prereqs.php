@@ -30,17 +30,17 @@ if (!empty($id)) {
     if (! $cm = get_coursemodule_from_id('exescorm', $id)) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
+    if (! $course = $DB->get_record("course", ["id" => $cm->course])) {
         throw new \moodle_exception('coursemisconf');
     }
-    if (! $exescorm = $DB->get_record("exescorm", array("id" => $cm->instance))) {
+    if (! $exescorm = $DB->get_record("exescorm", ["id" => $cm->instance])) {
         throw new \moodle_exception('invalidcoursemodule');
     }
 } else if (!empty($a)) {
-    if (! $exescorm = $DB->get_record("exescorm", array("id" => $a))) {
+    if (! $exescorm = $DB->get_record("exescorm", ["id" => $a])) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record("course", array("id" => $exescorm->course))) {
+    if (! $course = $DB->get_record("course", ["id" => $exescorm->course])) {
         throw new \moodle_exception('coursemisconf');
     }
     if (! $cm = get_coursemodule_from_instance("exescorm", $exescorm->id, $course->id)) {
@@ -52,12 +52,12 @@ if (!empty($id)) {
 
 // PARAM_RAW is used for $currentorg, validate it against records stored in the table.
 if (!empty($currentorg)) {
-    if (!$DB->record_exists('exescorm_scoes', array('exescorm' => $exescorm->id, 'identifier' => $currentorg))) {
+    if (!$DB->record_exists('exescorm_scoes', ['exescorm' => $exescorm->id, 'identifier' => $currentorg])) {
         $currentorg = '';
     }
 }
 
-$PAGE->set_url('/mod/exescorm/prereqs.php', array('scoid' => $scoid, 'attempt' => $attempt, 'id' => $cm->id));
+$PAGE->set_url('/mod/exescorm/prereqs.php', ['scoid' => $scoid, 'attempt' => $attempt, 'id' => $cm->id]);
 
 require_login($course, false, $cm);
 

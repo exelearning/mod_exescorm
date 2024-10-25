@@ -40,7 +40,7 @@ abstract class activity_base extends \core_analytics\local\indicator\community_o
      */
     protected function feedback_viewed_events() {
         // Any view after the data graded counts as feedback viewed.
-        return array('\mod_exescorm\event\course_module_viewed');
+        return ['\mod_exescorm\event\course_module_viewed'];
     }
 
     /**
