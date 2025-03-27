@@ -632,6 +632,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
      * Only available on moodleform_mod.
      *
      * @param stdClass $data the form data to be modified.
+     * @throws moodle_exception
      */
     public function data_postprocessing($data) {
         parent::data_postprocessing($data);
@@ -670,14 +671,22 @@ class mod_exescorm_mod_form extends moodleform_mod {
         if ($data->exescormtype === EXESCORM_TYPE_EXESCORMNET ) {
             if (! isset($data->showgradingmanagement)) {
                 if (isset($data->exebutton)) {
-                    // Editar y visualizar.
+                    // Edit and view.
                     $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $data->coursemodule, 'forceview' => 1]);
                 } else if (isset($data->exebutton2)) {
-                    // Editar y volver al curso.
+                    // Edit and return to the course.
                     $returnto = course_get_url($data->course, $data->coursesection ?? null, ['sr' => $data->sr]);
                 } else {
-                    // Fallback por si no se pulsó ningún botón personalizado.
+                    // Fallback in case no custom button was pressed.
                     $returnto = course_get_url($data->course);
+                }
+
+                // If for some reason the return URL is the qualifier, we force redirection to the activity.
+                if (strpos($returnto->out(false), '/grade/report/') !== false) {
+                    $returnto = new moodle_url("/mod/exescorm/view.php", [
+                            'id' => $data->coursemodule,
+                            'forceview' => 1
+                    ]);
                 }
                 // Set this becouse modedit.php expects it.
                 $data->submitbutton = true;
