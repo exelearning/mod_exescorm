@@ -26,7 +26,10 @@
 
 namespace mod_exescorm\exeonline;
 
+use coding_exception;
+use dml_exception;
 use mod_exescorm\exeonline\token_manager;
+use moodle_exception;
 use moodle_url;
 
 class exescorm_redirector {
@@ -58,6 +61,9 @@ class exescorm_redirector {
      * @param moodle_url|null $returnto
      *
      * @return moodle_url
+     * @throws dml_exception
+     * @throws coding_exception
+     * @throws moodle_exception
      */
     public static function get_redirection_url(int $cmid, moodle_url $returnto = null, string $action = null) {
         global $CFG, $USER;
@@ -87,7 +93,7 @@ class exescorm_redirector {
         }
         $url = $exeonlineurl . $target;
 
-        return new \moodle_url($url, $params);
+        return new moodle_url($url, $params);
     }
 
 
