@@ -306,12 +306,12 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->hideIf('editonlinearr', 'exescormtype', 'noteq', EXESCORM_TYPE_EXESCORMNET);
     }
 
-
     /**
      * Generate buttons within a group with alternative texts.
      *
      * @param string $groupname
      * @return void
+     * @throws coding_exception
      */
     public function add_edit_online_buttons($groupname) {
         $submitlabel = get_string('exescorm:editonlineanddisplay', 'mod_exescorm');
@@ -337,7 +337,6 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->addGroup($buttonarray, $groupname, '', [' '], false);
         $mform->setType($groupname, PARAM_RAW);
     }
-
 
     public function data_preprocessing(&$defaultvalues) {
         global $CFG, $COURSE;
@@ -671,11 +670,14 @@ class mod_exescorm_mod_form extends moodleform_mod {
         if ($data->exescormtype === EXESCORM_TYPE_EXESCORMNET ) {
             if (! isset($data->showgradingmanagement)) {
                 if (isset($data->exebutton)) {
-                    // Return to activity. If it this a new activity we don't have a coursemodule yet. We'll fix it in redirector.
+                    // Editar y visualizar.
                     $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $data->coursemodule, 'forceview' => 1]);
-                } else {
-                    // Return to course.
+                } else if (isset($data->exebutton2)) {
+                    // Editar y volver al curso.
                     $returnto = course_get_url($data->course, $data->coursesection ?? null, ['sr' => $data->sr]);
+                } else {
+                    // Fallback por si no se pulsó ningún botón personalizado.
+                    $returnto = course_get_url($data->course);
                 }
                 // Set this becouse modedit.php expects it.
                 $data->submitbutton = true;
