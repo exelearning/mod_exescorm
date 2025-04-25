@@ -42,36 +42,32 @@ endif
 
 # Start Docker containers in interactive mode
 # This target builds and starts the Docker containers, allowing interaction with the terminal.
-up: check-docker check-env
-	docker compose up
+up: check-docker
+	docker compose up --build
 
 # Start Docker containers in background mode (daemon)
 # This target builds and starts the Docker containers in the background.
-upd: check-docker check-env
+upd: check-docker
 	docker compose up -d    
 
 # Stop and remove Docker containers
 # This target stops and removes all running Docker containers.
-down: check-docker check-env
+down: check-docker
 	docker compose down
 
 # Pull the latest images from the registry
 # This target pulls the latest Docker images from the registry.
-pull: check-docker check-env
+pull: check-docker
 	docker compose -f docker-compose.yml pull
 
 # Build or rebuild Docker containers
 # This target builds or rebuilds the Docker containers.
-build: check-docker check-env
-	@if [ -z "$$(grep ^EXELEARNING_WEB_SOURCECODE_PATH .env | cut -d '=' -f2)" ]; then \
-		echo "Error: EXELEARNING_WEB_SOURCECODE_PATH is not defined or empty in the .env file"; \
-		exit 1; \
-	fi
+build: check-docker
 	docker compose build
 
 # Open a shell inside the moodle container
 # This target opens an interactive shell session inside the running Moodle container.
-shell: check-docker check-env
+shell: check-docker
 	docker compose exec moodle sh
 
 # Clean up and stop Docker containers, removing volumes and orphan containers
