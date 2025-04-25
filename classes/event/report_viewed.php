@@ -74,7 +74,7 @@ class report_viewed extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/exescorm/report.php', ['id' => $this->contextinstanceid, 'mode' => $this->other['mode'] ]);
+        return new \moodle_url('/mod/exescorm/report.php', ['id' => $this->contextinstanceid, 'mode' => $this->other['mode'], ]);
     }
 
     /**
@@ -83,8 +83,8 @@ class report_viewed extends \core\event\base {
      * @return array of parameters to be passed to legacy add_to_log() function.
      */
     protected function get_legacy_logdata() {
-        return [$this->courseid, 'exescorm', 'report', 'report.php?id=' . $this->contextinstanceid .
-                '&mode=' . $this->other['mode'], $this->other['exescormid'], $this->contextinstanceid];
+        return array($this->courseid, 'exescorm', 'report', 'report.php?id=' . $this->contextinstanceid .
+                '&mode=' . $this->other['mode'], $this->other['exescormid'], $this->contextinstanceid);
     }
 
     /**
@@ -106,8 +106,8 @@ class report_viewed extends \core\event\base {
     }
 
     public static function get_other_mapping() {
-        $othermapped = [];
-        $othermapped['exescormid'] = ['db' => 'exescorm', 'restore' => 'exescorm'];
+        $othermapped = array();
+        $othermapped['exescormid'] = array('db' => 'exescorm', 'restore' => 'exescorm');
 
         return $othermapped;
     }

@@ -41,7 +41,7 @@ class mod_exescorm_report_objectives_settings extends moodleform {
 
         $mform->addElement('header', 'preferencespage', get_string('preferencespage', 'mod_exescorm'));
 
-        $options = [];
+        $options = array();
         if ($COURSE->id != SITEID) {
             $options[EXESCORM_REPORT_ATTEMPTS_ALL_STUDENTS] = get_string('optallstudents', 'mod_exescorm');
             $options[EXESCORM_REPORT_ATTEMPTS_STUDENTS_WITH] = get_string('optattemptsonly', 'mod_exescorm');

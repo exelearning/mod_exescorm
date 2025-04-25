@@ -72,13 +72,13 @@ function exescorm_report_list($context) {
 function get_exescorm_question_count($exescormid) {
     global $DB;
     $count = 0;
-    $params = [];
+    $params = array();
     $select = "exescormid = ? AND ";
     $select .= $DB->sql_like("element", "?", false);
     $params[] = $exescormid;
     $params[] = "cmi.interactions_%.id";
     $rs = $DB->get_recordset_select("exescorm_scoes_track", $select, $params, 'element');
-    $keywords = ["cmi.interactions_", ".id"];
+    $keywords = array("cmi.interactions_", ".id");
     if ($rs->valid()) {
         foreach ($rs as $record) {
             $num = trim(str_ireplace($keywords, '', $record->element));

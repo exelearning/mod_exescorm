@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Core Report class of graphs reporting plugin
  *
@@ -152,7 +151,7 @@ class report extends \mod_exescorm\report {
             $labels[] = ($i - 1) * self::BANDWIDTH . ' - ' . $i * self::BANDWIDTH;
         }
 
-        if ($scoes = $DB->get_records('exescorm_scoes', ["exescorm" => $exescorm->id], 'sortorder, id')) {
+        if ($scoes = $DB->get_records('exescorm_scoes', array("exescorm" => $exescorm->id), 'sortorder, id')) {
             foreach ($scoes as $sco) {
                 if ($sco->launch != '') {
 

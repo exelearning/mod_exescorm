@@ -19,10 +19,10 @@ require_once($CFG->dirroot.'/mod/exescorm/locallib.php');
 
 $id = required_param('id', PARAM_INT);   // Course id.
 
-$PAGE->set_url('/mod/exescorm/index.php', ['id' => $id]);
+$PAGE->set_url('/mod/exescorm/index.php', array('id' => $id));
 
 if (!empty($id)) {
-    if (!$course = $DB->get_record('course', ['id' => $id])) {
+    if (!$course = $DB->get_record('course', array('id' => $id))) {
         throw new \moodle_exception('invalidcourseid');
     }
 } else {
@@ -33,7 +33,7 @@ require_course_login($course);
 $PAGE->set_pagelayout('incourse');
 
 // Trigger instances list viewed event.
-$event = \mod_exescorm\event\course_module_instance_list_viewed::create(['context' => context_course::instance($course->id) ]);
+$event = \mod_exescorm\event\course_module_instance_list_viewed::create(['context' => context_course::instance($course->id), ]);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
@@ -66,11 +66,11 @@ $table = new html_table();
 
 if ($usesections) {
     $strsectionname = get_string('sectionname', 'format_'.$course->format);
-    $table->head = [$strsectionname, $strname, $strsummary, $strreport];
-    $table->align = ["center", "left", "left", "left"];
+    $table->head = array ($strsectionname, $strname, $strsummary, $strreport);
+    $table->align = array ("center", "left", "left", "left");
 } else {
-    $table->head = [$strlastmodified, $strname, $strsummary, $strreport];
-    $table->align = ["left", "left", "left", "left"];
+    $table->head = array ($strlastmodified, $strname, $strsummary, $strreport);
+    $table->align = array ("left", "left", "left", "left");
 }
 
 foreach ($exescorms as $exescorm) {
@@ -98,13 +98,13 @@ foreach ($exescorms as $exescorm) {
         $report = exescorm_grade_user($exescorm, $USER->id);
         $reportshow = get_string('score', 'mod_exescorm').": ".$report;
     }
-    $options = (object)['noclean' => true];
+    $options = (object)array('noclean' => true);
     if (!$exescorm->visible) {
         // Show dimmed if the mod is hidden.
-        $table->data[] = [$tt, html_writer::link('view.php?id='.$exescorm->coursemodule,
+        $table->data[] = array ($tt, html_writer::link('view.php?id='.$exescorm->coursemodule,
                                                         format_string($exescorm->name),
-                                                        ['class' => 'dimmed']),
-                                format_module_intro('exescorm', $exescorm, $exescorm->coursemodule), $reportshow];
+                                                        array('class' => 'dimmed')),
+                                format_module_intro('exescorm', $exescorm, $exescorm->coursemodule), $reportshow);
     } else {
         // Show normal if the mod is visible.
         $table->data[] = [$tt,

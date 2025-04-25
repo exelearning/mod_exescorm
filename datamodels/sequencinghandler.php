@@ -26,18 +26,18 @@ $request = optional_param('request', '', PARAM_RAW);  // Scorm ID.
 
 if (!empty($id)) {
     $cm = get_coursemodule_from_id('exescorm', $id, 0, false, MUST_EXIST);
-    $course = $DB->get_record("course", ["id" => $cm->course], '*', MUST_EXIST);
-    $exescorm = $DB->get_record("exescorm", ["id" => $cm->instance], '*', MUST_EXIST);
+    $course = $DB->get_record("course", array("id" => $cm->course), '*', MUST_EXIST);
+    $exescorm = $DB->get_record("exescorm", array("id" => $cm->instance), '*', MUST_EXIST);
 } else if (!empty($a)) {
-    $exescorm = $DB->get_record("exescorm", ["id" => $a], '*', MUST_EXIST);
-    $course = $DB->get_record("course", ["id" => $exescorm->course], '*', MUST_EXIST);
+    $exescorm = $DB->get_record("exescorm", array("id" => $a), '*', MUST_EXIST);
+    $course = $DB->get_record("course", array("id" => $exescorm->course), '*', MUST_EXIST);
     $cm = get_coursemodule_from_instance("exescorm", $exescorm->id, $course->id, false, MUST_EXIST);
 } else {
     throw new \moodle_exception('missingparameter');
 }
 
 $PAGE->set_url('/mod/exescorm/datamodels/sequencinghandler.php',
-    ['scoid' => $scoid, 'attempt' => $attempt, 'id' => $cm->id, 'function' => $function, 'request' => $request]);
+    array('scoid' => $scoid, 'attempt' => $attempt, 'id' => $cm->id, 'function' => $function, 'request' => $request));
 
 require_login($course, false, $cm);
 

@@ -24,9 +24,9 @@
 
 namespace exescormreport_objectives\privacy;
 
-use core_privacy\local\metadata\collection;
-use core_privacy\local\request\transform;
-use core_privacy\local\request\writer;
+use \core_privacy\local\metadata\collection;
+use \core_privacy\local\request\transform;
+use \core_privacy\local\request\writer;
 
 /**
  * Privacy Subsystem for exescormreport_objectives.
@@ -44,7 +44,7 @@ class provider implements
      * @param  collection $collection The initialised item collection to add items to.
      * @return collection A listing of user data stored through this system.
      */
-    public static function get_metadata(collection $collection): collection {
+    public static function get_metadata(collection $collection) : collection {
         // User preferences shared between different exescorm reports.
         $collection->add_user_preference('exescorm_report_pagesize', 'privacy:metadata:preference:exescorm_report_pagesize');
 
