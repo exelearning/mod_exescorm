@@ -8,7 +8,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14
+        image: postgres:13
         env:
           POSTGRES_USER: 'postgres'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
@@ -30,8 +30,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1']
-        moodle-branch: ['MOODLE_401_STABLE']
+        php: ['8.1', '8.3']
+        moodle-branch: ['MOODLE_401_STABLE', 'MOODLE_404_STABLE']
         database: [pgsql, mariadb]
 
     steps:
@@ -106,7 +106,7 @@ jobs:
       - name: Behat features
         id: behat
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci behat --profile chrome --scss-deprecations
+        run: moodle-plugin-ci behat --profile chrome
 
       - name: Upload Behat Faildump
         if: ${{ failure() && steps.behat.outcome == 'failure' }}
