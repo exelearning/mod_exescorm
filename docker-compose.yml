@@ -3,23 +3,23 @@ version: "3"
 services:
 
   exelearning-web:
-    image: ghcr.io/exelearning/exelearning-web:${EXELEARNING_WEB_CONTAINER_TAG}
-    build: ${EXELEARNING_WEB_SOURCECODE_PATH:-} # If EXELEARNING_WEB__SOURCECODE_PATH is not defined, skip build
+    image: ghcr.io/exelearning/exelearning-web:latest
+    # build: ${EXELEARNING_WEB_PATH:-} # If EXELEARNING_WEB_PATH is not defined, skip build
     ports:
-      - ${APP_PORT}:8080
+      - 8080:8080
     restart: unless-stopped  # Restart the container unless it is stopped manually
     volumes:
       - mnt-data:/mnt/data:rw  # Mount the volume for persistent data
     environment:
-      APP_ENV: ${APP_ENV}
-      APP_DEBUG: ${APP_DEBUG}
-      XDEBUG_MODE: ${XDEBUG_MODE}
-      APP_SECRET: ${APP_SECRET}
+      APP_ENV: prod
+      APP_DEBUG: 0
+      XDEBUG_MODE: off
+      APP_SECRET: CHANGE_THIS_TO_A_SECRET
       PRE_CONFIGURE_COMMANDS:
       POST_CONFIGURE_COMMANDS: |
         echo "this is a test line 1"
         echo "this is a test line 2"
-        php bin/console app:create-user ${TEST_USER_EMAIL} ${TEST_USER_PASSWORD} ${TEST_USER_USERNAME} --no-fail
+        php bin/console app:create-user test@exelearning.net testpassword testuser --no-fail
 
   moodle:
     image: erseco/alpine-moodle
@@ -36,19 +36,19 @@ services:
       DB_PASS: moodle
       DB_PREFIX: mdl_
       DEBUG: true
-      MOODLE_EMAIL:  ${TEST_USER_EMAIL}
+      MOODLE_EMAIL: test@exelearning.net
       MOODLE_LANGUAGE: es
-      MOODLE_SITENAME: Moodle-eXeLearning
-      MOODLE_USERNAME: ${TEST_USER_USERNAME}
-      MOODLE_PASSWORD: ${TEST_USER_PASSWORD}
+      MOODLE_SITENAME: New-Site
+      MOODLE_USERNAME: testuser
+      MOODLE_PASSWORD: testpassword
       PRE_CONFIGURE_COMMANDS: |
         echo 'This is a pre-configure command'
       POST_CONFIGURE_COMMANDS: |
         echo 'This is a post-configure command'
         echo 'Forcing upgrade to re-install exe plugin...'
         php admin/cli/upgrade.php --non-interactive
-        php admin/cli/cfg.php --component=exescorm --name=exeonlinebaseuri --set=http://localhost:${APP_PORT}
-        php admin/cli/cfg.php --component=exescorm --name=hmackey1 --set=${APP_SECRET}
+        php admin/cli/cfg.php --component=exescorm --name=exeonlinebaseuri --set=http://localhost:8080
+        php admin/cli/cfg.php --component=exescorm --name=hmackey1 --set=CHANGE_THIS_TO_A_SECRET
     ports:
       - 80:8080
     volumes:
