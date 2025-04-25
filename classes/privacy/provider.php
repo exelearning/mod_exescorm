@@ -50,13 +50,13 @@ class provider implements
      * @param   collection $collection The initialised collection to add items to.
      * @return  collection A listing of user data stored through this system.
      */
-    public static function get_metadata(collection $collection): collection {
+    public static function get_metadata(collection $collection) : collection {
         $collection->add_database_table('exescorm_scoes_track', [
                 'userid' => 'privacy:metadata:userid',
                 'attempt' => 'privacy:metadata:attempt',
                 'element' => 'privacy:metadata:scoes_track:element',
                 'value' => 'privacy:metadata:scoes_track:value',
-                'timemodified' => 'privacy:metadata:timemodified',
+                'timemodified' => 'privacy:metadata:timemodified'
             ], 'privacy:metadata:exescorm_scoes_track');
 
         $collection->add_database_table('exescorm_aicc_session', [
@@ -71,7 +71,7 @@ class provider implements
             ], 'privacy:metadata:exescorm_aicc_session');
 
         $collection->add_external_location_link('aicc', [
-                'data' => 'privacy:metadata:aicc:data',
+                'data' => 'privacy:metadata:aicc:data'
             ], 'privacy:metadata:aicc:externalpurpose');
 
         return $collection;
@@ -83,7 +83,7 @@ class provider implements
      * @param int $userid The user to search.
      * @return contextlist $contextlist The contextlist containing the list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid(int $userid): contextlist {
+    public static function get_contexts_for_userid(int $userid) : contextlist {
         $sql = "SELECT ctx.id
                   FROM {%s} ss
                   JOIN {modules} m
@@ -199,7 +199,7 @@ class provider implements
             array_walk($attemptsdata, function($data, $attempt) use ($context) {
                 $subcontext = [
                     get_string('myattempts', 'mod_exescorm'),
-                    get_string('attempt', 'mod_exescorm'). " $attempt",
+                    get_string('attempt', 'mod_exescorm'). " $attempt"
                 ];
                 writer::with_context($context)->export_data(
                     $subcontext,
@@ -247,7 +247,7 @@ class provider implements
         array_walk($alldata, function($data, $contextid) {
             $context = \context::instance_by_id($contextid);
             $subcontext = [
-                get_string('myaiccsessions', 'mod_exescorm'),
+                get_string('myaiccsessions', 'mod_exescorm')
             ];
             writer::with_context($context)->export_data(
                 $subcontext,

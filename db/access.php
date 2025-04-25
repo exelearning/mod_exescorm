@@ -24,78 +24,78 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = [
+$capabilities = array(
 
-    'mod/exescorm:addinstance' => [
+    'mod/exescorm:addinstance' => array(
         'riskbitmask' => RISK_XSS,
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => [
+        'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-        ],
-        'clonepermissionsfrom' => 'moodle/course:manageactivities',
-    ],
+            'manager' => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'moodle/course:manageactivities'
+    ),
 
-    'mod/exescorm:viewreport' => [
+    'mod/exescorm:viewreport' => array(
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
+        'archetypes' => array(
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-        ],
-    ],
+            'manager' => CAP_ALLOW
+        )
+    ),
 
-    'mod/exescorm:skipview' => [
+    'mod/exescorm:skipview' => array(
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
-            'student' => CAP_ALLOW,
-        ],
-    ],
+        'archetypes' => array(
+            'student' => CAP_ALLOW
+        )
+    ),
 
-    'mod/exescorm:savetrack' => [
+    'mod/exescorm:savetrack' => array(
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
+        'archetypes' => array(
             'student' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-        ],
-    ],
+            'manager' => CAP_ALLOW
+        )
+    ),
 
-    'mod/exescorm:viewscores' => [
+    'mod/exescorm:viewscores' => array(
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
+        'archetypes' => array(
             'student' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-        ],
-    ],
-    'mod/exescorm:deleteresponses' => [
+            'manager' => CAP_ALLOW
+        )
+    ),
+    'mod/exescorm:deleteresponses' => array(
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
+        'archetypes' => array(
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-        ],
-    ],
-    'mod/exescorm:deleteownresponses' => [
+            'manager' => CAP_ALLOW
+        )
+    ),
+    'mod/exescorm:deleteownresponses' => array(
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [],
-    ],
-];
+        'archetypes' => array()
+    )
+);
 

@@ -42,7 +42,7 @@ class mod_exescorm_generator extends testing_module_generator {
         $cfgexescorm = get_config('exescorm');
 
         // Add default values for exescorm.
-        $record = (array)$record + [
+        $record = (array)$record + array(
             'exescormtype' => EXESCORM_TYPE_LOCAL,
             'packagefile' => '',
             'packageurl' => '',
@@ -68,8 +68,8 @@ class mod_exescorm_generator extends testing_module_generator {
             'lastattemptlock' => $cfgexescorm->lastattemptlock,
             'forcecompleted' => $cfgexescorm->forcecompleted,
             'masteryoverride' => $cfgexescorm->masteryoverride,
-            'auto' => $cfgexescorm->auto,
-        ];
+            'auto' => $cfgexescorm->auto
+        );
         if (empty($record['packagefilepath'])) {
             $record['packagefilepath'] = $CFG->dirroot.'/mod/exescorm/tests/packages/singlescobasic.zip';
         }
@@ -91,9 +91,9 @@ class mod_exescorm_generator extends testing_module_generator {
             $record['packagefile'] = file_get_unused_draft_itemid();
 
             // Add actual file there.
-            $filerecord = ['component' => 'user', 'filearea' => 'draft',
+            $filerecord = array('component' => 'user', 'filearea' => 'draft',
                     'contextid' => $usercontext->id, 'itemid' => $record['packagefile'],
-                    'filename' => basename($record['packagefilepath']), 'filepath' => '/'];
+                    'filename' => basename($record['packagefilepath']), 'filepath' => '/');
             $fs = get_file_storage();
             $fs->create_file_from_pathname($filerecord, $record['packagefilepath']);
         }

@@ -86,7 +86,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->setDefault('exescormtype', $defaulttype);
         $mform->setType('exescormtype', PARAM_ALPHA);
         $mform->addHelpButton('exescormtype', 'exescormtype', 'exescorm');
-        $mform->addElement('text', 'packageurl', get_string('packageurl', 'mod_exescorm'), ['size' => 60]);
+        $mform->addElement('text', 'packageurl', get_string('packageurl', 'mod_exescorm'), array('size' => 60));
         $mform->setType('packageurl', PARAM_RAW);
         $mform->addHelpButton('packageurl', 'packageurl', 'exescorm');
         $mform->hideIf('packageurl', 'exescormtype', 'in', [EXESCORM_TYPE_LOCAL, EXESCORM_TYPE_EXESCORMNET]);
@@ -99,8 +99,8 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->addGroup($group, 'typehelpgroup', '', ' ', false);
         $mform->hideIf('typehelpgroup', 'exescormtype', 'noteq', EXESCORM_TYPE_EXESCORMNET);
         // New local package upload.
-        $filemanageroptions = [];
-        $filemanageroptions['accepted_types'] = ['.zip', '.xml'];
+        $filemanageroptions = array();
+        $filemanageroptions['accepted_types'] = array('.zip', '.xml');
         $filemanageroptions['maxbytes'] = 0;
         $filemanageroptions['maxfiles'] = 1;
         $filemanageroptions['subdirs'] = 0;
@@ -139,7 +139,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->hideIf('height', 'popup', 'eq', 0);
 
         // Window Options.
-        $winoptgrp = [];
+        $winoptgrp = array();
         foreach (exescorm_get_popup_options_array() as $key => $value) {
             $winoptgrp[] = &$mform->createElement('checkbox', $key, '', get_string($key, 'mod_exescorm'));
             $mform->setDefault($key, $value);
@@ -208,9 +208,9 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->addElement('header', 'availability', get_string('availability'));
 
         $mform->addElement('date_time_selector', 'timeopen',
-                        get_string("exescormopen", "mod_exescorm"), ['optional' => true]);
+                        get_string("exescormopen", "mod_exescorm"), array('optional' => true));
         $mform->addElement('date_time_selector', 'timeclose',
-                        get_string("exescormclose", "mod_exescorm"), ['optional' => true]);
+                        get_string("exescormclose", "mod_exescorm"), array('optional' => true));
 
         // Grade Settings.
         $mform->addElement('header', 'gradesettings', get_string('gradenoun', 'mod_exescorm'));
@@ -317,7 +317,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform = $this->_form;
 
         // Elements in a row need a group.
-        $buttonarray = [];
+        $buttonarray = array();
 
         // Label for the submit button to return to the course.
         // Ignore this button in single activity format because it is confusing.
@@ -331,7 +331,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         $buttonarray[] = $mform->createElement('cancel');
 
-        $mform->addGroup($buttonarray, $groupname, '', [' '], false);
+        $mform->addGroup($buttonarray, $groupname, '', array(' '), false);
         $mform->setType($groupname, PARAM_RAW);
     }
 
@@ -365,7 +365,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         $draftitemid = file_get_submitted_draft_itemid('packagefile');
         file_prepare_draft_area($draftitemid, $this->context->id, 'mod_exescorm', 'package', 0,
-            ['subdirs' => 0, 'maxfiles' => 1]);
+            array('subdirs' => 0, 'maxfiles' => 1));
         $defaultvalues['packagefile'] = $draftitemid;
 
         if (($COURSE->format == 'singleactivity') &&
@@ -391,7 +391,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         }
 
         // Set some completion default data.
-        $cvalues = [];
+        $cvalues = array();
         if (empty($this->_instance)) {
             // When in add mode, set a default completion rule that requires the EXESCORM's status be set to "Completed".
             $cvalues[4] = 1;
@@ -427,7 +427,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
                 $draftitemid = file_get_submitted_draft_itemid('packagefile');
 
                 file_prepare_draft_area($draftitemid, $this->context->id, 'mod_exescorm', 'packagefilecheck', null,
-                    ['subdirs' => 0, 'maxfiles' => 1]);
+                    array('subdirs' => 0, 'maxfiles' => 1));
 
                 // Get file from users draft area.
                 $usercontext = context_user::instance($USER->id);
@@ -555,11 +555,11 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
     public function add_completion_rules() {
         $mform =& $this->_form;
-        $items = [];
+        $items = array();
 
         // Require score.
-        $group = [];
-        $group[] =& $mform->createElement('text', 'completionscorerequired', '', ['size' => 5]);
+        $group = array();
+        $group[] =& $mform->createElement('text', 'completionscorerequired', '', array('size' => 5));
         $group[] =& $mform->createElement('checkbox', 'completionscoredisabled', null, get_string('disable'));
         $mform->setType('completionscorerequired', PARAM_INT);
         $mform->addGroup($group, 'completionscoregroup', get_string('completionscorerequired', 'mod_exescorm'), '', false);
@@ -649,7 +649,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
                     $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $data->coursemodule, 'forceview' => 1]);
                 } else {
                     // Return to course.
-                    $returnto = course_get_url($data->course, $data->coursesection ?? null, ['sr' => $data->sr]);
+                    $returnto = course_get_url($data->course, $data->coursesection ?? null, array('sr' => $data->sr));
                 }
                 // Set this becouse modedit.php expects it.
                 $data->submitbutton = true;

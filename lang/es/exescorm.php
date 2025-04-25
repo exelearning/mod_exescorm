@@ -21,7 +21,6 @@
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['modulename'] = 'ExeSCORM';
 $string['toc'] = 'TOC (Tabla de Contenidos)';
 $string['navigation'] = 'Navegación';
 $string['aicchacptimeout'] = 'Tiempo de espera AICC HACP';

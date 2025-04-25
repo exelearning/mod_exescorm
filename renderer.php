@@ -37,9 +37,9 @@ class mod_exescorm_renderer extends plugin_renderer_base {
     public function view_user_heading($user, $course, $baseurl, $attempt, $attemptids) {
         $output = '';
         $output .= $this->box_start('generalbox boxaligncenter');
-        $output .= html_writer::start_tag('div', ['class' => 'mdl-align']);
-        $output .= $this->user_picture($user, ['courseid' => $course->id, 'link' => true]);
-        $url = new moodle_url('/user/view.php', ['id' => $user->id, 'course' => $course->id]);
+        $output .= html_writer::start_tag('div', array('class' => 'mdl-align'));
+        $output .= $this->user_picture($user, array('courseid' => $course->id, 'link' => true));
+        $url = new moodle_url('/user/view.php', array('id' => $user->id, 'course' => $course->id));
         $output .= html_writer::link($url, fullname($user));
         $baseurl->param('attempt', '');
         $pb = new mod_exescorm_attempt_bar($attemptids, $attempt, $baseurl, 'attempt');
@@ -75,7 +75,7 @@ class mod_exescorm_renderer extends plugin_renderer_base {
             }
         }
 
-        return html_writer::tag('div', $output, ['class' => 'paging']);
+        return html_writer::tag('div', $output, array('class' => 'paging'));
     }
 
     /**
@@ -172,7 +172,7 @@ class mod_exescorm_attempt_bar implements renderable {
     /**
      * @var array An array of strings. One of them is just a string: the current attempt
      */
-    public $attemptlinks = [];
+    public $attemptlinks = array();
 
     /**
      * Constructor mod_exescorm_attempt_bar with only the required params.
@@ -224,7 +224,7 @@ class mod_exescorm_attempt_bar implements renderable {
                     $prevattempt = $previous;
                 } else {
                     $attemptlink = html_writer::link(
-                        new moodle_url($this->baseurl, [$this->pagevar => $attemptid]), $attemptid);
+                        new moodle_url($this->baseurl, array($this->pagevar => $attemptid)), $attemptid);
                     $this->attemptlinks[] = $attemptlink;
                     if (empty($nextattempt) && $prevattempt !== null) {
                         // Set the nextattempt var as we have set previous attempt earlier.
@@ -236,14 +236,14 @@ class mod_exescorm_attempt_bar implements renderable {
 
             if ($this->attempt != $firstattempt) {
                 $this->previouslink = html_writer::link(
-                    new moodle_url($this->baseurl, [$this->pagevar => $prevattempt]),
-                    get_string('previous'), ['class' => 'previous']);
+                    new moodle_url($this->baseurl, array($this->pagevar => $prevattempt)),
+                    get_string('previous'), array('class' => 'previous'));
             }
 
             if ($this->attempt != $lastattempt) {
                 $this->nextlink = html_writer::link(
-                    new moodle_url($this->baseurl, [$this->pagevar => $nextattempt]),
-                    get_string('next'), ['class' => 'next']);
+                    new moodle_url($this->baseurl, array($this->pagevar => $nextattempt)),
+                    get_string('next'), array('class' => 'next'));
             }
         }
     }

@@ -87,12 +87,12 @@ class exescorm_package_file_info extends file_info_stored {
 function exescorm_get_popup_options_array() {
     $cfgexescorm = get_config('exescorm');
 
-    return ['scrollbars' => isset($cfgexescorm->scrollbars) ? $cfgexescorm->scrollbars : 0,
+    return array('scrollbars' => isset($cfgexescorm->scrollbars) ? $cfgexescorm->scrollbars : 0,
                  'directories' => isset($cfgexescorm->directories) ? $cfgexescorm->directories : 0,
                  'location' => isset($cfgexescorm->location) ? $cfgexescorm->location : 0,
                  'menubar' => isset($cfgexescorm->menubar) ? $cfgexescorm->menubar : 0,
                  'toolbar' => isset($cfgexescorm->toolbar) ? $cfgexescorm->toolbar : 0,
-                 'status' => isset($cfgexescorm->status) ? $cfgexescorm->status : 0];
+                 'status' => isset($cfgexescorm->status) ? $cfgexescorm->status : 0);
 }
 
 /**
@@ -101,10 +101,10 @@ function exescorm_get_popup_options_array() {
  * @return array an array of what grade options
  */
 function exescorm_get_grade_method_array() {
-    return  [EXESCORM_GRADESCOES => get_string('gradescoes', 'mod_exescorm'),
+    return array (EXESCORM_GRADESCOES => get_string('gradescoes', 'mod_exescorm'),
                   EXESCORM_GRADEHIGHEST => get_string('gradehighest', 'mod_exescorm'),
                   EXESCORM_GRADEAVERAGE => get_string('gradeaverage', 'mod_exescorm'),
-                  EXESCORM_GRADESUM => get_string('gradesum', 'mod_exescorm')];
+                  EXESCORM_GRADESUM => get_string('gradesum', 'mod_exescorm'));
 }
 
 /**
@@ -113,10 +113,10 @@ function exescorm_get_grade_method_array() {
  * @return array an array of what grade options
  */
 function exescorm_get_what_grade_array() {
-    return  [EXESCORM_HIGHESTATTEMPT => get_string('EXESCORM_HIGHESTATTEMPT', 'mod_exescorm'),
+    return array (EXESCORM_HIGHESTATTEMPT => get_string('EXESCORM_HIGHESTATTEMPT', 'mod_exescorm'),
                   EXESCORM_AVERAGEATTEMPT => get_string('EXESCORM_AVERAGEATTEMPT', 'mod_exescorm'),
                   EXESCORM_FIRSTATTEMPT => get_string('firstattempt', 'mod_exescorm'),
-                  EXESCORM_LASTATTEMPT => get_string('lastattempt', 'mod_exescorm')];
+                  EXESCORM_LASTATTEMPT => get_string('lastattempt', 'mod_exescorm'));
 }
 
 /**
@@ -125,9 +125,9 @@ function exescorm_get_what_grade_array() {
  * @return array an array of skip view options
  */
 function exescorm_get_skip_view_array() {
-    return [EXESCORM_SKIPVIEW_NEVER => get_string('never'),
+    return array(EXESCORM_SKIPVIEW_NEVER => get_string('never'),
                  EXESCORM_SKIPVIEW_FIRST => get_string('firstaccess', 'mod_exescorm'),
-                 EXESCORM_SKIPVIEW_ALWAYS => get_string('always')];
+                 EXESCORM_SKIPVIEW_ALWAYS => get_string('always'));
 }
 
 /**
@@ -136,10 +136,10 @@ function exescorm_get_skip_view_array() {
  * @return array an array of hide table of contents options
  */
 function exescorm_get_hidetoc_array() {
-     return [EXESCORM_TOC_SIDE => get_string('sided', 'mod_exescorm'),
+     return array(EXESCORM_TOC_SIDE => get_string('sided', 'mod_exescorm'),
                   EXESCORM_TOC_HIDDEN => get_string('hidden', 'mod_exescorm'),
                   EXESCORM_TOC_POPUP => get_string('popupmenu', 'mod_exescorm'),
-                  EXESCORM_TOC_DISABLED => get_string('disabled', 'mod_exescorm')];
+                  EXESCORM_TOC_DISABLED => get_string('disabled', 'mod_exescorm'));
 }
 
 /**
@@ -148,9 +148,9 @@ function exescorm_get_hidetoc_array() {
  * @return array an array of update frequency options
  */
 function exescorm_get_updatefreq_array() {
-    return [EXESCORM_UPDATE_NEVER => get_string('never'),
+    return array(EXESCORM_UPDATE_NEVER => get_string('never'),
                  EXESCORM_UPDATE_EVERYDAY => get_string('everyday', 'mod_exescorm'),
-                 EXESCORM_UPDATE_EVERYTIME => get_string('everytime', 'mod_exescorm')];
+                 EXESCORM_UPDATE_EVERYTIME => get_string('everytime', 'mod_exescorm'));
 }
 
 /**
@@ -159,8 +159,8 @@ function exescorm_get_updatefreq_array() {
  * @return array an array of popup display options
  */
 function exescorm_get_popup_display_array() {
-    return [0 => get_string('currentwindow', 'mod_exescorm'),
-                 1 => get_string('popup', 'mod_exescorm')];
+    return array(0 => get_string('currentwindow', 'mod_exescorm'),
+                 1 => get_string('popup', 'mod_exescorm'));
 }
 
 /**
@@ -169,9 +169,9 @@ function exescorm_get_popup_display_array() {
  * @return array an array of navigation buttons display options
  */
 function exescorm_get_navigation_display_array() {
-    return [EXESCORM_NAV_DISABLED => get_string('no'),
+    return array(EXESCORM_NAV_DISABLED => get_string('no'),
                  EXESCORM_NAV_UNDER_CONTENT => get_string('undercontent', 'mod_exescorm'),
-                 EXESCORM_NAV_FLOATING => get_string('floating', 'mod_exescorm')];
+                 EXESCORM_NAV_FLOATING => get_string('floating', 'mod_exescorm'));
 }
 
 /**
@@ -180,8 +180,8 @@ function exescorm_get_navigation_display_array() {
  * @return array an array of attempt options
  */
 function exescorm_get_attempts_array() {
-    $attempts = [0 => get_string('nolimit', 'mod_exescorm'),
-                      1 => get_string('attempt1', 'mod_exescorm')];
+    $attempts = array(0 => get_string('nolimit', 'mod_exescorm'),
+                      1 => get_string('attempt1', 'mod_exescorm'));
 
     for ($i = 2; $i <= 6; $i++) {
         $attempts[$i] = get_string('attemptsx', 'mod_exescorm', $i);
@@ -196,10 +196,10 @@ function exescorm_get_attempts_array() {
  * @return array an array of attempt status options
  */
 function exescorm_get_attemptstatus_array() {
-    return [EXESCORM_DISPLAY_ATTEMPTSTATUS_NO => get_string('no'),
+    return array(EXESCORM_DISPLAY_ATTEMPTSTATUS_NO => get_string('no'),
                  EXESCORM_DISPLAY_ATTEMPTSTATUS_ALL => get_string('attemptstatusall', 'mod_exescorm'),
                  EXESCORM_DISPLAY_ATTEMPTSTATUS_MY => get_string('attemptstatusmy', 'mod_exescorm'),
-                 EXESCORM_DISPLAY_ATTEMPTSTATUS_ENTRY => get_string('attemptstatusentry', 'mod_exescorm')];
+                 EXESCORM_DISPLAY_ATTEMPTSTATUS_ENTRY => get_string('attemptstatusentry', 'mod_exescorm'));
 }
 
 /**
@@ -208,9 +208,9 @@ function exescorm_get_attemptstatus_array() {
  * @return array an array of attempt options
  */
 function exescorm_get_forceattempt_array() {
-    return [EXESCORM_FORCEATTEMPT_NO => get_string('no'),
+    return array(EXESCORM_FORCEATTEMPT_NO => get_string('no'),
                  EXESCORM_FORCEATTEMPT_ONCOMPLETE => get_string('forceattemptoncomplete', 'mod_exescorm'),
-                 EXESCORM_FORCEATTEMPT_ALWAYS => get_string('forceattemptalways', 'mod_exescorm')];
+                 EXESCORM_FORCEATTEMPT_ALWAYS => get_string('forceattemptalways', 'mod_exescorm'));
 }
 
 /**
@@ -262,8 +262,8 @@ function exescorm_parse($exescorm, $full) {
             }
             if ($exescorm->reference !== '') {
                 $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
-                $filerecord = ['contextid' => $context->id, 'component' => 'mod_exescorm', 'filearea' => 'package',
-                                    'itemid' => 0, 'filepath' => '/'];
+                $filerecord = array('contextid' => $context->id, 'component' => 'mod_exescorm', 'filearea' => 'package',
+                                    'itemid' => 0, 'filepath' => '/');
                 if ($packagefile = $fs->create_file_from_url($filerecord, $exescorm->reference, ['calctimeout' => true], true)) {
                     $newhash = $packagefile->get_contenthash();
                 } else {
@@ -402,14 +402,14 @@ function exescorm_external_link($link) {
 function exescorm_get_sco($id, $what=EXESCORM_SCO_ALL) {
     global $DB;
 
-    if ($sco = $DB->get_record('exescorm_scoes', ['id' => $id])) {
+    if ($sco = $DB->get_record('exescorm_scoes', array('id' => $id))) {
         $sco = ($what == EXESCORM_SCO_DATA) ? new stdClass() : $sco;
-        if (($what != EXESCORM_SCO_ONLY) && ($scodatas = $DB->get_records('exescorm_scoes_data', ['scoid' => $id]))) {
+        if (($what != EXESCORM_SCO_ONLY) && ($scodatas = $DB->get_records('exescorm_scoes_data', array('scoid' => $id)))) {
             foreach ($scodatas as $scodata) {
                 $sco->{$scodata->name} = $scodata->value;
             }
         } else if (($what != EXESCORM_SCO_ONLY) &&
-            (!($scodatas = $DB->get_records('exescorm_scoes_data', ['scoid' => $id])))
+            (!($scodatas = $DB->get_records('exescorm_scoes_data', array('scoid' => $id))))
         ) {
             $sco->parameters = '';
         }
@@ -429,7 +429,7 @@ function exescorm_get_sco($id, $what=EXESCORM_SCO_ALL) {
 function exescorm_get_scoes($id, $organisation=false) {
     global $DB;
 
-    $queryarray = ['exescorm' => $id];
+    $queryarray = array('exescorm' => $id);
     if (!empty($organisation)) {
         $queryarray['organization'] = $organisation;
     }
@@ -437,7 +437,7 @@ function exescorm_get_scoes($id, $organisation=false) {
         // Drop keys so that it is a simple array as expected.
         $scoes = array_values($scoes);
         foreach ($scoes as $sco) {
-            if ($scodatas = $DB->get_records('exescorm_scoes_data', ['scoid' => $sco->id])) {
+            if ($scodatas = $DB->get_records('exescorm_scoes_data', array('scoid' => $sco->id))) {
                 foreach ($scodatas as $scodata) {
                     $sco->{$scodata->name} = $scodata->value;
                 }
@@ -461,7 +461,7 @@ function exescorm_insert_track($userid, $exescormid, $scoid, $attempt, $element,
             if ($track = $DB->get_record_select('exescorm_scoes_track',
                                                 'userid=? AND exescormid=? AND scoid=? AND attempt=? '.
                                                 'AND element=\'cmi.core.score.raw\'',
-                                                [$userid, $exescormid, $scoid, $attempt])) {
+                                                array($userid, $exescormid, $scoid, $attempt))) {
                 $value = 'completed';
             }
         }
@@ -469,7 +469,7 @@ function exescorm_insert_track($userid, $exescormid, $scoid, $attempt, $element,
             if ($tracktest = $DB->get_record_select('exescorm_scoes_track',
                                                     'userid=? AND exescormid=? AND scoid=? AND attempt=? '.
                                                     'AND element=\'cmi.core.lesson_status\'',
-                                                    [$userid, $exescormid, $scoid, $attempt])) {
+                                                    array($userid, $exescormid, $scoid, $attempt))) {
                 if ($tracktest->value == "incomplete") {
                     $tracktest->value = "completed";
                     $DB->update_record('exescorm_scoes_track', $tracktest);
@@ -477,18 +477,18 @@ function exescorm_insert_track($userid, $exescormid, $scoid, $attempt, $element,
             }
         }
         if (($element == 'cmi.success_status') && ($value == 'passed' || $value == 'failed')) {
-            if ($DB->get_record('exescorm_scoes_data', ['scoid' => $scoid, 'name' => 'objectivesetbycontent'])) {
+            if ($DB->get_record('exescorm_scoes_data', array('scoid' => $scoid, 'name' => 'objectivesetbycontent'))) {
                 $objectiveprogressstatus = true;
                 $objectivesatisfiedstatus = false;
                 if ($value == 'passed') {
                     $objectivesatisfiedstatus = true;
                 }
 
-                if ($track = $DB->get_record('exescorm_scoes_track', ['userid' => $userid,
+                if ($track = $DB->get_record('exescorm_scoes_track', array('userid' => $userid,
                                                                         'exescormid' => $exescormid,
                                                                         'scoid' => $scoid,
                                                                         'attempt' => $attempt,
-                                                                        'element' => 'objectiveprogressstatus'])) {
+                                                                        'element' => 'objectiveprogressstatus'))) {
                     $track->value = $objectiveprogressstatus;
                     $track->timemodified = time();
                     $DB->update_record('exescorm_scoes_track', $track);
@@ -505,11 +505,11 @@ function exescorm_insert_track($userid, $exescormid, $scoid, $attempt, $element,
                     $id = $DB->insert_record('exescorm_scoes_track', $track);
                 }
                 if ($objectivesatisfiedstatus) {
-                    if ($track = $DB->get_record('exescorm_scoes_track', ['userid' => $userid,
+                    if ($track = $DB->get_record('exescorm_scoes_track', array('userid' => $userid,
                                                                             'exescormid' => $exescormid,
                                                                             'scoid' => $scoid,
                                                                             'attempt' => $attempt,
-                                                                            'element' => 'objectivesatisfiedstatus'])) {
+                                                                            'element' => 'objectivesatisfiedstatus'))) {
                         $track->value = $objectivesatisfiedstatus;
                         $track->timemodified = time();
                         $DB->update_record('exescorm_scoes_track', $track);
@@ -537,11 +537,11 @@ function exescorm_insert_track($userid, $exescormid, $scoid, $attempt, $element,
             $track = $trackdata[$element];
         }
     } else {
-        $track = $DB->get_record('exescorm_scoes_track', ['userid' => $userid,
+        $track = $DB->get_record('exescorm_scoes_track', array('userid' => $userid,
                                                             'exescormid' => $exescormid,
                                                             'scoid' => $scoid,
                                                             'attempt' => $attempt,
-                                                            'element' => $element]);
+                                                            'element' => $element));
     }
     if ($track) {
         if ($element != 'x.start.time' ) { // Don't update x.start.time - keep the original value.
@@ -567,29 +567,29 @@ function exescorm_insert_track($userid, $exescormid, $scoid, $attempt, $element,
 
     // Trigger updating grades based on a given set of EXESCORM CMI elements.
     $exescorm = false;
-    if (in_array($element, ['cmi.core.score.raw', 'cmi.score.raw']) ||
-        (in_array($element, ['cmi.completion_status', 'cmi.core.lesson_status', 'cmi.success_status'])
-         && in_array($track->value, ['completed', 'passed']))) {
-        $exescorm = $DB->get_record('exescorm', ['id' => $exescormid]);
+    if (in_array($element, array('cmi.core.score.raw', 'cmi.score.raw')) ||
+        (in_array($element, array('cmi.completion_status', 'cmi.core.lesson_status', 'cmi.success_status'))
+         && in_array($track->value, array('completed', 'passed')))) {
+        $exescorm = $DB->get_record('exescorm', array('id' => $exescormid));
         include_once($CFG->dirroot.'/mod/exescorm/lib.php');
         exescorm_update_grades($exescorm, $userid);
     }
 
     // Trigger CMI element events.
-    if (in_array($element, ['cmi.core.score.raw', 'cmi.score.raw']) ||
-        (in_array($element, ['cmi.completion_status', 'cmi.core.lesson_status', 'cmi.success_status'])
-        && in_array($track->value, ['completed', 'failed', 'passed']))) {
+    if (in_array($element, array('cmi.core.score.raw', 'cmi.score.raw')) ||
+        (in_array($element, array('cmi.completion_status', 'cmi.core.lesson_status', 'cmi.success_status'))
+        && in_array($track->value, array('completed', 'failed', 'passed')))) {
         if (!$exescorm) {
-            $exescorm = $DB->get_record('exescorm', ['id' => $exescormid]);
+            $exescorm = $DB->get_record('exescorm', array('id' => $exescormid));
         }
         $cm = get_coursemodule_from_instance('exescorm', $exescormid);
-        $data = [
-            'other' => ['attemptid' => $attempt, 'cmielement' => $element, 'cmivalue' => $track->value],
+        $data = array(
+            'other' => array('attemptid' => $attempt, 'cmielement' => $element, 'cmivalue' => $track->value),
             'objectid' => $exescorm->id,
             'context' => context_module::instance($cm->id),
-            'relateduserid' => $userid,
-        ];
-        if (in_array($element, ['cmi.core.score.raw', 'cmi.score.raw'])) {
+            'relateduserid' => $userid
+        );
+        if (in_array($element, array('cmi.core.score.raw', 'cmi.score.raw'))) {
             // Create score submitted event.
             $event = \mod_exescorm\event\scoreraw_submitted::create($data);
         } else {
@@ -622,7 +622,7 @@ function exescorm_insert_track($userid, $exescormid, $scoid, $attempt, $element,
  */
 function exescorm_has_tracks($exescormid, $userid) {
     global $DB;
-    return $DB->record_exists('exescorm_scoes_track', ['userid' => $userid, 'exescormid' => $exescormid]);
+    return $DB->record_exists('exescorm_scoes_track', array('userid' => $userid, 'exescormid' => $exescormid));
 }
 
 function exescorm_get_tracks($scoid, $userid, $attempt='') {
@@ -630,14 +630,14 @@ function exescorm_get_tracks($scoid, $userid, $attempt='') {
     global $DB;
 
     if (empty($attempt)) {
-        if ($exescormid = $DB->get_field('exescorm_scoes', 'exescorm', ['id' => $scoid])) {
+        if ($exescormid = $DB->get_field('exescorm_scoes', 'exescorm', array('id' => $scoid))) {
             $attempt = exescorm_get_last_attempt($exescormid, $userid);
         } else {
             $attempt = 1;
         }
     }
-    if ($tracks = $DB->get_records('exescorm_scoes_track', ['userid' => $userid, 'scoid' => $scoid,
-                                                              'attempt' => $attempt], 'element ASC')) {
+    if ($tracks = $DB->get_records('exescorm_scoes_track', array('userid' => $userid, 'scoid' => $scoid,
+                                                              'attempt' => $attempt), 'element ASC')) {
         $usertrack = exescorm_format_interactions($tracks);
         $usertrack->userid = $userid;
         $usertrack->scoid = $scoid;
@@ -708,7 +708,7 @@ function exescorm_get_sco_runtime($exescormid, $scoid, $userid, $attempt=1) {
     global $DB;
 
     $timedata = new stdClass();
-    $params = ['userid' => $userid, 'exescormid' => $exescormid, 'attempt' => $attempt];
+    $params = array('userid' => $userid, 'exescormid' => $exescormid, 'attempt' => $attempt);
     if (!empty($scoid)) {
         $params['scoid'] = $scoid;
     }
@@ -739,7 +739,7 @@ function exescorm_grade_user_attempt($exescorm, $userid, $attempt=1) {
     $attemptscore->sum = 0;
     $attemptscore->lastmodify = 0;
 
-    if (!$scoes = $DB->get_records('exescorm_scoes', ['exescorm' => $exescorm->id], 'sortorder, id')) {
+    if (!$scoes = $DB->get_records('exescorm_scoes', array('exescorm' => $exescorm->id), 'sortorder, id')) {
         return null;
     }
 
@@ -836,7 +836,7 @@ function exescorm_count_launchable($exescormid, $organization='') {
     global $DB;
 
     $sqlorganization = '';
-    $params = [$exescormid];
+    $params = array($exescormid);
     if (!empty($organization)) {
         $sqlorganization = " AND organization=?";
         $params[] = $organization;
@@ -861,7 +861,7 @@ function exescorm_get_last_attempt($exescormid, $userid) {
     $sql = "SELECT MAX(attempt)
               FROM {exescorm_scoes_track}
              WHERE userid = ? AND exescormid = ?";
-    $lastattempt = $DB->get_field_sql($sql, [$userid, $exescormid]);
+    $lastattempt = $DB->get_field_sql($sql, array($userid, $exescormid));
     if (empty($lastattempt)) {
         return '1';
     } else {
@@ -885,7 +885,7 @@ function exescorm_get_first_attempt($exescormid, $userid) {
               FROM {exescorm_scoes_track}
              WHERE userid = ? AND exescormid = ?";
 
-    $lastattempt = $DB->get_field_sql($sql, [$userid, $exescormid]);
+    $lastattempt = $DB->get_field_sql($sql, array($userid, $exescormid));
     if (empty($lastattempt)) {
         return '1';
     } else {
@@ -910,7 +910,7 @@ function exescorm_get_last_completed_attempt($exescormid, $userid) {
              WHERE userid = ? AND exescormid = ?
                AND (".$DB->sql_compare_text('value')." = ".$DB->sql_compare_text('?')." OR ".
                       $DB->sql_compare_text('value')." = ".$DB->sql_compare_text('?').")";
-    $lastattempt = $DB->get_field_sql($sql, [$userid, $exescormid, 'completed', 'passed']);
+    $lastattempt = $DB->get_field_sql($sql, array($userid, $exescormid, 'completed', 'passed'));
     if (empty($lastattempt)) {
         return '1';
     } else {
@@ -928,9 +928,9 @@ function exescorm_get_last_completed_attempt($exescormid, $userid) {
  */
 function exescorm_get_all_attempts($exescormid, $userid) {
     global $DB;
-    $attemptids = [];
+    $attemptids = array();
     $sql = "SELECT DISTINCT attempt FROM {exescorm_scoes_track} WHERE userid = ? AND exescormid = ? ORDER BY attempt";
-    $attempts = $DB->get_records_sql($sql, [$userid, $exescormid]);
+    $attempts = $DB->get_records_sql($sql, array($userid, $exescormid));
     foreach ($attempts as $attempt) {
         $attemptids[] = $attempt->attempt;
     }
@@ -964,7 +964,7 @@ function exescorm_print_launch ($user, $exescorm, $action, $cm) {
     if ($orgs = $DB->get_records_select_menu('exescorm_scoes', 'exescorm = ? AND '.
                                          $DB->sql_isempty('exescorm_scoes', 'launch', false, true).' AND '.
                                          $DB->sql_isempty('exescorm_scoes', 'organization', false, false),
-                                         [$exescorm->id], 'sortorder, id', 'id,title')) {
+                                         array($exescorm->id), 'sortorder, id', 'id,title')) {
         if (count($orgs) > 1) {
             $select = new single_select(new moodle_url($action), 'organization', $orgs, $organization, null);
             $select->label = get_string('organizations', 'mod_exescorm');
@@ -1009,16 +1009,16 @@ function exescorm_print_launch ($user, $exescorm, $action, $cm) {
     // Do not give the player launch FORM if the EXESCORM object is locked after the final attempt.
     if ($exescorm->lastattemptlock == 0 || $result->attemptleft > 0) {
             echo html_writer::start_div('exescorm-center');
-            echo html_writer::start_tag('form', ['id' => 'exescormviewform',
+            echo html_writer::start_tag('form', array('id' => 'exescormviewform',
                                                         'method' => 'post',
-                                                        'action' => $CFG->wwwroot.'/mod/exescorm/player.php']);
+                                                        'action' => $CFG->wwwroot.'/mod/exescorm/player.php'));
         if ($exescorm->hidebrowse == 0) {
             echo html_writer::tag('button', get_string('browse', 'mod_exescorm'),
                     ['class' => 'btn btn-secondary mr-1', 'name' => 'mode',
                         'type' => 'submit', 'id' => 'b', 'value' => 'browse'])
                 . html_writer::end_tag('button');
         } else {
-            echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'mode', 'value' => 'normal']);
+            echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'mode', 'value' => 'normal'));
         }
         echo html_writer::tag('button', get_string('enter', 'mod_exescorm'),
                 ['class' => 'btn btn-primary mx-1', 'name' => 'mode',
@@ -1027,7 +1027,7 @@ function exescorm_print_launch ($user, $exescorm, $action, $cm) {
         if (!empty($exescorm->forcenewattempt)) {
             if ($exescorm->forcenewattempt == EXESCORM_FORCEATTEMPT_ALWAYS ||
                     ($exescorm->forcenewattempt == EXESCORM_FORCEATTEMPT_ONCOMPLETE && $incomplete === false)) {
-                echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'newattempt', 'value' => 'on']);
+                echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'newattempt', 'value' => 'on'));
             }
         } else if (
             !empty($attemptcount) &&
@@ -1035,18 +1035,18 @@ function exescorm_print_launch ($user, $exescorm, $action, $cm) {
             (($result->attemptleft > 0)||($exescorm->maxattempt == 0))
         ) {
             echo html_writer::start_div('pt-1');
-            echo html_writer::checkbox('newattempt', 'on', false, '', ['id' => 'a']);
+            echo html_writer::checkbox('newattempt', 'on', false, '', array('id' => 'a'));
             echo html_writer::label(get_string('newattempt', 'mod_exescorm'), 'a', true, ['class' => 'pl-1']);
             echo html_writer::end_div();
         }
         if (!empty($exescorm->popup)) {
-            echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'display', 'value' => 'popup']);
+            echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'display', 'value' => 'popup'));
         }
 
         echo html_writer::empty_tag('br');
-        echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'scoid', 'value' => $launchsco]);
-        echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'cm', 'value' => $cm->id]);
-        echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'currentorg', 'value' => $orgidentifier]);
+        echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'scoid', 'value' => $launchsco));
+        echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'cm', 'value' => $cm->id));
+        echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'currentorg', 'value' => $orgidentifier));
         echo html_writer::end_tag('form');
         echo html_writer::end_div();
     }
@@ -1066,7 +1066,7 @@ function exescorm_simple_play($exescorm, $user, $context, $cmid) {
         exescorm_parse($exescorm, false);
     }
     $scoes = $DB->get_records_select('exescorm_scoes', 'exescorm = ? AND '.
-        $DB->sql_isnotempty('exescorm_scoes', 'launch', false, true), [$exescorm->id], 'sortorder, id', 'id');
+        $DB->sql_isnotempty('exescorm_scoes', 'launch', false, true), array($exescorm->id), 'sortorder, id', 'id');
 
     if ($scoes) {
         $orgidentifier = '';
@@ -1080,7 +1080,7 @@ function exescorm_simple_play($exescorm, $user, $context, $cmid) {
         if ($exescorm->skipview >= EXESCORM_SKIPVIEW_FIRST) {
             $sco = current($scoes);
             $result = exescorm_get_toc($user, $exescorm, $cmid, EXESCORM_TOCFULLURL, $orgidentifier);
-            $url = new moodle_url('/mod/exescorm/player.php', ['a' => $exescorm->id, 'currentorg' => $orgidentifier]);
+            $url = new moodle_url('/mod/exescorm/player.php', array('a' => $exescorm->id, 'currentorg' => $orgidentifier));
 
             // Set last incomplete sco to launch first if forcenewattempt not set to always.
             if (!empty($result->sco->id) && $exescorm->forcenewattempt != EXESCORM_FORCEATTEMPT_ALWAYS) {
@@ -1112,13 +1112,13 @@ function exescorm_get_count_users($exescormid, $groupingid=null) {
                     INNER JOIN {groupings_groups} gg ON gm.groupid = gg.groupid
                 WHERE st.exescormid = ? AND gg.groupingid = ?
                 ";
-        $params = [$exescormid, $groupingid];
+        $params = array($exescormid, $groupingid);
     } else {
         $sql = "SELECT COUNT(DISTINCT st.userid)
                 FROM {exescorm_scoes_track} st
                 WHERE st.exescormid = ?
                 ";
-        $params = [$exescormid];
+        $params = array($exescormid);
     }
 
     return ($DB->count_records_sql($sql, $params));
@@ -1146,7 +1146,7 @@ function exescorm_reconstitute_array_element($sversion, $userdata, $elementname,
         $exescormseperator = '.';
     }
     // Filter out the ones we want.
-    $elementlist = [];
+    $elementlist = array();
     foreach ($userdata as $element => $value) {
         if (substr($element, 0, strlen($elementname)) == $elementname) {
             $elementlist[$element] = $value;
@@ -1358,9 +1358,9 @@ function exescorm_get_attempt_status($user, $exescorm, $cm = null) {
     if (!empty($cm)) {
         $context = context_module::instance($cm->id);
         if (has_capability('mod/exescorm:deleteownresponses', $context) &&
-            $DB->record_exists('exescorm_scoes_track', ['userid' => $user->id, 'exescormid' => $exescorm->id])) {
+            $DB->record_exists('exescorm_scoes_track', array('userid' => $user->id, 'exescormid' => $exescorm->id))) {
             // Check to see if any data is stored for this user.
-            $deleteurl = new moodle_url($PAGE->url, ['action' => 'delete', 'sesskey' => sesskey()]);
+            $deleteurl = new moodle_url($PAGE->url, array('action' => 'delete', 'sesskey' => sesskey()));
             $result .= $OUTPUT->single_button($deleteurl, get_string('deleteallattempts', 'mod_exescorm'));
         }
     }
@@ -1391,14 +1391,14 @@ function exescorm_get_attempt_count($userid, $exescorm, $returnobjects = false, 
     }
 
     if ($returnobjects) {
-        $params = ['userid' => $userid, 'exescormid' => $exescorm->id];
+        $params = array('userid' => $userid, 'exescormid' => $exescorm->id);
         if ($ignoremissingcompletion) { // Exclude attempts that don't have the completion element requested.
             $params['element'] = $element;
         }
         $attempts = $DB->get_records('exescorm_scoes_track', $params, 'attempt', 'DISTINCT attempt AS attemptnumber');
         return $attempts;
     } else {
-        $params = [$userid, $exescorm->id];
+        $params = array($userid, $exescorm->id);
         $sql = "SELECT COUNT(DISTINCT attempt)
                   FROM {exescorm_scoes_track}
                  WHERE userid = ? AND exescormid = ?";
@@ -1489,11 +1489,11 @@ function exescorm_delete_attempt($userid, $exescorm, $attemptid) {
     $cm = get_coursemodule_from_instance('exescorm', $exescorm->id);
 
     // Trigger instances list viewed event.
-    $event = \mod_exescorm\event\attempt_deleted::create([
-         'other' => ['attemptid' => $attemptid],
+    $event = \mod_exescorm\event\attempt_deleted::create(array(
+         'other' => array('attemptid' => $attemptid),
          'context' => context_module::instance($cm->id),
-         'relateduserid' => $userid,
-    ]);
+         'relateduserid' => $userid
+    ));
     $event->add_record_snapshot('course_modules', $cm);
     $event->add_record_snapshot('exescorm', $exescorm);
     $event->trigger();
@@ -1523,22 +1523,22 @@ function exescorm_format_duration($duration) {
         // this regexp discards empty sections, takes Month/Minute ambiguity into consideration,
         // and outputs filled sections, discarding leading zeroes and any format literals
         // also saves the only zero before seconds decimals (if there are any) and discards decimals if they are zero.
-        $pattern = [ '#([A-Z])0+Y#', '#([A-Z])0+M#', '#([A-Z])0+D#', '#P(|\d+Y)0*(\d+)M#',
+        $pattern = array( '#([A-Z])0+Y#', '#([A-Z])0+M#', '#([A-Z])0+D#', '#P(|\d+Y)0*(\d+)M#',
                             '#0*(\d+)Y#', '#0*(\d+)D#', '#P#', '#([A-Z])0+H#', '#([A-Z])[0.]+S#',
                             '#\.0+S#', '#T(|\d+H)0*(\d+)M#', '#0*(\d+)H#', '#0+\.(\d+)S#',
-                            '#0*([\d.]+)S#', '#T#' ];
-        $replace = [ '$1', '$1', '$1', '$1$2 '.$strmonths.' ', '$1 '.$stryears.' ', '$1 '.$strdays.' ',
+                            '#0*([\d.]+)S#', '#T#' );
+        $replace = array( '$1', '$1', '$1', '$1$2 '.$strmonths.' ', '$1 '.$stryears.' ', '$1 '.$strdays.' ',
                             '', '$1', '$1', 'S', '$1$2 '.$strminutes.' ', '$1 '.$strhours.' ',
-                            '0.$1 '.$strseconds, '$1 '.$strseconds, ''];
+                            '0.$1 '.$strseconds, '$1 '.$strseconds, '');
     } else {
         // Else we have SCORM 1.2 format there
         // first convert the timestamp to some SCORM 2004-like format for conveniency.
         $duration = preg_replace('#^(\d+):(\d+):([\d.]+)$#', 'T$1H$2M$3S', $duration);
         // Then convert in the same way as SCORM 2004.
-        $pattern = [ '#T0+H#', '#([A-Z])0+M#', '#([A-Z])[0.]+S#', '#\.0+S#', '#0*(\d+)H#',
-                            '#0*(\d+)M#', '#0+\.(\d+)S#', '#0*([\d.]+)S#', '#T#' ];
-        $replace = [ 'T', '$1', '$1', 'S', '$1 '.$strhours.' ', '$1 '.$strminutes.' ',
-                            '0.$1 '.$strseconds, '$1 '.$strseconds, '' ];
+        $pattern = array( '#T0+H#', '#([A-Z])0+M#', '#([A-Z])[0.]+S#', '#\.0+S#', '#0*(\d+)H#',
+                            '#0*(\d+)M#', '#0+\.(\d+)S#', '#0*([\d.]+)S#', '#T#' );
+        $replace = array( 'T', '$1', '$1', 'S', '$1 '.$strhours.' ', '$1 '.$strminutes.' ',
+                            '0.$1 '.$strseconds, '$1 '.$strseconds, '' );
     }
 
     $result = preg_replace($pattern, $replace, $duration);
@@ -1556,7 +1556,7 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
         $modestr = '&mode='.$mode;
     }
 
-    $result = [];
+    $result = array();
     $incomplete = false;
 
     if (!empty($organizationsco)) {
@@ -1568,7 +1568,7 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
 
     if ($scoes = exescorm_get_scoes($exescorm->id, $currentorg)) {
         // Retrieve user tracking data for each learning object.
-        $usertracks = [];
+        $usertracks = array();
         foreach ($scoes as $sco) {
             if (!empty($sco->launch)) {
                 if ($usertrack = exescorm_get_tracks($sco->id, $user->id, $attempt)) {
@@ -1681,11 +1681,11 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
         $scoid = '';
     }
 
-    return ['scoes' => $result, 'usertracks' => $usertracks, 'scoid' => $scoid];
+    return array('scoes' => $result, 'usertracks' => $usertracks, 'scoid' => $scoid);
 }
 
 function exescorm_get_toc_get_parent_child(&$result, $currentorg) {
-    $final = [];
+    $final = array();
     $level = 0;
     // Organization is always the root, prevparent.
     if (!empty($currentorg)) {
@@ -1734,7 +1734,7 @@ function exescorm_get_toc_get_parent_child(&$result, $currentorg) {
                 $prevparent = $ident;
             }
             if (!isset($final[$i][$prevparent]->children)) {
-                $final[$i][$prevparent]->children = [];
+                $final[$i][$prevparent]->children = array();
             }
             if ($sco->parent == $prevparent) {
                 $final[$i][$prevparent]->children[] = $sco;
@@ -1754,7 +1754,7 @@ function exescorm_get_toc_get_parent_child(&$result, $currentorg) {
         }
     }
 
-    $results = [];
+    $results = array();
     for ($i = 0; $i <= $level; $i++) {
         $keys = array_keys($final[$i]);
         $results[] = $final[$i][$keys[0]];
@@ -1829,7 +1829,7 @@ function exescorm_format_toc_for_treeview($user, $exescorm, $scoes, $usertracks,
                             $result->toc .= html_writer::link($url, format_string($sco->title)).$score;
                         } else {
                             $result->toc .= '&nbsp;'.html_writer::link($url, format_string($sco->title),
-                                                                        ['data-scoid' => $sco->id]).$score;
+                                                                        array('data-scoid' => $sco->id)).$score;
                         }
                     } else {
                         if ($sco->exescormtype == 'sco') {
@@ -1843,10 +1843,10 @@ function exescorm_format_toc_for_treeview($user, $exescorm, $scoes, $usertracks,
                         if ($sco->exescormtype == 'sco') {
                             $result->toc .= html_writer::tag('a', $sco->statusicon.'&nbsp;'.
                                                                 format_string($sco->title).'&nbsp;'.$score,
-                                                                ['data-scoid' => $sco->id, 'title' => $sco->url]);
+                                                                array('data-scoid' => $sco->id, 'title' => $sco->url));
                         } else {
                             $result->toc .= html_writer::tag('a', '&nbsp;'.format_string($sco->title).'&nbsp;'.$score,
-                                                                ['data-scoid' => $sco->id, 'title' => $sco->url]);
+                                                                array('data-scoid' => $sco->id, 'title' => $sco->url));
                         }
                     } else {
                         if ($sco->exescormtype == 'sco') {
@@ -1899,7 +1899,7 @@ function exescorm_format_toc_for_treeview($user, $exescorm, $scoes, $usertracks,
 }
 
 function exescorm_format_toc_for_droplist($exescorm, $scoes, $usertracks, $currentorg='', $organizationsco=null,
-                                        $children=false, $level=0, $tocmenus=[]) {
+                                        $children=false, $level=0, $tocmenus=array()) {
     if (!empty($scoes)) {
         if (!empty($organizationsco) && !$children) {
             $tocmenus[$organizationsco->id] = $organizationsco->title;
@@ -1952,8 +1952,8 @@ function exescorm_get_toc($user, $exescorm, $cmid, $toclink=EXESCORM_TOCJSLINK, 
     $organizationsco = null;
 
     if ($tocheader) {
-        $result->toc = html_writer::start_div('yui3-g-r', ['id' => 'exescorm_layout']);
-        $result->toc .= html_writer::start_div('yui3-u-1-5 loading', ['id' => 'exescorm_toc']);
+        $result->toc = html_writer::start_div('yui3-g-r', array('id' => 'exescorm_layout'));
+        $result->toc .= html_writer::start_div('yui3-u-1-5 loading', array('id' => 'exescorm_toc'));
         $result->toc .= html_writer::start_div('', ['id' => 'exescorm_tree']);
     }
 
@@ -2012,18 +2012,18 @@ function exescorm_get_toc($user, $exescorm, $cmid, $toclink=EXESCORM_TOCJSLINK, 
 
     if ($tocheader) {
         $result->toc .= html_writer::end_div().html_writer::end_div();
-        $result->toc .= html_writer::start_div('loading', ['id' => 'exescorm_toc_toggle']);
+        $result->toc .= html_writer::start_div('loading', array('id' => 'exescorm_toc_toggle'));
         $result->toc .= html_writer::tag('button', '',
-                        ['id' => 'exescorm_toc_toggle_btn', 'class' => 'bg-primary']).html_writer::end_div();
-        $result->toc .= html_writer::start_div('', ['id' => 'exescorm_content']);
-        $result->toc .= html_writer::div('', '', ['id' => 'exescorm_navpanel']);
+                        array('id' => 'exescorm_toc_toggle_btn', 'class' => 'bg-primary')).html_writer::end_div();
+        $result->toc .= html_writer::start_div('', array('id' => 'exescorm_content'));
+        $result->toc .= html_writer::div('', '', array('id' => 'exescorm_navpanel'));
         $result->toc .= html_writer::end_div().html_writer::end_div();
     }
 
     return $result;
 }
 
-function exescorm_get_adlnav_json ($scoes, &$adlnav = [], $parentscoid = null) {
+function exescorm_get_adlnav_json ($scoes, &$adlnav = array(), $parentscoid = null) {
     if (is_object($scoes)) {
         $sco = $scoes;
         if (isset($sco->url)) {
@@ -2095,11 +2095,11 @@ function exescorm_get_adlnav_json ($scoes, &$adlnav = [], $parentscoid = null) {
 function exescorm_check_url($url) {
     $curl = new curl;
     // Same options as in {@link download_file_content()}, used in {@link exescorm_parse_scorm()}.
-    $curl->setopt(['CURLOPT_FOLLOWLOCATION' => true, 'CURLOPT_MAXREDIRS' => 5]);
+    $curl->setopt(array('CURLOPT_FOLLOWLOCATION' => true, 'CURLOPT_MAXREDIRS' => 5));
     $cmsg = $curl->head($url);
     $info = $curl->get_info();
     if (empty($info['http_code']) || $info['http_code'] != 200) {
-        return get_string('invalidurlhttpcheck', 'mod_exescorm', ['cmsg' => $cmsg]);
+        return get_string('invalidurlhttpcheck', 'mod_exescorm', array('cmsg' => $cmsg));
     }
 
     return true;
@@ -2137,7 +2137,7 @@ function exescorm_check_launchable_sco($exescorm, $scoid) {
             // This scoid might be a top level org that can't be launched, find the first launchable sco after this sco.
             $scoes = $DB->get_records_select('exescorm_scoes',
                                              'exescorm = ? AND '.$DB->sql_isnotempty('exescorm_scoes', 'launch', false, true).
-                                             ' AND id > ?', [$exescorm->id, $sco->id], 'sortorder, id', 'id', 0, 1);
+                                             ' AND id > ?', array($exescorm->id, $sco->id), 'sortorder, id', 'id', 0, 1);
             if (!empty($scoes)) {
                 $sco = reset($scoes); // Get first item from the list.
                 return $sco->id;
@@ -2163,7 +2163,7 @@ function exescorm_check_launchable_sco($exescorm, $scoid) {
 function exescorm_get_availability_status($exescorm, $checkviewreportcap = false, $context = null, $userid = null) {
     $open = true;
     $closed = false;
-    $warnings = [];
+    $warnings = array();
 
     $timenow = time();
     if (!empty($exescorm->timeopen) && $exescorm->timeopen > $timenow) {
@@ -2175,7 +2175,7 @@ function exescorm_get_availability_status($exescorm, $checkviewreportcap = false
 
     if (!$open || $closed) {
         if ($checkviewreportcap && !empty($context) && has_capability('mod/exescorm:viewreport', $context, $userid)) {
-            return [true, $warnings];
+            return array(true, $warnings);
         }
 
         if (!$open) {
@@ -2184,11 +2184,11 @@ function exescorm_get_availability_status($exescorm, $checkviewreportcap = false
         if ($closed) {
             $warnings['expired'] = userdate($exescorm->timeclose);
         }
-        return [false, $warnings];
+        return array(false, $warnings);
     }
 
     // Scorm is available.
-    return [true, $warnings];
+    return array(true, $warnings);
 }
 
 /**
@@ -2231,7 +2231,7 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
                 if ($scoes = $DB->get_records_select(
                         'exescorm_scoes',
                         'exescorm = ? AND '.$DB->sql_isnotempty('exescorm_scoes', 'launch', false, true).' AND id > ?',
-                        [$exescorm->id, $sco->id],
+                        array($exescorm->id, $sco->id),
                         'sortorder, id')) {
                     $sco = current($scoes);
                 }
@@ -2244,7 +2244,7 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
         $scoes = $DB->get_records_select(
             'exescorm_scoes',
             'exescorm = ? AND '.$DB->sql_isnotempty('exescorm_scoes', 'launch', false, true),
-            [$exescorm->id],
+            array($exescorm->id),
             'sortorder, id'
         );
         $sco = current($scoes);
@@ -2302,7 +2302,7 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
         // EXESCORM does not work without slasharguments and moodle_url() encodes querystring vars.
         $scolaunchurl = "$CFG->wwwroot/pluginfile.php/$context->id/mod_exescorm/content/$exescorm->revision/$launcher";
     }
-    return [$sco, $scolaunchurl];
+    return array($sco, $scolaunchurl);
 }
 
 /**
@@ -2317,11 +2317,11 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
  */
 function exescorm_launch_sco($exescorm, $sco, $cm, $context, $scourl) {
 
-    $event = \mod_exescorm\event\sco_launched::create([
+    $event = \mod_exescorm\event\sco_launched::create(array(
         'objectid' => $sco->id,
         'context' => $context,
-        'other' => ['instanceid' => $exescorm->id, 'loadedcontent' => $scourl],
-    ]);
+        'other' => array('instanceid' => $exescorm->id, 'loadedcontent' => $scourl)
+    ));
     $event->add_record_snapshot('course_modules', $cm);
     $event->add_record_snapshot('exescorm', $exescorm);
     $event->add_record_snapshot('exescorm_scoes', $sco);
@@ -2343,8 +2343,8 @@ function exescorm_eval_prerequisites($prerequisites, $usertracks) {
     // This is really a little language parser - AICC_SCRIPT is the reference
     // see 2.3.2.5.1. Sequencing/Navigation Today  - from the SCORM 1.2 spec.
     $element = '';
-    $stack = [];
-    $statuses = [
+    $stack = array();
+    $statuses = array(
         'passed' => 'passed',
         'completed' => 'completed',
         'failed' => 'failed',
@@ -2356,8 +2356,8 @@ function exescorm_eval_prerequisites($prerequisites, $usertracks) {
         'f' => 'failed',
         'i' => 'incomplete',
         'b' => 'browsed',
-        'n' => 'notattempted',
-    ];
+        'n' => 'notattempted'
+    );
     $i = 0;
 
     // Expand the amp entities.
@@ -2371,7 +2371,7 @@ function exescorm_eval_prerequisites($prerequisites, $usertracks) {
     $elements = explode('\t', trim($prerequisites));
 
     // Process each token to build an expression to be evaluated.
-    $stack = [];
+    $stack = array();
     foreach ($elements as $element) {
         $element = trim($element);
         if (empty($element)) {
@@ -2453,7 +2453,7 @@ function exescorm_update_calendar(stdClass $exescorm, $cmid) {
     // The EXESCORM_EVENT_TYPE_OPEN event should only be an action event if no close time is specified.
     $event->type = empty($exescorm->timeclose) ? CALENDAR_EVENT_TYPE_ACTION : CALENDAR_EVENT_TYPE_STANDARD;
     if ($event->id = $DB->get_field('event', 'id',
-        ['modulename' => 'exescorm', 'instance' => $exescorm->id, 'eventtype' => $event->eventtype])) {
+        array('modulename' => 'exescorm', 'instance' => $exescorm->id, 'eventtype' => $event->eventtype))) {
         if ((!empty($exescorm->timeopen)) && ($exescorm->timeopen > 0)) {
             // Calendar event exists so update it.
             $event->name = get_string('calendarstart', 'mod_exescorm', $exescorm->name);
@@ -2496,7 +2496,7 @@ function exescorm_update_calendar(stdClass $exescorm, $cmid) {
     $event->type = CALENDAR_EVENT_TYPE_ACTION;
     $event->eventtype = EXESCORM_EVENT_TYPE_CLOSE;
     if ($event->id = $DB->get_field('event', 'id',
-        ['modulename' => 'exescorm', 'instance' => $exescorm->id, 'eventtype' => $event->eventtype])) {
+        array('modulename' => 'exescorm', 'instance' => $exescorm->id, 'eventtype' => $event->eventtype))) {
         if ((!empty($exescorm->timeclose)) && ($exescorm->timeclose > 0)) {
             // Calendar event exists so update it.
             $event->name = get_string('calendarend', 'mod_exescorm', $exescorm->name);

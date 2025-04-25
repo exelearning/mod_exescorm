@@ -26,7 +26,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- use mod_exescorm\exeonline\token_manager;
+ use \mod_exescorm\exeonline\token_manager;
 
 // @codingStandardsIgnoreLine as we validate via account id, HMAC keys, etc.
 require_once(__DIR__ . '/../../config.php');

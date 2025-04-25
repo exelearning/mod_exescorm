@@ -26,17 +26,17 @@ if (!empty($id)) {
     if (! $cm = get_coursemodule_from_id('exescorm', $id)) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record("course", ["id" => $cm->course])) {
+    if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
         throw new \moodle_exception('coursemisconf');
     }
-    if (! $exescorm = $DB->get_record("exescorm", ["id" => $cm->instance])) {
+    if (! $exescorm = $DB->get_record("exescorm", array("id" => $cm->instance))) {
         throw new \moodle_exception('invalidcoursemodule');
     }
 } else if (!empty($a)) {
-    if (! $exescorm = $DB->get_record("exescorm", ["id" => $a])) {
+    if (! $exescorm = $DB->get_record("exescorm", array("id" => $a))) {
         throw new \moodle_exception('invalidcoursemodule');
     }
-    if (! $course = $DB->get_record("course", ["id" => $exescorm->course])) {
+    if (! $course = $DB->get_record("course", array("id" => $exescorm->course))) {
         throw new \moodle_exception('coursemisconf');
     }
     if (! $cm = get_coursemodule_from_instance("exescorm", $exescorm->id, $course->id)) {
@@ -70,9 +70,9 @@ if (confirm_sesskey() && (!empty($scoid))) {
                 // SCORM 2004 Sequencing Request.
                 require_once($CFG->dirroot.'/mod/exescorm/datamodels/scorm_13lib.php');
 
-                $search = ['@continue@', '@previous@', '@\{target=(\S+)\}choice@', '@exit@',
-                                    '@exitAll@', '@abandon@', '@abandonAll@'];
-                $replace = ['continue_', 'previous_', '\1', 'exit_', 'exitall_', 'abandon_', 'abandonall'];
+                $search = array('@continue@', '@previous@', '@\{target=(\S+)\}choice@', '@exit@',
+                                    '@exitAll@', '@abandon@', '@abandonAll@');
+                $replace = array('continue_', 'previous_', '\1', 'exit_', 'exitall_', 'abandon_', 'abandonall');
                 $action = preg_replace($search, $replace, $value);
 
                 if ($action != $value) {
@@ -81,8 +81,8 @@ if (confirm_sesskey() && (!empty($scoid))) {
                     $valid = 'true';
 
                     // Set valid request.
-                    $search = ['@continue@', '@previous@', '@\{target=(\S+)\}choice@'];
-                    $replace = ['true', 'true', 'true'];
+                    $search = array('@continue@', '@previous@', '@\{target=(\S+)\}choice@');
+                    $replace = array('true', 'true', 'true');
                     $matched = preg_replace($search, $replace, $value);
                     if ($matched == 'true') {
                         $request = 'adl.nav.request_valid["'.$action.'"] = "'.$valid.'";';
