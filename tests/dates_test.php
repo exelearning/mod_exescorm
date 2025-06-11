@@ -52,35 +52,35 @@ class dates_test extends advanced_testcase {
 
         return [
             'without any dates' => [
-                null, null, [],
+                null, null, []
             ],
             'only with opening time' => [
                 $after, null, [
                     ['label' => 'Opens:', 'timestamp' => $after, 'dataid' => 'timeopen'],
-                ],
+                ]
             ],
             'only with closing time' => [
                 null, $after, [
                     ['label' => 'Closes:', 'timestamp' => $after, 'dataid' => 'timeclose'],
-                ],
+                ]
             ],
             'with both times' => [
                 $after, $later, [
                     ['label' => 'Opens:', 'timestamp' => $after, 'dataid' => 'timeopen'],
                     ['label' => 'Closes:', 'timestamp' => $later, 'dataid' => 'timeclose'],
-                ],
+                ]
             ],
             'between the dates' => [
                 $before, $after, [
                     ['label' => 'Opened:', 'timestamp' => $before, 'dataid' => 'timeopen'],
                     ['label' => 'Closes:', 'timestamp' => $after, 'dataid' => 'timeclose'],
-                ],
+                ]
             ],
             'dates are past' => [
                 $earlier, $before, [
                     ['label' => 'Opened:', 'timestamp' => $earlier, 'dataid' => 'timeopen'],
                     ['label' => 'Closed:', 'timestamp' => $before, 'dataid' => 'timeclose'],
-                ],
+                ]
             ],
         ];
     }

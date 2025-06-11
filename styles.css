@@ -236,7 +236,7 @@
 }
 
 #page-mod-exescorm-player #exescormpage li.yui3-treeview-has-children > div.yui3-treeview-row > span.yui3-treeview-icon {
-    display: block; /* Fix indentation */
+    display: block;
 }
 
 #page-mod-exescorm-player #exescormpage div.yui3-u-1,
@@ -390,27 +390,27 @@
 }
 
 #page-mod-exescorm-player button#nav_skipprev {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    background-image: url('[[pix:mod_exescorm|skipprev]]');
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+    background-image: url('[[pix:mod_exescorm|skipprev]]') !important;
 }
 
 #page-mod-exescorm-player button#nav_skipnext {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    background-image: url('[[pix:mod_exescorm|skipnext]]');
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+    background-image: url('[[pix:mod_exescorm|skipnext]]') !important;
 }
 
 #page-mod-exescorm-player button#nav_next {
-    background-image: url('[[pix:mod_exescorm|next]]');
+    background-image: url('[[pix:mod_exescorm|next]]') !important;
 }
 
 #page-mod-exescorm-player button#nav_prev {
-    background-image: url('[[pix:mod_exescorm|prev]]');
+    background-image: url('[[pix:mod_exescorm|prev]]') !important;
 }
 
 #page-mod-exescorm-player button#nav_up {
-    background-image: url('[[pix:mod_exescorm|up]]');
+    background-image: url('[[pix:mod_exescorm|up]]') !important;
 }
 
 #page-mod-exescorm-player #exescormpage li.yui3-treeview-has-children > div.yui3-treeview-row > span.yui3-treeview-icon {

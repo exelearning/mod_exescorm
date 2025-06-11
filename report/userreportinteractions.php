@@ -34,14 +34,14 @@ $download = optional_param('download', '', PARAM_ALPHA);
 $mode = optional_param('mode', '', PARAM_ALPHA); // Scorm mode from which reached here.
 
 // Building the url to use for links.+ data details buildup.
-$url = new moodle_url('/mod/exescorm/report/userreportinteractions.php', ['id' => $id,
+$url = new moodle_url('/mod/exescorm/report/userreportinteractions.php', array('id' => $id,
     'user' => $userid,
-    'attempt' => $attempt]);
+    'attempt' => $attempt));
 
 $cm = get_coursemodule_from_id('exescorm', $id, 0, false, MUST_EXIST);
 $course = get_course($cm->course);
-$exescorm = $DB->get_record('exescorm', ['id' => $cm->instance], '*', MUST_EXIST);
-$user = $DB->get_record('user', ['id' => $userid], implode(',', \core_user\fields::get_picture_fields()), MUST_EXIST);
+$exescorm = $DB->get_record('exescorm', array('id' => $cm->instance), '*', MUST_EXIST);
+$user = $DB->get_record('user', array('id' => $userid), implode(',', \core_user\fields::get_picture_fields()), MUST_EXIST);
 // Get list of attempts this user has made.
 $attemptids = exescorm_get_all_attempts($exescorm->id, $userid);
 
@@ -64,23 +64,23 @@ if (!groups_user_groups_visible($course, $userid, $cm)) {
 }
 
 // Trigger a user interactions viewed event.
-$event = \mod_exescorm\event\interactions_viewed::create([
+$event = \mod_exescorm\event\interactions_viewed::create(array(
     'context' => $contextmodule,
     'relateduserid' => $userid,
-    'other' => ['attemptid' => $attempt, 'instanceid' => $exescorm->id],
-]);
+    'other' => array('attemptid' => $attempt, 'instanceid' => $exescorm->id)
+));
 $event->add_record_snapshot('course_modules', $cm);
 $event->add_record_snapshot('exescorm', $exescorm);
 $event->trigger();
 
-$trackdata = $DB->get_records('exescorm_scoes_track', ['userid' => $user->id, 'exescormid' => $exescorm->id,
-    'attempt' => $attempt]);
+$trackdata = $DB->get_records('exescorm_scoes_track', array('userid' => $user->id, 'exescormid' => $exescorm->id,
+    'attempt' => $attempt));
 $usertrack = exescorm_format_interactions($trackdata);
 
 $questioncount = get_exescorm_question_count($exescorm->id);
 
 $courseshortname = format_string($course->shortname, true,
-    ['context' => context_course::instance($course->id)]);
+    array('context' => context_course::instance($course->id)));
 $exportfilename = $courseshortname . '-' . format_string($exescorm->name, true) . '-'
                 . get_string('interactions', 'mod_exescorm');
 
@@ -95,13 +95,13 @@ if (!$table->is_downloading($download, $exportfilename)) {
 
     $PAGE->set_title("$course->shortname: ".format_string($exescorm->name));
     $PAGE->set_heading($course->fullname);
-    $PAGE->navbar->add($strreport, new moodle_url('/mod/exescorm/report.php', ['id' => $cm->id]));
+    $PAGE->navbar->add($strreport, new moodle_url('/mod/exescorm/report.php', array('id' => $cm->id)));
 
     $PAGE->navbar->add(fullname($user). " - $strattempt $attempt");
 
     $PAGE->activityheader->set_attrs([
         'hidecompletion' => true,
-        'description' => '',
+        'description' => ''
     ]);
 
     echo $OUTPUT->header();
@@ -119,17 +119,17 @@ if (!$table->is_downloading($download, $exportfilename)) {
 
 }
 $table->define_baseurl($PAGE->url);
-$table->define_columns(['id', 'studentanswer', 'correctanswer', 'result', 'calcweight']);
-$table->define_headers([get_string('trackid', 'mod_exescorm'), get_string('response', 'mod_exescorm'),
+$table->define_columns(array('id', 'studentanswer', 'correctanswer', 'result', 'calcweight'));
+$table->define_headers(array(get_string('trackid', 'mod_exescorm'), get_string('response', 'mod_exescorm'),
     get_string('rightanswer', 'mod_exescorm'), get_string('result', 'mod_exescorm'),
-    get_string('calculatedweight', 'mod_exescorm')]);
+    get_string('calculatedweight', 'mod_exescorm')));
 $table->set_attribute('class', 'generaltable generalbox boxaligncenter boxwidthwide');
 
-$table->show_download_buttons_at([TABLE_P_BOTTOM]);
+$table->show_download_buttons_at(array(TABLE_P_BOTTOM));
 $table->setup();
 
 for ($i = 0; $i < $questioncount; $i++) {
-    $row = [];
+    $row = array();
     $element = 'cmi.interactions_'.$i.'.id';
     if (isset($usertrack->$element)) {
         $row[] = s($usertrack->$element);
