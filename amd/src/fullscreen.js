@@ -29,7 +29,6 @@ define([
         'core/templates'
     ], function($, Str, Ajax, Templates) {
         "use strict";
-        /* eslint-disable no-console */
         /**
          * @constructor
          */

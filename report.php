@@ -33,8 +33,8 @@ $download = optional_param('download', '', PARAM_RAW);
 $mode = optional_param('mode', '', PARAM_ALPHA); // Report mode.
 
 $cm = get_coursemodule_from_id('exescorm', $id, 0, false, MUST_EXIST);
-$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
-$exescorm = $DB->get_record('exescorm', ['id' => $cm->instance], '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+$exescorm = $DB->get_record('exescorm', array('id' => $cm->instance), '*', MUST_EXIST);
 
 $contextmodule = context_module::instance($cm->id);
 $reportlist = exescorm_report_list($contextmodule);
@@ -64,13 +64,13 @@ if (count($reportlist) < 1) {
 }
 
 // Trigger a report viewed event.
-$event = \mod_exescorm\event\report_viewed::create([
+$event = \mod_exescorm\event\report_viewed::create(array(
     'context' => $contextmodule,
-    'other' => [
+    'other' => array(
         'exescormid' => $exescorm->id,
-        'mode' => $mode,
-    ],
-]);
+        'mode' => $mode
+    )
+));
 $event->add_record_snapshot('course_modules', $cm);
 $event->add_record_snapshot('exescorm', $exescorm);
 $event->trigger();
@@ -89,10 +89,10 @@ if (empty($noheader)) {
     if ($CFG->version >= 2022041900) { // Moodle 4+.
         $PAGE->activityheader->set_attrs([
             'hidecompletion' => true,
-            'description' => '',
+            'description' => ''
         ]);
     }
-    $PAGE->navbar->add($strreport, new moodle_url('/mod/exescorm/report.php', ['id' => $cm->id]));
+    $PAGE->navbar->add($strreport, new moodle_url('/mod/exescorm/report.php', array('id' => $cm->id)));
 
     echo $OUTPUT->header();
     if ($CFG->version < 2022041900) { // Moodle prior to 4.

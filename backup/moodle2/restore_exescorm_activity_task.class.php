@@ -51,9 +51,9 @@ class restore_exescorm_activity_task extends restore_activity_task {
      * processed by the link decoder.
      */
     public static function define_decode_contents() {
-        $contents = [];
+        $contents = array();
 
-        $contents[] = new restore_decode_content('exescorm', ['intro'], 'exescorm');
+        $contents[] = new restore_decode_content('exescorm', array('intro'), 'exescorm');
 
         return $contents;
     }
@@ -63,7 +63,7 @@ class restore_exescorm_activity_task extends restore_activity_task {
      * to the activity to be executed by the link decoder.
      */
     public static function define_decode_rules() {
-        $rules = [];
+        $rules = array();
 
         $rules[] = new restore_decode_rule('EXESCORMVIEWBYID', '/mod/exescorm/view.php?id=$1', 'course_module');
         $rules[] = new restore_decode_rule('EXESCORMINDEX', '/mod/exescorm/index.php?id=$1', 'course');
@@ -74,12 +74,12 @@ class restore_exescorm_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@see \restore_logs_processor} when restoring
+     * by the {@link restore_logs_processor} when restoring
      * exescorm logs. It must return one array
-     * of {@see \restore_log_rule} objects.
+     * of {@link restore_log_rule} objects.
      */
     public static function define_restore_log_rules() {
-        $rules = [];
+        $rules = array();
 
         $rules[] = new restore_log_rule('exescorm', 'add', 'view.php?id={course_module}', '{exescorm}');
         $rules[] = new restore_log_rule('exescorm', 'update', 'view.php?id={course_module}', '{exescorm}');
@@ -98,16 +98,16 @@ class restore_exescorm_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@see \restore_logs_processor} when restoring
+     * by the {@link restore_logs_processor} when restoring
      * course logs. It must return one array
-     * of {@see \restore_log_rule} objects.
+     * of {@link restore_log_rule} objects.
      *
      * Note this rules are applied when restoring course logs
      * by the restore final task, but are defined here at
      * activity level. All them are rules not linked to any module instance (cmid = 0).
      */
     public static function define_restore_log_rules_for_course() {
-        $rules = [];
+        $rules = array();
 
         $rules[] = new restore_log_rule('exescorm', 'view all', 'index.php?id={course}', null);
 

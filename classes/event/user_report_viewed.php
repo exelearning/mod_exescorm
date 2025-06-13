@@ -73,11 +73,11 @@ class user_report_viewed extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        $params = [
+        $params = array(
             'id' => $this->contextinstanceid,
             'user' => $this->relateduserid,
-            'attempt' => $this->other['attemptid'],
-        ];
+            'attempt' => $this->other['attemptid']
+        );
         return new \moodle_url('/mod/exescorm/userreport.php', $params);
     }
 
@@ -87,9 +87,9 @@ class user_report_viewed extends \core\event\base {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return [$this->courseid, 'exescorm', 'userreport', 'report/userreport.php?id=' .
+        return array($this->courseid, 'exescorm', 'userreport', 'report/userreport.php?id=' .
                 $this->contextinstanceid . '&user=' . $this->relateduserid . '&attempt=' . $this->other['attemptid'],
-                $this->other['instanceid'], $this->contextinstanceid];
+                $this->other['instanceid'], $this->contextinstanceid);
     }
 
     /**
@@ -113,8 +113,8 @@ class user_report_viewed extends \core\event\base {
     }
 
     public static function get_other_mapping() {
-        $othermapped = [];
-        $othermapped['instanceid'] = ['db' => 'exescorm', 'restore' => 'exescorm'];
+        $othermapped = array();
+        $othermapped['instanceid'] = array('db' => 'exescorm', 'restore' => 'exescorm');
 
         return $othermapped;
     }

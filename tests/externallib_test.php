@@ -47,9 +47,9 @@ class externallib_test extends externallib_advanced_testcase {
 
         $CFG->enablecompletion = 1;
         // Setup test data.
-        $this->course = $this->getDataGenerator()->create_course(['enablecompletion' => 1]);
-        $this->exescorm = $this->getDataGenerator()->create_module('exescorm', ['course' => $this->course->id],
-            ['completion' => 2, 'completionview' => 1]);
+        $this->course = $this->getDataGenerator()->create_course(array('enablecompletion' => 1));
+        $this->exescorm = $this->getDataGenerator()->create_module('exescorm', array('course' => $this->course->id),
+            array('completion' => 2, 'completionview' => 1));
         $this->context = \context_module::instance($this->exescorm->cmid);
         $this->cm = get_coursemodule_from_instance('exescorm', $this->exescorm->id);
 
@@ -58,8 +58,8 @@ class externallib_test extends externallib_advanced_testcase {
         $this->teacher = self::getDataGenerator()->create_user();
 
         // Users enrolments.
-        $this->studentrole = $DB->get_record('role', ['shortname' => 'student']);
-        $this->teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
+        $this->studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $this->teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
         $this->getDataGenerator()->enrol_user($this->student->id, $this->course->id, $this->studentrole->id, 'manual');
         $this->getDataGenerator()->enrol_user($this->teacher->id, $this->course->id, $this->teacherrole->id, 'manual');
     }
@@ -89,7 +89,7 @@ class externallib_test extends externallib_advanced_testcase {
         }
 
         // Test user with full capabilities.
-        $this->studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $this->studentrole = $DB->get_record('role', array('shortname' => 'student'));
         $this->getDataGenerator()->enrol_user($user->id, $this->course->id, $this->studentrole->id);
 
         // Trigger and capture the event.
@@ -105,7 +105,7 @@ class externallib_test extends externallib_advanced_testcase {
         // Checking that the event contains the expected values.
         $this->assertInstanceOf('\mod_exescorm\event\course_module_viewed', $event);
         $this->assertEquals($this->context, $event->get_context());
-        $moodleurl = new \moodle_url('/mod/exescorm/view.php', ['id' => $this->cm->id]);
+        $moodleurl = new \moodle_url('/mod/exescorm/view.php', array('id' => $this->cm->id));
         $this->assertEquals($moodleurl, $event->get_url());
         $this->assertEventContextNotUsed($event);
         $this->assertNotEmpty($event->get_name());
@@ -225,8 +225,8 @@ class externallib_test extends externallib_advanced_testcase {
         self::setUser($student);
 
         // Users enrolments.
-        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
-        $teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
         $this->getDataGenerator()->enrol_user($student->id, $course->id, $studentrole->id, 'manual');
         $this->getDataGenerator()->enrol_user($teacher->id, $course->id, $teacherrole->id, 'manual');
 
@@ -258,19 +258,19 @@ class externallib_test extends externallib_advanced_testcase {
 
         $scoes = exescorm_get_scoes($exescorm->id);
         $sco = array_shift($scoes);
-        $sco->extradata = [];
+        $sco->extradata = array();
         $this->assertEquals((array) $sco, $result['scoes'][0]);
 
         $sco = array_shift($scoes);
-        $sco->extradata = [];
-        $sco->extradata[] = [
+        $sco->extradata = array();
+        $sco->extradata[] = array(
             'element' => 'isvisible',
-            'value' => $sco->isvisible,
-        ];
-        $sco->extradata[] = [
+            'value' => $sco->isvisible
+        );
+        $sco->extradata[] = array(
             'element' => 'parameters',
-            'value' => $sco->parameters,
-        ];
+            'value' => $sco->parameters
+        );
         unset($sco->isvisible);
         unset($sco->parameters);
 
@@ -318,18 +318,18 @@ class externallib_test extends externallib_advanced_testcase {
         $this->assertCount(9, $result['scoes']);
         $this->assertCount(0, $result['warnings']);
 
-        $expectedscoes = [];
+        $expectedscoes = array();
         $scoreturnstructure = mod_exescorm_external::get_exescorm_scoes_returns();
         $scoes = exescorm_get_scoes($exescorm->id);
         foreach ($scoes as $sco) {
-            $sco->extradata = [];
+            $sco->extradata = array();
             foreach ($sco as $element => $value) {
                 // Add the extra data to the extradata array and remove the object element.
                 if (!isset($scoreturnstructure->keys['scoes']->content->keys[$element])) {
-                    $sco->extradata[] = [
+                    $sco->extradata[] = array(
                         'element' => $element,
-                        'value' => $value,
-                    ];
+                        'value' => $value
+                    );
                     unset($sco->{$element});
                 }
             }
@@ -363,8 +363,8 @@ class externallib_test extends externallib_advanced_testcase {
         $exescorm = self::getDataGenerator()->create_module('exescorm', $record);
 
         // Users enrolments.
-        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
-        $teacherrole = $DB->get_record('role', ['shortname' => 'teacher']);
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $teacherrole = $DB->get_record('role', array('shortname' => 'teacher'));
         $this->getDataGenerator()->enrol_user($student1->id, $course->id, $studentrole->id, 'manual');
         $this->getDataGenerator()->enrol_user($teacher->id, $course->id, $teacherrole->id, 'manual');
 
@@ -427,21 +427,21 @@ class externallib_test extends externallib_advanced_testcase {
         $sco = array_shift($scoes);
 
         // Tracks.
-        $tracks = [];
-        $tracks[] = [
+        $tracks = array();
+        $tracks[] = array(
             'element' => 'cmi.core.lesson_status',
-            'value' => 'completed',
-        ];
-        $tracks[] = [
+            'value' => 'completed'
+        );
+        $tracks[] = array(
             'element' => 'cmi.core.score.raw',
-            'value' => '80',
-        ];
+            'value' => '80'
+        );
 
         // Set to the student user.
         self::setUser($student);
 
         // Users enrolments.
-        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
         $this->getDataGenerator()->enrol_user($student->id, $course->id, $studentrole->id, 'manual');
 
         // Exceptions first.
@@ -480,8 +480,8 @@ class externallib_test extends externallib_advanced_testcase {
         $result = \external_api::clean_returnvalue(mod_exescorm_external::insert_exescorm_tracks_returns(), $result);
         $this->assertCount(0, $result['warnings']);
 
-        $trackids = $DB->get_records('exescorm_scoes_track', ['userid' => $student->id, 'scoid' => $sco->id,
-                                                                'exescormid' => $exescorm->id, 'attempt' => 1]);
+        $trackids = $DB->get_records('exescorm_scoes_track', array('userid' => $student->id, 'scoid' => $sco->id,
+                                                                'exescormid' => $exescorm->id, 'attempt' => 1));
         // We use asort here to prevent problems with ids ordering.
         $expectedkeys = array_keys($trackids);
         $this->assertEquals(asort($expectedkeys), asort($result['trackids']));
@@ -512,8 +512,8 @@ class externallib_test extends externallib_advanced_testcase {
         $exescorm = self::getDataGenerator()->create_module('exescorm', $record);
 
         // Users enrolments.
-        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
-        $teacherrole = $DB->get_record('role', ['shortname' => 'teacher']);
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $teacherrole = $DB->get_record('role', array('shortname' => 'teacher'));
         $this->getDataGenerator()->enrol_user($student->id, $course->id, $studentrole->id, 'manual');
         $this->getDataGenerator()->enrol_user($teacher->id, $course->id, $teacherrole->id, 'manual');
 
@@ -616,8 +616,8 @@ class externallib_test extends externallib_advanced_testcase {
         $record->course = $course2->id;
         $exescorm2 = self::getDataGenerator()->create_module('exescorm', $record);
 
-        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
-        $teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
 
         // Users enrolments.
         $this->getDataGenerator()->enrol_user($student->id, $course1->id, $studentrole->id, 'manual');
@@ -643,7 +643,7 @@ class externallib_test extends externallib_advanced_testcase {
         $exescorm1->timeclose = $timenow - HOURSECS;
         $DB->update_record('exescorm', $exescorm1);
 
-        $result = mod_exescorm_external::get_exescorms_by_courses([$course1->id]);
+        $result = mod_exescorm_external::get_exescorms_by_courses(array($course1->id));
         $result = \external_api::clean_returnvalue($returndescription, $result);
         $this->assertCount(1, $result['warnings']);
         // Only 'id', 'coursemodule', 'course', 'name', 'intro', 'introformat', 'introfiles'.
@@ -654,7 +654,7 @@ class externallib_test extends externallib_advanced_testcase {
         $exescorm1->timeclose = $exescorm1->timeopen + DAYSECS;
         $DB->update_record('exescorm', $exescorm1);
 
-        $result = mod_exescorm_external::get_exescorms_by_courses([$course1->id]);
+        $result = mod_exescorm_external::get_exescorms_by_courses(array($course1->id));
         $result = \external_api::clean_returnvalue($returndescription, $result);
         $this->assertCount(1, $result['warnings']);
         // Only 'id', 'coursemodule', 'course', 'name', 'intro', 'introformat', 'introfiles'.
@@ -668,12 +668,12 @@ class externallib_test extends externallib_advanced_testcase {
 
         // Create what we expect to be returned when querying the two courses.
         // First for the student user.
-        $expectedfields = ['id', 'coursemodule', 'course', 'name', 'intro', 'introformat', 'lang', 'version', 'maxgrade',
+        $expectedfields = array('id', 'coursemodule', 'course', 'name', 'intro', 'introformat', 'lang', 'version', 'maxgrade',
                                 'grademethod', 'whatgrade', 'maxattempt', 'forcecompleted', 'forcenewattempt', 'lastattemptlock',
                                 'displayattemptstatus', 'displaycoursestructure', 'sha1hash', 'md5hash', 'revision', 'launch',
                                 'skipview', 'hidebrowse', 'hidetoc', 'nav', 'navpositionleft', 'navpositiontop', 'auto',
                                 'popup', 'width', 'height', 'timeopen', 'timeclose', 'packagesize',
-                                'packageurl', 'exescormtype', 'reference'];
+                                'packageurl', 'exescormtype', 'reference');
 
         // Add expected coursemodule and data.
         $exescorm1->coursemodule = $exescorm1->cmid;
@@ -709,8 +709,8 @@ class externallib_test extends externallib_advanced_testcase {
 
         // Forced to boolean as it is returned as PARAM_BOOL.
         $protectpackages = (bool)get_config('exescorm', 'protectpackagedownloads');
-        $expected1 = ['protectpackagedownloads' => $protectpackages];
-        $expected2 = ['protectpackagedownloads' => $protectpackages];
+        $expected1 = array('protectpackagedownloads' => $protectpackages);
+        $expected2 = array('protectpackagedownloads' => $protectpackages);
         foreach ($expectedfields as $field) {
 
             // Since we return the fields used as boolean as PARAM_BOOL instead PARAM_INT we need to force casting here.
@@ -730,12 +730,12 @@ class externallib_test extends externallib_advanced_testcase {
         $expected1['introfiles'] = [];
         $expected2['introfiles'] = [];
 
-        $expectedexescorms = [];
+        $expectedexescorms = array();
         $expectedexescorms[] = $expected2;
         $expectedexescorms[] = $expected1;
 
         // Call the external function passing course ids.
-        $result = mod_exescorm_external::get_exescorms_by_courses([$course2->id, $course1->id]);
+        $result = mod_exescorm_external::get_exescorms_by_courses(array($course2->id, $course1->id));
         $result = \external_api::clean_returnvalue($returndescription, $result);
         $this->assertEquals($expectedexescorms, $result['exescorms']);
 
@@ -754,7 +754,7 @@ class externallib_test extends externallib_advanced_testcase {
         $this->assertEquals($expectedexescorms, $result['exescorms']);
 
         // Call for the second course we unenrolled the user from, expected warning.
-        $result = mod_exescorm_external::get_exescorms_by_courses([$course2->id]);
+        $result = mod_exescorm_external::get_exescorms_by_courses(array($course2->id));
         $this->assertCount(1, $result['warnings']);
         $this->assertEquals('1', $result['warnings'][0]['warningcode']);
         $this->assertEquals($course2->id, $result['warnings'][0]['itemid']);
@@ -762,9 +762,9 @@ class externallib_test extends externallib_advanced_testcase {
         // Now, try as a teacher for getting all the additional fields.
         self::setUser($teacher);
 
-        $additionalfields = ['updatefreq', 'timemodified', 'options',
+        $additionalfields = array('updatefreq', 'timemodified', 'options',
                                     'completionstatusrequired', 'completionscorerequired', 'completionstatusallscos',
-                                    'autocommit', 'section', 'visible', 'groupmode', 'groupingid'];
+                                    'autocommit', 'section', 'visible', 'groupmode', 'groupingid');
 
         foreach ($additionalfields as $field) {
             $fieldtype = $returndescription->keys['exescorms']->content->keys[$field]->type;
@@ -795,7 +795,7 @@ class externallib_test extends externallib_advanced_testcase {
         // Admin also should get all the information.
         self::setAdminUser();
 
-        $result = mod_exescorm_external::get_exescorms_by_courses([$course1->id]);
+        $result = mod_exescorm_external::get_exescorms_by_courses(array($course1->id));
         $result = \external_api::clean_returnvalue($returndescription, $result);
         $this->assertEquals($expectedexescorms, $result['exescorms']);
     }
@@ -848,7 +848,7 @@ class externallib_test extends externallib_advanced_testcase {
         // Checking that the event contains the expected values.
         $this->assertInstanceOf('\mod_exescorm\event\sco_launched', $event);
         $this->assertEquals($this->context, $event->get_context());
-        $moodleurl = new \moodle_url('/mod/exescorm/player.php', ['cm' => $this->cm->id, 'scoid' => $sco->id]);
+        $moodleurl = new \moodle_url('/mod/exescorm/player.php', array('cm' => $this->cm->id, 'scoid' => $sco->id));
         $this->assertEquals($moodleurl, $event->get_url());
         $this->assertEventContextNotUsed($event);
         $this->assertNotEmpty($event->get_name());
@@ -886,7 +886,7 @@ class externallib_test extends externallib_advanced_testcase {
         $exescorm = self::getDataGenerator()->create_module('exescorm', $record);
         $context = \context_module::instance($exescorm->cmid);
 
-        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
         $this->getDataGenerator()->enrol_user($student->id, $course->id, $studentrole->id, 'manual');
 
         self::setUser($student);
@@ -894,7 +894,7 @@ class externallib_test extends externallib_advanced_testcase {
         $result = \external_api::clean_returnvalue(mod_exescorm_external::get_exescorm_access_information_returns(), $result);
 
         // Check default values for capabilities.
-        $enabledcaps = ['canskipview', 'cansavetrack', 'canviewscores'];
+        $enabledcaps = array('canskipview', 'cansavetrack', 'canviewscores');
 
         unset($result['warnings']);
         foreach ($result as $capname => $capvalue) {

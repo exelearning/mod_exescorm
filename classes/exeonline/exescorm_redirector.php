@@ -29,7 +29,6 @@ namespace mod_exescorm\exeonline;
 use coding_exception;
 use dml_exception;
 use mod_exescorm\exeonline\token_manager;
-use moodle_exception;
 use moodle_url;
 
 class exescorm_redirector {

@@ -91,9 +91,9 @@ var debugEXESCORMVersion = '<?php echo $exescorm->version; ?>';
 $lmsprefix = (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'LMS' : '';
 $lmsapi = (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exescorm->version)) ? 'API' : 'API_1484_11';
 
-$lmselements = [];
+$lmselements = array();
 if (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exescorm->version)) {
-    $lmselements = [   'cmi.core._children',
+    $lmselements = array(   'cmi.core._children',
                             'cmi.core.student_id',
                             'cmi.core.student_name',
                             'cmi.core.lesson_location',
@@ -141,9 +141,9 @@ if (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exes
                             'cmi.interactions.n.weighting',
                             'cmi.interactions.n.student_response',
                             'cmi.interactions.n.result',
-                            'cmi.interactions.n.latency'];
+                            'cmi.interactions.n.latency');
 } else {
-    $lmselements = [   'cmi._children',
+    $lmselements = array(   'cmi._children',
                             'cmi._version',
                             'cmi.learner_id',
                             'cmi.learner_name',
@@ -215,7 +215,7 @@ if (exescorm_version_check($exescorm->version, EXESCORM_SCORM_12) || empty($exes
                             'cmi.interactions.n.result',
                             'cmi.interactions.n.latency',
                             'cmi.interactions.n.description',
-                            'adl.nav.request'];
+                            'adl.nav.request');
 }
 ?>
 
