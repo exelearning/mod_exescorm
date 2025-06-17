@@ -598,7 +598,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         // Require status.
         $completionstatusrequiredel = 'completionstatusrequired' . $suffix;
-        foreach (scorm_status_options(true) as $key => $value) {
+        foreach (exescorm_status_options(true) as $key => $value) {
             $key = $completionstatusrequiredel . '['.$key.']';
             $mform->addElement('checkbox', $key, '', $value);
             $mform->setType($key, PARAM_BOOL);
