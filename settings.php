@@ -56,9 +56,7 @@ if ($ADMIN->fulltree) {
 
     // The eXescorm package validation rules.
     $mandatoryfilesre = implode("\n", [
-        '/^contentv[\d+]\.xml$/',
-        '/^content\.xsd$/',
-        '/^content\.data$/',
+	'/^content(v\d+)?\.xml$/',
     ]);
     $forbiddenfilesre = implode("\n", [
         '/.*\.php$/',
