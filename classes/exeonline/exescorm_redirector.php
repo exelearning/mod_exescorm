@@ -81,6 +81,10 @@ class exescorm_redirector {
             'pkgtype' => 'scorm',
             'returnurl' => $returnto->out(false),
             'userid' => $USER->id,
+            'provider' => [
+                'name' => get_config('exescorm', 'providername'),
+                'version' => get_config('exescorm', 'providerversion'),
+            ],
         ];
         $jwttoken = token_manager::get_jwt_token($payload);
         $params = [
