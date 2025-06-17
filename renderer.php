@@ -103,14 +103,22 @@ class mod_exescorm_renderer extends plugin_renderer_base {
      * Generate the EXESCORM's "Exit activity" button
      *
      * @param string $url The url to be hooked up to the exit button
-     * @param \stdClass $cm The course module viewed.
+     * @param stdClass $cm The course module viewed.
      * @return string
+     * @throws dml_exception
+     * @throws coding_exception
+     * @throws moodle_exception
      */
     public function generate_editexitbar(string $url, \stdClass $cm): string {
         $context = ['returnaction' => $url];
         if (has_capability('moodle/course:update', context_course::instance($cm->course))) {
             $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $cm->id, 'forceview' => 1]);
-            $context['editaction'] = exescorm_redirector::get_redirection_url($cm->id, $returnto)->out(false);
+            $exeonlineurl = get_config('exescorm', 'exeonlinebaseuri');
+            if (empty($exeonlineurl)) {
+                $context['editaction'] = false;
+            } else {
+                $context['editaction'] = exescorm_redirector::get_redirection_url($cm->id, $returnto)->out(false);
+            }
         }
         return $this->render_from_template('mod_exescorm/player_editexitbar', $context);
     }

@@ -23,7 +23,7 @@ require_once($CFG->dirroot.'/mod/exescorm/locallib.php');
 class mod_exescorm_mod_form extends moodleform_mod {
 
     public function definition() {
-        global $CFG, $COURSE, $OUTPUT, $PAGE;
+        global $CFG, $COURSE, $OUTPUT;
         $cfgexescorm = get_config('exescorm');
 
         $mform = $this->_form;
@@ -291,8 +291,11 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $this->standard_coursemodule_elements();
 
         // A EXESCORM module should define this within itself and is not needed here.
-        if ($mform->elementExists('completionpassgrade')) {
-            $mform->removeElement('completionpassgrade');
+        $suffix = $this->get_suffix();
+        $completionpassgradeel = 'completionpassgrade' . $suffix;
+        // The 'completionpassgrade' is a radio element with multiple options, so we should remove all of them.
+        while ($mform->elementExists($completionpassgradeel)) {
+            $mform->removeElement($completionpassgradeel);
         }
 
         // Buttons.
@@ -303,12 +306,12 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->hideIf('editonlinearr', 'exescormtype', 'noteq', EXESCORM_TYPE_EXESCORMNET);
     }
 
-
     /**
      * Generate buttons within a group with alternative texts.
      *
      * @param string $groupname
      * @return void
+     * @throws coding_exception
      */
     public function add_edit_online_buttons($groupname) {
         $submitlabel = get_string('exescorm:editonlineanddisplay', 'mod_exescorm');
@@ -334,7 +337,6 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->addGroup($buttonarray, $groupname, '', array(' '), false);
         $mform->setType($groupname, PARAM_RAW);
     }
-
 
     public function data_preprocessing(&$defaultvalues) {
         global $CFG, $COURSE;
@@ -391,27 +393,30 @@ class mod_exescorm_mod_form extends moodleform_mod {
         }
 
         // Set some completion default data.
-        $cvalues = array();
+        $suffix = $this->get_suffix();
+        $completionstatusrequiredel = 'completionstatusrequired' . $suffix;
+        $cvalues = [];
         if (empty($this->_instance)) {
             // When in add mode, set a default completion rule that requires the EXESCORM's status be set to "Completed".
             $cvalues[4] = 1;
-        } else if (!empty($defaultvalues['completionstatusrequired']) && !is_array($defaultvalues['completionstatusrequired'])) {
+        } else if (!empty($defaultvalues[$completionstatusrequiredel]) && !is_array($defaultvalues[$completionstatusrequiredel])) {
             // Unpack values.
             foreach (exescorm_status_options() as $key => $value) {
-                if (($defaultvalues['completionstatusrequired'] & $key) == $key) {
+                if (($defaultvalues[$completionstatusrequiredel] & $key) == $key) {
                     $cvalues[$key] = 1;
                 }
             }
         }
         if (!empty($cvalues)) {
-            $defaultvalues['completionstatusrequired'] = $cvalues;
+            $defaultvalues[$completionstatusrequiredel] = $cvalues;
         }
 
-        if (!isset($defaultvalues['completionscorerequired']) || !strlen($defaultvalues['completionscorerequired'])) {
-            $defaultvalues['completionscoredisabled'] = 1;
+        $completionscorerequiredel = 'completionscorerequired' . $suffix;
+        if (isset($defaultvalues[$completionscorerequiredel])) {
+            $completionscoreenabledel = 'completionscoreenabled' . $suffix;
+            $defaultvalues[$completionscoreenabledel] = 1;
         }
     }
-
 
     public function validation($data, $files) {
         global $CFG, $USER;
@@ -511,16 +516,30 @@ class mod_exescorm_mod_form extends moodleform_mod {
                 $errors['timeclose'] = get_string('closebeforeopen', 'mod_exescorm');
             }
         }
-        if (!empty($data['completionstatusallscos'])) {
+        $suffix = $this->get_suffix();
+        $completionstatusallscosel = 'completionstatusallscos' . $suffix;
+        if (!empty($data[$completionstatusallscosel])) {
+            $completionstatusrequiredel = 'completionstatusrequired' . $suffix;
             $requirestatus = false;
             foreach (exescorm_status_options(true) as $key => $value) {
-                if (!empty($data['completionstatusrequired'][$key])) {
+                if (!empty($data[$completionstatusrequiredel][$key])) {
                     $requirestatus = true;
                 }
             }
             if (!$requirestatus) {
-                $errors['completionstatusallscos'] = get_string('youmustselectastatus', 'mod_exescorm');
+                $errors[$completionstatusallscosel] = get_string('youmustselectastatus', 'mod_exescorm');
             }
+        }
+        // Validate 'Require minimum score' value.
+        $completionscorerequiredel = 'completionscorerequired' . $this->get_suffix();
+        $completionscoreenabledel = 'completionscoreenabled' . $this->get_suffix();
+        if (array_key_exists($completionscoreenabledel, $data) &&
+                $data[$completionscoreenabledel] &&
+                array_key_exists($completionscorerequiredel, $data) &&
+                strlen($data[$completionscorerequiredel]) &&
+                $data[$completionscorerequiredel] <= 0
+        ) {
+            $errors['completionscoregroup' . $this->get_suffix()] = get_string('minimumscoregreater', 'mod_exescorm');
         }
 
         return $errors;
@@ -554,50 +573,54 @@ class mod_exescorm_mod_form extends moodleform_mod {
     }
 
     public function add_completion_rules() {
+        $suffix = $this->get_suffix();
         $mform =& $this->_form;
         $items = array();
 
         // Require score.
-        $group = array();
-        $group[] =& $mform->createElement('text', 'completionscorerequired', '', array('size' => 5));
-        $group[] =& $mform->createElement('checkbox', 'completionscoredisabled', null, get_string('disable'));
-        $mform->setType('completionscorerequired', PARAM_INT);
-        $mform->addGroup($group, 'completionscoregroup', get_string('completionscorerequired', 'mod_exescorm'), '', false);
-        $mform->addHelpButton('completionscoregroup', 'completionscorerequired', 'exescorm');
-        $mform->disabledIf('completionscorerequired', 'completionscoredisabled', 'checked');
-        $mform->setDefault('completionscorerequired', 0);
+        $group = [];
+        $completionscorerequiredel = 'completionscorerequired' . $suffix;
+        $completionscoreenabledel = 'completionscoreenabled' . $suffix;
+        $group[] =& $mform->createElement(
+                'checkbox',
+                $completionscoreenabledel,
+                null,
+                get_string('completionscorerequired', 'mod_exescorm')
+        );
+        $group[] =& $mform->createElement('text', $completionscorerequiredel, '', ['size' => 5]);
+        $mform->setType($completionscorerequiredel, PARAM_INT);
+        $completionscoregroupel = 'completionscoregroup' . $suffix;
+        $mform->addGroup($group, $completionscoregroupel, '', '', false);
+        $mform->hideIf($completionscorerequiredel, $completionscoreenabledel, 'notchecked');
+        $mform->setDefault($completionscorerequiredel, 0);
 
-        $items[] = 'completionscoregroup';
+        $items[] = $completionscoregroupel;
 
         // Require status.
-        $first = true;
-        $firstkey = null;
+        $completionstatusrequiredel = 'completionstatusrequired' . $suffix;
         foreach (exescorm_status_options(true) as $key => $value) {
-            $name = null;
-            $key = 'completionstatusrequired['.$key.']';
-            if ($first) {
-                $name = get_string('completionstatusrequired', 'mod_exescorm');
-                $first = false;
-                $firstkey = $key;
-            }
-            $mform->addElement('checkbox', $key, $name, $value);
+            $key = $completionstatusrequiredel . '['.$key.']';
+            $mform->addElement('checkbox', $key, '', $value);
             $mform->setType($key, PARAM_BOOL);
+            $mform->hideIf($key, $completionstatusrequiredel, 'notchecked');
             $items[] = $key;
         }
-        $mform->addHelpButton($firstkey, 'completionstatusrequired', 'exescorm');
 
-        $mform->addElement('checkbox', 'completionstatusallscos', get_string('completionstatusallscos', 'mod_exescorm'));
-        $mform->setType('completionstatusallscos', PARAM_BOOL);
-        $mform->addHelpButton('completionstatusallscos', 'completionstatusallscos', 'exescorm');
-        $mform->setDefault('completionstatusallscos', 0);
-        $items[] = 'completionstatusallscos';
+        $completionstatusallscosel = 'completionstatusallscos' . $suffix;
+        $mform->addElement('checkbox', $completionstatusallscosel, get_string('completionstatusallscos', 'mod_exescorm'));
+        $mform->setType($completionstatusallscosel, PARAM_BOOL);
+        $mform->addHelpButton($completionstatusallscosel, 'completionstatusallscos', 'mod_exescorm');
+        $mform->setDefault($completionstatusallscosel, 0);
+        $items[] = $completionstatusallscosel;
 
         return $items;
     }
 
     public function completion_rule_enabled($data) {
-        $status = !empty($data['completionstatusrequired']);
-        $score = empty($data['completionscoredisabled']) && strlen($data['completionscorerequired']);
+        $suffix = $this->get_suffix();
+        $status = !empty($data['completionstatusrequired' . $suffix]);
+        $score = !empty($data['completionscoreenabled' . $suffix]) &&
+                strlen($data['completionscorerequired' . $suffix] && $data['completionscorerequired' . $suffix] > 0);
 
         return $status || $score;
     }
@@ -609,13 +632,15 @@ class mod_exescorm_mod_form extends moodleform_mod {
      * Only available on moodleform_mod.
      *
      * @param stdClass $data the form data to be modified.
+     * @throws moodle_exception
      */
     public function data_postprocessing($data) {
         parent::data_postprocessing($data);
         // Convert completionstatusrequired to a proper integer, if any.
         $total = 0;
-        if (isset($data->completionstatusrequired) && is_array($data->completionstatusrequired)) {
-            foreach ($data->completionstatusrequired as $state => $value) {
+        $suffix = $this->get_suffix();
+        if (isset($data->{'completionstatusrequired' . $suffix}) && is_array($data->{'completionstatusrequired' . $suffix})) {
+            foreach ($data->{'completionstatusrequired' . $suffix} as $state => $value) {
                 if ($value) {
                     $total |= $state;
                 }
@@ -623,12 +648,13 @@ class mod_exescorm_mod_form extends moodleform_mod {
             if (!$total) {
                 $total = null;
             }
-            $data->completionstatusrequired = $total;
+            $data->{'completionstatusrequired' . $suffix} = $total;
         }
 
         if (!empty($data->completionunlocked)) {
             // Turn off completion settings if the checkboxes aren't ticked.
-            $autocompletion = isset($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
+            $completion = $data->{'completion' . $suffix};
+            $autocompletion = isset($completion) && $completion == COMPLETION_TRACKING_AUTOMATIC;
 
             if (!(isset($data->completionstatusrequired) && $autocompletion)) {
                 $data->completionstatusrequired = null;
@@ -636,8 +662,8 @@ class mod_exescorm_mod_form extends moodleform_mod {
             // Else do nothing: completionstatusrequired has been already converted
             // into a correct integer representation.
 
-            if (!empty($data->completionscoredisabled) || !$autocompletion) {
-                $data->completionscorerequired = null;
+            if (!(isset($data->{'completionscoreenabled' . $suffix}) && $autocompletion)) {
+                $data->{'completionscorerequired' . $suffix} = null;
             }
         }
 
@@ -645,7 +671,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         if ($data->exescormtype === EXESCORM_TYPE_EXESCORMNET ) {
             if (! isset($data->showgradingmanagement)) {
                 if (isset($data->exebutton)) {
-                    // Return to activity. If it this a new activity we don't have a coursemodule yet. We'll fix it in redirector.
+                    // Edit and view.
                     $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $data->coursemodule, 'forceview' => 1]);
                 } else {
                     // Return to course.
