@@ -58,7 +58,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
             EXESCORM_TYPE_LOCAL => get_string('typelocal', 'mod_exescorm'),
         ];
         $defaulttype = EXESCORM_TYPE_LOCAL;
-        if (!empty($cfgexescorm->exeonlinebaseuri) && !empty($cfgexescorm->hmackey1)) {
+        if (!empty($cfgexescorm->exeonlinebaseuri)) {
             if ($editmode) {
                 $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormedit', 'mod_exescorm');
             } else {

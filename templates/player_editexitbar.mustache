@@ -30,9 +30,21 @@
         {{#str}}exitactivity, mod_exescorm{{/str}}
     </a>
     {{#editaction}}
-    <a class="btn btn-secondary mr-1" data-action="mod_exescorm/link-edit"
-        href="{{{editaction}}}">
-        {{#str}}typeexescormedit, mod_exescorm{{/str}}
-    </a>
+        {{#hasgrades}}
+            <button type="button" class="btn btn-secondary mr-1" data-action="edit-exescorm" data-editurl="{{{editaction}}}">
+                {{#str}}typeexescormedit, mod_exescorm{{/str}}
+            </button>
+        {{/hasgrades}}
+        {{^hasgrades}}
+            <a class="btn btn-secondary mr-1" href="{{{editaction}}}">
+                {{#str}}typeexescormedit, mod_exescorm{{/str}}
+            </a>
+        {{/hasgrades}}
     {{/editaction}}
 </div>
+
+{{#editaction}}
+    {{#js}}
+        require(['mod_exescorm/edit_confirmation'], (module) => module.init());
+    {{/js}}
+{{/editaction}}

@@ -100,7 +100,7 @@ class mod_exescorm_renderer extends plugin_renderer_base {
     }
 
     /**
-     * Generate the EXESCORM's "Exit activity" button
+     * Generate the EXESCORM's "Edit on Exescorm" and  "Exit activity" buttons
      *
      * @param string $url The url to be hooked up to the exit button
      * @param stdClass $cm The course module viewed.
@@ -111,7 +111,14 @@ class mod_exescorm_renderer extends plugin_renderer_base {
      */
     public function generate_editexitbar(string $url, \stdClass $cm): string {
         $context = ['returnaction' => $url];
-        if (has_capability('moodle/course:update', context_course::instance($cm->course))) {
+
+        // Check if this exescorm activity has grades to determine if show a confirmation modal.
+        global $DB;
+        $exescorm = $DB->get_record("exescorm", array("id" => $cm->instance));
+        $context['hasgrades'] = exescorm_get_user_grades($exescorm, 0);
+
+        $capability = has_capability('moodle/course:update', context_course::instance($cm->course));
+        if ($capability && get_config('exescorm', 'exeonlinebaseuri')) {
             $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $cm->id, 'forceview' => 1]);
             $exeonlineurl = get_config('exescorm', 'exeonlinebaseuri');
             if (empty($exeonlineurl)) {
