@@ -33,6 +33,17 @@ if ($ADMIN->fulltree) {
         get_string('exeonline:hmackey1', 'mod_exescorm'),
         get_string('exeonline:hmackey1_desc', 'mod_exescorm'), ''));
 
+    $settings->add(new admin_setting_configtext('exescorm/providername',
+        get_string('exeonline:provider_name', 'mod_exescorm'),
+        get_string('exeonline:provider_name_desc', 'mod_exescorm'), 'Moodle'));
+
+    $moodleversion = substr($CFG->release, 0, 3);
+    $settings->add(new admin_setting_configtext('exescorm/providerversion',
+        get_string('exeonline:provider_version', 'mod_exescorm'),
+        get_string('exeonline:provider_version_desc', 'mod_exescorm')
+            . "<br><code>Current Moodle Version: "
+            . $CFG->release . "</code>", $moodleversion));
+
     $settings->add(new admin_setting_configduration('exescorm/tokenexpiration',
         get_string('exeonline:tokenexpiration', 'mod_exescorm'),
         get_string('exeonline:tokenexpiration_desc', 'mod_exescorm'), 86400, 1));
