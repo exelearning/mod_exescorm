@@ -314,6 +314,7 @@ $string['maximumattemptsdesc'] = 'Esta preferencia fija el valor por defecto sob
 $string['maximumgradedesc'] = 'Esta preferencia fija el valor por defecto sobre la calificación máxima de una actividad';
 $string['menubar'] = 'Mostrar la barra de menú';
 $string['min'] = 'Calificación mínima';
+$string['minimumscoregreater'] = 'La puntuación mínima debe ser mayor que 0.';
 $string['missing_attribute'] = 'Falta atributo ({$a->attr}) en marca {$a->tag}';
 $string['missingparam'] = 'Un parámetro requerido falta o es incorrecto';
 $string['missing_tag'] = 'Falta marca {$a->tag}';

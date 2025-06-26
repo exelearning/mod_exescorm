@@ -314,6 +314,7 @@ $string['maximumattemptsdesc'] = 'Hobespen horrek finkatzen du jarduera baten ge
 $string['maximumgradedesc'] = 'Hobespen horrek finkatzen du jarduera baten gehienezko kalifikazioaren gaineko balio lehenetsia';
 $string['menubar'] = 'Erakutsi menu-barra';
 $string['min'] = 'Gutxieneko kalifikazioa';
+$string['minimumscoregreater'] = 'Gutxieneko puntuazioak 0 baino handiagoa izan behar du.';
 $string['missing_attribute'] = '({$a->attr}) atributua falta da {$a->tag} markan';
 $string['missingparam'] = 'Eskatutako parametro bat falta da edo ez da zuzena';
 $string['missing_tag'] = '{$A->tag} marka falta da';
