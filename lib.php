@@ -138,11 +138,8 @@ function exescorm_add_instance($exescorm, $mform=null) {
     // Reload exescorm instance.
     $record = $DB->get_record('exescorm', array('id' => $id));
 
-    if ($exescorm->exescormtype === EXESCORM_TYPE_EXESCORMNET
-        || $exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
-        if ($exescorm->exescormtype === EXESCORM_TYPE_EXESCORMNET) {
-            $record->exescormtype = EXESCORM_TYPE_LOCAL;
-        }
+    if ($exescorm->exescormtype === EXESCORM_TYPE_EXESCORMNET) {
+        $record->exescormtype = EXESCORM_TYPE_LOCAL;
 
         $fs = get_file_storage();
         $templatename = get_config('exescorm', 'template');
@@ -175,6 +172,46 @@ function exescorm_add_instance($exescorm, $mform=null) {
         $filename = $file->get_filename();
         if ($filename !== false) {
             $record->reference = $filename;
+        }
+    } else if ($exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
+        // Embedded type: user may optionally upload an .elpx project file.
+        if (!empty($exescorm->packagefile)) {
+            $fs = get_file_storage();
+            $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
+            file_save_draft_area_files($exescorm->packagefile, $context->id, 'mod_exescorm', 'package',
+                0, array('subdirs' => 0, 'maxfiles' => 1));
+            $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', 0, '', false);
+            $file = reset($files);
+            if ($file) {
+                $record->reference = $file->get_filename();
+            }
+        } else {
+            // No file uploaded: create default package so there is something to parse.
+            $fs = get_file_storage();
+            $templatename = get_config('exescorm', 'template');
+            $templatefile = false;
+            $fileinfo = [
+                'contextid' => $context->id,
+                'component' => 'mod_exescorm',
+                'filearea' => 'package',
+                'itemid' => 0,
+                'filepath' => '/',
+                'filename' => 'default_package.zip',
+                'userid' => $USER->id,
+                'source' => 'default_package.zip',
+                'author' => fullname($USER),
+                'license' => 'unknown',
+            ];
+            if (! empty($templatename)) {
+                $templatefile = $fs->get_file(1, 'exescorm', 'config', 0, '/', ltrim($templatename, '/'));
+            }
+            if ($templatefile) {
+                $file = $fs->create_file_from_storedfile($fileinfo, $templatefile);
+            } else {
+                $defaultpackagepath = $CFG->dirroot . '/mod/exescorm/data/default_package.zip';
+                $file = $fs->create_file_from_pathname($fileinfo, $defaultpackagepath);
+            }
+            $record->reference = $file->get_filename();
         }
     } else if ($record->exescormtype === EXESCORM_TYPE_LOCAL) {
         // Store the package and verify.
@@ -211,7 +248,18 @@ function exescorm_add_instance($exescorm, $mform=null) {
     $record->cmidnumber = $cmidnumber;
     $record->cmid = $cmid;
 
-    exescorm_parse($record, true);
+    // Skip parse for .elpx files: they are eXeLearning project files, not SCORM packages.
+    // The embedded editor will import the .elpx and export a proper SCORM package on save.
+    $skipparse = false;
+    if (!empty($record->reference)) {
+        $ext = strtolower(pathinfo($record->reference, PATHINFO_EXTENSION));
+        if ($ext === 'elpx') {
+            $skipparse = true;
+        }
+    }
+    if (!$skipparse) {
+        exescorm_parse($record, true);
+    }
 
     exescorm_grade_item_update($record);
     exescorm_update_calendar($record, $cmid);
@@ -265,7 +313,19 @@ function exescorm_update_instance($exescorm, $mform=null) {
     }
 
     if ($exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
-        // Embedded editor saves are handled via editor/save.php, nothing to do here.
+        // Embedded editor saves are handled via editor/save.php.
+        // But user may re-upload an .elpx file via the settings form.
+        if (!empty($exescorm->packagefile)) {
+            $fs = get_file_storage();
+            $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
+            file_save_draft_area_files($exescorm->packagefile, $context->id, 'mod_exescorm', 'package',
+                0, array('subdirs' => 0, 'maxfiles' => 1));
+            $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', 0, '', false);
+            $file = reset($files);
+            if ($file) {
+                $exescorm->reference = $file->get_filename();
+            }
+        }
     } else if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL) {
         if (!empty($exescorm->packagefile)) {
             $fs = get_file_storage();
@@ -312,7 +372,18 @@ function exescorm_update_instance($exescorm, $mform=null) {
     $exescorm->idnumber = $cmidnumber;
     $exescorm->cmid = $cmid;
 
-    exescorm_parse($exescorm, (bool)$exescorm->updatefreq);
+    // Skip parse for .elpx files: they are eXeLearning project files, not SCORM packages.
+    // The embedded editor will import the .elpx and export a proper SCORM package on save.
+    $skipparse = false;
+    if (!empty($exescorm->reference)) {
+        $ext = strtolower(pathinfo($exescorm->reference, PATHINFO_EXTENSION));
+        if ($ext === 'elpx') {
+            $skipparse = true;
+        }
+    }
+    if (!$skipparse) {
+        exescorm_parse($exescorm, (bool)$exescorm->updatefreq);
+    }
 
     exescorm_grade_item_update($exescorm);
     exescorm_update_grades($exescorm);

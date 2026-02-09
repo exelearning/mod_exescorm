@@ -64,8 +64,11 @@ require_login($course, false, $cm);
 $context = context_course::instance($course->id);
 $contextmodule = context_module::instance($cm->id);
 
+// Check if package is an .elpx file (eXeLearning project, not yet converted to SCORM).
+$iselpx = !empty($exescorm->reference) && strtolower(pathinfo($exescorm->reference, PATHINFO_EXTENSION)) === 'elpx';
+
 $launch = false; // Does this automatically trigger a launch based on skipview.
-if (!empty($exescorm->popup)) {
+if (!empty($exescorm->popup) && !$iselpx) {
     $scoid = 0;
     $orgidentifier = '';
 
@@ -128,7 +131,7 @@ $pagetitle = strip_tags($shortname.': '.format_string($exescorm->name));
 // Trigger module viewed event.
 exescorm_view($exescorm, $course, $cm, $contextmodule);
 
-if (empty($preventskip) && empty($launch) && (has_capability('mod/exescorm:skipview', $contextmodule))) {
+if (empty($preventskip) && empty($launch) && !$iselpx && (has_capability('mod/exescorm:skipview', $contextmodule))) {
     exescorm_simple_play($exescorm, $USER, $contextmodule, $cm->id);
 }
 
@@ -167,16 +170,38 @@ if ($CFG->version < 2022041900) { // Moodle prior to 4.
 }
 // Print the main part of the page.
 $attemptstatus = '';
-if (empty($launch) && ($exescorm->displayattemptstatus == EXESCORM_DISPLAY_ATTEMPTSTATUS_ALL ||
+if (empty($launch) && !$iselpx && ($exescorm->displayattemptstatus == EXESCORM_DISPLAY_ATTEMPTSTATUS_ALL ||
          $exescorm->displayattemptstatus == EXESCORM_DISPLAY_ATTEMPTSTATUS_ENTRY)) {
     $attemptstatus = exescorm_get_attempt_status($USER, $exescorm, $cm);
 }
 echo $OUTPUT->box(format_module_intro('exescorm', $exescorm, $cm->id), '', 'intro');
 
+// Show embedded editor button if available and user has capability.
+// Show for embedded type OR when the package is an .elpx file (needs editor to convert to SCORM).
+if (($exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED || $iselpx)
+    && exescorm_embedded_editor_available()
+    && has_capability('moodle/course:update', context_course::instance($course->id))) {
+    $editorurl = new moodle_url('/mod/exescorm/editor/index.php', [
+        'id' => $cm->id,
+        'sesskey' => sesskey(),
+    ]);
+    echo html_writer::start_div('d-flex mb-2');
+    echo html_writer::tag('button', get_string('editembedded', 'mod_exescorm'), [
+        'type' => 'button',
+        'class' => 'btn btn-primary',
+        'data-action' => 'mod_exescorm/editor-open',
+        'data-cmid' => $cm->id,
+        'data-editorurl' => $editorurl->out(false),
+        'data-activityname' => format_string($exescorm->name),
+    ]);
+    echo html_writer::end_div();
+    $PAGE->requires->js_call_amd('mod_exescorm/editor_modal', 'init');
+}
+
 // Check if EXESCORM available. No need to display warnings because activity dates are displayed at the top of the page.
 list($available, $warnings) = exescorm_get_availability_status($exescorm);
 
-if ($available && empty($launch)) {
+if ($available && empty($launch) && !$iselpx) {
     exescorm_print_launch($USER, $exescorm, 'view.php?id='.$cm->id, $cm);
 }
 

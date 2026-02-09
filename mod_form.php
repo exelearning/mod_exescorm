@@ -89,7 +89,6 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         $nonfilepickertypes = [
                 EXESCORM_TYPE_EXESCORMNET,
-                EXESCORM_TYPE_EMBEDDED,
             ];
         // Reference.
         $mform->addElement('select', 'exescormtype', get_string('exescormtype', 'mod_exescorm'), $exescormtypes);
@@ -480,6 +479,9 @@ class mod_exescorm_mod_form extends moodleform_mod {
                     }
                 } else if (strtolower(substr($file->get_filename(), -3)) == 'xml') {
                     $errors['packagefile'] = get_string('invalidmanifestname', 'mod_exescorm');
+                } else if (strtolower(pathinfo($file->get_filename(), PATHINFO_EXTENSION)) === 'elpx') {
+                    // .elpx is an eXeLearning project file, not a SCORM package.
+                    // It will be imported by the embedded editor and exported as SCORM on save.
                 } else {
                     // Validate this EXESCORM package.
                     $errors = array_merge($errors, exescorm_validate_package($file));
