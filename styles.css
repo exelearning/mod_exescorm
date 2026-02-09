@@ -521,3 +521,46 @@
     right: 145px;
 }
 
+/* Embedded editor modal overlay */
+.exescorm-editor-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.exescorm-editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    flex-shrink: 0;
+}
+
+.exescorm-editor-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.exescorm-editor-buttons {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.exescorm-editor-iframe {
+    flex: 1;
+    border: none;
+    width: 100%;
+}
+

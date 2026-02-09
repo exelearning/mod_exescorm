@@ -491,6 +491,23 @@ $string['width'] = 'Anchura';
 $string['window'] = 'Xanela';
 $string['youmustselectastatus'] = 'Debe seleccionar un estado que será requirido';
 
+// Embedded editor strings.
+$string['embeddededitorsettings'] = 'Tipo de editor';
+$string['editormode'] = 'Modo de editor';
+$string['editormodedesc'] = 'Seleccione que editor usar para crear e editar contido eXeLearning. A configuración de conexión online só aplica cando se selecciona o modo "eXeLearning Online".';
+$string['editormodeonline'] = 'eXeLearning Online (servidor remoto)';
+$string['editormodeembedded'] = 'Editor integrado (embebido)';
+$string['embeddednotinstalled'] = 'Os ficheiros do editor integrado non están instalados. Execute "make build-editor" para xeralos.';
+$string['editembedded'] = 'Editar con eXeLearning';
+$string['editembedded_integrated'] = 'Integrado';
+$string['editembedded_help'] = 'Abre o editor eXeLearning integrado para editar o contido directamente dentro de Moodle.';
+$string['editormissing'] = 'O editor integrado eXeLearning non está instalado. Contacte co administrador.';
+$string['embeddedtypehelp'] = 'Crearase a actividade e poderá editala usando o editor eXeLearning integrado dende a páxina de visualización da actividade.';
+$string['saving'] = 'Gardando...';
+$string['savedsuccess'] = 'Cambios gardados correctamente';
+$string['savetomoodle'] = 'Gardar en Moodle';
+$string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
+
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Amosar o nome da actividade';

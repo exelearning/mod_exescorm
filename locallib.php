@@ -231,13 +231,14 @@ function exescorm_parse($exescorm, $full) {
     $context = context_module::instance($exescorm->cmid);
     $newhash = $exescorm->sha1hash;
 
-    if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL || $exescorm->exescormtype === EXESCORM_TYPE_LOCALSYNC) {
+    if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL || $exescorm->exescormtype === EXESCORM_TYPE_LOCALSYNC
+        || $exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
 
         $fs = get_file_storage();
         $packagefile = false;
         $packagefileimsmanifest = false;
 
-        if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL) {
+        if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL || $exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
             if ($packagefile = $fs->get_file($context->id, 'mod_exescorm', 'package', 0, '/', $exescorm->reference)) {
                 if ($packagefile->is_external_file()) { // Get zip file so we can check it is correct.
                     $packagefile->import_external_file_contents();

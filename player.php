@@ -314,6 +314,7 @@ if (file_exists($CFG->dirroot.'/mod/exescorm/datamodels/'.$exescorm->version.'.p
 \core\session\manager::keepalive('networkdropped', 'mod_exescorm', 30, 10);
 
 $PAGE->requires->js_call_amd('mod_exescorm/fullscreen', 'init');
+$PAGE->requires->js_call_amd('mod_exescorm/editor_modal', 'init');
 
 echo $OUTPUT->footer();
 

@@ -491,6 +491,23 @@ $string['width'] = 'Zabalera';
 $string['window'] = 'Leihoa';
 $string['youmustselectastatus'] = 'Eskatuko den egoera bat hautatu behar duzu';
 
+// Embedded editor strings.
+$string['embeddededitorsettings'] = 'Editore mota';
+$string['editormode'] = 'Editore modua';
+$string['editormodedesc'] = 'Aukeratu zein editore erabili eXeLearning edukia sortu eta editatzeko. Online konexio-ezarpenak soilik aplikatzen dira "eXeLearning Online" modua hautatzen denean.';
+$string['editormodeonline'] = 'eXeLearning Online (urruneko zerbitzaria)';
+$string['editormodeembedded'] = 'Editore txertatua (integratua)';
+$string['embeddednotinstalled'] = 'Editore txertatuaren fitxategiak ez daude instalatuta. Exekutatu "make build-editor" sortzeko.';
+$string['editembedded'] = 'Editatu eXeLearning-ekin';
+$string['editembedded_integrated'] = 'Integratua';
+$string['editembedded_help'] = 'Ireki eXeLearning editore txertatua edukia zuzenean Moodle-n editatzeko.';
+$string['editormissing'] = 'eXeLearning editore txertatua ez dago instalatuta. Jarri harremanetan administratzailearekin.';
+$string['embeddedtypehelp'] = 'Jarduera sortuko da eta eXeLearning editore txertatuarekin editatu ahal izango duzu jardueraren ikuspegi-orritik.';
+$string['saving'] = 'Gordetzen...';
+$string['savedsuccess'] = 'Aldaketak ondo gorde dira';
+$string['savetomoodle'] = 'Moodle-n gorde';
+$string['typeembedded'] = 'Sortu eXeLearning-ekin (editore txertatua)';
+
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Informazioa';
 $string['displayactivityname'] = 'Erakutsi jardueraren izena';

@@ -31,6 +31,8 @@ define('EXESCORM_TYPE_LOCALSYNC', 'localsync');
 define('EXESCORM_TYPE_EXTERNAL', 'external');
 /** EXESCORM_TYPE_AICCURL = external AICC url */
 define('EXESCORM_TYPE_AICCURL', 'aiccurl');
+/** EXESCORM_TYPE_EMBEDDED = embedded static editor */
+define('EXESCORM_TYPE_EMBEDDED', 'embedded');
 
 define('EXESCORM_TOC_SIDE', 0);
 define('EXESCORM_TOC_HIDDEN', 1);
@@ -136,8 +138,11 @@ function exescorm_add_instance($exescorm, $mform=null) {
     // Reload exescorm instance.
     $record = $DB->get_record('exescorm', array('id' => $id));
 
-    if ($exescorm->exescormtype === EXESCORM_TYPE_EXESCORMNET) {
-        $record->exescormtype = EXESCORM_TYPE_LOCAL;
+    if ($exescorm->exescormtype === EXESCORM_TYPE_EXESCORMNET
+        || $exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
+        if ($exescorm->exescormtype === EXESCORM_TYPE_EXESCORMNET) {
+            $record->exescormtype = EXESCORM_TYPE_LOCAL;
+        }
 
         $fs = get_file_storage();
         $templatename = get_config('exescorm', 'template');
@@ -259,7 +264,9 @@ function exescorm_update_instance($exescorm, $mform=null) {
         $exescorm->exescormtype = EXESCORM_TYPE_LOCAL;
     }
 
-    if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL) {
+    if ($exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
+        // Embedded editor saves are handled via editor/save.php, nothing to do here.
+    } else if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL) {
         if (!empty($exescorm->packagefile)) {
             $fs = get_file_storage();
             $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
@@ -1020,7 +1027,12 @@ function exescorm_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
         }
         $revision = (int)array_shift($args); // Prevents caching problems - ignored here.
         $relativepath = implode('/', $args);
-        $fullpath = "/$context->id/mod_exescorm/package/0/$relativepath";
+        // Try with revision first (used by embedded editor), fallback to itemid=0.
+        $fullpath = "/$context->id/mod_exescorm/package/$revision/$relativepath";
+        $fs = get_file_storage();
+        if (!$fs->get_file_by_hash(sha1($fullpath))) {
+            $fullpath = "/$context->id/mod_exescorm/package/0/$relativepath";
+        }
         $lifetime = 0; // No caching here.
 
     } else if ($filearea === 'imsmanifest') { // This isn't a real filearea, it's a url parameter for this type of package.
@@ -1202,7 +1214,8 @@ function exescorm_version_check($exescormversion, $version='') {
  */
 function exescorm_dndupload_register() {
     return array('files' => array(
-        array('extension' => 'zip', 'message' => get_string('dnduploadexescorm', 'mod_exescorm'))
+        array('extension' => 'zip', 'message' => get_string('dnduploadexescorm', 'mod_exescorm')),
+        array('extension' => 'elpx', 'message' => get_string('dnduploadexescorm', 'mod_exescorm')),
     ));
 }
 
@@ -1879,6 +1892,58 @@ function mod_exescorm_core_calendar_get_event_action_string(string $eventtype): 
     }
 
     return get_string($identifier, 'mod_exescorm', $modulename);
+}
+
+/**
+ * Check if the embedded static editor is available.
+ *
+ * Checks both the admin editor mode setting and the existence of the editor files.
+ *
+ * @return bool True if the editor mode is 'embedded' and dist/static/index.html exists.
+ */
+function exescorm_embedded_editor_available() {
+    global $CFG;
+    $mode = get_config('exescorm', 'editormode');
+    if ($mode === false) {
+        $mode = 'online';
+    }
+    return ($mode === 'embedded') && file_exists($CFG->dirroot . '/mod/exescorm/dist/static/index.html');
+}
+
+/**
+ * Check if the online eXeLearning editor is available.
+ *
+ * Checks that the editor mode is not 'embedded' and that the online base URI is configured.
+ *
+ * @return bool True if online editor mode is active and base URI is configured.
+ */
+function exescorm_online_editor_available() {
+    $mode = get_config('exescorm', 'editormode');
+    if ($mode === false) {
+        $mode = 'online';
+    }
+    return ($mode !== 'embedded') && !empty(get_config('exescorm', 'exeonlinebaseuri'));
+}
+
+/**
+ * Get the URL for the package file of an exescorm instance.
+ *
+ * @param stdClass $exescorm The exescorm record.
+ * @param context_module $context The module context.
+ * @return moodle_url|null The URL to the package file, or null if not found.
+ */
+function exescorm_get_package_url($exescorm, $context) {
+    $fs = get_file_storage();
+    $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', false, 'sortorder DESC, id ASC', false);
+    $package = reset($files);
+    if (!$package) {
+        return null;
+    }
+    $revision = isset($exescorm->revision) ? $exescorm->revision : 0;
+    return moodle_url::make_pluginfile_url(
+        $context->id, 'mod_exescorm', 'package', $revision,
+        $package->get_filepath(), $package->get_filename()
+    );
 }
 
 /**

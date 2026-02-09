@@ -498,6 +498,23 @@ $string['whatgradedesc'] = 'Si s\'enregistra en el butlletí de qualificacions l
 $string['width'] = 'Amplada';
 $string['window'] = 'Finestra';
 $string['youmustselectastatus'] = 'Ha de seleccionar un estat que serà requerit';
+// Embedded editor strings.
+$string['embeddededitorsettings'] = 'Tipus d\'editor';
+$string['editormode'] = 'Mode d\'editor';
+$string['editormodedesc'] = 'Seleccioneu quin editor voleu utilitzar per crear i editar contingut eXeLearning. La configuració de connexió online només s\'aplica quan es selecciona el mode "eXeLearning Online".';
+$string['editormodeonline'] = 'eXeLearning Online (servidor remot)';
+$string['editormodeembedded'] = 'Editor integrat (incrustat)';
+$string['embeddednotinstalled'] = 'Els fitxers de l\'editor integrat no estan instal·lats. Executeu "make build-editor" per generar-los.';
+$string['editembedded'] = 'Editar amb eXeLearning';
+$string['editembedded_integrated'] = 'Integrat';
+$string['editembedded_help'] = 'Obre l\'editor eXeLearning integrat per editar el contingut directament dins de Moodle.';
+$string['editormissing'] = 'L\'editor integrat eXeLearning no està instal·lat. Contacteu amb l\'administrador.';
+$string['embeddedtypehelp'] = 'Es crearà l\'activitat i podreu editar-la amb l\'editor eXeLearning integrat des de la pàgina de visualització de l\'activitat.';
+$string['saving'] = 'Desant...';
+$string['savedsuccess'] = 'Canvis desats correctament';
+$string['savetomoodle'] = 'Desar a Moodle';
+$string['typeembedded'] = 'Crear amb eXeLearning (editor integrat)';
+
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Mostra el nom de l\'activitat';
 $string['displayactivityname_help'] = 'Si cal mostrar o no el nom de l\'activitat al damunt del reproductor eXeLearning';

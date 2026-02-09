@@ -21,9 +21,48 @@ if ($ADMIN->fulltree) {
     $yesno = [0 => get_string('no'),
                    1 => get_string('yes')];
 
+    // Embedded editor settings.
+    $editoravailable = file_exists($CFG->dirroot . '/mod/exescorm/dist/static/index.html');
+    $settings->add(new admin_setting_heading('exescorm/embeddededitorsettings',
+        get_string('embeddededitorsettings', 'mod_exescorm'), ''));
+
+    $editormodedesc = get_string('editormodedesc', 'mod_exescorm');
+    if (!$editoravailable) {
+        $editormodedesc .= '<br><strong>' . get_string('embeddednotinstalled', 'mod_exescorm') . '</strong>';
+    }
+
+    $editormodes = [
+        'online' => get_string('editormodeonline', 'mod_exescorm'),
+        'embedded' => get_string('editormodeembedded', 'mod_exescorm'),
+    ];
+    $settings->add(new admin_setting_configselect('exescorm/editormode',
+        get_string('editormode', 'mod_exescorm'), $editormodedesc,
+        'online', $editormodes));
+
+    // JavaScript to toggle connection settings visibility based on editor mode.
+    $connectionsettingsdesc = '<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var modeSelect = document.getElementById("id_s_exescorm_editormode");
+    if (!modeSelect) return;
+    var connectionIds = [
+        "admin-connectionsettings", "admin-exeonlinebaseuri", "admin-providername",
+        "admin-providerversion", "admin-hmackey1", "admin-tokenexpiration"
+    ];
+    function toggleConnectionSettings() {
+        var show = (modeSelect.value === "online");
+        connectionIds.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = show ? "" : "none";
+        });
+    }
+    modeSelect.addEventListener("change", toggleConnectionSettings);
+    toggleConnectionSettings();
+});
+</script>';
+
     // Connection settings.
     $settings->add(new admin_setting_heading('exescorm/connectionsettings',
-        get_string('exeonline:connectionsettings', 'mod_exescorm'), ''));
+        get_string('exeonline:connectionsettings', 'mod_exescorm'), $connectionsettingsdesc));
 
     $settings->add(new admin_setting_configtext('exescorm/exeonlinebaseuri',
         get_string('exeonline:baseuri', 'mod_exescorm'),
