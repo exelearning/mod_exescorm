@@ -202,7 +202,6 @@ help:
 	@echo "  clean-editor           - Remove editor build artifacts"
 	@echo "  update-submodule       - Initialize editor submodule"
 	@echo "  force-update-submodule - Force update editor submodule to latest"
-	@echo "  package                - Create distributable ZIP (VERSION=X required)"
 	@echo "  help                   - Display this help with available commands"
 
 
