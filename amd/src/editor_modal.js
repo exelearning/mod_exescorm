@@ -162,11 +162,10 @@ const handleMessage = (event) => {
                 getString('savedsuccess', 'mod_exescorm').then((label) => {
                     saveBtn.textContent = label;
                     saveBtn.disabled = false;
-                    // Reload the page after a short delay to show updated content.
                     setTimeout(() => {
                         close();
                         window.location.reload();
-                    }, 1000);
+                    }, 400);
                     return;
                 }).catch();
             }
@@ -189,6 +188,9 @@ const handleMessage = (event) => {
 
         case 'editor-ready':
             Log.debug('[editor_modal] Editor is ready');
+            break;
+
+        default:
             break;
     }
 };
@@ -213,6 +215,7 @@ export const close = () => {
         iframe = null;
         document.body.style.overflow = '';
         window.removeEventListener('message', handleMessage);
+
         document.removeEventListener('keydown', handleKeydown);
     }
 };
@@ -225,6 +228,7 @@ export const init = () => {
 
     // Delegate click events for embedded editor buttons.
     document.addEventListener('click', (e) => {
+
         const btn = e.target.closest('[data-action="mod_exescorm/editor-open"]');
         if (btn) {
             e.preventDefault();

@@ -45,56 +45,59 @@ require_capability('moodle/course:manageactivities', $context);
 header('Content-Type: application/json; charset=utf-8');
 
 try {
-    // Check that a file was uploaded.
     if (empty($_FILES['package'])) {
         throw new moodle_exception('nofile', 'error');
     }
 
     $uploadedfile = $_FILES['package'];
-    if ($uploadedfile['error'] !== UPLOAD_ERR_OK) {
+    if ((int)$uploadedfile['error'] !== UPLOAD_ERR_OK) {
         throw new moodle_exception('uploadproblem', 'error');
     }
 
-    $fs = get_file_storage();
+    if (empty($uploadedfile['tmp_name']) || !is_uploaded_file($uploadedfile['tmp_name'])) {
+        throw new moodle_exception('uploadproblem', 'error');
+    }
 
-    // Update revision and timestamp.
+    $filename = clean_filename($uploadedfile['name'] ?? 'package.zip');
+    if ($filename === '') {
+        $filename = 'package.zip';
+    }
+    if (core_text::strtolower(pathinfo($filename, PATHINFO_EXTENSION)) !== 'zip') {
+        throw new moodle_exception('uploadproblem', 'error', '', null, 'Uploaded file must be a ZIP package');
+    }
+
+    $fs = get_file_storage();
     $exescorm->timemodified = time();
 
-    // Clean old package files.
+    // Overwrite current package.
     $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
 
-    // Save the uploaded file as the new package (itemid=0 as exescorm expects).
     $fileinfo = [
         'contextid' => $context->id,
         'component' => 'mod_exescorm',
         'filearea' => 'package',
         'itemid' => 0,
         'filepath' => '/',
-        'filename' => clean_filename($uploadedfile['name']),
+        'filename' => $filename,
         'userid' => $USER->id,
-        'source' => clean_filename($uploadedfile['name']),
+        'source' => $filename,
         'author' => fullname($USER),
         'license' => 'unknown',
     ];
+    $fs->create_file_from_pathname($fileinfo, $uploadedfile['tmp_name']);
 
-    $package = $fs->create_file_from_pathname($fileinfo, $uploadedfile['tmp_name']);
-
-    // Store filename as reference.
-    $exescorm->reference = clean_filename($uploadedfile['name']);
+    // Keep package name in SCORM reference and trigger re-parse.
+    $exescorm->reference = $filename;
     $DB->update_record('exescorm', $exescorm);
-
-    // Parse the SCORM package: extracts ZIP to content, finds imsmanifest.xml,
-    // parses SCOs, and sets $exescorm->version.
     exescorm_parse($exescorm, true);
 
-    // Re-read to get updated version/data after parse.
-    $exescorm = $DB->get_record('exescorm', ['id' => $exescorm->id]);
+    $updated = $DB->get_record('exescorm', ['id' => $exescorm->id], 'id,timemodified,version', MUST_EXIST);
 
     echo json_encode([
         'success' => true,
-        'revision' => $exescorm->timemodified,
+        'revision' => (int)$updated->timemodified,
+        'version' => $updated->version,
     ]);
-
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([

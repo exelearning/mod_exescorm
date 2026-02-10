@@ -512,3 +512,4 @@ $string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Mostrar el nombre de la actividad';
 $string['displayactivityname_help'] = 'Mostrar o no mostrar el nombre de la actividad sobre el visor de eXeLearning.';
+$string['elpxneedsconversion'] = 'Esta actividad contiene actualmente un proyecto .elpx. Abrelo en el editor eXeLearning integrado y guardalo para convertirlo a un paquete SCORM 1.2 reproducible y trazable.';

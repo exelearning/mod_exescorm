@@ -24,8 +24,38 @@
 
 require('../../../config.php');
 
-$file = required_param('file', PARAM_PATH);
-$id = required_param('id', PARAM_INT);
+// Support both slash arguments (PATH_INFO) and query params.
+// Slash arguments: /static.php/{cmid}/{filepath}
+// Query params: /static.php?id={cmid}&file={filepath}
+$pathinfo = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO']
+    : (!empty($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : '');
+
+// Fallback: parse from REQUEST_URI when PATH_INFO is not available.
+if (empty($pathinfo) && !empty($_SERVER['REQUEST_URI'])) {
+    $requesturi = $_SERVER['REQUEST_URI'];
+    $qpos = strpos($requesturi, '?');
+    if ($qpos !== false) {
+        $requesturi = substr($requesturi, 0, $qpos);
+    }
+    $marker = 'static.php/';
+    $mpos = strpos($requesturi, $marker);
+    if ($mpos !== false) {
+        $pathinfo = '/' . substr($requesturi, $mpos + strlen($marker));
+    }
+}
+
+if (!empty($pathinfo)) {
+    $parts = explode('/', ltrim($pathinfo, '/'), 2);
+    if (count($parts) < 2 || !is_numeric($parts[0]) || empty($parts[1])) {
+        send_header_404();
+        die('Invalid path');
+    }
+    $id = (int)$parts[0];
+    $file = $parts[1];
+} else {
+    $file = required_param('file', PARAM_PATH);
+    $id = required_param('id', PARAM_INT);
+}
 
 $cm = get_coursemodule_from_id('exescorm', $id, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
@@ -38,7 +68,6 @@ require_capability('moodle/course:manageactivities', $context);
 $file = clean_param($file, PARAM_PATH);
 $file = ltrim($file, '/');
 
-// Prevent directory traversal.
 if (strpos($file, '..') !== false) {
     send_header_404();
     die('File not found');
@@ -47,7 +76,6 @@ if (strpos($file, '..') !== false) {
 $staticdir = $CFG->dirroot . '/mod/exescorm/dist/static';
 $filepath = realpath($staticdir . '/' . $file);
 
-// Ensure the resolved path is within the static directory.
 if ($filepath === false || strpos($filepath, realpath($staticdir)) !== 0) {
     send_header_404();
     die('File not found');
@@ -58,7 +86,6 @@ if (!is_file($filepath)) {
     die('File not found');
 }
 
-// Determine content type.
 $mimetypes = [
     'html' => 'text/html',
     'htm' => 'text/html',
@@ -85,15 +112,23 @@ $mimetypes = [
     'pdf' => 'application/pdf',
     'xml' => 'application/xml',
     'wasm' => 'application/wasm',
+    'zip' => 'application/zip',
+    'md' => 'text/plain',
 ];
 
 $ext = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
 $contenttype = isset($mimetypes[$ext]) ? $mimetypes[$ext] : 'application/octet-stream';
 
-// Send the file with appropriate headers.
+// Release session lock early so parallel requests are not blocked.
+\core\session\manager::write_close();
+
 header('Content-Type: ' . $contenttype);
 header('Content-Length: ' . filesize($filepath));
-header('Cache-Control: public, max-age=604800'); // Cache for 1 week.
+header('Cache-Control: public, max-age=604800');
 header('X-Frame-Options: SAMEORIGIN');
+
+if (basename($file) === 'preview-sw.js') {
+    header('Service-Worker-Allowed: /');
+}
 
 readfile($filepath);

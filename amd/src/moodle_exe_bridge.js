@@ -1,11 +1,8 @@
 /**
- * Bridge between the embedded eXeLearning editor and Moodle.
+ * Bridge between embedded eXeLearning and Moodle save endpoint.
  *
- * This script runs inside the editor iframe. It reads Moodle configuration
- * injected by editor/index.php, handles importing the current package into
- * the editor, and saves edited packages back to Moodle via AJAX.
- *
- * Based on the same bridge pattern used in wp-exelearning and omeka-s-exelearning.
+ * This script does not access editor internals. It talks to eXe exclusively
+ * through EmbeddingBridge postMessage protocol (OPEN_FILE / REQUEST_EXPORT).
  *
  * @module      mod_exescorm/moodle_exe_bridge
  * @copyright   2025 eXeLearning
@@ -19,337 +16,321 @@
 
     var config = window.__MOODLE_EXE_CONFIG__;
     if (!config) {
-        console.error('[moodle-exe-bridge] No __MOODLE_EXE_CONFIG__ found');
+        console.error('[moodle-exe-bridge] Missing __MOODLE_EXE_CONFIG__');
         return;
     }
 
-    console.log('[moodle-exe-bridge] Initializing with config:', config);
+    var embeddingConfig = window.__EXE_EMBEDDING_CONFIG__ || {};
+    var hasInitialProjectUrl = !!embeddingConfig.initialProjectUrl;
 
-    /**
-     * Wait for the eXeLearning app to be ready (legacy fallback).
-     *
-     * @param {number} maxAttempts Maximum attempts before giving up.
-     * @return {Promise} Resolves with the app instance.
-     */
-    function waitForAppLegacy(maxAttempts) {
-        maxAttempts = maxAttempts || 100;
-        return new Promise(function(resolve, reject) {
-            var attempts = 0;
-            var check = function() {
-                attempts++;
-                if (window.eXeLearning && window.eXeLearning.app) {
-                    resolve(window.eXeLearning.app);
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 100);
-                } else {
-                    reject(new Error('App did not initialize'));
-                }
-            };
-            check();
-        });
+    var editorWindow = window;
+    var parentWindow = window.parent && window.parent !== window ? window.parent : null;
+    var state = {
+        ready: false,
+        importing: false,
+        imported: hasInitialProjectUrl,
+        saving: false,
+    };
+
+    var pendingRequests = Object.create(null);
+
+    function createRequestId(prefix) {
+        return (prefix || 'req') + '-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
     }
 
-    /**
-     * Wait for the Yjs project bridge to be ready.
-     *
-     * @param {number} maxAttempts Maximum attempts before giving up.
-     * @return {Promise} Resolves with the bridge instance.
-     */
-    function waitForBridge(maxAttempts) {
-        maxAttempts = maxAttempts || 150;
-        return new Promise(function(resolve, reject) {
-            var attempts = 0;
-            var check = function() {
-                attempts++;
-                var bridge = window.eXeLearning?.app?.project?._yjsBridge
-                    || window.YjsModules?.getBridge?.();
-                if (bridge) {
-                    console.log('[moodle-exe-bridge] Bridge found after', attempts, 'attempts');
-                    resolve(bridge);
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 200);
-                } else {
-                    reject(new Error('Project bridge did not initialize'));
-                }
-            };
-            check();
-        });
-    }
-
-    /**
-     * Show or update the loading screen.
-     *
-     * @param {string} message Message to display.
-     * @param {boolean} show Whether to show or hide.
-     */
-    function updateLoadScreen(message, show) {
-        if (show === undefined) {
-            show = true;
+    function updateLoadScreen(message, visible) {
+        if (visible === undefined) {
+            visible = true;
         }
+
         var loadScreen = document.getElementById('load-screen-main');
-        var loadMessage = loadScreen?.querySelector('.loading-message, p');
-
-        if (loadScreen) {
-            if (show) {
-                loadScreen.classList.remove('hide');
-            } else {
-                loadScreen.classList.add('hide');
-            }
-        }
-
-        if (loadMessage && message) {
-            loadMessage.textContent = message;
-        }
-    }
-
-    /**
-     * Import the ELP package from Moodle into the editor.
-     */
-    async function importPackageFromMoodle() {
-        var packageUrl = config.packageUrl;
-        if (!packageUrl) {
-            console.log('[moodle-exe-bridge] No package URL, starting with empty project');
+        if (!loadScreen) {
             return;
         }
 
-        console.log('[moodle-exe-bridge] Starting import from:', packageUrl);
+        var loadMessage = loadScreen.querySelector('.loading-message, p');
+        if (loadMessage && message) {
+            loadMessage.textContent = message;
+        }
 
-        try {
-            updateLoadScreen('Loading project...');
-
-            // Wait for the Yjs bridge to be initialized.
-            updateLoadScreen('Waiting for editor...');
-            var bridge = await waitForBridge();
-
-            // Fetch the package file.
-            updateLoadScreen('Downloading file...');
-            var response = await fetch(packageUrl, {credentials: 'include'});
-            if (!response.ok) {
-                throw new Error('HTTP ' + response.status + ': ' + response.statusText);
-            }
-
-            // Convert to File object.
-            var blob = await response.blob();
-            console.log('[moodle-exe-bridge] File downloaded, size:', blob.size);
-            var filename = packageUrl.split('/').pop().split('?')[0] || 'project.elpx';
-            var file = new File([blob], filename, {type: 'application/zip'});
-
-            // Import using the project API or bridge directly.
-            updateLoadScreen('Importing content...');
-            var project = window.eXeLearning?.app?.project;
-            if (typeof project?.importElpxFile === 'function') {
-                console.log('[moodle-exe-bridge] Using project.importElpxFile...');
-                await project.importElpxFile(file);
-            } else if (typeof project?.importFromElpxViaYjs === 'function') {
-                console.log('[moodle-exe-bridge] Using project.importFromElpxViaYjs...');
-                await project.importFromElpxViaYjs(file, {clearExisting: true});
-            } else {
-                console.log('[moodle-exe-bridge] Using bridge.importFromElpx...');
-                await bridge.importFromElpx(file, {clearExisting: true});
-            }
-
-            console.log('[moodle-exe-bridge] Package imported successfully');
-        } catch (error) {
-            console.error('[moodle-exe-bridge] Import failed:', error);
-            updateLoadScreen('Error loading project');
-        } finally {
-            setTimeout(function() {
-                updateLoadScreen('', false);
-            }, 500);
+        if (visible) {
+            loadScreen.classList.remove('hide');
+        } else {
+            loadScreen.classList.add('hide');
         }
     }
 
-    /**
-     * Export the current project and save it back to Moodle.
-     */
+    function notifyParent(type, data) {
+        if (!parentWindow) {
+            return;
+        }
+
+        parentWindow.postMessage({
+            source: 'exescorm-editor',
+            type: type,
+            data: data || {},
+        }, '*');
+    }
+
+    function postToEditor(type, data, transfer, timeoutMs) {
+        if (!type) {
+            return Promise.reject(new Error('Missing message type'));
+        }
+
+        var requestId = createRequestId(type.toLowerCase());
+
+        return new Promise(function(resolve, reject) {
+            var timer = setTimeout(function() {
+                delete pendingRequests[requestId];
+                reject(new Error(type + ' timed out'));
+            }, timeoutMs || 30000);
+
+            pendingRequests[requestId] = {
+                resolve: resolve,
+                reject: reject,
+                timer: timer,
+                requestType: type,
+            };
+
+            try {
+                if (transfer && transfer.length) {
+                    editorWindow.postMessage({type: type, requestId: requestId, data: data || {}}, window.location.origin, transfer);
+                } else {
+                    editorWindow.postMessage({type: type, requestId: requestId, data: data || {}}, window.location.origin);
+                }
+            } catch (error) {
+                clearTimeout(timer);
+                delete pendingRequests[requestId];
+                reject(error);
+            }
+        });
+    }
+
+    function settleRequest(requestId, error, payload) {
+        var pending = pendingRequests[requestId];
+        if (!pending) {
+            return false;
+        }
+
+        clearTimeout(pending.timer);
+        delete pendingRequests[requestId];
+
+        if (error) {
+            pending.reject(error instanceof Error ? error : new Error(String(error)));
+        } else {
+            pending.resolve(payload || {});
+        }
+
+        return true;
+    }
+
+    function getFilenameFromUrl(url) {
+        if (!url) {
+            return 'project.elpx';
+        }
+
+        var clean = url.split('?')[0] || '';
+        var parts = clean.split('/');
+        return parts[parts.length - 1] || 'project.elpx';
+    }
+
+    async function importPackageFromMoodle() {
+        if (!config.packageUrl || state.importing || state.imported) {
+            return;
+        }
+
+        state.importing = true;
+
+        try {
+            updateLoadScreen('Downloading project...', true);
+
+            var response = await fetch(config.packageUrl, {credentials: 'include'});
+            if (!response.ok) {
+                throw new Error('Could not download package (HTTP ' + response.status + ')');
+            }
+
+            var bytes = await response.arrayBuffer();
+            var filename = getFilenameFromUrl(config.packageUrl);
+
+            updateLoadScreen('Opening project...', true);
+
+            await postToEditor('OPEN_FILE', {
+                bytes: bytes,
+                filename: filename,
+            }, [bytes], 60000);
+
+            state.imported = true;
+            console.log('[moodle-exe-bridge] Package opened:', filename);
+        } finally {
+            state.importing = false;
+            updateLoadScreen('', false);
+        }
+    }
+
+    async function uploadExportToMoodle(bytes, filename) {
+        if (!bytes || !bytes.byteLength) {
+            throw new Error('Export is empty');
+        }
+
+        var uploadName = filename || 'package.zip';
+        var blob = bytes instanceof Blob ? bytes : new Blob([bytes], {type: 'application/zip'});
+
+        var formData = new FormData();
+        formData.append('package', blob, uploadName);
+        formData.append('cmid', String(config.cmid));
+        formData.append('sesskey', config.sesskey);
+
+        var response = await fetch(config.saveUrl, {
+            method: 'POST',
+            credentials: 'include',
+            body: formData,
+        });
+
+        var result;
+        try {
+            result = await response.json();
+        } catch (jsonError) {
+            throw new Error('Invalid save response from Moodle');
+        }
+
+        if (!response.ok || !result || !result.success) {
+            throw new Error((result && result.error) ? result.error : ('Save failed (HTTP ' + response.status + ')'));
+        }
+
+        return result;
+    }
+
     async function saveToMoodle() {
-        // Notify parent window that save is starting.
+        if (state.saving) {
+            return;
+        }
+
+        state.saving = true;
         notifyParent('save-start');
 
         try {
-            console.log('[moodle-exe-bridge] Starting save...');
+            var exportResponse = await postToEditor('REQUEST_EXPORT', {
+                format: 'scorm12',
+                filename: 'package.zip',
+            }, null, 120000);
 
-            // Get the project bridge for export.
-            var project = window.eXeLearning?.app?.project;
-            var yjsBridge = project?._yjsBridge
-                || window.YjsModules?.getBridge?.()
-                || project?.bridge;
-
-            if (!yjsBridge) {
-                throw new Error('Project bridge not available');
+            var bytes = exportResponse.bytes;
+            if (!bytes && exportResponse.blob) {
+                bytes = await exportResponse.blob.arrayBuffer();
             }
 
-            // Export using SharedExporters (scorm12 for SCORM packages).
-            var blob;
-            if (window.SharedExporters?.quickExport) {
-                console.log('[moodle-exe-bridge] Using SharedExporters.quickExport...');
-                var result = await window.SharedExporters.quickExport(
-                    'scorm12',
-                    yjsBridge.documentManager,
-                    null,
-                    yjsBridge.resourceFetcher,
-                    {},
-                    yjsBridge.assetManager
-                );
-                if (!result.success || !result.data) {
-                    throw new Error('Export failed');
-                }
-                blob = new Blob([result.data], {type: 'application/zip'});
-            } else if (window.SharedExporters?.createExporter) {
-                console.log('[moodle-exe-bridge] Using SharedExporters.createExporter...');
-                var exporter = window.SharedExporters.createExporter(
-                    'scorm12',
-                    yjsBridge.documentManager,
-                    yjsBridge.assetCache,
-                    yjsBridge.resourceFetcher,
-                    yjsBridge.assetManager
-                );
-                var exportResult = await exporter.export();
-                if (!exportResult.success || !exportResult.data) {
-                    throw new Error('Export failed');
-                }
-                blob = new Blob([exportResult.data], {type: 'application/zip'});
-            } else {
-                throw new Error('No exporter available');
-            }
+            var saveResult = await uploadExportToMoodle(bytes, exportResponse.filename || 'package.zip');
 
-            console.log('[moodle-exe-bridge] Export complete, size:', blob.size);
-
-            // Upload to Moodle.
-            var formData = new FormData();
-            formData.append('package', blob, 'package.zip');
-            formData.append('cmid', config.cmid);
-            formData.append('sesskey', config.sesskey);
-
-            console.log('[moodle-exe-bridge] Uploading to:', config.saveUrl);
-
-            var saveResponse = await fetch(config.saveUrl, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include',
+            notifyParent('save-complete', {
+                revision: saveResult.revision,
             });
-
-            var saveResult = await saveResponse.json();
-
-            if (saveResult.success) {
-                console.log('[moodle-exe-bridge] Save successful, revision:', saveResult.revision);
-                showNotification('success', 'Saved successfully!');
-                notifyParent('save-complete', {revision: saveResult.revision});
-            } else {
-                throw new Error(saveResult.error || 'Save failed');
-            }
         } catch (error) {
             console.error('[moodle-exe-bridge] Save failed:', error);
-            showNotification('error', 'Error: ' + error.message);
-            notifyParent('save-error', {error: error.message});
+            notifyParent('save-error', {
+                error: error.message || 'Unknown error',
+            });
+        } finally {
+            state.saving = false;
         }
     }
 
-    /**
-     * Send a message to the parent window (the Moodle modal).
-     *
-     * @param {string} type Message type.
-     * @param {Object} data Optional payload.
-     */
-    function notifyParent(type, data) {
-        if (window.parent && window.parent !== window) {
-            window.parent.postMessage({
-                source: 'exescorm-editor',
-                type: type,
-                data: data || {},
-            }, '*');
+    async function maybeImport() {
+        if (hasInitialProjectUrl) {
+            // Fast-path: eXe bootstraps initial package via __EXE_EMBEDDING_CONFIG__.initialProjectUrl.
+            state.imported = true;
+            return;
         }
-    }
-
-    /**
-     * Show a notification inside the editor.
-     *
-     * @param {string} type Notification type (success, error).
-     * @param {string} message Message to display.
-     */
-    function showNotification(type, message) {
-        var existing = document.getElementById('moodle-exe-notification');
-        if (existing) {
-            existing.remove();
+        if (!state.ready || state.imported || state.importing) {
+            return;
         }
 
-        var notification = document.createElement('div');
-        notification.id = 'moodle-exe-notification';
-        notification.style.cssText = 'position:fixed;top:10px;right:10px;z-index:99999;padding:12px 20px;'
-            + 'border-radius:4px;color:#fff;font-size:14px;'
-            + (type === 'success' ? 'background:#28a745;' : 'background:#dc3545;');
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        setTimeout(function() {
-            notification.style.transition = 'opacity 0.3s';
-            notification.style.opacity = '0';
-            setTimeout(function() {
-                notification.remove();
-            }, 300);
-        }, 3000);
-    }
-
-    /**
-     * Initialize the bridge.
-     */
-    async function init() {
         try {
-            console.log('[moodle-exe-bridge] Starting initialization...');
-
-            // Wait for app initialization using the ready promise or legacy polling.
-            if (window.eXeLearning?.ready) {
-                await window.eXeLearning.ready;
-            } else {
-                await waitForAppLegacy();
-            }
-            console.log('[moodle-exe-bridge] App initialized');
-
-            // Import package if URL provided.
-            if (config.packageUrl) {
-                await importPackageFromMoodle();
-            } else {
-                console.log('[moodle-exe-bridge] No packageUrl in config, skipping import');
-            }
-
-            // Notify parent window that bridge is ready.
-            notifyParent('editor-ready');
-
-            // Listen for save shortcuts (Ctrl+S / Cmd+S).
-            document.addEventListener('keydown', function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    saveToMoodle();
-                }
-            });
-
-            // Listen for messages from parent window (modal save button).
-            window.addEventListener('message', function(event) {
-                if (event.data && event.data.source === 'exescorm-modal') {
-                    if (event.data.type === 'save') {
-                        saveToMoodle();
-                    }
-                }
-            });
-
-            console.log('[moodle-exe-bridge] Initialization complete');
+            await importPackageFromMoodle();
         } catch (error) {
-            console.error('[moodle-exe-bridge] Initialization failed:', error);
+            console.error('[moodle-exe-bridge] Import failed:', error);
+            notifyParent('save-error', {error: 'Import failed: ' + (error.message || 'Unknown error')});
         }
     }
 
-    // Initialize when DOM is ready.
+    function handleProtocolMessage(message) {
+        if (!message || !message.requestId || !message.type) {
+            return;
+        }
+
+        if (message.type === 'OPEN_FILE_SUCCESS' || message.type === 'SAVE_FILE' || message.type === 'EXPORT_FILE' || message.type === 'PROJECT_INFO'
+            || message.type === 'STATE' || message.type === 'CONFIGURE_SUCCESS' || message.type === 'SET_TRUSTED_ORIGINS_SUCCESS') {
+            settleRequest(message.requestId, null, message);
+            return;
+        }
+
+        if (message.type.endsWith('_ERROR')) {
+            settleRequest(message.requestId, message.error || (message.type + ' failed'));
+        }
+    }
+
+    function handleParentMessage(event) {
+        if (!event || !event.data) {
+            return;
+        }
+
+        var message = event.data;
+
+        if (message.type === 'EXELEARNING_READY') {
+            state.ready = true;
+            notifyParent('editor-ready');
+            maybeImport();
+            return;
+        }
+
+        handleProtocolMessage(message);
+    }
+
+    function handleFrameMessage(event) {
+        if (!event || !event.data) {
+            return;
+        }
+
+        var message = event.data;
+
+        if (message.source === 'exescorm-modal' && message.type === 'save') {
+            saveToMoodle();
+            return;
+        }
+
+        handleProtocolMessage(message);
+    }
+
+    async function init() {
+        window.addEventListener('message', handleFrameMessage);
+
+        if (parentWindow && typeof parentWindow.addEventListener === 'function') {
+            parentWindow.addEventListener('message', handleParentMessage);
+        }
+
+        // Fallback probe in case EXELEARNING_READY was emitted before listeners attached.
+        var probeAttempts = 0;
+        var probe = setInterval(function() {
+            probeAttempts++;
+            if (state.ready || probeAttempts > 20) {
+                clearInterval(probe);
+                return;
+            }
+
+            postToEditor('GET_STATE', {}, null, 3000).then(function() {
+                if (!state.ready) {
+                    state.ready = true;
+                    notifyParent('editor-ready');
+                    maybeImport();
+                }
+            }).catch(function() {
+                // Ignore until next probe.
+            });
+        }, 1000);
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
-
-    // Expose for debugging.
-    window.moodleExeBridge = {
-        config: config,
-        save: saveToMoodle,
-        import: importPackageFromMoodle,
-    };
-
 })();

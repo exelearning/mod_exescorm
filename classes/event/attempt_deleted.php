@@ -81,10 +81,6 @@ class attempt_deleted extends \core\event\base {
      *
      * @return array of parameters to be passed to legacy add_to_log() function.
      */
-    protected function get_legacy_logdata() {
-        return array($this->courseid, 'exescorm', 'delete attempts', 'report.php?id=' . $this->contextinstanceid,
-                $this->other['attemptid'], $this->contextinstanceid);
-    }
 
     /**
      * Custom validation.

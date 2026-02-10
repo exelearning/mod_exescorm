@@ -2252,6 +2252,7 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
     }
 
     $connector = '';
+    $scolaunchurl = '';
     $version = substr($exescorm->version, 0, 4);
     if ((isset($sco->parameters) && (!empty($sco->parameters))) || ($version == 'AICC')) {
         if (stripos($sco->launch, '?') !== false) {
@@ -2297,7 +2298,8 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
         $scolaunchurl = "$CFG->wwwroot/pluginfile.php/$context->id/mod_exescorm/imsmanifest/$exescorm->revision/$launcher";
     } else if (
         $exescorm->exescormtype === EXESCORM_TYPE_LOCAL ||
-        $exescorm->exescormtype === EXESCORM_TYPE_LOCALSYNC
+        $exescorm->exescormtype === EXESCORM_TYPE_LOCALSYNC ||
+        $exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED
     ) {
         // Note: do not convert this to use moodle_url().
         // EXESCORM does not work without slasharguments and moodle_url() encodes querystring vars.
@@ -2321,7 +2323,7 @@ function exescorm_launch_sco($exescorm, $sco, $cm, $context, $scourl) {
     $event = \mod_exescorm\event\sco_launched::create(array(
         'objectid' => $sco->id,
         'context' => $context,
-        'other' => array('instanceid' => $exescorm->id, 'loadedcontent' => $scourl)
+        'other' => array('instanceid' => $exescorm->id, 'loadedcontent' => !empty($scourl) ? $scourl : (string)$sco->launch)
     ));
     $event->add_record_snapshot('course_modules', $cm);
     $event->add_record_snapshot('exescorm', $exescorm);

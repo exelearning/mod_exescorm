@@ -198,6 +198,10 @@ if (($exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED || $iselpx)
     $PAGE->requires->js_call_amd('mod_exescorm/editor_modal', 'init');
 }
 
+if ($iselpx) {
+    echo $OUTPUT->notification(get_string('elpxneedsconversion', 'mod_exescorm'), 'warning');
+}
+
 // Check if EXESCORM available. No need to display warnings because activity dates are displayed at the top of the page.
 list($available, $warnings) = exescorm_get_availability_status($exescorm);
 

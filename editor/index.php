@@ -51,17 +51,21 @@ $packageurl = exescorm_get_package_url($exescorm, $context);
 // Build the save endpoint URL.
 $saveurl = new moodle_url('/mod/exescorm/editor/save.php');
 
-// Base URL pointing directly to the static editor directory (web-accessible).
-$editorbaseurl = $CFG->wwwroot . '/mod/exescorm/dist/static';
+// Serve editor resources through static.php (slash arguments) to ensure
+// files are always accessible regardless of web server configuration.
+$editorbaseurl = $CFG->wwwroot . '/mod/exescorm/editor/static.php/' . $cm->id;
 
 // Read the editor template.
-$html = file_get_contents($editorpath);
+$html = @file_get_contents($editorpath);
+if ($html === false || empty($html)) {
+    throw new moodle_exception('editormissing', 'mod_exescorm');
+}
 
 // Inject <base> tag pointing directly to the static directory.
 $basetag = '<base href="' . htmlspecialchars($editorbaseurl, ENT_QUOTES, 'UTF-8') . '/">';
 $html = preg_replace('/(<head[^>]*>)/i', '$1' . $basetag, $html);
 
-// Fix explicit "./" relative paths in attributes (same pattern used by WP and Omeka-S).
+// Fix explicit "./" relative paths in attributes.
 $html = preg_replace(
     '/(?<=["\'])\.\//',
     htmlspecialchars($editorbaseurl, ENT_QUOTES, 'UTF-8') . '/',
@@ -84,6 +88,7 @@ $embeddingconfig = json_encode([
     'basePath' => $editorbaseurl,
     'parentOrigin' => $CFG->wwwroot,
     'trustedOrigins' => [$CFG->wwwroot],
+    'initialProjectUrl' => $packageurl ? $packageurl->out(false) : '',
     'hideUI' => [
         'fileMenu' => true,
         'saveButton' => true,

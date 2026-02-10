@@ -70,22 +70,12 @@ class sco_launched extends \core\event\base {
     }
 
     /**
-     * Get URL related to the action
+     * Get URL related to the action.
      *
      * @return \moodle_url
      */
     public function get_url() {
         return new \moodle_url('/mod/exescorm/player.php', array('cm' => $this->contextinstanceid, 'scoid' => $this->objectid));
-    }
-
-    /**
-     * Replace add_to_log() statement.
-     *
-     * @return array of parameters to be passed to legacy add_to_log() function.
-     */
-    protected function get_legacy_logdata() {
-        return array($this->courseid, 'exescorm', 'launch', 'view.php?id=' . $this->contextinstanceid,
-                $this->other['loadedcontent'], $this->contextinstanceid);
     }
 
     /**
@@ -102,10 +92,20 @@ class sco_launched extends \core\event\base {
         }
     }
 
+    /**
+     * Object ID mapping for restore.
+     *
+     * @return array
+     */
     public static function get_objectid_mapping() {
         return array('db' => 'exescorm_scoes', 'restore' => 'exescorm_sco');
     }
 
+    /**
+     * Other mapping for restore.
+     *
+     * @return array
+     */
     public static function get_other_mapping() {
         $othermapped = array();
         $othermapped['instanceid'] = array('db' => 'exescorm', 'restore' => 'exescorm');

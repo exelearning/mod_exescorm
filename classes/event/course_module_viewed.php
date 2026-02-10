@@ -44,17 +44,11 @@ class course_module_viewed extends \core\event\course_module_viewed {
     }
 
     /**
-     * Replace add_to_log() statement.
+     * Object ID mapping for restore.
      *
-     * @return array of parameters to be passed to legacy add_to_log() function.
+     * @return array
      */
-    protected function get_legacy_logdata() {
-        return array($this->courseid, 'exescorm', 'pre-view', 'view.php?id=' . $this->contextinstanceid, $this->objectid,
-                $this->contextinstanceid);
-    }
-
     public static function get_objectid_mapping() {
         return array('db' => 'exescorm', 'restore' => 'exescorm');
     }
 }
-
