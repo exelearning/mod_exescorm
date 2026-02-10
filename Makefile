@@ -155,24 +155,29 @@ clean-editor:
 
 PLUGIN_NAME = mod_exescorm
 
+
 # Create a distributable ZIP package
+# Usage: make package RELEASE=0.0.2
+# VERSION (YYYYMMDDXX) is auto-generated from current date
 package:
-	@if [ -z "$(VERSION)" ]; then \
-		echo "Error: VERSION not specified. Use 'make package VERSION=2026020800'"; \
+	@if [ -z "$(RELEASE)" ]; then \
+		echo "Error: RELEASE not specified. Use 'make package RELEASE=0.0.2'"; \
 		exit 1; \
 	fi
-	@echo "Updating version to $(VERSION) in version.php..."
-	$(SED_INPLACE) "s/\(plugin->version[[:space:]]*=[[:space:]]*\)[0-9]*/\1$(VERSION)/" version.php
-	@echo "Creating ZIP archive: $(PLUGIN_NAME)-$(VERSION).zip..."
+	$(eval DATE_VERSION := $(shell date +%Y%m%d)00)
+	@echo "Packaging release $(RELEASE) (version $(DATE_VERSION))..."
+	$(SED_INPLACE) "s/\(plugin->version[[:space:]]*=[[:space:]]*\)[0-9]*/\1$(DATE_VERSION)/" version.php
+	$(SED_INPLACE) "s/\(plugin->release[[:space:]]*=[[:space:]]*'\)[^']*/\1$(RELEASE)/" version.php
+	@echo "Creating ZIP archive: $(PLUGIN_NAME)-$(RELEASE).zip..."
 	rm -rf /tmp/exescorm-package
 	mkdir -p /tmp/exescorm-package/exescorm
 	rsync -av --exclude-from=.distignore ./ /tmp/exescorm-package/exescorm/
-	cd /tmp/exescorm-package && zip -qr "$(CURDIR)/$(PLUGIN_NAME)-$(VERSION).zip" exescorm
+	cd /tmp/exescorm-package && zip -qr "$(CURDIR)/$(PLUGIN_NAME)-$(RELEASE).zip" exescorm
 	rm -rf /tmp/exescorm-package
-	@echo "Restoring version in version.php..."
-	$(SED_INPLACE) "s/\(plugin->version[[:space:]]*=[[:space:]]*\)[0-9]*/\10000000000/" version.php
-	@echo "Package created: $(PLUGIN_NAME)-$(VERSION).zip"
-
+	@echo "Restoring development values in version.php..."
+	$(SED_INPLACE) "s/\(plugin->version[[:space:]]*=[[:space:]]*\)[0-9]*/\19999999999/" version.php
+	$(SED_INPLACE) "s/\(plugin->release[[:space:]]*=[[:space:]]*'\)[^']*/\1dev/" version.php
+	@echo "Package created: $(PLUGIN_NAME)-$(RELEASE).zip"
 # -------------------------------------------------------
 
 # Display help with available commands
@@ -192,7 +197,7 @@ help:
 	@echo "  test                   - Run tests using Composer"
 	@echo "  phpmd                  - Run PHP Mess Detector using Composer"
 	@echo "  behat                  - Run Behat tests using Composer"
-	@echo "  build-editor           - Build embedded static editor"
+	@echo "  package                - Create distributable ZIP (RELEASE=X.Y.Z required)"
 	@echo "  build-editor-no-update - Build editor without submodule update (CI/CD)"
 	@echo "  clean-editor           - Remove editor build artifacts"
 	@echo "  update-submodule       - Initialize editor submodule"
