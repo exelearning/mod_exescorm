@@ -115,35 +115,66 @@ behat:
 
 EDITOR_SUBMODULE_PATH = exelearning
 EDITOR_DIST_PATH = dist/static
+EDITOR_REPO_DEFAULT = https://github.com/exelearning/exelearning.git
+EDITOR_REF_DEFAULT = main
 
 # Check if bun is installed
 check-bun:
 	@command -v bun > /dev/null 2>&1 || (echo "Error: bun is not installed. Please install bun: https://bun.sh" && exit 1)
 
-# Initialize submodule if not present
-update-submodule:
-	@if [ ! -f $(EDITOR_SUBMODULE_PATH)/.gitignore ]; then \
-		echo "Initializing submodule..."; \
-		git submodule update --init $(EDITOR_SUBMODULE_PATH); \
-	fi
-
-# Force update submodule to configured branch
-force-update-submodule:
-	git submodule update --init --remote $(EDITOR_SUBMODULE_PATH)
+# Fetch editor source code from remote repository (branch/tag, shallow clone)
+fetch-editor-source:
+	@set -e; \
+	get_env() { \
+		if [ -f .env ]; then \
+			grep -E "^$$1=" .env | tail -n1 | cut -d '=' -f2-; \
+		fi; \
+	}; \
+	REPO_URL="$${EXELEARNING_EDITOR_REPO_URL:-$$(get_env EXELEARNING_EDITOR_REPO_URL)}"; \
+	REF="$${EXELEARNING_EDITOR_REF:-$$(get_env EXELEARNING_EDITOR_REF)}"; \
+	REF_TYPE="$${EXELEARNING_EDITOR_REF_TYPE:-$$(get_env EXELEARNING_EDITOR_REF_TYPE)}"; \
+	if [ -z "$$REPO_URL" ]; then REPO_URL="$(EDITOR_REPO_DEFAULT)"; fi; \
+	if [ -z "$$REF" ]; then REF="$${EXELEARNING_EDITOR_DEFAULT_BRANCH:-$$(get_env EXELEARNING_EDITOR_DEFAULT_BRANCH)}"; fi; \
+	if [ -z "$$REF" ]; then REF="$(EDITOR_REF_DEFAULT)"; fi; \
+	if [ -z "$$REF_TYPE" ]; then REF_TYPE="auto"; fi; \
+	echo "Fetching editor source from $$REPO_URL (ref=$$REF, type=$$REF_TYPE)"; \
+	rm -rf $(EDITOR_SUBMODULE_PATH); \
+	git init -q $(EDITOR_SUBMODULE_PATH); \
+	git -C $(EDITOR_SUBMODULE_PATH) remote add origin "$$REPO_URL"; \
+	case "$$REF_TYPE" in \
+		tag) \
+			git -C $(EDITOR_SUBMODULE_PATH) fetch --depth 1 origin "refs/tags/$$REF:refs/tags/$$REF"; \
+			git -C $(EDITOR_SUBMODULE_PATH) checkout -q "tags/$$REF"; \
+			;; \
+		branch) \
+			git -C $(EDITOR_SUBMODULE_PATH) fetch --depth 1 origin "$$REF"; \
+			git -C $(EDITOR_SUBMODULE_PATH) checkout -q FETCH_HEAD; \
+			;; \
+		auto) \
+			if git -C $(EDITOR_SUBMODULE_PATH) fetch --depth 1 origin "refs/tags/$$REF:refs/tags/$$REF" > /dev/null 2>&1; then \
+				echo "Resolved $$REF as tag"; \
+				git -C $(EDITOR_SUBMODULE_PATH) checkout -q "tags/$$REF"; \
+			else \
+				echo "Resolved $$REF as branch"; \
+				git -C $(EDITOR_SUBMODULE_PATH) fetch --depth 1 origin "$$REF"; \
+				git -C $(EDITOR_SUBMODULE_PATH) checkout -q FETCH_HEAD; \
+			fi; \
+			;; \
+		*) \
+			echo "Error: EXELEARNING_EDITOR_REF_TYPE must be one of: auto, branch, tag"; \
+			exit 1; \
+			;; \
+	esac
 
 # Build static editor to dist/static/
-build-editor: check-bun update-submodule
+build-editor: check-bun fetch-editor-source
 	cd $(EDITOR_SUBMODULE_PATH) && bun install && bun run build:static
 	@mkdir -p $(EDITOR_DIST_PATH)
 	@rm -rf $(EDITOR_DIST_PATH)/*
 	cp -r $(EDITOR_SUBMODULE_PATH)/dist/static/* $(EDITOR_DIST_PATH)/
 
-# Build without submodule update (for CI/CD)
-build-editor-no-update: check-bun
-	cd $(EDITOR_SUBMODULE_PATH) && bun install && bun run build:static
-	@mkdir -p $(EDITOR_DIST_PATH)
-	@rm -rf $(EDITOR_DIST_PATH)/*
-	cp -r $(EDITOR_SUBMODULE_PATH)/dist/static/* $(EDITOR_DIST_PATH)/
+# Backward-compatible alias
+build-editor-no-update: build-editor
 
 # Remove build artifacts
 clean-editor:
@@ -197,11 +228,11 @@ help:
 	@echo "  test                   - Run tests using Composer"
 	@echo "  phpmd                  - Run PHP Mess Detector using Composer"
 	@echo "  behat                  - Run Behat tests using Composer"
-	@echo "  package                - Create distributable ZIP (RELEASE=X.Y.Z required)"
-	@echo "  build-editor-no-update - Build editor without submodule update (CI/CD)"
+	@echo "  build-editor           - Build embedded static editor"
+	@echo "  build-editor-no-update - Alias of build-editor"
 	@echo "  clean-editor           - Remove editor build artifacts"
-	@echo "  update-submodule       - Initialize editor submodule"
-	@echo "  force-update-submodule - Force update editor submodule to latest"
+	@echo "  fetch-editor-source    - Download editor source from configured repo/ref"
+	@echo "  package                - Create distributable ZIP (RELEASE=X.Y.Z required)"
 	@echo "  help                   - Display this help with available commands"
 
 

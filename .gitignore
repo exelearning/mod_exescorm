@@ -11,3 +11,6 @@ phpmd-rules.xml
 
 # Built static editor files
 dist/static/
+
+# Local editor checkout fetched during build
+exelearning/

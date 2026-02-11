@@ -1,7 +1,6 @@
 .git
 .github
 .gitignore
-.gitmodules
 .aider*
 .DS_Store
 .distignore
