@@ -187,7 +187,8 @@ $PAGE->requires->data_for_js('exescormplayerdata', Array('launch' => false,
                                                        'courseid' => $exescorm->course,
                                                        'cwidth' => $exescorm->width,
                                                        'cheight' => $exescorm->height,
-                                                       'popupoptions' => $exescorm->options), true);
+                                                       'popupoptions' => $exescorm->options,
+                                                       'teachermodevisible' => (int)($exescorm->teachermodevisible ?? 1)), true);
 $PAGE->requires->js('/mod/exescorm/request.js', true);
 $PAGE->requires->js('/lib/cookies.js', true);
 

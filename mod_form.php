@@ -221,6 +221,11 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->setDefault('displayattemptstatus', $cfgexescorm->displayattemptstatus);
         $mform->setAdvanced('displayattemptstatus', $cfgexescorm->displayattemptstatus_adv);
 
+        // Teacher mode toggler visibility.
+        $mform->addElement('advcheckbox', 'teachermodevisible', get_string('teachermodevisible', 'mod_exescorm'));
+        $mform->addHelpButton('teachermodevisible', 'teachermodevisible', 'mod_exescorm');
+        $mform->setDefault('teachermodevisible', 1);
+
         // Availability.
         $mform->addElement('header', 'availability', get_string('availability'));
 

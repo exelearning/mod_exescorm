@@ -50,5 +50,17 @@ function xmldb_exescorm_upgrade($oldversion) {
     // Automatically generated Moodle v4.1.0 release upgrade line.
     // Put any upgrade step following this.
 
+    if ($oldversion < 2026021200) {
+        $table = new xmldb_table('exescorm');
+        $field = new xmldb_field('teachermodevisible', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1',
+            'displaycoursestructure');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2026021200, 'exescorm');
+    }
+
     return true;
 }
