@@ -58,20 +58,19 @@ class mod_exescorm_mod_form extends moodleform_mod {
             EXESCORM_TYPE_LOCAL => get_string('typelocal', 'mod_exescorm'),
         ];
         $defaulttype = EXESCORM_TYPE_LOCAL;
-        if (!empty($cfgexescorm->exeonlinebaseuri)) {
+        if (exescorm_embedded_editor_available()) {
+            if ($editmode) {
+                $exescormtypes[EXESCORM_TYPE_EMBEDDED] = get_string('typeexescormedit', 'mod_exescorm');
+            } else {
+                $exescormtypes[EXESCORM_TYPE_EMBEDDED] = get_string('typeexescormcreate', 'mod_exescorm');
+                $defaulttype = EXESCORM_TYPE_EMBEDDED;
+            }
+        } else if (!empty($cfgexescorm->exeonlinebaseuri)) {
             if ($editmode) {
                 $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormedit', 'mod_exescorm');
             } else {
                 $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormcreate', 'mod_exescorm');
                 $defaulttype = EXESCORM_TYPE_EXESCORMNET;
-            }
-        }
-        if (exescorm_embedded_editor_available()) {
-            if ($editmode) {
-                $exescormtypes[EXESCORM_TYPE_EMBEDDED] = get_string('typeexescormedit', 'mod_exescorm');
-            } else {
-                $exescormtypes[EXESCORM_TYPE_EMBEDDED] = get_string('typeembedded', 'mod_exescorm');
-                $defaulttype = EXESCORM_TYPE_EMBEDDED;
             }
         }
 
@@ -89,6 +88,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         $nonfilepickertypes = [
                 EXESCORM_TYPE_EXESCORMNET,
+                EXESCORM_TYPE_EMBEDDED,
             ];
         // Reference.
         $mform->addElement('select', 'exescormtype', get_string('exescormtype', 'mod_exescorm'), $exescormtypes);
@@ -98,7 +98,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->addElement('text', 'packageurl', get_string('packageurl', 'mod_exescorm'), array('size' => 60));
         $mform->setType('packageurl', PARAM_RAW);
         $mform->addHelpButton('packageurl', 'packageurl', 'exescorm');
-        $mform->hideIf('packageurl', 'exescormtype', 'in', [EXESCORM_TYPE_LOCAL, EXESCORM_TYPE_EXESCORMNET]);
+        $mform->hideIf('packageurl', 'exescormtype', 'in', [EXESCORM_TYPE_LOCAL, EXESCORM_TYPE_EXESCORMNET, EXESCORM_TYPE_EMBEDDED]);
         // Workarround to hide static element.
         $group = [];
         $staticelement = $mform->createElement('static', 'onlinetypehelp', '',

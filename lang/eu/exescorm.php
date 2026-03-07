@@ -506,9 +506,13 @@ $string['embeddedtypehelp'] = 'Jarduera sortuko da eta eXeLearning editore txert
 $string['saving'] = 'Gordetzen...';
 $string['savedsuccess'] = 'Aldaketak ondo gorde dira';
 $string['savetomoodle'] = 'Moodle-n gorde';
+$string['savingwait'] = 'Mesedez, itxaron fitxategia gordetzen den bitartean.';
+$string['unsavedchanges'] = 'Gorde gabeko aldaketak dituzu. Ziur zaude itxi nahi duzula?';
 $string['typeembedded'] = 'Sortu eXeLearning-ekin (editore txertatua)';
 
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Informazioa';
 $string['displayactivityname'] = 'Erakutsi jardueraren izena';
 $string['displayactivityname_help'] = 'Erakutsi edo ez erakutsi jardueraren izena eXeLearning-en bisorean.';
+$string['teachermodevisible'] = 'Erakutsi irakasle-geruza hautatzailea';
+$string['teachermodevisible_help'] = 'Desaktibatuta badago, irakasle-geruza hautatzailea ezkutatuko da eXeLearning eduki txertatuan.';

@@ -118,8 +118,8 @@ $string['display'] = 'Mostrar paquete';
 $string['displayattemptstatus'] = 'Mostrar estado de intentos';
 $string['displayattemptstatus_help'] = 'Esta preferencia permite mostrar un resumen de los intentos de los usuarios en el bloque Vista general del curso en Mi Tablero y/o en la página de entrada del eXeLearning.';
 $string['displayattemptstatusdesc'] = 'Mostrar un resumen de los intentos del usuario en el bloque de descripción general del curso en el Tablero y / o la página de entrada eXeLearning.';
-$string['teachermodevisible'] = 'Mostrar el conmutador de Modo Profesor';
-$string['teachermodevisible_help'] = 'Si se desactiva, el conmutador de Modo Profesor se ocultará en el contenido eXeLearning embebido.';
+$string['teachermodevisible'] = 'Mostrar el selector de capa docente';
+$string['teachermodevisible_help'] = 'Si se desactiva, el selector de capa docente se ocultará en el contenido eXeLearning embebido.';
 $string['displaycoursestructure'] = 'Mostrar estructura del curso en la página de entrada';
 $string['displaycoursestructure_help'] = 'Si está activado, la tabla de contenidos se mostrará en la página de resumen SCORM.';
 $string['displaycoursestructuredesc'] = 'Si está habilitado, la tabla de contenidos se mostrará en la página de resumen de la actividad.';
@@ -508,6 +508,8 @@ $string['embeddedtypehelp'] = 'Se creará la actividad y podrá editarla usando 
 $string['saving'] = 'Guardando...';
 $string['savedsuccess'] = 'Cambios guardados correctamente';
 $string['savetomoodle'] = 'Guardar en Moodle';
+$string['savingwait'] = 'Por favor, espere mientras se guarda el archivo.';
+$string['unsavedchanges'] = 'Tiene cambios sin guardar. ¿Está seguro de que desea cerrar?';
 $string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
 
 // Deprecated since Moodle 4.0.

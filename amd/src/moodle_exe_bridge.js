@@ -32,6 +32,9 @@
         saving: false,
     };
 
+    var monitoredYdoc = null;
+    var changeNotified = false;
+
     var pendingRequests = Object.create(null);
 
     function createRequestId(prefix) {
@@ -71,6 +74,64 @@
             data: data || {},
         }, '*');
     }
+
+    function postProtocolMessage(message) {
+        if (!parentWindow) {
+            return;
+        }
+        parentWindow.postMessage(message, '*');
+    }
+
+    function monitorDocumentChanges() {
+        try {
+            var app = window.eXeLearning && window.eXeLearning.app;
+            var ydoc = app && app.project && app.project._yjsBridge
+                && app.project._yjsBridge.documentManager && app.project._yjsBridge.documentManager.ydoc;
+            if (!ydoc || typeof ydoc.on !== 'function') {
+                return;
+            }
+            if (ydoc === monitoredYdoc) {
+                return;
+            }
+            monitoredYdoc = ydoc;
+            changeNotified = false;
+            ydoc.on('update', function() {
+                if (!changeNotified) {
+                    changeNotified = true;
+                    postProtocolMessage({type: 'DOCUMENT_CHANGED'});
+                }
+            });
+        } catch (error) {
+            console.warn('[moodle-exe-bridge] Change monitor failed:', error);
+        }
+    }
+
+    async function notifyWhenDocumentLoaded() {
+        try {
+            var timeout = 30000;
+            var start = Date.now();
+            while (Date.now() - start < timeout) {
+                var app = window.eXeLearning && window.eXeLearning.app;
+                var manager = app && app.project && app.project._yjsBridge
+                    && app.project._yjsBridge.documentManager;
+                if (manager) {
+                    postProtocolMessage({type: 'DOCUMENT_LOADED'});
+                    monitorDocumentChanges();
+                    return;
+                }
+                await new Promise(function(resolve) {
+                    setTimeout(resolve, 150);
+                });
+            }
+        } catch (error) {
+            console.warn('[moodle-exe-bridge] DOCUMENT_LOADED monitor failed:', error);
+        }
+    }
+
+    // Re-attach ydoc monitor when the parent sends messages that may replace the document.
+    window.addEventListener('message', function() {
+        setTimeout(monitorDocumentChanges, 500);
+    });
 
     function postToEditor(type, data, transfer, timeoutMs) {
         if (!type) {
@@ -306,6 +367,8 @@
         if (parentWindow && typeof parentWindow.addEventListener === 'function') {
             parentWindow.addEventListener('message', handleParentMessage);
         }
+
+        notifyWhenDocumentLoaded();
 
         // Fallback probe in case EXELEARNING_READY was emitted before listeners attached.
         var probeAttempts = 0;

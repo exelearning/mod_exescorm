@@ -506,9 +506,13 @@ $string['embeddedtypehelp'] = 'Crearase a actividade e poderá editala usando o 
 $string['saving'] = 'Gardando...';
 $string['savedsuccess'] = 'Cambios gardados correctamente';
 $string['savetomoodle'] = 'Gardar en Moodle';
+$string['savingwait'] = 'Por favor, agarde mentres se garda o ficheiro.';
+$string['unsavedchanges'] = 'Ten cambios sen gardar. Está seguro de que desexa pechar?';
 $string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
 
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Amosar o nome da actividade';
 $string['displayactivityname_help'] = 'Amosar ou non o nome da actividade sobre o visor de eXeLearning.';
+$string['teachermodevisible'] = 'Amosar o selector de capa docente';
+$string['teachermodevisible_help'] = 'Se se desactiva, o selector de capa docente ocultarase no contido eXeLearning embebido.';

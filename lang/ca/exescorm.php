@@ -513,9 +513,13 @@ $string['embeddedtypehelp'] = 'Es crearà l\'activitat i podreu editar-la amb l\
 $string['saving'] = 'Desant...';
 $string['savedsuccess'] = 'Canvis desats correctament';
 $string['savetomoodle'] = 'Desar a Moodle';
+$string['savingwait'] = 'Si us plau, espereu mentre es desa el fitxer.';
+$string['unsavedchanges'] = 'Teniu canvis sense desar. Esteu segur que voleu tancar?';
 $string['typeembedded'] = 'Crear amb eXeLearning (editor integrat)';
 
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Mostra el nom de l\'activitat';
 $string['displayactivityname_help'] = 'Si cal mostrar o no el nom de l\'activitat al damunt del reproductor eXeLearning';
+$string['teachermodevisible'] = 'Mostrar el selector de capa docent';
+$string['teachermodevisible_help'] = 'Si es desactiva, el selector de capa docent s\'ocultarà al contingut eXeLearning incrustat.';
 

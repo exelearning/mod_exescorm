@@ -118,8 +118,8 @@ $string['display'] = 'Display package';
 $string['displayattemptstatus'] = 'Display attempt status';
 $string['displayattemptstatus_help'] = 'This preference allows a summary of the users attempts to show in the course overview block in Dashboard and/or the eXeLearning entry page.';
 $string['displayattemptstatusdesc'] = 'Whether a summary of the user\'s attempts is shown in the course overview block in Dashboard and/or the eXeLearning entry page.';
-$string['teachermodevisible'] = 'Show Teacher Mode toggler';
-$string['teachermodevisible_help'] = 'If disabled, the Teacher Mode toggler is hidden in the embedded eXeLearning content.';
+$string['teachermodevisible'] = 'Show teacher layer selector';
+$string['teachermodevisible_help'] = 'If disabled, the teacher layer selector is hidden in the embedded eXeLearning content.';
 $string['displaycoursestructure'] = 'Display course structure on entry page';
 $string['displaycoursestructure_help'] = 'If enabled, the table of contents is displayed on the eXeLearning outline page.';
 $string['displaycoursestructuredesc'] = 'If enabled, the table of contents is displayed on the eXeLearning outline page.';
@@ -509,6 +509,8 @@ $string['typeembedded'] = 'Create with eXeLearning (embedded editor)';
 $string['saving'] = 'Saving...';
 $string['savedsuccess'] = 'Changes saved successfully';
 $string['savetomoodle'] = 'Save to Moodle';
+$string['savingwait'] = 'Please wait while the file is being saved.';
+$string['unsavedchanges'] = 'You have unsaved changes. Are you sure you want to close?';
 
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
