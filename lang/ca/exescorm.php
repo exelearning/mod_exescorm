@@ -522,4 +522,5 @@ $string['displayactivityname'] = 'Mostra el nom de l\'activitat';
 $string['displayactivityname_help'] = 'Si cal mostrar o no el nom de l\'activitat al damunt del reproductor eXeLearning';
 $string['teachermodevisible'] = 'Mostrar el selector de capa docent';
 $string['teachermodevisible_help'] = 'Si es desactiva, el selector de capa docent s\'ocultarà al contingut eXeLearning incrustat.';
+$string['packageempty'] = 'Aquesta activitat encara no conté contingut reproduïble. Obriu-la a l\'editor d\'eXeLearning per afegir contingut.';
 

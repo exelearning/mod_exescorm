@@ -517,3 +517,4 @@ $string['info'] = 'Info';
 $string['displayactivityname'] = 'Display activity name';
 $string['displayactivityname_help'] = 'Whether or not to display the activity name above the eXeLearning player.';
 $string['elpxneedsconversion'] = 'This activity currently contains an .elpx project. Open it in the embedded eXeLearning editor and save to convert it to a SCORM 1.2 package for playback and tracking.';
+$string['packageempty'] = 'This activity does not contain any playable content yet. Open it in the eXeLearning editor to add content.';

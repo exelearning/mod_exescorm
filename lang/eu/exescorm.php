@@ -516,3 +516,4 @@ $string['displayactivityname'] = 'Erakutsi jardueraren izena';
 $string['displayactivityname_help'] = 'Erakutsi edo ez erakutsi jardueraren izena eXeLearning-en bisorean.';
 $string['teachermodevisible'] = 'Erakutsi irakasle-geruza hautatzailea';
 $string['teachermodevisible_help'] = 'Desaktibatuta badago, irakasle-geruza hautatzailea ezkutatuko da eXeLearning eduki txertatuan.';
+$string['packageempty'] = 'Jarduera honek oraindik ez du eduki erreproduzigarririk. Ireki eXeLearning editorean edukia gehitzeko.';

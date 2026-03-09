@@ -516,3 +516,4 @@ $string['displayactivityname'] = 'Amosar o nome da actividade';
 $string['displayactivityname_help'] = 'Amosar ou non o nome da actividade sobre o visor de eXeLearning.';
 $string['teachermodevisible'] = 'Amosar o selector de capa docente';
 $string['teachermodevisible_help'] = 'Se se desactiva, ocultarase o selector de capa docente no contido eXeLearning embebido.';
+$string['packageempty'] = 'Esta actividade aínda non contén contido reproducible. Ábrea no editor de eXeLearning para engadir contido.';

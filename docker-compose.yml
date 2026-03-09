@@ -21,7 +21,7 @@ services:
         php bin/console app:create-user ${TEST_USER_EMAIL} ${TEST_USER_PASSWORD} ${TEST_USER_USERNAME} --no-fail
 
   moodle:
-    image: erseco/alpine-moodle:v5.0.5
+    image: erseco/alpine-moodle:${MOODLE_VERSION:-v5.0.5}
     restart: unless-stopped
     environment:
       LANG: es_ES.UTF-8
