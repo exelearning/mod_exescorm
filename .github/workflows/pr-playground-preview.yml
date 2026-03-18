@@ -1,0 +1,82 @@
+---
+name: PR Playground Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: playground-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+
+jobs:
+  playground-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build Playground URL and post comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Read blueprint from repo
+            const blueprint = JSON.parse(fs.readFileSync('blueprint.json', 'utf8'));
+
+            // Swap plugin URL to PR branch archive
+            const headRepo = context.payload.pull_request.head.repo.full_name;
+            const branch = context.payload.pull_request.head.ref;
+            const prNumber = context.payload.pull_request.number;
+            const pluginUrl = `https://github.com/${headRepo}/archive/refs/heads/${branch}.zip`;
+
+            // Update blueprint
+            for (const step of blueprint.steps) {
+              if (step.step === 'installMoodlePlugin' && step.pluginName === 'exescorm') {
+                step.url = pluginUrl;
+              }
+            }
+
+            // Base64 encode
+            const encoded = Buffer.from(JSON.stringify(blueprint)).toString('base64');
+            const playgroundUrl = `https://ateeducacion.github.io/moodle-playground/?blueprint=${encoded}`;
+
+            const marker = '<!-- moodle-playground-preview -->';
+            const body = [
+              marker,
+              '## Test in Moodle Playground',
+              '',
+              'Test the plugin **with the code from this branch**:',
+              '',
+              `**[Open in Moodle Playground](${playgroundUrl})**`,
+              '',
+              '> The preview installs a Moodle site with the plugin and a test course ready to use.',
+            ].join('\n');
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+            const existing = comments.find(c => c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            }
