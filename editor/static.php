@@ -23,6 +23,7 @@
  */
 
 require('../../../config.php');
+require_once($CFG->dirroot . '/mod/exescorm/lib.php');
 
 // Support both slash arguments (PATH_INFO) and query params.
 // Slash arguments: /static.php/{cmid}/{filepath}
@@ -73,19 +74,6 @@ if (strpos($file, '..') !== false) {
     die('File not found');
 }
 
-$staticdir = $CFG->dirroot . '/mod/exescorm/dist/static';
-$filepath = realpath($staticdir . '/' . $file);
-
-if ($filepath === false || strpos($filepath, realpath($staticdir)) !== 0) {
-    send_header_404();
-    die('File not found');
-}
-
-if (!is_file($filepath)) {
-    send_header_404();
-    die('File not found');
-}
-
 $mimetypes = [
     'html' => 'text/html',
     'htm' => 'text/html',
@@ -116,19 +104,55 @@ $mimetypes = [
     'md' => 'text/plain',
 ];
 
-$ext = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
+$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 $contenttype = isset($mimetypes[$ext]) ? $mimetypes[$ext] : 'application/octet-stream';
 
 // Release session lock early so parallel requests are not blocked.
 \core\session\manager::write_close();
 
+if (exescorm_embedded_editor_uses_local_assets()) {
+    $staticdir = exescorm_get_embedded_editor_local_static_dir();
+    $filepath = realpath($staticdir . '/' . $file);
+    $staticroot = realpath($staticdir);
+
+    // Ensure the resolved path is within the static directory.
+    if ($filepath === false || $staticroot === false || strpos($filepath, $staticroot) !== 0) {
+        send_header_404();
+        die('File not found');
+    }
+
+    if (!is_file($filepath)) {
+        send_header_404();
+        die('File not found');
+    }
+
+    header('Content-Type: ' . $contenttype);
+    header('Content-Length: ' . filesize($filepath));
+    header('Cache-Control: public, max-age=604800'); // Cache for 1 week.
+    header('X-Frame-Options: SAMEORIGIN');
+
+    if (basename($file) === 'preview-sw.js') {
+        header('Service-Worker-Allowed: /');
+    }
+
+    readfile($filepath);
+    exit;
+}
+
+$remoteurl = exescorm_get_embedded_editor_remote_asset_url($file);
+$content = download_file_content($remoteurl);
+if ($content === false || $content === null) {
+    send_header_404();
+    die('Could not retrieve editor asset: ' . $file);
+}
+
 header('Content-Type: ' . $contenttype);
-header('Content-Length: ' . filesize($filepath));
-header('Cache-Control: public, max-age=604800');
+header('Content-Length: ' . strlen($content));
+header('Cache-Control: public, max-age=604800'); // Cache for 1 week.
 header('X-Frame-Options: SAMEORIGIN');
 
 if (basename($file) === 'preview-sw.js') {
     header('Service-Worker-Allowed: /');
 }
 
-readfile($filepath);
+echo $content;

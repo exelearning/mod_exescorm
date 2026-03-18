@@ -15,7 +15,7 @@ This plugin version is tested for:
 
 ## Installation
 
-> **Important:** Always install from a [release ZIP](https://github.com/exelearning/mod_exescorm/releases). Do not clone the repository directly, as it does not include the embedded editor which is built during the release process.
+> **Important:** It is recommended to install from a [release ZIP](https://github.com/exelearning/mod_exescorm/releases), which includes the embedded editor pre-built for optimal performance. If you clone the repository directly or install without the `dist/static/` directory, the embedded editor will still work but will load its assets remotely from `https://app.exelearning.net/`, which requires an internet connection and may be slower.
 
 ### Installing via uploaded ZIP file
 

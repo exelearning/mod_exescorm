@@ -22,14 +22,10 @@ if ($ADMIN->fulltree) {
                    1 => get_string('yes')];
 
     // Embedded editor settings.
-    $editoravailable = file_exists($CFG->dirroot . '/mod/exescorm/dist/static/index.html');
     $settings->add(new admin_setting_heading('exescorm/embeddededitorsettings',
         get_string('embeddededitorsettings', 'mod_exescorm'), ''));
 
     $editormodedesc = get_string('editormodedesc', 'mod_exescorm');
-    if (!$editoravailable) {
-        $editormodedesc .= '<br><strong>' . get_string('embeddednotinstalled', 'mod_exescorm') . '</strong>';
-    }
 
     $editormodes = [
         'online' => get_string('editormodeonline', 'mod_exescorm'),

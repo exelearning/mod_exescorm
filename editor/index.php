@@ -39,12 +39,6 @@ $context = context_module::instance($cm->id);
 require_capability('moodle/course:manageactivities', $context);
 require_sesskey();
 
-// Verify the embedded editor is available.
-$editorpath = $CFG->dirroot . '/mod/exescorm/dist/static/index.html';
-if (!file_exists($editorpath)) {
-    throw new moodle_exception('editormissing', 'mod_exescorm');
-}
-
 // Build the package URL for the editor to import.
 $packageurl = exescorm_get_package_url($exescorm, $context);
 
@@ -55,8 +49,14 @@ $saveurl = new moodle_url('/mod/exescorm/editor/save.php');
 // files are always accessible regardless of web server configuration.
 $editorbaseurl = $CFG->wwwroot . '/mod/exescorm/editor/static.php/' . $cm->id;
 
-// Read the editor template.
-$html = @file_get_contents($editorpath);
+// Read the editor template from the local dist build when available, or fall
+// back to the remote static deployment otherwise.
+$editorindexsource = exescorm_get_embedded_editor_index_source();
+if (exescorm_embedded_editor_uses_local_assets()) {
+    $html = @file_get_contents($editorindexsource);
+} else {
+    $html = download_file_content($editorindexsource);
+}
 if ($html === false || empty($html)) {
     throw new moodle_exception('editormissing', 'mod_exescorm');
 }

@@ -99,9 +99,10 @@ try {
         'version' => $updated->version,
     ]);
 } catch (Exception $e) {
+    debugging('mod_exescorm editor save failed: ' . $e->getMessage(), DEBUG_DEVELOPER);
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'error' => $e->getMessage(),
+        'error' => get_string('error'),
     ]);
 }
