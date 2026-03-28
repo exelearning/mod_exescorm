@@ -1,6 +1,6 @@
 # eXeLearning SCORM activities for Moodle
 
-[![Try in Moodle Playground](https://raw.githubusercontent.com/ateeducacion/moodle-playground/refs/heads/main/ogimage.png)](https://ateeducacion.github.io/moodle-playground/?blueprint-url=https://raw.githubusercontent.com/exelearning/mod_exescorm/refs/heads/main/blueprint.json)
+[![Preview in Moodle Playground](https://raw.githubusercontent.com/ateeducacion/action-moodle-playground-pr-preview/refs/heads/main/assets/playground-preview-button.svg)](https://ateeducacion.github.io/moodle-playground/?blueprint-url=https://raw.githubusercontent.com/exelearning/mod_exescorm/refs/heads/main/blueprint.json)
 
 Activity-type module to create and edit SCORM packages with eXeLearning (online).
 
