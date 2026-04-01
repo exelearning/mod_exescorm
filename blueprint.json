@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/ateeducacion/moodle-playground/refs/heads/main/assets/blueprints/blueprint-schema.json",
   "preferredVersions": { "php": "8.3", "moodle": "5.0" },
-  "landingPage": "/my/",
+  "landingPage": "/course/view.php?id=2",
   "constants": {
     "ADMIN_USER": "admin",
     "ADMIN_PASS": "password",
@@ -35,11 +35,38 @@
       "summary": "Test course for the eXeLearning SCORM plugin."
     },
     {
+      "step": "createUser",
+      "username": "student",
+      "password": "password",
+      "email": "student@example.com",
+      "firstname": "Demo",
+      "lastname": "Student"
+    },
+    {
       "step": "enrolUser",
       "username": "{{ADMIN_USER}}",
       "course": "EXESCORM01",
       "role": "editingteacher"
     },
-    { "step": "setLandingPage", "path": "/my/" }
+    {
+      "step": "enrolUser",
+      "username": "student",
+      "course": "EXESCORM01",
+      "role": "student"
+    },
+    {
+      "step": "createSection",
+      "course": "EXESCORM01",
+      "name": "Example SCORM Activities"
+    },
+    {
+      "step": "addModule",
+      "module": "exescorm",
+      "course": "EXESCORM01",
+      "section": 1,
+      "name": "Sample eXeLearning SCORM Package",
+      "intro": "This is a sample SCORM package created with eXeLearning. Click to launch the activity."
+    },
+    { "step": "setLandingPage", "path": "/course/view.php?id=2" }
   ]
 }
