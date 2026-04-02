@@ -20,66 +20,69 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright 3iPunt <https://www.tresipunt.com/>
  */
-import * as Str from 'core/str';
-import ModalFactory from 'core/modal_factory';
-import ModalEvents from 'core/modal_events';
+define(['core/str', 'core/modal_factory', 'core/modal_events'], function(Str, ModalFactory, ModalEvents) {
 
+    /**
+     * Initialize the edit confirmation functionality.
+     */
+    var init = function() {
+        var editButtons = document.querySelectorAll('[data-action="edit-exescorm"]');
 
-/**
- * Initialize the edit confirmation functionality.
- */
-export const init = () => {
-    const editButtons = document.querySelectorAll('[data-action="edit-exescorm"]');
-
-    editButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetUrl = button.getAttribute('data-editurl');
-            showConfirmation(targetUrl);
+        editButtons.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                var targetUrl = button.getAttribute('data-editurl');
+                showConfirmation(targetUrl);
+            });
         });
-    });
-};
+    };
 
-/**
- * Show confirmation modal before redirecting to edit.
- *
- * @param {string} targetUrl The URL to redirect to if confirmed
- */
-export const showConfirmation = (targetUrl) => {
-    Promise.all([
-        Str.get_string('edit', 'core'),
-        Str.get_string('yes', 'core'),
-        Str.get_string('cancel', 'core'),
-        Str.get_string('editdialogcontent', 'mod_exescorm'),
-        Str.get_string('editdialogcontent:caution', 'mod_exescorm'),
-        Str.get_string('editdialogcontent:continue', 'mod_exescorm'),
-    ]).then((strings) => {
-        // Center the body content using a div with text-center class.
-        const warnIcon = '<i class="fa fa-circle-exclamation text-danger"></i> ';
-        const bodyContent = strings[3] + '<br><br><strong>' + warnIcon + strings[4] +
-            '</strong><br><br>' + '<div class="text-center">' + strings[5] +
-            '</div>';
-        return ModalFactory.create({
-            type: ModalFactory.types.SAVE_CANCEL,
-            title: strings[0],
-            body: bodyContent,
-            buttons: {
-                save: strings[1],
-                cancel: strings[2]
-            }
-        });
-    }).then((modal) => {
-        modal.getRoot().on(ModalEvents.save, () => {
+    /**
+     * Show confirmation modal before redirecting to edit.
+     *
+     * @param {string} targetUrl The URL to redirect to if confirmed
+     */
+    var showConfirmation = function(targetUrl) {
+        Promise.all([
+            Str.get_string('edit', 'core'),
+            Str.get_string('yes', 'core'),
+            Str.get_string('cancel', 'core'),
+            Str.get_string('editdialogcontent', 'mod_exescorm'),
+            Str.get_string('editdialogcontent:caution', 'mod_exescorm'),
+            Str.get_string('editdialogcontent:continue', 'mod_exescorm'),
+        ]).then(function(strings) {
+            // Center the body content using a div with text-center class.
+            var warnIcon = '<i class="fa fa-circle-exclamation text-danger"></i> ';
+            var bodyContent = strings[3] + '<br><br><strong>' + warnIcon + strings[4] +
+                '</strong><br><br>' + '<div class="text-center">' + strings[5] +
+                '</div>';
+            return ModalFactory.create({
+                type: ModalFactory.types.SAVE_CANCEL,
+                title: strings[0],
+                body: bodyContent,
+                buttons: {
+                    save: strings[1],
+                    cancel: strings[2],
+                },
+            });
+        }).then(function(modal) {
+            modal.getRoot().on(ModalEvents.save, function() {
+                window.location.href = targetUrl;
+            });
+
+            modal.getRoot().on(ModalEvents.cancel, function() {
+                modal.hide();
+            });
+
+            modal.show();
+            return modal;
+        }).catch(function() {
             window.location.href = targetUrl;
         });
+    };
 
-        modal.getRoot().on(ModalEvents.cancel, () => {
-            modal.hide();
-        });
-
-        modal.show();
-        return modal;
-    }).catch(() => {
-        window.location.href = targetUrl;
-    });
-};
+    return {
+        init: init,
+        showConfirmation: showConfirmation,
+    };
+});
