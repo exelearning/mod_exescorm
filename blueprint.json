@@ -26,6 +26,12 @@
       "pluginName": "exescorm",
       "url": "https://github.com/exelearning/mod_exescorm/archive/refs/heads/main.zip"
     },
+    {
+      "step": "setConfig",
+      "name": "editormode",
+      "value": "embedded",
+      "plugin": "exescorm"
+    },
     { "step": "createCategory", "name": "Test Courses" },
     {
       "step": "createCourse",
@@ -64,8 +70,38 @@
       "module": "exescorm",
       "course": "EXESCORM01",
       "section": 1,
-      "name": "Sample eXeLearning SCORM Package",
-      "intro": "This is a sample SCORM package created with eXeLearning. Click to launch the activity."
+      "name": "Test Content",
+      "intro": "Sample eXeLearning SCORM content for testing.",
+      "exescormtype": "local",
+      "reference": "test-content.elpx"
+    },
+    {
+      "step": "addModule",
+      "module": "exescorm",
+      "course": "EXESCORM01",
+      "section": 1,
+      "name": "Propiedades",
+      "intro": "Example content demonstrating eXeLearning properties.",
+      "exescormtype": "local",
+      "reference": "propiedades.elpx"
+    },
+    {
+      "step": "writeFile",
+      "path": "/tmp/test-content.elpx",
+      "data": {
+        "url": "https://raw.githubusercontent.com/exelearning/wp-exelearning/refs/heads/main/tests/fixtures/test-content.elpx"
+      }
+    },
+    {
+      "step": "writeFile",
+      "path": "/tmp/propiedades.elpx",
+      "data": {
+        "url": "https://raw.githubusercontent.com/exelearning/wp-exelearning/refs/heads/main/tests/fixtures/propiedades.elpx"
+      }
+    },
+    {
+      "step": "runPhpCode",
+      "code": "<?php\ndefine('CLI_SCRIPT', true);\nrequire('/www/moodle/config.php');\nrequire_once($CFG->dirroot . '/mod/exescorm/lib.php');\nrequire_once($CFG->dirroot . '/mod/exescorm/locallib.php');\n\n$course = $DB->get_record('course', ['shortname' => 'EXESCORM01'], '*', MUST_EXIST);\n$modules = [\n    'Test Content' => '/tmp/test-content.elpx',\n    'Propiedades' => '/tmp/propiedades.elpx',\n];\n\nforeach ($modules as $modname => $filepath) {\n    $exescorm = $DB->get_record('exescorm', ['course' => $course->id, 'name' => $modname]);\n    if (!$exescorm || !file_exists($filepath)) continue;\n\n    $cm = get_coursemodule_from_instance('exescorm', $exescorm->id, $course->id);\n    $context = context_module::instance($cm->id);\n    $fs = get_file_storage();\n\n    $filename = basename($filepath);\n\n    $fileinfo = [\n        'contextid' => $context->id,\n        'component' => 'mod_exescorm',\n        'filearea' => 'package',\n        'itemid' => 0,\n        'filepath' => '/',\n        'filename' => $filename,\n        'userid' => 2,\n        'source' => $filename,\n        'author' => 'Admin User',\n        'license' => 'unknown',\n    ];\n\n    $newpackage = $fs->create_file_from_pathname($fileinfo, $filepath);\n\n    $exescorm->exescormtype = 'local';\n    $exescorm->reference = $filename;\n    $exescorm->sha1hash = $newpackage->get_contenthash();\n    $exescorm->timemodified = time();\n    $DB->update_record('exescorm', $exescorm);\n\n    try {\n        exescorm_parse($exescorm, true);\n    } catch (Throwable $e) {}\n}\necho json_encode(['ok' => true]);"
     },
     { "step": "setLandingPage", "path": "/course/view.php?id=2" }
   ]
