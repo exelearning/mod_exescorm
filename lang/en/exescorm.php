@@ -501,7 +501,7 @@ $string['editormodeonline'] = 'eXeLearning Online (remote server)';
 $string['editormodeembedded'] = 'Integrated editor (embedded)';
 $string['embeddednotinstalled'] = 'The embedded editor files are not installed.';
 $string['embeddednotinstalledcontactadmin'] = 'The embedded editor files are not installed. Please contact your site administrator to install it.';
-$string['embeddednotinstalledadmin'] = 'The embedded editor files are not installed. You can install it from the <a href="{$a}">plugin settings</a>.';
+$string['embeddednotinstalledadmin'] = 'The embedded editor files are not installed. You can install it from the <a href="{$a}" target="_top">plugin settings</a>.';
 $string['editembedded'] = 'Edit with eXeLearning';
 $string['editembedded_integrated'] = 'Integrated';
 $string['editembedded_help'] = 'Open the embedded eXeLearning editor to edit the content directly within Moodle.';
