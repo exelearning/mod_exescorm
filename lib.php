@@ -1966,68 +1966,41 @@ function mod_exescorm_core_calendar_get_event_action_string(string $eventtype): 
 }
 
 /**
- * Get the remote base URL used for the embedded editor fallback.
- *
- * @return string
- */
-function exescorm_get_embedded_editor_remote_base_url(): string {
-    // Production static editor URL.
-    return 'https://app.exelearning.net/';
-    // Nightly (uncomment to use development/nightly builds):
-    // return 'https://static.exelearning.dev/';
-}
-
-/**
  * Get the local dist/static directory for the embedded editor.
  *
  * @return string
  */
 function exescorm_get_embedded_editor_local_static_dir(): string {
-    global $CFG;
+    $dir = \mod_exescorm\local\embedded_editor_source_resolver::get_active_dir();
+    if ($dir !== null) {
+        return $dir;
+    }
 
-    return $CFG->dirroot . '/mod/exescorm/dist/static';
+    return \mod_exescorm\local\embedded_editor_source_resolver::get_bundled_dir();
 }
 
 /**
- * Check whether the embedded editor local dist assets are available.
+ * Check whether the embedded editor uses local assets.
  *
  * @return bool
  */
 function exescorm_embedded_editor_uses_local_assets(): bool {
-    $staticdir = exescorm_get_embedded_editor_local_static_dir();
-    $indexpath = $staticdir . '/index.html';
-
-    return is_dir($staticdir) && is_readable($indexpath);
-}
-
-/**
- * Get the source URL for a fallback embedded editor asset.
- *
- * @param string $filepath Relative asset path.
- * @return string
- */
-function exescorm_get_embedded_editor_remote_asset_url(string $filepath = ''): string {
-    return rtrim(exescorm_get_embedded_editor_remote_base_url(), '/') . '/' . ltrim($filepath, '/');
+    return \mod_exescorm\local\embedded_editor_source_resolver::has_local_source();
 }
 
 /**
  * Get the source used to read the embedded editor index HTML.
  *
- * @return string
+ * @return string|null
  */
-function exescorm_get_embedded_editor_index_source(): string {
-    if (exescorm_embedded_editor_uses_local_assets()) {
-        return exescorm_get_embedded_editor_local_static_dir() . '/index.html';
-    }
-
-    return exescorm_get_embedded_editor_remote_asset_url('index.html');
+function exescorm_get_embedded_editor_index_source(): ?string {
+    return \mod_exescorm\local\embedded_editor_source_resolver::get_index_source();
 }
 
 /**
  * Check if the embedded static editor is available.
  *
- * Checks the admin editor mode setting. When local dist assets are unavailable,
- * the editor falls back to the remote static deployment.
+ * Checks the admin editor mode setting.
  *
  * @return bool True if the editor mode is 'embedded'.
  */

@@ -35,6 +35,11 @@ if ($ADMIN->fulltree) {
         get_string('editormode', 'mod_exescorm'), $editormodedesc,
         'online', $editormodes));
 
+    $settings->add(new \mod_exescorm\admin\admin_setting_embeddededitor(
+        get_string('embeddededitorstatus', 'mod_exescorm'),
+        ''
+    ));
+
     // JavaScript to toggle connection settings visibility based on editor mode.
     $connectionsettingsdesc = '<script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -44,12 +49,14 @@ document.addEventListener("DOMContentLoaded", function() {
         "admin-connectionsettings", "admin-exeonlinebaseuri", "admin-providername",
         "admin-providerversion", "admin-hmackey1", "admin-tokenexpiration"
     ];
+    var embeddedWidget = document.querySelector(".mod_exescorm-admin-embedded-editor-setting");
     function toggleConnectionSettings() {
         var show = (modeSelect.value === "online");
         connectionIds.forEach(function(id) {
             var el = document.getElementById(id);
             if (el) el.style.display = show ? "" : "none";
         });
+        if (embeddedWidget) embeddedWidget.style.display = (modeSelect.value === "embedded") ? "" : "none";
     }
     modeSelect.addEventListener("change", toggleConnectionSettings);
     toggleConnectionSettings();

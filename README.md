@@ -17,7 +17,7 @@ This plugin version is tested for:
 
 ## Installation
 
-> **Important:** It is recommended to install from a [release ZIP](https://github.com/exelearning/mod_exescorm/releases), which includes the embedded editor pre-built for optimal performance. If you clone the repository directly or install without the `dist/static/` directory, the embedded editor will still work but will load its assets remotely from `https://app.exelearning.net/`, which requires an internet connection and may be slower.
+> **Important:** It is recommended to install from a [release ZIP](https://github.com/exelearning/mod_exescorm/releases), which includes the embedded editor pre-built for optimal performance. If the release ZIP does not include the editor, or if you want to install a newer version, administrators can download it from GitHub Releases via the embedded editor controls in the plugin settings.
 
 ### Installing via uploaded ZIP file
 
@@ -67,6 +67,15 @@ Go to the URL:
 
   * Forbidden files RE list: *exescorm | forbiddenfileslist*
     * A forbidden files list can be configurad here. Enter each forbidden file as a PHP regular expression (RE) on a new line.
+
+## Embedded Editor Management
+
+The plugin supports two local editor sources with the following precedence:
+
+1. **Admin-installed** (moodledata): Downloaded from GitHub Releases via the plugin settings.
+2. **Bundled** (plugin): Included in the plugin release ZIP at `dist/static/`.
+
+The admin-installed version takes priority over the bundled one. If neither source is available, the embedded editor mode cannot be used.
 
 ## Development
 
