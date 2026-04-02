@@ -28,6 +28,23 @@ defined('MOODLE_INTERNAL') || die();
 
 $functions = [
 
+    'mod_exescorm_manage_embedded_editor_action' => [
+        'classname'   => 'mod_exescorm\external\manage_embedded_editor',
+        'methodname'  => 'execute_action',
+        'description' => 'Execute an install, update, repair, or uninstall action on the embedded eXeLearning editor.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'capabilities' => 'moodle/site:config, mod/exescorm:manageembeddededitor',
+    ],
+    'mod_exescorm_manage_embedded_editor_status' => [
+        'classname'   => 'mod_exescorm\external\manage_embedded_editor',
+        'methodname'  => 'get_status',
+        'description' => 'Return the current installation status of the embedded eXeLearning editor.',
+        'type'        => 'read',
+        'ajax'        => true,
+        'capabilities' => 'moodle/site:config, mod/exescorm:manageembeddededitor',
+    ],
+
     'mod_exescorm_view_exescorm' => [
         'classname' => 'mod_exescorm_external',
         'methodname' => 'view_exescorm',

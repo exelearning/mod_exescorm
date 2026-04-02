@@ -96,6 +96,15 @@ $capabilities = array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array()
+    ),
+
+    'mod/exescorm:manageembeddededitor' => array(
+        'riskbitmask' => RISK_CONFIG | RISK_DATALOSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'manager' => CAP_ALLOW
+        )
     )
 );
-

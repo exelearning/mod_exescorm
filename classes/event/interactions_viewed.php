@@ -87,11 +87,6 @@ class interactions_viewed extends \core\event\base {
      *
      * @return array
      */
-    protected function get_legacy_logdata() {
-        return array($this->courseid, 'exescorm', 'userreportinteractions', 'report/userreportinteractions.php?id=' .
-                $this->contextinstanceid . '&user=' . $this->relateduserid . '&attempt=' . $this->other['attemptid'],
-                $this->other['instanceid'], $this->contextinstanceid);
-    }
 
     /**
      * Custom validation.

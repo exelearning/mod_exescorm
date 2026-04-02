@@ -31,6 +31,8 @@ define('EXESCORM_TYPE_LOCALSYNC', 'localsync');
 define('EXESCORM_TYPE_EXTERNAL', 'external');
 /** EXESCORM_TYPE_AICCURL = external AICC url */
 define('EXESCORM_TYPE_AICCURL', 'aiccurl');
+/** EXESCORM_TYPE_EMBEDDED = embedded static editor */
+define('EXESCORM_TYPE_EMBEDDED', 'embedded');
 
 define('EXESCORM_TOC_SIDE', 0);
 define('EXESCORM_TOC_HIDDEN', 1);
@@ -171,6 +173,46 @@ function exescorm_add_instance($exescorm, $mform=null) {
         if ($filename !== false) {
             $record->reference = $filename;
         }
+    } else if ($exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
+        // Embedded type: user may optionally upload an .elpx project file.
+        if (!empty($exescorm->packagefile)) {
+            $fs = get_file_storage();
+            $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
+            file_save_draft_area_files($exescorm->packagefile, $context->id, 'mod_exescorm', 'package',
+                0, array('subdirs' => 0, 'maxfiles' => 1));
+            $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', 0, '', false);
+            $file = reset($files);
+            if ($file) {
+                $record->reference = $file->get_filename();
+            }
+        } else {
+            // No file uploaded: create default package so there is something to parse.
+            $fs = get_file_storage();
+            $templatename = get_config('exescorm', 'template');
+            $templatefile = false;
+            $fileinfo = [
+                'contextid' => $context->id,
+                'component' => 'mod_exescorm',
+                'filearea' => 'package',
+                'itemid' => 0,
+                'filepath' => '/',
+                'filename' => 'default_package.zip',
+                'userid' => $USER->id,
+                'source' => 'default_package.zip',
+                'author' => fullname($USER),
+                'license' => 'unknown',
+            ];
+            if (! empty($templatename)) {
+                $templatefile = $fs->get_file(1, 'exescorm', 'config', 0, '/', ltrim($templatename, '/'));
+            }
+            if ($templatefile) {
+                $file = $fs->create_file_from_storedfile($fileinfo, $templatefile);
+            } else {
+                $defaultpackagepath = $CFG->dirroot . '/mod/exescorm/data/default_package.zip';
+                $file = $fs->create_file_from_pathname($fileinfo, $defaultpackagepath);
+            }
+            $record->reference = $file->get_filename();
+        }
     } else if ($record->exescormtype === EXESCORM_TYPE_LOCAL) {
         // Store the package and verify.
         if (!empty($exescorm->packagefile)) {
@@ -206,7 +248,18 @@ function exescorm_add_instance($exescorm, $mform=null) {
     $record->cmidnumber = $cmidnumber;
     $record->cmid = $cmid;
 
-    exescorm_parse($record, true);
+    // Skip parse for .elpx files: they are eXeLearning project files, not SCORM packages.
+    // The embedded editor will import the .elpx and export a proper SCORM package on save.
+    $skipparse = false;
+    if (!empty($record->reference)) {
+        $ext = strtolower(pathinfo($record->reference, PATHINFO_EXTENSION));
+        if ($ext === 'elpx') {
+            $skipparse = true;
+        }
+    }
+    if (!$skipparse) {
+        exescorm_parse($record, true);
+    }
 
     exescorm_grade_item_update($record);
     exescorm_update_calendar($record, $cmid);
@@ -259,7 +312,21 @@ function exescorm_update_instance($exescorm, $mform=null) {
         $exescorm->exescormtype = EXESCORM_TYPE_LOCAL;
     }
 
-    if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL) {
+    if ($exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
+        // Embedded editor saves are handled via editor/save.php.
+        // But user may re-upload an .elpx file via the settings form.
+        if (!empty($exescorm->packagefile)) {
+            $fs = get_file_storage();
+            $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
+            file_save_draft_area_files($exescorm->packagefile, $context->id, 'mod_exescorm', 'package',
+                0, array('subdirs' => 0, 'maxfiles' => 1));
+            $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', 0, '', false);
+            $file = reset($files);
+            if ($file) {
+                $exescorm->reference = $file->get_filename();
+            }
+        }
+    } else if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL) {
         if (!empty($exescorm->packagefile)) {
             $fs = get_file_storage();
             $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
@@ -305,7 +372,18 @@ function exescorm_update_instance($exescorm, $mform=null) {
     $exescorm->idnumber = $cmidnumber;
     $exescorm->cmid = $cmid;
 
-    exescorm_parse($exescorm, (bool)$exescorm->updatefreq);
+    // Skip parse for .elpx files: they are eXeLearning project files, not SCORM packages.
+    // The embedded editor will import the .elpx and export a proper SCORM package on save.
+    $skipparse = false;
+    if (!empty($exescorm->reference)) {
+        $ext = strtolower(pathinfo($exescorm->reference, PATHINFO_EXTENSION));
+        if ($ext === 'elpx') {
+            $skipparse = true;
+        }
+    }
+    if (!$skipparse) {
+        exescorm_parse($exescorm, (bool)$exescorm->updatefreq);
+    }
 
     exescorm_grade_item_update($exescorm);
     exescorm_update_grades($exescorm);
@@ -1020,7 +1098,12 @@ function exescorm_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
         }
         $revision = (int)array_shift($args); // Prevents caching problems - ignored here.
         $relativepath = implode('/', $args);
-        $fullpath = "/$context->id/mod_exescorm/package/0/$relativepath";
+        // Try with revision first (used by embedded editor), fallback to itemid=0.
+        $fullpath = "/$context->id/mod_exescorm/package/$revision/$relativepath";
+        $fs = get_file_storage();
+        if (!$fs->get_file_by_hash(sha1($fullpath))) {
+            $fullpath = "/$context->id/mod_exescorm/package/0/$relativepath";
+        }
         $lifetime = 0; // No caching here.
 
     } else if ($filearea === 'imsmanifest') { // This isn't a real filearea, it's a url parameter for this type of package.
@@ -1202,7 +1285,8 @@ function exescorm_version_check($exescormversion, $version='') {
  */
 function exescorm_dndupload_register() {
     return array('files' => array(
-        array('extension' => 'zip', 'message' => get_string('dnduploadexescorm', 'mod_exescorm'))
+        array('extension' => 'zip', 'message' => get_string('dnduploadexescorm', 'mod_exescorm')),
+        array('extension' => 'elpx', 'message' => get_string('dnduploadexescorm', 'mod_exescorm')),
     ));
 }
 
@@ -1879,6 +1963,89 @@ function mod_exescorm_core_calendar_get_event_action_string(string $eventtype): 
     }
 
     return get_string($identifier, 'mod_exescorm', $modulename);
+}
+
+/**
+ * Get the local dist/static directory for the embedded editor.
+ *
+ * @return string
+ */
+function exescorm_get_embedded_editor_local_static_dir(): string {
+    $dir = \mod_exescorm\local\embedded_editor_source_resolver::get_active_dir();
+    if ($dir !== null) {
+        return $dir;
+    }
+
+    return \mod_exescorm\local\embedded_editor_source_resolver::get_bundled_dir();
+}
+
+/**
+ * Check whether the embedded editor uses local assets.
+ *
+ * @return bool
+ */
+function exescorm_embedded_editor_uses_local_assets(): bool {
+    return \mod_exescorm\local\embedded_editor_source_resolver::has_local_source();
+}
+
+/**
+ * Get the source used to read the embedded editor index HTML.
+ *
+ * @return string|null
+ */
+function exescorm_get_embedded_editor_index_source(): ?string {
+    return \mod_exescorm\local\embedded_editor_source_resolver::get_index_source();
+}
+
+/**
+ * Check if the embedded static editor is available.
+ *
+ * Checks the admin editor mode setting.
+ *
+ * @return bool True if the editor mode is 'embedded'.
+ */
+function exescorm_embedded_editor_available() {
+    $mode = get_config('exescorm', 'editormode');
+    if ($mode === false) {
+        $mode = 'online';
+    }
+    return $mode === 'embedded';
+}
+
+/**
+ * Check if the online eXeLearning editor is available.
+ *
+ * Checks that the editor mode is not 'embedded' and that the online base URI is configured.
+ *
+ * @return bool True if online editor mode is active and base URI is configured.
+ */
+function exescorm_online_editor_available() {
+    $mode = get_config('exescorm', 'editormode');
+    if ($mode === false) {
+        $mode = 'online';
+    }
+    return ($mode !== 'embedded') && !empty(get_config('exescorm', 'exeonlinebaseuri'));
+}
+
+/**
+ * Get the URL for the package file of an exescorm instance.
+ *
+ * @param stdClass $exescorm The exescorm record.
+ * @param context_module $context The module context.
+ * @return moodle_url|null The URL to the package file, or null if not found.
+ */
+function exescorm_get_package_url($exescorm, $context) {
+    $fs = get_file_storage();
+    $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', false, 'sortorder DESC, id ASC', false);
+    $package = reset($files);
+    if (!$package) {
+        return null;
+    }
+    $revision = isset($exescorm->revision) ? $exescorm->revision : 0;
+    return moodle_url::make_pluginfile_url(
+        $context->id, 'mod_exescorm', 'package', $revision,
+        $package->get_filepath(), $package->get_filename()
+    );
 }
 
 /**

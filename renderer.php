@@ -118,13 +118,17 @@ class mod_exescorm_renderer extends plugin_renderer_base {
         $context['hasgrades'] = exescorm_get_user_grades($exescorm, 0);
 
         $capability = has_capability('moodle/course:update', context_course::instance($cm->course));
-        if ($capability && get_config('exescorm', 'exeonlinebaseuri')) {
-            $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $cm->id, 'forceview' => 1]);
-            $exeonlineurl = get_config('exescorm', 'exeonlinebaseuri');
-            if (empty($exeonlineurl)) {
-                $context['editaction'] = false;
-            } else {
+        if ($capability) {
+            if (exescorm_online_editor_available()) {
+                $returnto = new moodle_url("/mod/exescorm/view.php", ['id' => $cm->id, 'forceview' => 1]);
                 $context['editaction'] = exescorm_redirector::get_redirection_url($cm->id, $returnto)->out(false);
+            } else if (exescorm_embedded_editor_available()) {
+                $context['editorurl'] = (new moodle_url('/mod/exescorm/editor/index.php', [
+                    'id' => $cm->id,
+                    'sesskey' => sesskey(),
+                ]))->out(false);
+                $context['cmid'] = $cm->id;
+                $context['activityname'] = $exescorm ? format_string($exescorm->name) : '';
             }
         }
         return $this->render_from_template('mod_exescorm/player_editexitbar', $context);

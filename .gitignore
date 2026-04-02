@@ -1,0 +1,16 @@
+.aider*
+.env
+
+# mess detector rules
+phpmd-rules.xml
+
+# Composer ignores
+/vendor/
+/composer.lock
+/composer.phar
+
+# Built static editor files
+dist/static/
+
+# Local editor checkout fetched during build
+exelearning/

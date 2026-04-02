@@ -58,7 +58,14 @@ class mod_exescorm_mod_form extends moodleform_mod {
             EXESCORM_TYPE_LOCAL => get_string('typelocal', 'mod_exescorm'),
         ];
         $defaulttype = EXESCORM_TYPE_LOCAL;
-        if (!empty($cfgexescorm->exeonlinebaseuri)) {
+        if (exescorm_embedded_editor_available()) {
+            if ($editmode) {
+                $exescormtypes[EXESCORM_TYPE_EMBEDDED] = get_string('typeexescormedit', 'mod_exescorm');
+            } else {
+                $exescormtypes[EXESCORM_TYPE_EMBEDDED] = get_string('typeexescormcreate', 'mod_exescorm');
+                $defaulttype = EXESCORM_TYPE_EMBEDDED;
+            }
+        } else if (!empty($cfgexescorm->exeonlinebaseuri)) {
             if ($editmode) {
                 $exescormtypes[EXESCORM_TYPE_EXESCORMNET] = get_string('typeexescormedit', 'mod_exescorm');
             } else {
@@ -66,6 +73,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
                 $defaulttype = EXESCORM_TYPE_EXESCORMNET;
             }
         }
+
         if ($cfgexescorm->allowtypeexternal) {
             $exescormtypes[EXESCORM_TYPE_EXTERNAL] = get_string('typeexternal', 'mod_exescorm');
         }
@@ -80,6 +88,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         $nonfilepickertypes = [
                 EXESCORM_TYPE_EXESCORMNET,
+                EXESCORM_TYPE_EMBEDDED,
             ];
         // Reference.
         $mform->addElement('select', 'exescormtype', get_string('exescormtype', 'mod_exescorm'), $exescormtypes);
@@ -89,7 +98,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->addElement('text', 'packageurl', get_string('packageurl', 'mod_exescorm'), array('size' => 60));
         $mform->setType('packageurl', PARAM_RAW);
         $mform->addHelpButton('packageurl', 'packageurl', 'exescorm');
-        $mform->hideIf('packageurl', 'exescormtype', 'in', [EXESCORM_TYPE_LOCAL, EXESCORM_TYPE_EXESCORMNET]);
+        $mform->hideIf('packageurl', 'exescormtype', 'in', [EXESCORM_TYPE_LOCAL, EXESCORM_TYPE_EXESCORMNET, EXESCORM_TYPE_EMBEDDED]);
         // Workarround to hide static element.
         $group = [];
         $staticelement = $mform->createElement('static', 'onlinetypehelp', '',
@@ -98,9 +107,17 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $group[] =& $staticelement;
         $mform->addGroup($group, 'typehelpgroup', '', ' ', false);
         $mform->hideIf('typehelpgroup', 'exescormtype', 'noteq', EXESCORM_TYPE_EXESCORMNET);
+        // Embedded editor help text.
+        $embeddedgroup = [];
+        $embeddedelement = $mform->createElement('static', 'embeddedtypehelp', '',
+                                                get_string('embeddedtypehelp', 'mod_exescorm'));
+        $embeddedelement->updateAttributes(['class' => 'font-weight-bold']);
+        $embeddedgroup[] =& $embeddedelement;
+        $mform->addGroup($embeddedgroup, 'embeddedtypehelpgroup', '', ' ', false);
+        $mform->hideIf('embeddedtypehelpgroup', 'exescormtype', 'noteq', EXESCORM_TYPE_EMBEDDED);
         // New local package upload.
         $filemanageroptions = array();
-        $filemanageroptions['accepted_types'] = array('.zip', '.xml');
+        $filemanageroptions['accepted_types'] = array('.zip', '.xml', '.elpx');
         $filemanageroptions['maxbytes'] = 0;
         $filemanageroptions['maxfiles'] = 1;
         $filemanageroptions['subdirs'] = 0;
@@ -204,6 +221,11 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->setDefault('displayattemptstatus', $cfgexescorm->displayattemptstatus);
         $mform->setAdvanced('displayattemptstatus', $cfgexescorm->displayattemptstatus_adv);
 
+        // Teacher mode toggler visibility.
+        $mform->addElement('advcheckbox', 'teachermodevisible', get_string('teachermodevisible', 'mod_exescorm'));
+        $mform->addHelpButton('teachermodevisible', 'teachermodevisible', 'mod_exescorm');
+        $mform->setDefault('teachermodevisible', 1);
+
         // Availability.
         $mform->addElement('header', 'availability', get_string('availability'));
 
@@ -304,6 +326,9 @@ class mod_exescorm_mod_form extends moodleform_mod {
 
         $this->add_edit_online_buttons('editonlinearr');
         $mform->hideIf('editonlinearr', 'exescormtype', 'noteq', EXESCORM_TYPE_EXESCORMNET);
+
+        // Hide updatefreq for embedded type.
+        $mform->hideIf('updatefreq', 'exescormtype', 'eq', EXESCORM_TYPE_EMBEDDED);
     }
 
     /**
@@ -459,6 +484,9 @@ class mod_exescorm_mod_form extends moodleform_mod {
                     }
                 } else if (strtolower(substr($file->get_filename(), -3)) == 'xml') {
                     $errors['packagefile'] = get_string('invalidmanifestname', 'mod_exescorm');
+                } else if (strtolower(pathinfo($file->get_filename(), PATHINFO_EXTENSION)) === 'elpx') {
+                    // .elpx is an eXeLearning project file, not a SCORM package.
+                    // It will be imported by the embedded editor and exported as SCORM on save.
                 } else {
                     // Validate this EXESCORM package.
                     $errors = array_merge($errors, exescorm_validate_package($file));
@@ -469,6 +497,8 @@ class mod_exescorm_mod_form extends moodleform_mod {
                 // Make sure updatefreq is not set if using normal local file, as exescormnet received file will be local.
                 $errors['updatefreq'] = get_string('updatefreq_error', 'mod_exescorm');
             }
+        } else if ($type === EXESCORM_TYPE_EMBEDDED) {
+            // Embedded editor handles everything via editor/save.php, no validation needed here.
         } else if ($type === EXESCORM_TYPE_EXTERNAL) {
             $reference = $data['packageurl'];
             // Syntax check.

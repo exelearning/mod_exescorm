@@ -1,0 +1,44 @@
+---
+name: PR Playground Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: playground-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  playground-preview:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Build PR blueprint
+        env:
+          PLUGIN_REPO_OWNER: ${{ github.event.pull_request.head.repo.owner.login }}
+          PLUGIN_REPO_NAME: ${{ github.event.pull_request.head.repo.name }}
+          PLUGIN_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+        run: |
+          plugin_url="https://github.com/${PLUGIN_REPO_OWNER}/${PLUGIN_REPO_NAME}/archive/refs/heads/${PLUGIN_BRANCH_NAME}.zip"
+          sed "s|https://github.com/exelearning/mod_exescorm/archive/refs/heads/main.zip|${plugin_url}|" blueprint.json > blueprint.pr.json
+
+      - uses: ateeducacion/action-moodle-playground-pr-preview@main
+        with:
+          blueprint-file: blueprint.pr.json
+          mode: append-to-description
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          extra-text: >
+            ⚠️ The embedded eXeLearning editor is not included in this preview.
+            You can install it from **Modules > eXeLearning SCORM > Configure**
+            using the "Download & Install Editor" button.
+            All other module features (ELPX upload, viewer, preview) work normally.

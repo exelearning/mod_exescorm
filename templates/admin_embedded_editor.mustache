@@ -1,0 +1,164 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_exescorm/admin_embedded_editor
+
+    Inline admin-settings widget for managing the embedded eXeLearning editor.
+    JavaScript (mod_exescorm/admin_embedded_editor) reads data-* attributes on the
+    container and uses AJAX external functions to perform install/update/uninstall.
+
+    Context variables required for this template:
+    * sesskey               - Session key for CSRF protection.
+    * active_source         - String: 'moodledata', 'bundled', or 'none'.
+    * active_source_moodledata - Boolean.
+    * active_source_bundled    - Boolean.
+    * active_source_none       - Boolean.
+    * moodledata_available  - Boolean.
+    * moodledata_version    - Version string or empty.
+    * moodledata_installed_at - Datetime string or empty.
+    * bundled_available     - Boolean.
+    * can_install           - Boolean.
+    * can_update            - Boolean (PHP always passes false; JS may set true).
+    * can_uninstall         - Boolean.
+
+    Example context (json):
+    {
+        "sesskey": "abc123",
+        "active_source": "moodledata",
+        "active_source_moodledata": true,
+        "active_source_bundled": false,
+        "active_source_none": false,
+        "moodledata_available": true,
+        "moodledata_version": "4.0.0",
+        "moodledata_installed_at": "2025-01-15 10:30:00",
+        "bundled_available": false,
+        "can_install": false,
+        "can_update": false,
+        "can_uninstall": true
+    }
+}}
+
+<div class="mod_exescorm-admin-embedded-editor"
+     data-sesskey="{{sesskey}}"
+     data-active-source="{{active_source}}"
+     data-can-install="{{#can_install}}1{{/can_install}}{{^can_install}}0{{/can_install}}"
+     data-can-uninstall="{{#can_uninstall}}1{{/can_uninstall}}{{^can_uninstall}}0{{/can_uninstall}}"
+     data-confirm-uninstall="{{#str}} confirmuninstall, mod_exescorm {{/str}}">
+
+    <div class="card">
+        <div class="card-body">
+
+            {{! Status section }}
+            <div class="d-flex align-items-center mb-3">
+                <span class="mod_exescorm-status-primary">
+                    {{#active_source_moodledata}}
+                        <span class="badge badge-success bg-success mr-2 me-2">
+                            {{#str}} editormoodledatasource, mod_exescorm {{/str}}
+                        </span>
+                        {{#moodledata_version}}
+                            <span class="font-weight-bold fw-bold mr-2 me-2">v{{moodledata_version}}</span>
+                        {{/moodledata_version}}
+                        {{#moodledata_installed_at}}
+                            <span class="text-muted small">
+                                {{#str}} editorinstalledat, mod_exescorm {{/str}} {{moodledata_installed_at}}
+                            </span>
+                        {{/moodledata_installed_at}}
+                    {{/active_source_moodledata}}
+
+                    {{#active_source_bundled}}
+                        <span class="badge badge-info bg-info mr-2 me-2">
+                            {{#str}} editorbundledsource, mod_exescorm {{/str}}
+                        </span>
+                        <span class="text-muted small">
+                            {{#str}} editorbundleddesc, mod_exescorm {{/str}}
+                        </span>
+                    {{/active_source_bundled}}
+
+                    {{#active_source_none}}
+                        <span class="badge badge-danger bg-danger mr-2 me-2">
+                            {{#str}} noeditorinstalled, mod_exescorm {{/str}}
+                        </span>
+                        <span class="text-muted small">
+                            {{#str}} editornotinstalleddesc, mod_exescorm {{/str}}
+                        </span>
+                    {{/active_source_none}}
+                </span>
+
+                {{! Latest version area — JS populates after actions }}
+                <span class="mod_exescorm-latest-version-area ml-2 ms-2">
+                    <span class="mod_exescorm-latest-version-spinner" style="display:none;">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="text-muted small">{{#str}} checkingforupdates, mod_exescorm {{/str}}</span>
+                    </span>
+                    <span class="mod_exescorm-latest-version-text text-muted small" style="display:none;"></span>
+                </span>
+            </div>
+
+            {{! Help text }}
+            <p class="text-muted small mb-3">
+                {{#str}} editormanagementhelp, mod_exescorm {{/str}}
+            </p>
+
+            {{! Action buttons }}
+            <div class="mod_exescorm-editor-actions d-flex flex-wrap gap-2 mb-0">
+
+                {{#can_install}}
+                    <button type="button"
+                            class="btn btn-primary btn-sm mod_exescorm-btn-install"
+                            data-action="install">
+                        {{#pix}} i/import, core {{/pix}}
+                        {{#str}} editorinstall, mod_exescorm {{/str}}
+                    </button>
+                {{/can_install}}
+
+                {{! Update button — hidden by default; JS shows when update is available }}
+                <button type="button"
+                        class="btn btn-info btn-sm mod_exescorm-btn-update"
+                        data-action="update"
+                        style="display:none;">
+                    {{#pix}} i/reload, core {{/pix}}
+                    {{#str}} editorupdate, mod_exescorm {{/str}}
+                </button>
+
+                {{#can_uninstall}}
+                    <button type="button"
+                            class="btn btn-outline-danger btn-sm mod_exescorm-btn-uninstall"
+                            data-action="uninstall">
+                        {{#pix}} t/delete, core {{/pix}}
+                        {{#str}} editoruninstall, mod_exescorm {{/str}}
+                    </button>
+                {{/can_uninstall}}
+
+            </div>
+
+            {{! Spinner — hidden until an action is running }}
+            <div class="mod_exescorm-progress-container mt-3" style="display:none;" aria-live="polite">
+                <div class="d-flex align-items-center">
+                    <span class="spinner-border spinner-border-sm mr-2 me-2" role="status" aria-hidden="true"></span>
+                    <span class="mod_exescorm-progress-message text-muted small"></span>
+                </div>
+            </div>
+
+            {{! Result / error message area — hidden until set by JS }}
+            <div class="mod_exescorm-result-area mt-3" style="display:none;" aria-live="polite">
+                <div class="mod_exescorm-result-message alert mb-0" role="alert"></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
