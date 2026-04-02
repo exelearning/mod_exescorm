@@ -28,6 +28,48 @@
 require('../../../config.php');
 require_once($CFG->dirroot . '/mod/exescorm/lib.php');
 
+/**
+ * Output a visible error page inside the editor iframe.
+ *
+ * @param string $message The error message to display.
+ */
+function exescorm_editor_error_page(string $message): void {
+    $escapedmessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+    header('Content-Type: text/html; charset=utf-8');
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {
+        display: flex; align-items: center; justify-content: center;
+        min-height: 100vh; margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f8f9fa; color: #333;
+    }
+    .error-box {
+        max-width: 520px; padding: 2rem; text-align: center;
+        background: #fff; border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        border-left: 4px solid #dc3545;
+    }
+    .error-box h2 { margin: 0 0 .75rem; color: #dc3545; font-size: 1.25rem; }
+    .error-box p { margin: 0; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="error-box">
+    <h2>⚠ Error</h2>
+    <p>{$escapedmessage}</p>
+</div>
+</body>
+</html>
+HTML;
+    die;
+}
+
 $id = required_param('id', PARAM_INT); // Course module ID.
 
 $cm = get_coursemodule_from_id('exescorm', $id, 0, false, MUST_EXIST);
@@ -53,14 +95,14 @@ $editorbaseurl = $CFG->wwwroot . '/mod/exescorm/editor/static.php/' . $cm->id;
 $editorindexsource = exescorm_get_embedded_editor_index_source();
 if ($editorindexsource === null) {
     if (is_siteadmin()) {
-        throw new moodle_exception('embeddednotinstalledadmin', 'mod_exescorm');
+        exescorm_editor_error_page(get_string('embeddednotinstalledadmin', 'mod_exescorm'));
     } else {
-        throw new moodle_exception('embeddednotinstalledcontactadmin', 'mod_exescorm');
+        exescorm_editor_error_page(get_string('embeddednotinstalledcontactadmin', 'mod_exescorm'));
     }
 }
 $html = @file_get_contents($editorindexsource);
 if ($html === false || empty($html)) {
-    throw new moodle_exception('editormissing', 'mod_exescorm');
+    exescorm_editor_error_page(get_string('editormissing', 'mod_exescorm'));
 }
 
 // Inject <base> tag pointing directly to the static directory.
