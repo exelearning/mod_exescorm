@@ -74,6 +74,7 @@
       "intro": "Sample eXeLearning SCORM content for testing.",
       "exescormtype": "local",
       "reference": "test-content.elpx",
+      "display": 1,
       "files": [
         {
           "filearea": "package",
@@ -93,6 +94,7 @@
       "intro": "Example content demonstrating eXeLearning properties.",
       "exescormtype": "local",
       "reference": "propiedades.elpx",
+      "display": 1,
       "files": [
         {
           "filearea": "package",
