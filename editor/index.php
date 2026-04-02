@@ -54,7 +54,20 @@ $editorindexsource = exescorm_get_embedded_editor_index_source();
 if ($editorindexsource === null) {
     if (is_siteadmin()) {
         $settingsurl = new moodle_url('/admin/settings.php', ['section' => 'modsettingexescorm']);
-        throw new moodle_exception('embeddednotinstalledadmin', 'mod_exescorm', '', $settingsurl->out());
+        $msg = htmlspecialchars(get_string('embeddednotinstalledadmin', 'mod_exescorm'), ENT_QUOTES, 'UTF-8');
+        $linkurl = htmlspecialchars($settingsurl->out(), ENT_QUOTES, 'UTF-8');
+        $linktext = htmlspecialchars(get_string('embeddednotinstalledadminlinktext', 'mod_exescorm'), ENT_QUOTES, 'UTF-8');
+        header('Content-Type: text/html; charset=utf-8');
+        echo '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="display:flex;align-items:center;'
+            . 'justify-content:center;min-height:100vh;margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;'
+            . 'background:#f8f9fa;color:#333"><div style="max-width:520px;padding:2rem;text-align:center;background:#fff;'
+            . 'border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);border-left:4px solid #dc3545">'
+            . '<h2 style="margin:0 0 .75rem;color:#dc3545;font-size:1.25rem">⚠ Error</h2>'
+            . '<p style="margin:0;line-height:1.5">' . $msg . '</p>'
+            . '<p style="margin-top:1rem"><a href="' . $linkurl . '" target="_top" '
+            . 'style="color:#fff;background:#0d6efd;padding:.5rem 1rem;border-radius:4px;text-decoration:none;display:inline-block">'
+            . $linktext . '</a></p></div></body></html>';
+        die;
     } else {
         throw new moodle_exception('embeddednotinstalledcontactadmin', 'mod_exescorm');
     }
