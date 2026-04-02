@@ -128,10 +128,15 @@ $moodleconfig = json_encode([
     'editorBaseUrl' => $editorbaseurl,
 ]);
 
+// Extract the origin (scheme + host) from wwwroot for postMessage trust.
+$parsedwwwroot = parse_url($CFG->wwwroot);
+$wwwrootorigin = $parsedwwwroot['scheme'] . '://' . $parsedwwwroot['host']
+    . (!empty($parsedwwwroot['port']) ? ':' . $parsedwwwroot['port'] : '');
+
 $embeddingconfig = json_encode([
     'basePath' => $editorbaseurl,
-    'parentOrigin' => $CFG->wwwroot,
-    'trustedOrigins' => [$CFG->wwwroot],
+    'parentOrigin' => $wwwrootorigin,
+    'trustedOrigins' => [$wwwrootorigin],
     'initialProjectUrl' => $packageurl ? $packageurl->out(false) : '',
     'hideUI' => [
         'fileMenu' => true,
