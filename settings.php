@@ -72,19 +72,14 @@ if ($ADMIN->fulltree) {
         ]
     ));
 
-    // Link to the styles management page for the list + toggle/delete
-    // actions (shown only for embedded mode via the JS toggle below).
-    $styleslinkurl = new moodle_url('/mod/exescorm/admin/styles.php');
-    $styleslink = '<div class="mod_exescorm-admin-styles-link">'
-        . '<a class="btn btn-secondary" href="' . $styleslinkurl->out(false) . '">'
-        . get_string('stylesmanager_manage', 'mod_exescorm') . '</a>'
-        . '<p class="text-muted small mt-1 mb-0">'
-        . get_string('stylesmanager_manage_hint', 'mod_exescorm') . '</p>'
-        . '</div>';
-    $settings->add(new admin_setting_heading(
-        'exescorm/stylesmanagerlink',
-        get_string('stylesmanager', 'mod_exescorm'),
-        $styleslink
+    // Uploaded styles list (checkbox per style + per-row delete link).
+    $settings->add(new \mod_exescorm\admin\admin_setting_stylesuploaded(
+        'exescorm/styles_uploaded'
+    ));
+
+    // Built-in styles list (checkbox per style).
+    $settings->add(new \mod_exescorm\admin\admin_setting_stylesbuiltins(
+        'exescorm/styles_builtins'
     ));
 
     $settings->add(new admin_setting_configcheckbox(
@@ -111,12 +106,11 @@ document.addEventListener("DOMContentLoaded", function() {
             if (el) el.style.display = show ? "" : "none";
         });
         if (embeddedWidget) embeddedWidget.style.display = (modeSelect.value === "embedded") ? "" : "none";
-        var stylesRow = document.getElementById("admin-stylesmanagerlink");
-        if (stylesRow) stylesRow.style.display = (modeSelect.value === "embedded") ? "" : "none";
-        var stylesDrops = document.getElementById("admin-styles_drops");
-        if (stylesDrops) stylesDrops.style.display = (modeSelect.value === "embedded") ? "" : "none";
-        var stylesBlock = document.getElementById("admin-stylesblockimport");
-        if (stylesBlock) stylesBlock.style.display = (modeSelect.value === "embedded") ? "" : "none";
+        ["admin-styles_drops", "admin-styles_uploaded", "admin-styles_builtins",
+            "admin-stylesblockimport"].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = (modeSelect.value === "embedded") ? "" : "none";
+        });
     }
     modeSelect.addEventListener("change", toggleConnectionSettings);
     toggleConnectionSettings();
