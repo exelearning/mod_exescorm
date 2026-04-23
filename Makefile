@@ -207,7 +207,14 @@ package:
 		cd /tmp/exescorm-package && zip -qr "$(CURDIR)/$(PLUGIN_NAME)-$(RELEASE).zip" exescorm; \
 		rm -rf /tmp/exescorm-package; \
 	else \
-		PYTHON=$$(command -v python3 > /dev/null 2>&1 && echo python3 || echo python); \
+		PYTHON=; \
+		for cmd in python3 py python; do \
+			if $$cmd --version > /dev/null 2>&1; then PYTHON=$$cmd; break; fi; \
+		done; \
+		if [ -z "$$PYTHON" ]; then \
+			echo "Error: Python 3 not found. Please install Python 3."; \
+			exit 1; \
+		fi; \
 		$$PYTHON scripts/package.py $(RELEASE) $(PLUGIN_NAME); \
 	fi
 	@echo "Restoring development values in version.php..."
