@@ -1,0 +1,167 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Embedded eXeLearning editor bootstrap page.
+ *
+ * Loads the static editor and injects Moodle configuration so the editor
+ * can communicate with Moodle (load/save packages).
+ *
+ * @package    mod_exescorm
+ * @copyright  2025 eXeLearning
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+require('../../../config.php');
+require_once($CFG->dirroot . '/mod/exescorm/lib.php');
+
+/**
+ * Output a visible error page inside the editor iframe.
+ *
+ * @param string $message The error message to display.
+ */
+function exescorm_editor_error_page(string $message): void {
+    $escapedmessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+    header('Content-Type: text/html; charset=utf-8');
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {
+        display: flex; align-items: center; justify-content: center;
+        min-height: 100vh; margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f8f9fa; color: #333;
+    }
+    .error-box {
+        max-width: 520px; padding: 2rem; text-align: center;
+        background: #fff; border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        border-left: 4px solid #dc3545;
+    }
+    .error-box h2 { margin: 0 0 .75rem; color: #dc3545; font-size: 1.25rem; }
+    .error-box p { margin: 0; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="error-box">
+    <h2>⚠ Error</h2>
+    <p>{$escapedmessage}</p>
+</div>
+</body>
+</html>
+HTML;
+    die;
+}
+
+$id = required_param('id', PARAM_INT); // Course module ID.
+
+$cm = get_coursemodule_from_id('exescorm', $id, 0, false, MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+$exescorm = $DB->get_record('exescorm', ['id' => $cm->instance], '*', MUST_EXIST);
+
+require_login($course, true, $cm);
+$context = context_module::instance($cm->id);
+require_capability('moodle/course:manageactivities', $context);
+require_sesskey();
+
+// Build the package URL for the editor to import.
+$packageurl = exescorm_get_package_url($exescorm, $context);
+
+// Build the save endpoint URL.
+$saveurl = new moodle_url('/mod/exescorm/editor/save.php');
+
+// Serve editor resources through static.php (slash arguments) to ensure
+// files are always accessible regardless of web server configuration.
+$editorbaseurl = $CFG->wwwroot . '/mod/exescorm/editor/static.php/' . $cm->id;
+
+// Read the editor template from the active local source.
+$editorindexsource = exescorm_get_embedded_editor_index_source();
+if ($editorindexsource === null) {
+    if (is_siteadmin()) {
+        exescorm_editor_error_page(get_string('embeddednotinstalledadmin', 'mod_exescorm'));
+    } else {
+        exescorm_editor_error_page(get_string('embeddednotinstalledcontactadmin', 'mod_exescorm'));
+    }
+}
+$html = @file_get_contents($editorindexsource);
+if ($html === false || empty($html)) {
+    exescorm_editor_error_page(get_string('editormissing', 'mod_exescorm'));
+}
+
+// Inject <base> tag pointing directly to the static directory.
+$basetag = '<base href="' . htmlspecialchars($editorbaseurl, ENT_QUOTES, 'UTF-8') . '/">';
+$html = preg_replace('/(<head[^>]*>)/i', '$1' . $basetag, $html);
+
+// Fix explicit "./" relative paths in attributes.
+$html = preg_replace(
+    '/(?<=["\'])\.\//',
+    htmlspecialchars($editorbaseurl, ENT_QUOTES, 'UTF-8') . '/',
+    $html
+);
+
+// Build Moodle configuration for the bridge script.
+$moodleconfig = json_encode([
+    'cmid' => $cm->id,
+    'contextid' => $context->id,
+    'sesskey' => sesskey(),
+    'packageUrl' => $packageurl ? $packageurl->out(false) : '',
+    'saveUrl' => $saveurl->out(false),
+    'activityName' => format_string($exescorm->name),
+    'wwwroot' => $CFG->wwwroot,
+    'editorBaseUrl' => $editorbaseurl,
+]);
+
+// Extract the origin (scheme + host) from wwwroot for postMessage trust.
+$parsedwwwroot = parse_url($CFG->wwwroot);
+$wwwrootorigin = $parsedwwwroot['scheme'] . '://' . $parsedwwwroot['host']
+    . (!empty($parsedwwwroot['port']) ? ':' . $parsedwwwroot['port'] : '');
+
+$embeddingconfig = json_encode([
+    'basePath' => $editorbaseurl,
+    'parentOrigin' => $wwwrootorigin,
+    'trustedOrigins' => [$wwwrootorigin],
+    'initialProjectUrl' => $packageurl ? $packageurl->out(false) : '',
+    'hideUI' => [
+        'fileMenu' => true,
+        'saveButton' => true,
+        'userMenu' => true,
+    ],
+    'platform' => 'moodle',
+    'pluginVersion' => get_config('mod_exescorm', 'version'),
+]);
+
+// Inject configuration scripts before </head>.
+$configscript = <<<EOT
+<script>
+    window.__MOODLE_EXE_CONFIG__ = $moodleconfig;
+    window.__EXE_EMBEDDING_CONFIG__ = $embeddingconfig;
+</script>
+EOT;
+
+// Inject bridge script before </body>.
+$bridgescript = '<script src="' . $CFG->wwwroot . '/mod/exescorm/amd/src/moodle_exe_bridge.js"></script>';
+
+$html = str_replace('</head>', $configscript . "\n" . '</head>', $html);
+$html = str_replace('</body>', $bridgescript . "\n" . '</body>', $html);
+
+// Output the processed HTML.
+header('Content-Type: text/html; charset=utf-8');
+header('X-Frame-Options: SAMEORIGIN');
+echo $html;

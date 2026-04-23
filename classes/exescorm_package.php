@@ -29,6 +29,33 @@ namespace mod_exescorm;
 
 class exescorm_package {
 
+    /**
+     * Check if a stored file is a valid package file (ZIP or ELPX).
+     *
+     * ELPX files are ZIP archives with a different extension. Browsers may
+     * report them as application/octet-stream, so we also check the extension.
+     *
+     * @param \stored_file $file
+     * @return bool
+     */
+    public static function is_valid_package_file(\stored_file $file) {
+        $mimetype = $file->get_mimetype();
+        $filename = $file->get_filename();
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        // Accept ZIP mimetype or ELPX extension (which is a ZIP archive).
+        $validmimes = ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'];
+        $validexts = ['zip', 'elpx'];
+
+        if (in_array($ext, $validexts) && in_array($mimetype, $validmimes)) {
+            return true;
+        }
+        if ($mimetype === 'application/zip') {
+            return true;
+        }
+        return false;
+    }
+
     public static function validate_file_list($filelist) {
         $errors = [];
 

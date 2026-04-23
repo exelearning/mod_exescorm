@@ -967,11 +967,35 @@ var exescorm_resize = function() {
 };
 
 /**
+ * Injects CSS to hide the teacher mode toggler when configured.
+ *
+ * @param {Element} iFrame
+ */
+var exescorm_apply_teacher_mode_visibility = function(iFrame) {
+    if (!iFrame || !iFrame.contentWindow || !iFrame.contentWindow.document) {
+        return;
+    }
+    if (typeof exescormplayerdata === 'undefined' || Number(exescormplayerdata.teachermodevisible) === 1) {
+        return;
+    }
+    var doc = iFrame.contentWindow.document;
+    if (doc.getElementById('exescorm-teacher-mode-style')) {
+        return;
+    }
+
+    var style = doc.createElement('style');
+    style.id = 'exescorm-teacher-mode-style';
+    style.textContent = '#teacher-mode-toggler-wrapper { visibility: hidden !important; }';
+    (doc.head || doc.body || doc.documentElement).appendChild(style);
+};
+
+/**
  * IFrame's onload handler. Used to keep iFrame's height dynamic, varying on iFrame's contents.
  *
  * @param {Element} iFrame
  */
 var exescorm_iframe_onload = function(iFrame) {
+    exescorm_apply_teacher_mode_visibility(iFrame);
     exescorm_resize([], null);
     // Set a mutation observer, so we can adapt to changes from iFrame's javascript (such
     // as tab clicks o hide/show sections).

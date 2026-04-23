@@ -12,23 +12,37 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_exescorm/player_exitbar
-    Actions bar for the user reports page UI.
+    @template mod_exescorm/player_editexitbar
+    Actions bar for the player page UI.
     Classes required for JS:
     * none
     Data attributes required for JS:
     * none
     Context variables required for this template:
-    * action
+    * returnaction - URL for exit button
+    * editaction - URL for eXeLearning Online edit (optional)
+    * editorurl - URL for embedded editor (optional)
+    * cmid - Course module ID (for embedded editor)
+    * activityname - Activity name (for embedded editor)
+    * hasgrades - Whether activity has grades
     Example context (json):
     {
-        "action": "http://localhost/moodle/mod/exescorm/report.php?id=70&mode=interactions"
+        "returnaction": "http://localhost/moodle/course/view.php?id=2"
     }
 }}
 <div class="d-flex flex-row-reverse mb-2">
     <a class="btn btn-secondary" href="{{{returnaction}}}">
         {{#str}}exitactivity, mod_exescorm{{/str}}
     </a>
+    {{#editorurl}}
+        <button type="button" class="btn btn-secondary mr-1"
+            data-action="mod_exescorm/editor-open"
+            data-cmid="{{cmid}}"
+            data-editorurl="{{{editorurl}}}"
+            data-activityname="{{activityname}}">
+            {{#str}}editembedded, mod_exescorm{{/str}}
+        </button>
+    {{/editorurl}}
     {{#editaction}}
         {{#hasgrades}}
             <button type="button" class="btn btn-secondary mr-1" data-action="edit-exescorm" data-editurl="{{{editaction}}}">

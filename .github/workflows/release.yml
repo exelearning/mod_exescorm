@@ -1,0 +1,81 @@
+---
+name: Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release label for package name (e.g. 1.2.3 or 1.2.3-beta)"
+        required: false
+        default: ""
+      editor_repo_url:
+        description: "Editor source repository URL"
+        required: false
+        default: "https://github.com/exelearning/exelearning.git"
+      editor_ref:
+        description: "Editor ref value (main, branch name, or tag)"
+        required: false
+        default: "main"
+      editor_ref_type:
+        description: "Type of editor ref"
+        required: false
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - branch
+          - tag
+
+permissions:
+  contents: write
+
+jobs:
+  build_and_upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Set environment variables
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            RAW_TAG="${GITHUB_REF##*/}"
+            VERSION_TAG="${RAW_TAG#v}"
+            echo "RELEASE_TAG=${VERSION_TAG}" >> $GITHUB_ENV
+            echo "EXELEARNING_EDITOR_REPO_URL=https://github.com/exelearning/exelearning.git" >> $GITHUB_ENV
+            echo "EXELEARNING_EDITOR_REF=main" >> $GITHUB_ENV
+            echo "EXELEARNING_EDITOR_REF_TYPE=branch" >> $GITHUB_ENV
+          else
+            INPUT_RELEASE="${{ github.event.inputs.release_tag }}"
+            if [ -z "$INPUT_RELEASE" ]; then
+              INPUT_RELEASE="manual-$(date +%Y%m%d)-${GITHUB_SHA::7}"
+            fi
+            echo "RELEASE_TAG=${INPUT_RELEASE}" >> $GITHUB_ENV
+            echo "EXELEARNING_EDITOR_REPO_URL=${{ github.event.inputs.editor_repo_url }}" >> $GITHUB_ENV
+            echo "EXELEARNING_EDITOR_REF=${{ github.event.inputs.editor_ref }}" >> $GITHUB_ENV
+            echo "EXELEARNING_EDITOR_REF_TYPE=${{ github.event.inputs.editor_ref_type }}" >> $GITHUB_ENV
+          fi
+
+      - name: Build static editor
+        run: make build-editor
+
+      - name: Create package
+        run: make package RELEASE=${RELEASE_TAG}
+
+      - name: Upload ZIP as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod_exescorm-${{ env.RELEASE_TAG }}
+          path: mod_exescorm-${{ env.RELEASE_TAG }}.zip
+
+      - name: Upload ZIP to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: mod_exescorm-${{ env.RELEASE_TAG }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

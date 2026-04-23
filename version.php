@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2025061900;    // The current module version (Date: YYYYMMDDXX).
-$plugin->requires = 2020061500;    // Moodle 3.9 to 4.1.
-$plugin->component = 'mod_exescorm';   // Full name of the plugin (used for diagnostics).
+$plugin->version = 9999999999; // Dev value, overridden by CI/CD (Date: YYYYMMDDXX).
+$plugin->release = 'dev'; // Dev value, overridden by CI/CD (semver from git tag).
+$plugin->requires = 2023042400; // Moodle 4.2+.
+$plugin->component = 'mod_exescorm'; // Full name of the plugin (used for diagnostics).
+$plugin->cron = 0;

@@ -143,7 +143,13 @@ require_once($CFG->dirroot.'/mod/exescorm/datamodels/'.$exescorm->version.'lib.p
 
 $result = exescorm_get_toc($USER, $exescorm, $cm->id, EXESCORM_TOCJSLINK, $currentorg, $scoid,
     $mode, $attempt, true, true);
-$sco = $result->sco;
+$sco = $result->sco ?? null;
+if (empty($sco)) {
+    echo $OUTPUT->header();
+    echo $OUTPUT->notification(get_string('packageempty', 'mod_exescorm'), 'warning');
+    echo $OUTPUT->footer();
+    exit;
+}
 if ($exescorm->lastattemptlock == 1 && $result->attemptleft == 0) {
     echo $OUTPUT->header();
     echo $OUTPUT->notification(get_string('exceededmaxattempts', 'mod_exescorm'));
@@ -187,7 +193,8 @@ $PAGE->requires->data_for_js('exescormplayerdata', Array('launch' => false,
                                                        'courseid' => $exescorm->course,
                                                        'cwidth' => $exescorm->width,
                                                        'cheight' => $exescorm->height,
-                                                       'popupoptions' => $exescorm->options), true);
+                                                       'popupoptions' => $exescorm->options,
+                                                       'teachermodevisible' => (int)($exescorm->teachermodevisible ?? 1)), true);
 $PAGE->requires->js('/mod/exescorm/request.js', true);
 $PAGE->requires->js('/lib/cookies.js', true);
 
@@ -314,6 +321,7 @@ if (file_exists($CFG->dirroot.'/mod/exescorm/datamodels/'.$exescorm->version.'.p
 \core\session\manager::keepalive('networkdropped', 'mod_exescorm', 30, 10);
 
 $PAGE->requires->js_call_amd('mod_exescorm/fullscreen', 'init');
+$PAGE->requires->js_call_amd('mod_exescorm/editor_modal', 'init');
 
 echo $OUTPUT->footer();
 

@@ -231,13 +231,14 @@ function exescorm_parse($exescorm, $full) {
     $context = context_module::instance($exescorm->cmid);
     $newhash = $exescorm->sha1hash;
 
-    if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL || $exescorm->exescormtype === EXESCORM_TYPE_LOCALSYNC) {
+    if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL || $exescorm->exescormtype === EXESCORM_TYPE_LOCALSYNC
+        || $exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
 
         $fs = get_file_storage();
         $packagefile = false;
         $packagefileimsmanifest = false;
 
-        if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL) {
+        if ($exescorm->exescormtype === EXESCORM_TYPE_LOCAL || $exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED) {
             if ($packagefile = $fs->get_file($context->id, 'mod_exescorm', 'package', 0, '/', $exescorm->reference)) {
                 if ($packagefile->is_external_file()) { // Get zip file so we can check it is correct.
                     $packagefile->import_external_file_contents();
@@ -1558,6 +1559,7 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
 
     $result = array();
     $incomplete = false;
+    $usertracks = array();
 
     if (!empty($organizationsco)) {
         $result[0] = $organizationsco;
@@ -1568,7 +1570,6 @@ function exescorm_get_toc_object($user, $exescorm, $currentorg='', $scoid='', $m
 
     if ($scoes = exescorm_get_scoes($exescorm->id, $currentorg)) {
         // Retrieve user tracking data for each learning object.
-        $usertracks = array();
         foreach ($scoes as $sco) {
             if (!empty($sco->launch)) {
                 if ($usertrack = exescorm_get_tracks($sco->id, $user->id, $attempt)) {
@@ -1728,6 +1729,9 @@ function exescorm_get_toc_get_parent_child(&$result, $currentorg) {
     }
 
     for ($i = 0; $i <= $level; $i++) {
+        if (empty($final[$i])) {
+            continue;
+        }
         $prevparent = '';
         foreach ($final[$i] as $ident => $sco) {
             if (empty($prevparent)) {
@@ -1756,6 +1760,9 @@ function exescorm_get_toc_get_parent_child(&$result, $currentorg) {
 
     $results = array();
     for ($i = 0; $i <= $level; $i++) {
+        if (empty($final[$i])) {
+            continue;
+        }
         $keys = array_keys($final[$i]);
         $results[] = $final[$i][$keys[0]];
     }
@@ -1968,13 +1975,17 @@ function exescorm_get_toc($user, $exescorm, $cmid, $toclink=EXESCORM_TOCJSLINK, 
 
     $scoes = exescorm_get_toc_object($user, $exescorm, $currentorg, $scoid, $mode, $attempt, $play, $organizationsco);
 
-    $treeview = exescorm_format_toc_for_treeview($user, $exescorm, $scoes['scoes'][0]->children, $scoes['usertracks'], $cmid,
-                                                $toclink, $currentorg, $attempt, $play, $organizationsco, false);
+    $rootsco = !empty($scoes['scoes']) ? $scoes['scoes'][0] : null;
 
-    if ($tocheader) {
-        $result->toc .= $treeview->toc;
-    } else {
-        $result->toc = $treeview->toc;
+    if ($rootsco) {
+        $treeview = exescorm_format_toc_for_treeview($user, $exescorm, $rootsco->children ?? [], $scoes['usertracks'], $cmid,
+                                                    $toclink, $currentorg, $attempt, $play, $organizationsco, false);
+
+        if ($tocheader) {
+            $result->toc .= $treeview->toc;
+        } else {
+            $result->toc = $treeview->toc;
+        }
     }
 
     if (!empty($scoes['scoid'])) {
@@ -1983,18 +1994,18 @@ function exescorm_get_toc($user, $exescorm, $cmid, $toclink=EXESCORM_TOCJSLINK, 
 
     if (empty($scoid)) {
         // If this is a normal package with an org sco and child scos get the first child.
-        if (!empty($scoes['scoes'][0]->children)) {
-            $result->sco = $scoes['scoes'][0]->children[0];
-        } else { // This package only has one sco - it may be a simple external AICC package.
-            $result->sco = $scoes['scoes'][0];
+        if ($rootsco && !empty($rootsco->children)) {
+            $result->sco = $rootsco->children[0];
+        } else if ($rootsco) { // This package only has one sco - it may be a simple external AICC package.
+            $result->sco = $rootsco;
         }
 
     } else {
         $result->sco = exescorm_get_sco($scoid);
     }
 
-    if ($exescorm->hidetoc == EXESCORM_TOC_POPUP) {
-        $tocmenu = exescorm_format_toc_for_droplist($exescorm, $scoes['scoes'][0]->children, $scoes['usertracks'],
+    if ($exescorm->hidetoc == EXESCORM_TOC_POPUP && $rootsco) {
+        $tocmenu = exescorm_format_toc_for_droplist($exescorm, $rootsco->children ?? [], $scoes['usertracks'],
                                                     $currentorg, $organizationsco);
 
         $modestr = '';
@@ -2006,9 +2017,9 @@ function exescorm_get_toc($user, $exescorm, $cmid, $toclink=EXESCORM_TOCJSLINK, 
         $result->tocmenu = $OUTPUT->single_select($url, 'scoid', $tocmenu, $result->sco->id, null, "tocmenu");
     }
 
-    $result->prerequisites = $treeview->prerequisites;
-    $result->incomplete = $treeview->incomplete;
-    $result->attemptleft = $treeview->attemptleft;
+    $result->prerequisites = isset($treeview) ? $treeview->prerequisites : true;
+    $result->incomplete = isset($treeview) ? $treeview->incomplete : true;
+    $result->attemptleft = isset($treeview) ? $treeview->attemptleft : 1;
 
     if ($tocheader) {
         $result->toc .= html_writer::end_div().html_writer::end_div();
@@ -2251,6 +2262,7 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
     }
 
     $connector = '';
+    $scolaunchurl = '';
     $version = substr($exescorm->version, 0, 4);
     if ((isset($sco->parameters) && (!empty($sco->parameters))) || ($version == 'AICC')) {
         if (stripos($sco->launch, '?') !== false) {
@@ -2296,7 +2308,8 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
         $scolaunchurl = "$CFG->wwwroot/pluginfile.php/$context->id/mod_exescorm/imsmanifest/$exescorm->revision/$launcher";
     } else if (
         $exescorm->exescormtype === EXESCORM_TYPE_LOCAL ||
-        $exescorm->exescormtype === EXESCORM_TYPE_LOCALSYNC
+        $exescorm->exescormtype === EXESCORM_TYPE_LOCALSYNC ||
+        $exescorm->exescormtype === EXESCORM_TYPE_EMBEDDED
     ) {
         // Note: do not convert this to use moodle_url().
         // EXESCORM does not work without slasharguments and moodle_url() encodes querystring vars.
@@ -2320,7 +2333,7 @@ function exescorm_launch_sco($exescorm, $sco, $cm, $context, $scourl) {
     $event = \mod_exescorm\event\sco_launched::create(array(
         'objectid' => $sco->id,
         'context' => $context,
-        'other' => array('instanceid' => $exescorm->id, 'loadedcontent' => $scourl)
+        'other' => array('instanceid' => $exescorm->id, 'loadedcontent' => !empty($scourl) ? $scourl : (string)$sco->launch)
     ));
     $event->add_record_snapshot('course_modules', $cm);
     $event->add_record_snapshot('exescorm', $exescorm);

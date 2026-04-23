@@ -1,0 +1,146 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ateeducacion/moodle-playground/refs/heads/main/assets/blueprints/blueprint-schema.json",
+  "preferredVersions": { "php": "8.3", "moodle": "5.0" },
+  "landingPage": "/course/view.php?id=2",
+  "constants": {
+    "ADMIN_USER": "admin",
+    "ADMIN_PASS": "password",
+    "ADMIN_EMAIL": "admin@example.com"
+  },
+  "steps": [
+    {
+      "step": "installMoodle",
+      "options": {
+        "adminUser": "{{ADMIN_USER}}",
+        "adminPass": "{{ADMIN_PASS}}",
+        "adminEmail": "{{ADMIN_EMAIL}}",
+        "siteName": "eXeLearning SCORM Demo",
+        "locale": "es",
+        "timezone": "Europe/Madrid"
+      }
+    },
+    { "step": "login", "username": "{{ADMIN_USER}}" },
+    {
+      "step": "installMoodlePlugin",
+      "pluginType": "mod",
+      "pluginName": "exescorm",
+      "url": "https://github.com/exelearning/mod_exescorm/archive/refs/heads/main.zip"
+    },
+    { "step": "setConfig", "name": "editormode", "value": "embedded", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "providername", "value": "Moodle", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "providerversion", "value": "5.0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "sendtemplate", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "mandatoryfileslist", "value": "/^content(v\\d+)?\\.xml$/", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "forbiddenfileslist", "value": "/.*\\.php$/", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "displaycoursestructure", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "popup", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "framewidth", "value": "100", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "frameheight", "value": "500", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "winoptgrp_adv", "value": "1", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "skipview", "value": "2", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "hidebrowse", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "hidetoc", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "nav", "value": "1", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "navpositionleft", "value": "-100", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "navpositiontop", "value": "-100", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "collapsetocwinsize", "value": "767", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "displayattemptstatus", "value": "1", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "grademethod", "value": "1", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "maxgrade", "value": "100", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "maxattempt", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "whatgrade", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "forcecompleted", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "forcenewattempt", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "autocommit", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "masteryoverride", "value": "1", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "lastattemptlock", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "auto", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "updatefreq", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "exescormstandard", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "allowtypeexternal", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "allowtypelocalsync", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "allowtypeexternalaicc", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "allowaicchacp", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "aicchacptimeout", "value": "30", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "aicchacpkeepsessiondata", "value": "1", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "aiccuserid", "value": "1", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "forcejavascript", "value": "1", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "allowapidebug", "value": "0", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "apidebugmask", "value": ".*", "plugin": "exescorm" },
+    { "step": "setConfig", "name": "protectpackagedownloads", "value": "0", "plugin": "exescorm" },
+    { "step": "createCategory", "name": "Test Courses" },
+    {
+      "step": "createCourse",
+      "fullname": "eXeLearning SCORM Test Course",
+      "shortname": "EXESCORM01",
+      "category": "Test Courses",
+      "summary": "Test course for the eXeLearning SCORM plugin."
+    },
+    {
+      "step": "createUser",
+      "username": "student",
+      "password": "password",
+      "email": "student@example.com",
+      "firstname": "Demo",
+      "lastname": "Student"
+    },
+    {
+      "step": "enrolUser",
+      "username": "{{ADMIN_USER}}",
+      "course": "EXESCORM01",
+      "role": "editingteacher"
+    },
+    {
+      "step": "enrolUser",
+      "username": "student",
+      "course": "EXESCORM01",
+      "role": "student"
+    },
+    {
+      "step": "createSection",
+      "course": "EXESCORM01",
+      "name": "Example SCORM Activities"
+    },
+    {
+      "step": "addModule",
+      "module": "exescorm",
+      "course": "EXESCORM01",
+      "section": 1,
+      "name": "Test Content",
+      "intro": "Sample eXeLearning SCORM content for testing.",
+      "exescormtype": "local",
+      "reference": "test-content.elpx",
+      "display": 1,
+      "files": [
+        {
+          "filearea": "package",
+          "filename": "test-content.elpx",
+          "data": {
+            "url": "https://raw.githubusercontent.com/exelearning/wp-exelearning/refs/heads/main/tests/fixtures/test-content.elpx"
+          }
+        }
+      ]
+    },
+    {
+      "step": "addModule",
+      "module": "exescorm",
+      "course": "EXESCORM01",
+      "section": 1,
+      "name": "Propiedades",
+      "intro": "Example content demonstrating eXeLearning properties.",
+      "exescormtype": "local",
+      "reference": "propiedades.elpx",
+      "display": 1,
+      "files": [
+        {
+          "filearea": "package",
+          "filename": "propiedades.elpx",
+          "data": {
+            "url": "https://raw.githubusercontent.com/exelearning/wp-exelearning/refs/heads/main/tests/fixtures/propiedades.elpx"
+          }
+        }
+      ]
+    },
+    { "step": "setLandingPage", "path": "/course/view.php?id=2" }
+  ]
+}
