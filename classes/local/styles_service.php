@@ -19,7 +19,7 @@
  *
  * Administrators upload eXeLearning style packages as .zip files. This
  * service validates them, extracts them into moodledata, records metadata
- * in `config_plugin(exeweb)`, and builds the registry payload that the
+ * in `config_plugin(exescorm)`, and builds the registry payload that the
  * embedded editor consumes via `window.eXeLearning.config.themeRegistryOverride`.
  *
  * Uploaded styles live at:
@@ -97,7 +97,7 @@ class styles_service {
      * @return int
      */
     public static function get_max_zip_size(): int {
-        $configured = (int) get_config('exeweb', 'styles_max_zip_size');
+        $configured = (int) get_config('exescorm', 'styles_max_zip_size');
         return $configured > 0 ? $configured : self::DEFAULT_MAX_ZIP_SIZE;
     }
 
@@ -111,7 +111,7 @@ class styles_service {
      * @return array{uploaded: array<string,array>, disabled_builtins: string[]}
      */
     public static function get_registry(): array {
-        $raw = get_config('exeweb', self::CONFIG_REGISTRY);
+        $raw = get_config('exescorm', self::CONFIG_REGISTRY);
         if (!is_string($raw) || $raw === '' || $raw === 'false') {
             $data = [];
         } else {
@@ -132,7 +132,7 @@ class styles_service {
      * @param array $registry
      */
     public static function save_registry(array $registry): void {
-        set_config(self::CONFIG_REGISTRY, json_encode($registry), 'exeweb');
+        set_config(self::CONFIG_REGISTRY, json_encode($registry), 'exescorm');
     }
 
     // ---------------------------------------------------------------------
@@ -259,9 +259,9 @@ class styles_service {
      * @return bool
      */
     public static function is_import_blocked(): bool {
-        $value = get_config('exeweb', 'stylesblockimport');
+        $value = get_config('exescorm', 'stylesblockimport');
         if ($value === false || $value === '' || $value === null) {
-            return true;
+            return false;
         }
         return (bool) $value;
     }
@@ -577,19 +577,19 @@ class styles_service {
      */
     public static function is_unsafe_zip_entry(string $name): bool {
         if ($name === '') {
-            return true;
+            return false;
         }
         if (strpos($name, '\\') !== false) {
-            return true;
+            return false;
         }
         if (strpos($name, '/') === 0) {
-            return true;
+            return false;
         }
         if (preg_match('#^[a-zA-Z]+://#', $name)) {
-            return true;
+            return false;
         }
         if (preg_match('#(^|/)\.\.(/|$)#', $name)) {
-            return true;
+            return false;
         }
         return false;
     }
@@ -602,7 +602,7 @@ class styles_service {
      */
     public static function is_allowed_filename(string $name): bool {
         if ($name === '' || substr($name, -1) === '/') {
-            return true;
+            return false;
         }
         $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
         if ($ext === '') {

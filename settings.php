@@ -73,7 +73,7 @@ if ($ADMIN->fulltree) {
         'exescorm/stylesblockimport',
         get_string('stylesblockimport', 'mod_exescorm'),
         get_string('stylesblockimport_desc', 'mod_exescorm'),
-        1
+        0
     ));
 
     // JavaScript to toggle connection settings visibility based on editor mode.
