@@ -26,19 +26,20 @@ require('../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
 use mod_exescorm\local\styles_service;
-use mod_exescorm\form\styles_upload_form;
 
 admin_externalpage_setup('mod_exescorm_styles');
 
 $context = \context_system::instance();
 require_capability('moodle/site:config', $context);
-require_capability('mod/exeweb:manageembeddededitor', $context);
+require_capability('mod/exescorm:manageembeddededitor', $context);
 
 $action = optional_param('action', '', PARAM_ALPHA);
 $returnurl = new moodle_url('/mod/exescorm/admin/styles.php');
+$settingsurl = new moodle_url('/admin/settings.php', ['section' => 'modsettingexescorm']);
 
 // --------------------------------------------------------------------
-// Toggle/delete actions still use GET + sesskey (simple URL handlers).
+// Toggle/delete actions use GET + sesskey (simple URL handlers).
+// Upload happens inline in the plugin settings page.
 // --------------------------------------------------------------------
 if ($action !== '') {
     require_sesskey();
@@ -70,37 +71,27 @@ if ($action !== '') {
 }
 
 // --------------------------------------------------------------------
-// Upload form using Moodle's filemanager (drag-and-drop, multi-file).
-// --------------------------------------------------------------------
-$form = new styles_upload_form($returnurl->out(false));
-
-if ($formdata = $form->get_data()) {
-    $draftitemid = $formdata->styles_zip ?? null;
-    $summary = process_uploaded_style_drafts($draftitemid);
-    $msg = build_upload_summary_message($summary);
-    $level = empty($summary['errors'])
-        ? \core\output\notification::NOTIFY_SUCCESS
-        : (empty($summary['installed'])
-            ? \core\output\notification::NOTIFY_ERROR
-            : \core\output\notification::NOTIFY_WARNING);
-    redirect($returnurl, $msg, null, $level);
-}
-
-// --------------------------------------------------------------------
 // Render.
 // --------------------------------------------------------------------
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('stylesmanager', 'mod_exescorm'));
 
-if (get_config('exeweb', 'editormode') !== 'embedded') {
+if (get_config('exescorm', 'editormode') !== 'embedded') {
     echo $OUTPUT->notification(get_string('stylesonlywhenembedded', 'mod_exescorm'),
         \core\output\notification::NOTIFY_WARNING);
 }
 
 echo html_writer::tag('p', get_string('stylesmanager_intro', 'mod_exescorm'));
 
-echo $OUTPUT->heading(get_string('stylesupload_label', 'mod_exescorm'), 3);
-$form->display();
+// Point admins at the inline uploader on the plugin settings page —
+// the filemanager there is the single entry point for uploading styles.
+echo html_writer::tag('p',
+    html_writer::link(
+        $settingsurl,
+        get_string('stylesupload_goto_settings', 'mod_exescorm'),
+        ['class' => 'btn btn-secondary']
+    )
+);
 
 // Uploaded styles table.
 $uploaded = styles_service::list_uploaded_styles();
@@ -190,67 +181,3 @@ if (empty($builtins)) {
 }
 
 echo $OUTPUT->footer();
-
-// --------------------------------------------------------------------
-// Helpers.
-// --------------------------------------------------------------------
-
-/**
- * Consume every ZIP in the given draft filearea, extract it to
- * moodledata/mod_exescorm/styles/<slug>/, record it in the registry, and
- * delete the draft file.
- *
- * @param int|null $draftitemid Draft item id from the filemanager.
- * @return array{installed: string[], errors: string[]}
- */
-function process_uploaded_style_drafts(?int $draftitemid): array {
-    global $USER;
-    $summary = ['installed' => [], 'errors' => []];
-    if (!$draftitemid) {
-        return $summary;
-    }
-    $usercontext = \context_user::instance($USER->id);
-    $fs = get_file_storage();
-    $files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'id', false);
-    if (empty($files)) {
-        return $summary;
-    }
-    $tmpdir = make_request_directory();
-    foreach ($files as $file) {
-        $filename = $file->get_filename();
-        $tmppath = $tmpdir . '/' . clean_param($filename, PARAM_FILE);
-        try {
-            $file->copy_content_to($tmppath);
-            $entry = \mod_exescorm\local\styles_service::install_from_zip($tmppath, $filename);
-            $summary['installed'][] = $entry['title'] ?? $entry['name'];
-        } catch (\moodle_exception $e) {
-            $summary['errors'][] = $filename . ': ' . $e->getMessage();
-        } finally {
-            if (is_file($tmppath)) {
-                @unlink($tmppath);
-            }
-            $file->delete();
-        }
-    }
-    return $summary;
-}
-
-/**
- * Compose the redirect message for the upload summary.
- *
- * @param array{installed: string[], errors: string[]} $summary
- * @return string
- */
-function build_upload_summary_message(array $summary): string {
-    $parts = [];
-    if (!empty($summary['installed'])) {
-        $parts[] = get_string('stylesupload_success_many', 'mod_exescorm', implode(', ', $summary['installed']));
-    }
-    if (!empty($summary['errors'])) {
-        $parts[] = implode("\n", $summary['errors']);
-    }
-    if (empty($parts)) {
-        return get_string('stylesupload_failed', 'mod_exescorm');
-    }
-    return implode("\n\n", $parts);
-}

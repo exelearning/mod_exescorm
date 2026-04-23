@@ -181,13 +181,13 @@ class styles_service_test extends \advanced_testcase {
     public function test_import_blocked_follows_admin_config(): void {
         $this->assertTrue(styles_service::is_import_blocked()); // Default locked down.
 
-        set_config('stylesblockimport', 0, 'exeweb');
+        set_config('stylesblockimport', 0, 'exescorm');
         $this->assertFalse(styles_service::is_import_blocked());
 
         $override = styles_service::build_theme_registry_override();
         $this->assertFalse($override['blockImportInstall']);
 
-        set_config('stylesblockimport', 1, 'exeweb');
+        set_config('stylesblockimport', 1, 'exescorm');
         $this->assertTrue(styles_service::is_import_blocked());
     }
 
@@ -202,7 +202,7 @@ class styles_service_test extends \advanced_testcase {
      * @return string Absolute path to the ZIP.
      */
     private function make_zip(array $entries): string {
-        $path = tempnam(sys_get_temp_dir(), 'exewebstyle') . '.zip';
+        $path = tempnam(sys_get_temp_dir(), 'exescormstyle') . '.zip';
         @unlink($path);
         $zip = new \ZipArchive();
         $this->assertTrue($zip->open($path, \ZipArchive::CREATE) === true);

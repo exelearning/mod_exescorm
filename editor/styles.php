@@ -21,7 +21,7 @@
  *
  * Files are stored outside the plugin source tree at
  * `{dataroot}/mod_exescorm/styles/{slug}/`; this endpoint is the only way
- * the embedded editor reaches them. Access requires `mod/exeweb:view`
+ * the embedded editor reaches them. Access requires `mod/exescorm:view`
  * so teachers/students/admins can load the CSS/assets the editor
  * references after an admin has approved the style.
  *
@@ -73,16 +73,16 @@ if (strpos($file, '..') !== false || strpos($slug, '..') !== false) {
 }
 
 // Require a real Moodle session. The embedded editor is loaded inside an
-// authenticated admin/teacher context; we still gate on mod/exeweb:view
+// authenticated admin/teacher context; we still gate on mod/exescorm:view
 // via the system context since admin-approved styles are site-wide.
 require_login(null, false);
 
 $context = \context_system::instance();
-// Any user who can view at least one exeweb activity should be able to
+// Any user who can view at least one exescorm activity should be able to
 // load the CSS. Check the module capability at system level so the
 // admin preview on /mod/exescorm/admin/styles.php also works.
-if (!has_capability('mod/exeweb:view', $context)
-    && !has_capability('mod/exeweb:manageembeddededitor', $context)) {
+if (!has_capability('mod/exescorm:view', $context)
+    && !has_capability('mod/exescorm:manageembeddededitor', $context)) {
     send_header_404();
     die('Forbidden');
 }

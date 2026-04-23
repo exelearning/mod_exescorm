@@ -54,14 +54,32 @@ if ($ADMIN->fulltree) {
         ''
     ));
 
-    // Link to the styles management page (shown only for embedded mode
-    // via the existing admin/editormode JS toggle below).
+    // Inline style ZIP upload (native filemanager). Each dropped .zip is
+    // validated + extracted + registered on save; the file is then
+    // removed from the filearea so the next render starts clean.
+    $settings->add(new \mod_exescorm\admin\admin_setting_stylesupload(
+        'exescorm/styles_drops',
+        get_string('stylesupload_label', 'mod_exescorm'),
+        get_string('stylesupload_hint', 'mod_exescorm',
+            display_size(\mod_exescorm\local\styles_service::get_max_zip_size())),
+        'styles_drops',
+        0,
+        [
+            'accepted_types' => ['.zip'],
+            'maxbytes' => \mod_exescorm\local\styles_service::get_max_zip_size(),
+            'maxfiles' => -1,
+            'subdirs' => 0,
+        ]
+    ));
+
+    // Link to the styles management page for the list + toggle/delete
+    // actions (shown only for embedded mode via the JS toggle below).
     $styleslinkurl = new moodle_url('/mod/exescorm/admin/styles.php');
     $styleslink = '<div class="mod_exescorm-admin-styles-link">'
         . '<a class="btn btn-secondary" href="' . $styleslinkurl->out(false) . '">'
-        . get_string('stylesmanager', 'mod_exescorm') . '</a>'
+        . get_string('stylesmanager_manage', 'mod_exescorm') . '</a>'
         . '<p class="text-muted small mt-1 mb-0">'
-        . get_string('stylesmanager_hint', 'mod_exescorm') . '</p>'
+        . get_string('stylesmanager_manage_hint', 'mod_exescorm') . '</p>'
         . '</div>';
     $settings->add(new admin_setting_heading(
         'exescorm/stylesmanagerlink',
@@ -95,6 +113,10 @@ document.addEventListener("DOMContentLoaded", function() {
         if (embeddedWidget) embeddedWidget.style.display = (modeSelect.value === "embedded") ? "" : "none";
         var stylesRow = document.getElementById("admin-stylesmanagerlink");
         if (stylesRow) stylesRow.style.display = (modeSelect.value === "embedded") ? "" : "none";
+        var stylesDrops = document.getElementById("admin-styles_drops");
+        if (stylesDrops) stylesDrops.style.display = (modeSelect.value === "embedded") ? "" : "none";
+        var stylesBlock = document.getElementById("admin-stylesblockimport");
+        if (stylesBlock) stylesBlock.style.display = (modeSelect.value === "embedded") ? "" : "none";
     }
     modeSelect.addEventListener("change", toggleConnectionSettings);
     toggleConnectionSettings();
