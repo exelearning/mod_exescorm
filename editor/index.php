@@ -155,19 +155,55 @@ $themeoverride = json_encode(
 );
 
 // Inject configuration scripts before </head>.
+// The static editor boot sequence reassigns window.eXeLearning and
+// window.eXeLearning.config repeatedly (the inline script in index.html
+// resets the whole object, and app.bundle.js later parses 'config' from a
+// JSON string back into an object), so a plain assignment of
+// themeRegistryOverride never reaches the editor. Wrap the injection in a
+// self-restoring defineProperty getter/setter so the override and the
+// userStyles mirror survive every reset.
 $configscript = <<<EOT
 <script>
     window.__MOODLE_EXE_CONFIG__ = $moodleconfig;
     window.__EXE_EMBEDDING_CONFIG__ = $embeddingconfig;
-    window.eXeLearning = window.eXeLearning || {};
-    window.eXeLearning.config = window.eXeLearning.config || {};
-    window.eXeLearning.config.themeRegistryOverride = $themeoverride;
-    // Mirror blockImportInstall onto the pre-existing userStyles flag
-    // (ONLINE_THEMES_INSTALL) so the "install this project's style?"
-    // modal is also suppressed end-to-end.
-    window.eXeLearning.config.userStyles =
-        window.eXeLearning.config.themeRegistryOverride &&
-        window.eXeLearning.config.themeRegistryOverride.blockImportInstall ? 0 : 1;
+    (function() {
+        var OVERRIDE = $themeoverride;
+        function injectConfig(cfg) {
+            if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) return cfg;
+            cfg.themeRegistryOverride = OVERRIDE;
+            // Mirror blockImportInstall onto the pre-existing userStyles
+            // flag (ONLINE_THEMES_INSTALL) so the install-from-project
+            // modal is also suppressed end-to-end.
+            cfg.userStyles = OVERRIDE && OVERRIDE.blockImportInstall ? 0 : 1;
+            return cfg;
+        }
+        function trapConfig(target) {
+            if (!target || typeof target !== "object") return;
+            var stored = injectConfig(target.config);
+            try {
+                Object.defineProperty(target, "config", {
+                    configurable: true,
+                    enumerable: true,
+                    get: function() { return stored; },
+                    set: function(v) { stored = injectConfig(v); }
+                });
+            } catch (e) {
+                target.config = stored;
+            }
+        }
+        var rootValue = window.eXeLearning;
+        trapConfig(rootValue);
+        try {
+            Object.defineProperty(window, "eXeLearning", {
+                configurable: true,
+                get: function() { return rootValue; },
+                set: function(v) { rootValue = v; trapConfig(v); }
+            });
+        } catch (e) {
+            window.eXeLearning = rootValue || {};
+            trapConfig(window.eXeLearning);
+        }
+    })();
 </script>
 EOT;
 

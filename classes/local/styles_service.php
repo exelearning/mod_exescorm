@@ -224,6 +224,7 @@ class styles_service {
             $cssfiles = isset($meta['css_files']) && is_array($meta['css_files'])
                 ? array_values(array_map('strval', $meta['css_files']))
                 : ['style.css'];
+            $files = self::list_uploaded_files($slug);
             $uploaded[] = [
                 'id' => (string) $slug,
                 'name' => (string) $slug,
@@ -233,9 +234,10 @@ class styles_service {
                 'version' => (string) ($meta['version'] ?? ''),
                 'author' => (string) ($meta['author'] ?? ''),
                 'license' => (string) ($meta['license'] ?? ''),
-                'type' => 'uploaded',
+                'type' => 'admin',
                 'url' => self::get_style_url($slug),
                 'cssFiles' => $cssfiles,
+                'files' => $files,
                 'downloadable' => '0',
                 'valid' => true,
             ];
@@ -609,6 +611,46 @@ class styles_service {
             return false;
         }
         return in_array($ext, self::ALLOWED_EXTENSIONS, true);
+    }
+
+    /**
+     * Walk an uploaded style's extracted directory and return every file
+     * inside it as a list of forward-slash relative paths. The embedded
+     * editor's ResourceFetcher consumes this manifest via
+     * themeRegistryOverride.uploaded[].files so admin-approved styles can
+     * be fetched file-by-file instead of expecting a zip bundle under
+     * /bundles/themes/<name>.zip.
+     *
+     * @param string $slug
+     * @return string[]
+     */
+    public static function list_uploaded_files(string $slug): array {
+        $slug = self::normalize_slug($slug);
+        $dir = self::get_storage_dir() . '/' . $slug;
+        if (!is_dir($dir)) {
+            return [];
+        }
+        $baselen = strlen(rtrim($dir, '/') . '/');
+        $out = [];
+        try {
+            $iter = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::LEAVES_ONLY
+            );
+            foreach ($iter as $fileinfo) {
+                if (!$fileinfo->isFile()) {
+                    continue;
+                }
+                $absolute = (string) $fileinfo->getPathname();
+                $relative = substr($absolute, $baselen);
+                $relative = str_replace(DIRECTORY_SEPARATOR, '/', $relative);
+                $out[] = $relative;
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
+        sort($out);
+        return $out;
     }
 
     /**
