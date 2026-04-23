@@ -200,11 +200,16 @@ package:
 	$(SED_INPLACE) "s/\(plugin->version[[:space:]]*=[[:space:]]*\)[0-9]*/\1$(DATE_VERSION)/" version.php
 	$(SED_INPLACE) "s/\(plugin->release[[:space:]]*=[[:space:]]*'\)[^']*/\1$(RELEASE)/" version.php
 	@echo "Creating ZIP archive: $(PLUGIN_NAME)-$(RELEASE).zip..."
-	rm -rf /tmp/exescorm-package
-	mkdir -p /tmp/exescorm-package/exescorm
-	rsync -av --exclude-from=.distignore ./ /tmp/exescorm-package/exescorm/
-	cd /tmp/exescorm-package && zip -qr "$(CURDIR)/$(PLUGIN_NAME)-$(RELEASE).zip" exescorm
-	rm -rf /tmp/exescorm-package
+	@if command -v rsync > /dev/null 2>&1 && command -v zip > /dev/null 2>&1; then \
+		rm -rf /tmp/exescorm-package; \
+		mkdir -p /tmp/exescorm-package/exescorm; \
+		rsync -av --exclude-from=.distignore ./ /tmp/exescorm-package/exescorm/; \
+		cd /tmp/exescorm-package && zip -qr "$(CURDIR)/$(PLUGIN_NAME)-$(RELEASE).zip" exescorm; \
+		rm -rf /tmp/exescorm-package; \
+	else \
+		PYTHON=$$(command -v python3 > /dev/null 2>&1 && echo python3 || echo python); \
+		$$PYTHON scripts/package.py $(RELEASE) $(PLUGIN_NAME); \
+	fi
 	@echo "Restoring development values in version.php..."
 	$(SED_INPLACE) "s/\(plugin->version[[:space:]]*=[[:space:]]*\)[0-9]*/\19999999999/" version.php
 	$(SED_INPLACE) "s/\(plugin->release[[:space:]]*=[[:space:]]*'\)[^']*/\1dev/" version.php

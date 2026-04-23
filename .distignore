@@ -17,4 +17,6 @@ composer.json
 composer.lock
 composer.phar
 CLAUDE.md
-*.zip
+AGENTS.md
+scripts/
+mod_exescorm-*.zip
