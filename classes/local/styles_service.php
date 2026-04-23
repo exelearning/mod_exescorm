@@ -579,19 +579,19 @@ class styles_service {
      */
     public static function is_unsafe_zip_entry(string $name): bool {
         if ($name === '') {
-            return false;
+            return true;
         }
         if (strpos($name, '\\') !== false) {
-            return false;
+            return true;
         }
         if (strpos($name, '/') === 0) {
-            return false;
+            return true;
         }
         if (preg_match('#^[a-zA-Z]+://#', $name)) {
-            return false;
+            return true;
         }
         if (preg_match('#(^|/)\.\.(/|$)#', $name)) {
-            return false;
+            return true;
         }
         return false;
     }
