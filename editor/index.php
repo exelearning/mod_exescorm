@@ -147,11 +147,27 @@ $embeddingconfig = json_encode([
     'pluginVersion' => get_config('mod_exescorm', 'version'),
 ]);
 
+// Approved style registry consumed by the editor's themeRegistryOverride
+// hook (see exelearning/exelearning#1722). Filters built-ins, appends
+// admin-uploaded styles, and blocks install-from-content paths.
+$themeoverride = json_encode(
+    \mod_exescorm\local\styles_service::build_theme_registry_override()
+);
+
 // Inject configuration scripts before </head>.
 $configscript = <<<EOT
 <script>
     window.__MOODLE_EXE_CONFIG__ = $moodleconfig;
     window.__EXE_EMBEDDING_CONFIG__ = $embeddingconfig;
+    window.eXeLearning = window.eXeLearning || {};
+    window.eXeLearning.config = window.eXeLearning.config || {};
+    window.eXeLearning.config.themeRegistryOverride = $themeoverride;
+    // Mirror blockImportInstall onto the pre-existing userStyles flag
+    // (ONLINE_THEMES_INSTALL) so the "install this project's style?"
+    // modal is also suppressed end-to-end.
+    window.eXeLearning.config.userStyles =
+        window.eXeLearning.config.themeRegistryOverride &&
+        window.eXeLearning.config.themeRegistryOverride.blockImportInstall ? 0 : 1;
 </script>
 EOT;
 
