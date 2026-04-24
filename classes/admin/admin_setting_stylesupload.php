@@ -42,8 +42,16 @@ use mod_exescorm\local\styles_service;
  */
 class admin_setting_stylesupload extends \admin_setting_configstoredfile {
 
-    /** @var string Component that owns the style upload filearea. */
-    public const COMPONENT = 'mod_exescorm';
+    /**
+     * @var string Component that owns the style upload filearea.
+     *
+     * `admin_setting_configstoredfile` derives the component from the
+     * first segment of the setting name ('exescorm/styles_drops' →
+     * 'exescorm') and uses it when moving the draft into the plugin
+     * file area, so we must read from the same component here or the
+     * saved ZIP stays invisible to the registry walker.
+     */
+    public const COMPONENT = 'exescorm';
 
     /** @var string Filearea used to receive drops before extraction. */
     public const FILEAREA = 'styles_drops';

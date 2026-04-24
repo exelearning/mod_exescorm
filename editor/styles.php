@@ -33,6 +33,7 @@
 // phpcs:disable moodle.Files.MoodleInternal.MoodleInternalGlobalState
 
 require('../../../config.php');
+require_once($CFG->libdir . '/filelib.php');
 
 use mod_exescorm\local\styles_service;
 

@@ -20,7 +20,7 @@ defined('MOODLE_INTERNAL') || die;
 // `/admin/settings.php` and from a dedicated link below.
 if ($hassiteconfig) {
     $ADMIN->add(
-        'modsettingsexescorm',
+        'modsettings',
         new admin_externalpage(
             'mod_exescorm_styles',
             get_string('stylesmanager', 'mod_exescorm'),
