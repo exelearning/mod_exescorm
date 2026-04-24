@@ -451,12 +451,14 @@ class styles_service {
         }
 
         foreach ($entries as $entry) {
-            if ($prefix === '') {
-                // When config.xml is at the root, subdirectories under root are allowed.
-                if (strpos($entry, '/') !== false) {
-                    // But the extension check still applies to files.
-                }
-            } else if (strpos($entry, $prefix) !== 0) {
+            // ZipArchive::statIndex() surfaces every explicit directory
+            // entry (e.g. 'img/', 'fonts/'). Skip them before any
+            // extension/prefix checks — a directory is not an asset and
+            // is_allowed_filename() rejects trailing-slash names.
+            if (substr($entry, -1) === '/') {
+                continue;
+            }
+            if ($prefix !== '' && strpos($entry, $prefix) !== 0) {
                 $zip->close();
                 throw new \moodle_exception('stylesupload_mixedroots', 'mod_exescorm');
             }
