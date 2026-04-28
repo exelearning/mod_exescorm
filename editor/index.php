@@ -204,6 +204,108 @@ $configscript = <<<EOT
             trapConfig(window.eXeLearning);
         }
     })();
+
+    // The static editor's ResourceFetcher rejects on missing CSS / iDevice
+    // resources, which surfaces as an "Uncaught (in promise)" that aborts
+    // the Yjs theme bind and leaves the editor unresponsive. WP and Omeka-S
+    // ship the same workaround: swallow 404s on .css / idevices URLs and
+    // return an empty stylesheet so the editor keeps booting.
+    // Disable any new service-worker registration (the static editor's
+    // preview-sw.js is served from the same static.php router; environments
+    // that proxy or cache that router — e.g. moodle-playground — return a
+    // 404 there and the registration error spams the console without
+    // blocking anything).
+    (function() {
+        if ("serviceWorker" in navigator) {
+            try {
+                var registerOriginal = navigator.serviceWorker.register
+                    ? navigator.serviceWorker.register.bind(navigator.serviceWorker)
+                    : null;
+                navigator.serviceWorker.register = function(scriptURL, options) {
+                    if (typeof scriptURL === "string" && scriptURL.indexOf("preview-sw.js") !== -1) {
+                        return Promise.resolve({ scope: "" });
+                    }
+                    return registerOriginal
+                        ? registerOriginal(scriptURL, options)
+                        : Promise.resolve({ scope: "" });
+                };
+            } catch (e) {
+                // Some embeds make navigator.serviceWorker non-writable; ignore.
+            }
+        }
+
+        var originalFetch = window.fetch;
+        if (originalFetch) {
+            window.fetch = function(input, init) {
+                var url = typeof input === "string" ? input : (input && input.url) || "";
+                return originalFetch.apply(this, arguments).then(function(response) {
+                    if (!response.ok && (url.indexOf(".css") !== -1 || url.indexOf("idevices") !== -1)) {
+                        console.warn("[mod_exescorm] Fetch 404 fallback:", url);
+                        return new Response("/* empty fallback */", {
+                            status: 200,
+                            headers: { "Content-Type": "text/css" }
+                        });
+                    }
+                    return response;
+                }).catch(function(error) {
+                    if (url.indexOf(".css") !== -1 || url.indexOf("idevices") !== -1) {
+                        console.warn("[mod_exescorm] Fetch error fallback:", url);
+                        return new Response("/* empty fallback */", {
+                            status: 200,
+                            headers: { "Content-Type": "text/css" }
+                        });
+                    }
+                    throw error;
+                });
+            };
+        }
+
+        var patchJQuery = function(\$) {
+            if (!\$ || !\$.ajaxTransport) return;
+            \$.ajaxTransport("+*", function(options) {
+                var url = options.url || "";
+                if (!(url.indexOf(".css") !== -1 || url.indexOf("idevices") !== -1)) return;
+                return {
+                    send: function(headers, completeCallback) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open(options.type || "GET", url, true);
+                        xhr.onload = function() {
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                completeCallback(xhr.status, xhr.statusText, { text: xhr.responseText });
+                            } else {
+                                console.warn("[mod_exescorm] jQuery 404 fallback:", url);
+                                completeCallback(200, "OK", { text: "/* empty fallback */" });
+                            }
+                        };
+                        xhr.onerror = function() {
+                            console.warn("[mod_exescorm] jQuery error fallback:", url);
+                            completeCallback(200, "OK", { text: "/* empty fallback */" });
+                        };
+                        xhr.send();
+                    },
+                    abort: function() {}
+                };
+            });
+        };
+        if (window.jQuery) {
+            patchJQuery(window.jQuery);
+        } else {
+            try {
+                Object.defineProperty(window, "jQuery", {
+                    configurable: true,
+                    set: function(val) {
+                        Object.defineProperty(window, "jQuery", {
+                            configurable: true, writable: true, enumerable: true, value: val
+                        });
+                        patchJQuery(val);
+                    },
+                    get: function() { return undefined; }
+                });
+            } catch (e) {
+                // jQuery already defined non-configurable; nothing to patch.
+            }
+        }
+    })();
 </script>
 EOT;
 
