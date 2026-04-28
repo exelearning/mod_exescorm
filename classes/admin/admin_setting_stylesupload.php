@@ -31,14 +31,14 @@ use mod_exescorm\local\styles_service;
 /**
  * Inline filemanager setting for the Styles admin section.
  *
- * Reuses Moodle's native `admin_setting_configstoredfile` — the exact
- * same pattern as the 'Default template' filemanager already present in
- * the plugin settings. After Moodle moves the draft files into the
- * plugin's file area on save, we walk them through
- * {@see styles_service::install_from_zip()}: successful installs are
- * removed from the file area (we only care about the extracted output);
- * failed ones are kept so the admin can spot them and a notification is
- * queued with the specific error.
+ * Reuses Moodle's native `admin_setting_configstoredfile` only for its
+ * filemanager rendering. Persistence is handled here because our pipeline
+ * is fire-and-forget: dropped ZIPs are extracted into moodledata by
+ * {@see styles_service::install_from_zip()} and then deleted from the
+ * filearea, so the parent's "remember the last filepath in config" flow
+ * would either be wrong (config points at a file we already removed) or
+ * trip the parent's `errorsetting` validation when the page is resaved
+ * without changes.
  */
 class admin_setting_stylesupload extends \admin_setting_configstoredfile {
 
@@ -57,13 +57,32 @@ class admin_setting_stylesupload extends \admin_setting_configstoredfile {
     public const FILEAREA = 'styles_drops';
 
     /**
-     * Persist the uploaded files and extract any fresh ZIPs.
+     * Stage any uploaded drafts into the plugin filearea and extract them.
+     *
+     * We bypass `admin_setting_configstoredfile::write_setting()` because
+     * that path persists the submitted file's path in plugin config and
+     * trips an `errorsetting` validation when the form is saved a second
+     * time without changes — by then the cached config still points at a
+     * file `consume_pending_uploads()` already extracted and removed.
+     * Since we never read the config value back, just move the drafts and
+     * return success regardless of whether anything was attached.
      *
      * @param string $data The draft item id.
-     * @return string Empty on success or error message string.
+     * @return string Always empty (success); install errors surface as notifications.
      */
     public function write_setting($data) {
-        $return = parent::write_setting($data);
+        if (is_numeric($data) && (int) $data > 0) {
+            $options = $this->get_options();
+            $component = is_null($this->plugin) ? 'core' : $this->plugin;
+            file_save_draft_area_files(
+                $data,
+                $options['context']->id,
+                $component,
+                $this->filearea,
+                $this->itemid,
+                $options
+            );
+        }
         $summary = $this->consume_pending_uploads();
         foreach ($summary['installed'] as $title) {
             \core\notification::success(
@@ -73,7 +92,7 @@ class admin_setting_stylesupload extends \admin_setting_configstoredfile {
         foreach ($summary['errors'] as $error) {
             \core\notification::error($error);
         }
-        return $return;
+        return '';
     }
 
     /**
