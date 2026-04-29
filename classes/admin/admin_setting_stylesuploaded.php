@@ -111,7 +111,14 @@ class admin_setting_stylesuploaded extends \admin_setting {
                 . $deletelink
                 . '</li>';
         }
-        $html = '<ul class="mod_exescorm-styles-uploaded list-unstyled" '
+        // Hidden sentinel so the form always posts the parent name. Without
+        // it admin_find_write_settings() skips write_setting() when every
+        // checkbox is cleared, so the registry never learns the user
+        // disabled the last enabled upload.
+        $sentinel = '<input type="hidden" name="' . s($this->get_full_name())
+            . '[__sentinel]" value="1">';
+        $html = $sentinel
+            . '<ul class="mod_exescorm-styles-uploaded list-unstyled" '
             . 'style="list-style:none;padding:0;margin:0;">' . $rows . '</ul>';
         return format_admin_setting($this, $this->visiblename, $html, $this->description);
     }

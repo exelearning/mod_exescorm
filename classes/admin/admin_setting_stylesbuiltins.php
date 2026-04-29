@@ -117,7 +117,14 @@ class admin_setting_stylesbuiltins extends \admin_setting {
                 . '</label>'
                 . '</li>';
         }
-        $html = '<ul class="mod_exescorm-styles-builtins list-unstyled" '
+        // Hidden sentinel so the form always posts the parent name. Without
+        // it admin_find_write_settings() skips write_setting() when every
+        // checkbox is cleared, so disabling all builtins from the form
+        // would leave them silently re-enabled.
+        $sentinel = '<input type="hidden" name="' . s($this->get_full_name())
+            . '[__sentinel]" value="1">';
+        $html = $sentinel
+            . '<ul class="mod_exescorm-styles-builtins list-unstyled" '
             . 'style="list-style:none;padding:0;margin:0;">' . $rows . '</ul>';
         return format_admin_setting($this, $this->visiblename, $html, $this->description);
     }
