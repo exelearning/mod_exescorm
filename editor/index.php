@@ -147,11 +147,165 @@ $embeddingconfig = json_encode([
     'pluginVersion' => get_config('mod_exescorm', 'version'),
 ]);
 
+// Approved style registry consumed by the editor's themeRegistryOverride
+// hook (see exelearning/exelearning#1722). Filters built-ins, appends
+// admin-uploaded styles, and blocks install-from-content paths.
+$themeoverride = json_encode(
+    \mod_exescorm\local\styles_service::build_theme_registry_override()
+);
+
 // Inject configuration scripts before </head>.
+// The static editor boot sequence reassigns window.eXeLearning and
+// window.eXeLearning.config repeatedly (the inline script in index.html
+// resets the whole object, and app.bundle.js later parses 'config' from a
+// JSON string back into an object), so a plain assignment of
+// themeRegistryOverride never reaches the editor. Wrap the injection in a
+// self-restoring defineProperty getter/setter so the override and the
+// userStyles mirror survive every reset.
 $configscript = <<<EOT
 <script>
     window.__MOODLE_EXE_CONFIG__ = $moodleconfig;
     window.__EXE_EMBEDDING_CONFIG__ = $embeddingconfig;
+    (function() {
+        var OVERRIDE = $themeoverride;
+        function injectConfig(cfg) {
+            if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) return cfg;
+            cfg.themeRegistryOverride = OVERRIDE;
+            // Mirror blockImportInstall onto the pre-existing userStyles
+            // flag (ONLINE_THEMES_INSTALL) so the install-from-project
+            // modal is also suppressed end-to-end.
+            cfg.userStyles = OVERRIDE && OVERRIDE.blockImportInstall ? 0 : 1;
+            return cfg;
+        }
+        function trapConfig(target) {
+            if (!target || typeof target !== "object") return;
+            var stored = injectConfig(target.config);
+            try {
+                Object.defineProperty(target, "config", {
+                    configurable: true,
+                    enumerable: true,
+                    get: function() { return stored; },
+                    set: function(v) { stored = injectConfig(v); }
+                });
+            } catch (e) {
+                target.config = stored;
+            }
+        }
+        var rootValue = window.eXeLearning;
+        trapConfig(rootValue);
+        try {
+            Object.defineProperty(window, "eXeLearning", {
+                configurable: true,
+                get: function() { return rootValue; },
+                set: function(v) { rootValue = v; trapConfig(v); }
+            });
+        } catch (e) {
+            window.eXeLearning = rootValue || {};
+            trapConfig(window.eXeLearning);
+        }
+    })();
+
+    // The static editor's ResourceFetcher rejects on missing CSS / iDevice
+    // resources, which surfaces as an "Uncaught (in promise)" that aborts
+    // the Yjs theme bind and leaves the editor unresponsive. WP and Omeka-S
+    // ship the same workaround: swallow 404s on .css / idevices URLs and
+    // return an empty stylesheet so the editor keeps booting.
+    // Disable any new service-worker registration (the static editor's
+    // preview-sw.js is served from the same static.php router; environments
+    // that proxy or cache that router — e.g. moodle-playground — return a
+    // 404 there and the registration error spams the console without
+    // blocking anything).
+    (function() {
+        if ("serviceWorker" in navigator) {
+            try {
+                var registerOriginal = navigator.serviceWorker.register
+                    ? navigator.serviceWorker.register.bind(navigator.serviceWorker)
+                    : null;
+                navigator.serviceWorker.register = function(scriptURL, options) {
+                    if (typeof scriptURL === "string" && scriptURL.indexOf("preview-sw.js") !== -1) {
+                        return Promise.resolve({ scope: "" });
+                    }
+                    return registerOriginal
+                        ? registerOriginal(scriptURL, options)
+                        : Promise.resolve({ scope: "" });
+                };
+            } catch (e) {
+                // Some embeds make navigator.serviceWorker non-writable; ignore.
+            }
+        }
+
+        var originalFetch = window.fetch;
+        if (originalFetch) {
+            window.fetch = function(input, init) {
+                var url = typeof input === "string" ? input : (input && input.url) || "";
+                return originalFetch.apply(this, arguments).then(function(response) {
+                    if (!response.ok && (url.indexOf(".css") !== -1 || url.indexOf("idevices") !== -1)) {
+                        console.warn("[mod_exescorm] Fetch 404 fallback:", url);
+                        return new Response("/* empty fallback */", {
+                            status: 200,
+                            headers: { "Content-Type": "text/css" }
+                        });
+                    }
+                    return response;
+                }).catch(function(error) {
+                    if (url.indexOf(".css") !== -1 || url.indexOf("idevices") !== -1) {
+                        console.warn("[mod_exescorm] Fetch error fallback:", url);
+                        return new Response("/* empty fallback */", {
+                            status: 200,
+                            headers: { "Content-Type": "text/css" }
+                        });
+                    }
+                    throw error;
+                });
+            };
+        }
+
+        var patchJQuery = function(\$) {
+            if (!\$ || !\$.ajaxTransport) return;
+            \$.ajaxTransport("+*", function(options) {
+                var url = options.url || "";
+                if (!(url.indexOf(".css") !== -1 || url.indexOf("idevices") !== -1)) return;
+                return {
+                    send: function(headers, completeCallback) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open(options.type || "GET", url, true);
+                        xhr.onload = function() {
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                completeCallback(xhr.status, xhr.statusText, { text: xhr.responseText });
+                            } else {
+                                console.warn("[mod_exescorm] jQuery 404 fallback:", url);
+                                completeCallback(200, "OK", { text: "/* empty fallback */" });
+                            }
+                        };
+                        xhr.onerror = function() {
+                            console.warn("[mod_exescorm] jQuery error fallback:", url);
+                            completeCallback(200, "OK", { text: "/* empty fallback */" });
+                        };
+                        xhr.send();
+                    },
+                    abort: function() {}
+                };
+            });
+        };
+        if (window.jQuery) {
+            patchJQuery(window.jQuery);
+        } else {
+            try {
+                Object.defineProperty(window, "jQuery", {
+                    configurable: true,
+                    set: function(val) {
+                        Object.defineProperty(window, "jQuery", {
+                            configurable: true, writable: true, enumerable: true, value: val
+                        });
+                        patchJQuery(val);
+                    },
+                    get: function() { return undefined; }
+                });
+            } catch (e) {
+                // jQuery already defined non-configurable; nothing to patch.
+            }
+        }
+    })();
 </script>
 EOT;
 

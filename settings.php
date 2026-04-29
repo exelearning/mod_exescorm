@@ -16,6 +16,20 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+// Register the styles management admin page so it is reachable from
+// `/admin/settings.php` and from a dedicated link below.
+if ($hassiteconfig) {
+    $ADMIN->add(
+        'modsettings',
+        new admin_externalpage(
+            'mod_exescorm_styles',
+            get_string('stylesmanager', 'mod_exescorm'),
+            new moodle_url('/mod/exescorm/admin/styles.php'),
+            ['moodle/site:config', 'mod/exescorm:manageembeddededitor']
+        )
+    );
+}
+
 if ($ADMIN->fulltree) {
     require_once($CFG->dirroot . '/mod/exescorm/locallib.php');
     $yesno = [0 => get_string('no'),
@@ -40,6 +54,41 @@ if ($ADMIN->fulltree) {
         ''
     ));
 
+    // Inline style ZIP upload (native filemanager). Each dropped .zip is
+    // validated + extracted + registered on save; the file is then
+    // removed from the filearea so the next render starts clean.
+    $settings->add(new \mod_exescorm\admin\admin_setting_stylesupload(
+        'exescorm/styles_drops',
+        get_string('stylesupload_label', 'mod_exescorm'),
+        get_string('stylesupload_hint', 'mod_exescorm',
+            display_size(\mod_exescorm\local\styles_service::get_max_zip_size())),
+        'styles_drops',
+        0,
+        [
+            'accepted_types' => ['.zip'],
+            'maxbytes' => \mod_exescorm\local\styles_service::get_max_zip_size(),
+            'maxfiles' => -1,
+            'subdirs' => 0,
+        ]
+    ));
+
+    // Uploaded styles list (checkbox per style + per-row delete link).
+    $settings->add(new \mod_exescorm\admin\admin_setting_stylesuploaded(
+        'exescorm/styles_uploaded'
+    ));
+
+    // Built-in styles list (checkbox per style).
+    $settings->add(new \mod_exescorm\admin\admin_setting_stylesbuiltins(
+        'exescorm/styles_builtins'
+    ));
+
+    $settings->add(new admin_setting_configcheckbox(
+        'exescorm/stylesblockimport',
+        get_string('stylesblockimport', 'mod_exescorm'),
+        get_string('stylesblockimport_desc', 'mod_exescorm'),
+        0
+    ));
+
     // JavaScript to toggle connection settings visibility based on editor mode.
     $connectionsettingsdesc = '<script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -57,6 +106,11 @@ document.addEventListener("DOMContentLoaded", function() {
             if (el) el.style.display = show ? "" : "none";
         });
         if (embeddedWidget) embeddedWidget.style.display = (modeSelect.value === "embedded") ? "" : "none";
+        ["admin-styles_drops", "admin-styles_uploaded", "admin-styles_builtins",
+            "admin-stylesblockimport"].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = (modeSelect.value === "embedded") ? "" : "none";
+        });
     }
     modeSelect.addEventListener("change", toggleConnectionSettings);
     toggleConnectionSettings();

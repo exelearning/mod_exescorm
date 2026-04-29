@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v4.0.0 – 2025-04-28
+## v4.0.0 – 2025-04-29
 
 - Version jump to 4.0.0 to align numbering with eXeLearning for consistency across related projects.
 - Introduce fully integrated embedded eXeLearning editor inside Moodle, enabling SCORM content creation and editing without leaving the platform.
