@@ -142,13 +142,22 @@ if (!empty($errors)) {
     echo json_encode($resultmsg);
     exit(1);
 }
-// Package is valid so delete files from package area and move the new one.
-$fs->delete_area_files($context->id, 'mod_exescorm', 'package');
+// Drop any previous package on the same itemid before moving the validated file in.
+// We can't keep both because mod_exescorm stores its package at itemid 0 and Moodle
+// rejects two files sharing the same {itemid, filepath, filename} triple. Deferring this
+// to a single targeted delete (instead of wiping the whole package area) keeps the
+// activity recoverable if anything below fails: only the entry being replaced is removed.
+$existingfiles = $fs->get_area_files($context->id, 'mod_exescorm', 'package', 0, 'filename', false);
+foreach ($existingfiles as $existing) {
+    $existing->delete();
+}
 $fileinfo['filearea'] = 'package';
 $file = $fs->create_file_from_storedfile($fileinfo, $tmpfile);
 $fs->delete_area_files($context->id, 'mod_exescorm', 'temppackage');
-// Set filename as new instance reference.
+// Set filename as new instance reference. exescorm_parse() reads the package from the
+// 'package' filearea using this reference, so it must be persisted before parsing.
 $exescorm->reference = $file->get_filename();
+$exescorm->timemodified = time();
 $DB->update_record('exescorm', $exescorm);
 
 exescorm_parse($exescorm, true);
