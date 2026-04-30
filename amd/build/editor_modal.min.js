@@ -35,8 +35,28 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
     var loadingModal = null;
     var isSaving = false;
     var hasUnsavedChanges = false;
+    var hostWindow = null;
+    var hostDocument = null;
 
     var getString = Str.get_string;
+
+    /**
+     * Resolve the topmost same-origin window so the overlay can cover the full
+     * viewport even when the modal is opened from inside a small frame
+     * (e.g. a popup-mode launcher or an embedded iframe).
+     * @returns {Window}
+     */
+    var getHostWindow = function() {
+        var candidate = window;
+        try {
+            while (candidate.parent && candidate.parent !== candidate && candidate.parent.document) {
+                candidate = candidate.parent;
+            }
+        } catch (e) {
+            // Cross-origin parent — stay where we are.
+        }
+        return candidate;
+    };
 
     /**
      * Prefetch language strings used by the modal.
@@ -61,7 +81,8 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
     };
 
     var createLoadingModal = function() {
-        var modal = document.createElement('div');
+        var targetDocument = hostDocument || document;
+        var modal = targetDocument.createElement('div');
         modal.className = 'exescorm-loading-modal';
         modal.id = 'exescorm-loading-modal';
 
@@ -77,7 +98,7 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
                 '<h3 class="exescorm-loading-modal__title">' + strings[0] + '</h3>' +
                 '<p class="exescorm-loading-modal__message">' + strings[1] + '</p>' +
                 '</div>';
-            document.body.appendChild(modal);
+            targetDocument.body.appendChild(modal);
             return modal;
         });
     };
@@ -149,6 +170,8 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
         }
         var doClose = function() {
             var wasShowingLoader = isSaving || (skipConfirm === true);
+            var activeWindow = hostWindow || window;
+            var activeDocument = hostDocument || document;
 
             overlay.remove();
             overlay = null;
@@ -157,9 +180,11 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
             isSaving = false;
             hasUnsavedChanges = false;
 
-            document.body.style.overflow = '';
-            window.removeEventListener('message', handleMessage);
-            document.removeEventListener('keydown', handleKeydown);
+            activeDocument.body.style.overflow = '';
+            activeWindow.removeEventListener('message', handleMessage);
+            activeDocument.removeEventListener('keydown', handleKeydown);
+            hostWindow = null;
+            hostDocument = null;
 
             if (wasShowingLoader) {
                 setTimeout(function() {
@@ -320,15 +345,19 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
         iframe.setAttribute('frameborder', '0');
         overlay.appendChild(iframe);
 
-        // Append to body.
-        document.body.appendChild(overlay);
-        document.body.style.overflow = 'hidden';
+        // Attach the overlay to the topmost same-origin window so the modal covers
+        // the full viewport even when triggered from inside a small frame
+        // (e.g. a popup-mode launcher or an embedded iframe).
+        hostWindow = getHostWindow();
+        hostDocument = hostWindow.document;
+        hostDocument.body.appendChild(overlay);
+        hostDocument.body.style.overflow = 'hidden';
 
         // Listen for messages from the editor iframe.
-        window.addEventListener('message', handleMessage);
+        hostWindow.addEventListener('message', handleMessage);
 
         // Listen for Escape key.
-        document.addEventListener('keydown', handleKeydown);
+        hostDocument.addEventListener('keydown', handleKeydown);
     };
 
     return {
