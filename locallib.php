@@ -1850,10 +1850,12 @@ function exescorm_format_toc_for_treeview($user, $exescorm, $scoes, $usertracks,
                         if ($sco->exescormtype == 'sco') {
                             $result->toc .= html_writer::tag('a', $sco->statusicon.'&nbsp;'.
                                                                 format_string($sco->title).'&nbsp;'.$score,
-                                                                array('data-scoid' => $sco->id, 'title' => $sco->url));
+                                                                array('data-scoid' => $sco->id, 'title' => $sco->url,
+                                                                    'href' => '#'));
                         } else {
                             $result->toc .= html_writer::tag('a', '&nbsp;'.format_string($sco->title).'&nbsp;'.$score,
-                                                                array('data-scoid' => $sco->id, 'title' => $sco->url));
+                                                                array('data-scoid' => $sco->id, 'title' => $sco->url,
+                                                                    'href' => '#'));
                         }
                     } else {
                         if ($sco->exescormtype == 'sco') {

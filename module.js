@@ -193,6 +193,10 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             obj.setAttribute('webkitallowfullscreen', 'webkitallowfullscreen');
             obj.setAttribute('mozallowfullscreen', 'mozallowfullscreen');
             obj.setAttribute('onload', "exescorm_iframe_onload(this)");
+            var labelEl = document.createElement('div');
+            labelEl.innerHTML = node.label || '';
+            var frameTitle = (labelEl.textContent || labelEl.innerText || '').replace(/\s+/g, ' ').trim();
+            obj.setAttribute('title', frameTitle || M.util.get_string('contenttitle', 'mod_exescorm'));
 
             if (!window_name && node.title != null) {
                 obj.setAttribute('src', url_prefix + node.title);
@@ -706,6 +710,11 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
         }
         tree.render();
         tree.openAll();
+
+        // Prevent href="#" on TOC anchors from scrolling to page top.
+        Y.one('#exescorm_tree').delegate('click', function(e) {
+            e.preventDefault();
+        }, 'a');
 
         // On getting the window, always set the focus on the current item
         Y.one(Y.config.win).on('focus', function (e) {
