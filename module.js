@@ -211,7 +211,7 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             obj.setAttribute('onload', "exescorm_iframe_onload(this)");
             var labelEl = document.createElement('div');
             labelEl.innerHTML = node.label || '';
-            var frameTitle = (labelEl.textContent || labelEl.innerText || '').replace(/\s+/g, ' ').trim();
+            var frameTitle = (labelEl.textContent || labelEl.innerText || '').replace(/\s+/g, ' ').trim().replace(/ \| [^|]*$/, '').replace(/["']/g, '');
             obj.setAttribute('title', frameTitle || M.util.get_string('contenttitle', 'mod_exescorm'));
 
             if (!window_name && node.title != null) {
