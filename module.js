@@ -86,6 +86,12 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
     var exescorm_buttons = [];
     var exescorm_bloody_labelclick = false;
     var exescorm_nav_panel;
+    // Re-entry guard for `tree.after('select', ...)`. `exescorm_activate_item`
+    // collapses + re-expands the whole TreeView via `closeAll()`/`openAll()`,
+    // and YUI fires extra `select` events during that dance. Without this
+    // flag we re-entered the navigation handler with a sibling node and ended
+    // up loading the wrong page in the iframe (issue #63).
+    var exescorm_navigating = false;
 
     Y.use('button', 'dd-plugin', 'panel', 'resize', 'gallery-sm-treeview', function(Y) {
 
@@ -175,6 +181,10 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             // End of - Avoid recursive calls.
 
             exescorm_current_node = node;
+            // Suppress the 'select' re-entry the next .select()/closeAll()/openAll()
+            // calls would otherwise generate (issue #63). Cleared after openAll()
+            // below.
+            exescorm_navigating = true;
             if (!exescorm_current_node.state.selected) {
                 exescorm_current_node.select();
             }
@@ -230,6 +240,7 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                 exescorm_fixnav();
             }
             exescorm_tree_node.openAll();
+            exescorm_navigating = false;
         };
 
         mod_exescorm_activate_item = exescorm_activate_item;
@@ -665,6 +676,12 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
         exescorm_tree_node = tree;
         // Trigger after instead of on, avoid recursive calls.
         tree.after('select', function(e) {
+            // Skip select events triggered by programmatic state changes inside
+            // exescorm_activate_item (closeAll/openAll). See exescorm_navigating
+            // declaration for context.
+            if (exescorm_navigating) {
+                return;
+            }
             var node = e.node;
             if (node.title == '' || node.title == null) {
                 return; //this item has no navigation
