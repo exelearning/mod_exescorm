@@ -2,9 +2,13 @@
 .github
 .gitignore
 .aider*
+.claude
 .DS_Store
 .distignore
+.editor-version
 .env
+.env.dist
+.omc
 exelearning/
 vendor/
 node_modules/
@@ -19,4 +23,5 @@ composer.phar
 CLAUDE.md
 AGENTS.md
 scripts/
+NUL
 mod_exescorm-*.zip
