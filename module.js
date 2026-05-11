@@ -189,6 +189,22 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                 exescorm_current_node.select();
             }
 
+            // Mark the active TOC link so screen readers can announce the current item.
+            Y.one('#exescorm_tree').all('a[aria-current]').each(function(a) {
+                a.removeAttribute('aria-current');
+                a.setAttribute('aria-selected', 'false');
+            });
+            if (node.id) {
+                var activeEl = Y.one('#' + node.id);
+                if (activeEl) {
+                    var activeLink = activeEl.one('a');
+                    if (activeLink) {
+                        activeLink.setAttribute('aria-current', 'page');
+                        activeLink.setAttribute('aria-selected', 'true');
+                    }
+                }
+            }
+
             exescorm_tree_node.closeAll();
             var url_prefix = M.cfg.wwwroot + '/mod/exescorm/loadSCO.php?';
             var el_old_api = document.getElementById('exescormapi123');
@@ -203,6 +219,10 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             obj.setAttribute('webkitallowfullscreen', 'webkitallowfullscreen');
             obj.setAttribute('mozallowfullscreen', 'mozallowfullscreen');
             obj.setAttribute('onload', "exescorm_iframe_onload(this)");
+            var labelEl = document.createElement('div');
+            labelEl.innerHTML = node.label || '';
+            var frameTitle = (labelEl.textContent || labelEl.innerText || '').replace(/\s+/g, ' ').trim().replace(/ \| [^|]*$/, '').replace(/["']/g, '');
+            obj.setAttribute('title', frameTitle || M.util.get_string('contenttitle', 'mod_exescorm'));
 
             if (!window_name && node.title != null) {
                 obj.setAttribute('src', url_prefix + node.title);
@@ -305,14 +325,16 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                     toc.addClass(cssclasses.disabled)
                         .setAttribute('disabled-by', 'screen-size');
                     exescorm_toc_toggle_btn.setHTML('&gt;').addClass('collapsed').removeClass('uncollapsed')
-                        .set('title', M.util.get_string('show', 'moodle'));
+                        .set('title', M.util.get_string('show', 'moodle'))
+                        .setAttribute('aria-expanded', 'false');
                     exescorm_content.removeClass(cssclasses.exescorm_grid_content_toc_visible)
                         .addClass(cssclasses.exescorm_grid_content_toc_hidden);
                 } else if (body.get('winWidth') > collapsetocwinsize) {
                     toc.removeClass(cssclasses.disabled)
                         .removeAttribute('disabled-by');
                     exescorm_toc_toggle_btn.setHTML('&lt;').addClass('uncollapsed').removeClass('collapsed')
-                        .set('title', M.util.get_string('hide', 'moodle'));
+                        .set('title', M.util.get_string('hide', 'moodle'))
+                        .setAttribute('aria-expanded', 'true');
                     exescorm_content.removeClass(cssclasses.exescorm_grid_content_toc_hidden)
                         .addClass(cssclasses.exescorm_grid_content_toc_visible);
                 }
@@ -322,14 +344,16 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                 toc.removeClass(cssclasses.disabled)
                     .removeAttribute('disabled-by');
                 exescorm_toc_toggle_btn.setHTML('&lt;').addClass('uncollapsed').removeClass('collapsed')
-                    .set('title', M.util.get_string('hide', 'moodle'));
+                    .set('title', M.util.get_string('hide', 'moodle'))
+                    .setAttribute('aria-expanded', 'true');
                 exescorm_content.removeClass(cssclasses.exescorm_grid_content_toc_hidden)
                     .addClass(cssclasses.exescorm_grid_content_toc_visible);
             } else {
                 toc.addClass(cssclasses.disabled)
                     .setAttribute('disabled-by', 'user');
                 exescorm_toc_toggle_btn.setHTML('&gt;').addClass('collapsed').removeClass('uncollapsed')
-                    .set('title', M.util.get_string('show', 'moodle'));
+                    .set('title', M.util.get_string('show', 'moodle'))
+                    .setAttribute('aria-expanded', 'false');
                 exescorm_content.removeClass(cssclasses.exescorm_grid_content_toc_visible)
                     .addClass(cssclasses.exescorm_grid_content_toc_hidden);
             }
@@ -632,7 +656,8 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             Y.one('#exescorm_toc_toggle').addClass(cssclasses.exescorm_grid_toggle);
             Y.one('#exescorm_toc_toggle_btn')
                 .setHTML('&lt;')
-                .setAttribute('title', M.util.get_string('hide', 'moodle'));
+                .setAttribute('title', M.util.get_string('hide', 'moodle'))
+                .setAttribute('aria-expanded', 'true');
             Y.one('#exescorm_content').addClass(cssclasses.exescorm_grid_content_toc_visible);
             exescorm_toggle_toc(true);
         }
@@ -643,7 +668,8 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                 Y.one('#exescorm_toc').addClass(cssclasses.disabled);
                 Y.one('#exescorm_toc_toggle_btn')
                     .setHTML('&gt;')
-                    .setAttribute('title', M.util.get_string('show', 'moodle'));
+                    .setAttribute('title', M.util.get_string('show', 'moodle'))
+                    .setAttribute('aria-expanded', 'false');
                 Y.one('#exescorm_content')
                     .removeClass(cssclasses.exescorm_grid_content_toc_visible)
                     .addClass(cssclasses.exescorm_grid_content_toc_hidden);
@@ -723,6 +749,11 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
         }
         tree.render();
         tree.openAll();
+
+        // Prevent href="#" on TOC anchors from scrolling to page top.
+        Y.one('#exescorm_tree').delegate('click', function(e) {
+            e.preventDefault();
+        }, 'a');
 
         // On getting the window, always set the focus on the current item
         Y.one(Y.config.win).on('focus', function (e) {
