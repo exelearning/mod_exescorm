@@ -23,6 +23,7 @@
  */
 $string['toc'] = 'TOC (Edukien Taula)';
 $string['navigation'] = 'Nabigazioa';
+$string['contenttitle'] = 'Edukia';
 $string['aicchacptimeout'] = 'AICC HACP itxaronaldia';
 $string['aicchacptimeout_desc'] = 'Zenbat minutuz egonen den irekia AICC HACP kanpoko saio bat';
 $string['aicchacpkeepsessiondata'] = 'AICC HACP saioaren datuak';

@@ -1848,12 +1848,14 @@ function exescorm_format_toc_for_treeview($user, $exescorm, $scoes, $usertracks,
                 } else {
                     if (!empty($sco->launch)) {
                         if ($sco->exescormtype == 'sco') {
-                            $result->toc .= html_writer::tag('a', $sco->statusicon.'&nbsp;'.
-                                                                format_string($sco->title).'&nbsp;'.$score,
-                                                                array('data-scoid' => $sco->id, 'title' => $sco->url));
+                            $result->toc .= html_writer::tag('a', $sco->statusicon.
+                                                                format_string($sco->title).($score ? '&nbsp;'.$score : ''),
+                                                                array('data-scoid' => $sco->id, 'title' => $sco->url,
+                                                                    'href' => '#'));
                         } else {
-                            $result->toc .= html_writer::tag('a', '&nbsp;'.format_string($sco->title).'&nbsp;'.$score,
-                                                                array('data-scoid' => $sco->id, 'title' => $sco->url));
+                            $result->toc .= html_writer::tag('a', '&nbsp;'.format_string($sco->title).($score ? '&nbsp;'.$score : ''),
+                                                                array('data-scoid' => $sco->id, 'title' => $sco->url,
+                                                                    'href' => '#'));
                         }
                     } else {
                         if ($sco->exescormtype == 'sco') {
@@ -1960,7 +1962,11 @@ function exescorm_get_toc($user, $exescorm, $cmid, $toclink=EXESCORM_TOCJSLINK, 
 
     if ($tocheader) {
         $result->toc = html_writer::start_div('yui3-g-r', array('id' => 'exescorm_layout'));
-        $result->toc .= html_writer::start_div('yui3-u-1-5 loading', array('id' => 'exescorm_toc'));
+        $result->toc .= html_writer::start_div('yui3-u-1-5 loading', array(
+            'id' => 'exescorm_toc',
+            'role' => 'navigation',
+            'aria-label' => get_string('contents', 'mod_exescorm'),
+        ));
         $result->toc .= html_writer::start_div('', ['id' => 'exescorm_tree']);
     }
 
@@ -2025,7 +2031,8 @@ function exescorm_get_toc($user, $exescorm, $cmid, $toclink=EXESCORM_TOCJSLINK, 
         $result->toc .= html_writer::end_div().html_writer::end_div();
         $result->toc .= html_writer::start_div('loading', array('id' => 'exescorm_toc_toggle'));
         $result->toc .= html_writer::tag('button', '',
-                        array('id' => 'exescorm_toc_toggle_btn', 'class' => 'bg-primary')).html_writer::end_div();
+                        array('id' => 'exescorm_toc_toggle_btn', 'class' => 'bg-primary',
+                            'aria-expanded' => 'true', 'aria-controls' => 'exescorm_toc')).html_writer::end_div();
         $result->toc .= html_writer::start_div('', array('id' => 'exescorm_content'));
         $result->toc .= html_writer::div('', '', array('id' => 'exescorm_navpanel'));
         $result->toc .= html_writer::end_div().html_writer::end_div();
