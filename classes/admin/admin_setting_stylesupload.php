@@ -57,6 +57,28 @@ class admin_setting_stylesupload extends \admin_setting_configstoredfile {
     public const FILEAREA = 'styles_drops';
 
     /**
+     * Report a non-null stored value so this setting is never flagged as
+     * "new" on `admin/upgradesettings.php`.
+     *
+     * `admin_setting_configstoredfile` reads the file id from plugin config,
+     * but our `write_setting()` deletes the staged ZIP after extraction and
+     * never persists anything in `config_plugins`. Without this override,
+     * `get_setting()` keeps returning `null`, so Moodle's
+     * `admin_output_new_settings_by_page()` re-renders the upload widget on
+     * every plugin upgrade, trapping the admin in an upgrade-settings loop
+     * (issue #66).
+     *
+     * The widget itself does not need a stored value to render — it always
+     * starts from a fresh draft area — so returning an empty string is
+     * functionally equivalent to "nothing pending".
+     *
+     * @return string
+     */
+    public function get_setting() {
+        return '';
+    }
+
+    /**
      * Stage any uploaded drafts into the plugin filearea and extract them.
      *
      * We bypass `admin_setting_configstoredfile::write_setting()` because
