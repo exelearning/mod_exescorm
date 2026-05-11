@@ -24,6 +24,7 @@
 
 $string['toc'] = 'Taula de continguts';
 $string['navigation'] = 'Navegació';
+$string['contenttitle'] = 'Contingut';
 $string['aicchacptimeout'] = 'Temps d\'espera AICC HACP';
 $string['aicchacptimeout_desc'] = 'Període de temps en minuts que una sessió externa AICC HACP es mantindrà oberta';
 $string['aicchacpkeepsessiondata'] = 'Dades de sessió AICC HACP';
