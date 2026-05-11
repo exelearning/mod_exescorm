@@ -218,6 +218,7 @@ $PAGE->requires->string_for_js('toc', 'mod_exescorm');
 $PAGE->requires->string_for_js('hide', 'moodle');
 $PAGE->requires->string_for_js('show', 'moodle');
 $PAGE->requires->string_for_js('popupsblocked', 'mod_exescorm');
+$PAGE->requires->string_for_js('contenttitle', 'mod_exescorm');
 
 $name = false;
 

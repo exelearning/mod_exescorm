@@ -79,6 +79,14 @@
     font-size: 0.8em;
 }
 
+#page-mod-exescorm-player #tocbox li a i{
+    margin-right: .5em
+}
+
+#page-mod-exescorm-player #tocbox a[aria-current]{
+    text-decoration: underline;
+}
+
 #page-mod-exescorm-player #toctree {
     overflow: visible;
 }
