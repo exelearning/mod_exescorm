@@ -2,18 +2,38 @@
 
 [![Preview in Moodle Playground](https://raw.githubusercontent.com/ateeducacion/action-moodle-playground-pr-preview/refs/heads/main/assets/playground-preview-button.svg)](https://moodle-playground.com/?blueprint-url=https://raw.githubusercontent.com/exelearning/mod_exescorm/refs/heads/main/blueprint.json)
 
-Activity-type module to create and edit SCORM packages with eXeLearning (online).
+Activity-type module to create and edit SCORM packages with eXeLearning inside Moodle.
 
-You need the eXeLearning online version installed (ws28 or higher) and access to its configuration files to run
-this module.
+The plugin can run in either of two editing modes, selected by the site administrator under _Site administration > Plugins > Activity modules > eXeLearning (SCORM) > Editor mode_:
+
+* **Embedded editor (integrated, default)** — a self-contained build of the eXeLearning editor ships with the plugin (or can be installed by an administrator from the plugin settings page). It runs directly inside Moodle, so **no external server is required**.
+* **eXeLearning Online (remote server)** — connects to an existing eXeLearning Online instance (ws28 or higher) using its base URL and signing key. Useful when an organisation already operates a shared eXeLearning Online deployment.
+
+Both modes produce the same kind of activity; pick the one that best fits your infrastructure.
 
 ## Compatibility
 
-This plugin version is tested for:
+This plugin works on every supported Moodle release from **Moodle 4.2** (the minimum required, see `version.php`: `$plugin->requires = 2023042400`) up to the latest Moodle 5.2.x stable. It is verified on the LTS branches commonly deployed in production:
 
-* Moodle 4.1.3+ (Build: 20230526)
-* Moodle 3.11.10+ (Build: 20221007)
-* Moodle 3.9.2+ (Build: 20200929)
+| Moodle branch         | Status                                |
+| --------------------- | ------------------------------------- |
+| 4.2.x                 | Supported (minimum required version)  |
+| 4.3.x                 | Supported                             |
+| 4.4.x                 | Supported                             |
+| 4.5.x (LTS)           | Supported                             |
+| 5.0.x                 | Supported                             |
+| 5.1.x                 | Supported                             |
+| 5.2.x (latest stable) | Supported                             |
+
+Older Moodle releases (3.x, 4.0 and 4.1) are **not** supported. The plugin is expected to keep working with newer Moodle releases as they appear; if you find an incompatibility please open an issue at <https://github.com/exelearning/mod_exescorm/issues>.
+
+### Requirements
+
+* **Moodle**: 4.2 or later (see table above).
+* **PHP**: any version required by the Moodle release in use — the plugin does not add extra PHP requirements on top of Moodle's own.
+* **Database**: any database supported by the Moodle release in use.
+* **Browser**: any modern, evergreen browser with JavaScript enabled.
+* **Optional (only for _eXeLearning Online_ mode)**: an eXeLearning Online instance (ws28 or higher) and access to its configuration files / signing key.
 
 ## Installation
 
@@ -81,9 +101,14 @@ The admin-installed version takes priority over the bundled one. If neither sour
 
 For development setup, build instructions, and contributing guidelines, see [DEVELOPMENT.md](DEVELOPMENT.md).
 
+## Support
+
+Please report bugs and feature requests on the GitHub issue tracker:
+<https://github.com/exelearning/mod_exescorm/issues>
+
 ## About
 
-Copyright 2023:
+Copyright 2023-2026:
 Centro Nacional de Desarrollo Curricular en Sistemas no Propietarios (CeDeC) /
 INTEF (Instituto Nacional de Tecnologías Educativas y de Formación del Profesorado)
 
