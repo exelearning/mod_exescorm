@@ -6,8 +6,8 @@ Activity-type module to create and edit SCORM packages with eXeLearning inside M
 
 The plugin can run in either of two editing modes, selected by the site administrator under _Site administration > Plugins > Activity modules > eXeLearning (SCORM) > Editor mode_:
 
-* **Embedded editor (integrated, default)** — a self-contained build of the eXeLearning editor ships with the plugin (or can be installed by an administrator from the plugin settings page). It runs directly inside Moodle, so **no external server is required**.
-* **eXeLearning Online (remote server)** — connects to an existing eXeLearning Online instance (ws28 or higher) using its base URL and signing key. Useful when an organisation already operates a shared eXeLearning Online deployment.
+* **eXeLearning Online (remote server, default)** — connects to an existing eXeLearning Online instance using its base URL and signing key. This is the default mode shipped by the plugin and the recommended choice when an organisation operates a shared eXeLearning Online deployment.
+* **Embedded editor (integrated)** — a self-contained build of the eXeLearning editor ships with the plugin (or can be installed by an administrator from the plugin settings page). It runs directly inside Moodle, so **no external server is required**.
 
 Both modes produce the same kind of activity; pick the one that best fits your infrastructure.
 
@@ -33,7 +33,7 @@ Older Moodle releases (3.x, 4.0 and 4.1) are **not** supported. The plugin is ex
 * **PHP**: any version required by the Moodle release in use — the plugin does not add extra PHP requirements on top of Moodle's own.
 * **Database**: any database supported by the Moodle release in use.
 * **Browser**: any modern, evergreen browser with JavaScript enabled.
-* **Optional (only for _eXeLearning Online_ mode)**: an eXeLearning Online instance (ws28 or higher) and access to its configuration files / signing key.
+* **Required for _eXeLearning Online_ mode (default)**: an eXeLearning Online instance and access to its configuration files / signing key. Not needed when running the plugin in _Embedded editor_ mode.
 
 ## Installation
 
