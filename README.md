@@ -9,11 +9,9 @@ this module.
 
 ## Compatibility
 
-This plugin version is tested for:
+This plugin is compatible with Moodle 3.9.2 and later, including all official Moodle 4.x and 5.x releases (currently up to Moodle 5.2).
 
-* Moodle 4.1.3+ (Build: 20230526)
-* Moodle 3.11.10+ (Build: 20221007)
-* Moodle 3.9.2+ (Build: 20200929)
+Compatibility has been tested on multiple Moodle 3.x (>= 3.9.2), 4.x, and 5.x versions.
 
 ## Installation
 
