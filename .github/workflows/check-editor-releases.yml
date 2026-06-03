@@ -57,6 +57,8 @@ jobs:
           EXELEARNING_EDITOR_REPO_URL: https://github.com/exelearning/exelearning.git
           EXELEARNING_EDITOR_REF: ${{ steps.check.outputs.tag }}
           EXELEARNING_EDITOR_REF_TYPE: tag
+          # Embed the final release version in the editor build (not 0.0.0-alpha).
+          APP_VERSION: ${{ steps.check.outputs.tag }}
         run: make build-editor
 
       - name: Compute version
