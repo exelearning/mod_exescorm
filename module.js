@@ -53,17 +53,28 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
     scoes_nav = Y.JSON.parse(scoes_nav);
 
     var exescorm_update_siblings = function (scoesnav) {
-        for(var key in scoesnav ){
-            var siblings = [],
-                parentscoid = key;
-            for (var mk in scoesnav) {
-                var val = scoesnav[mk];
-                if (typeof val !== "undefined" && typeof val.parentscoid !== 'undefined' && val.parentscoid === parentscoid) {
-                    siblings.push(mk);
+        // Group every entry by its parentscoid, then link the members of each group as
+        // siblings. Top-level sections have no parentscoid at all (they are the roots of
+        // the organization being displayed; the organization node itself has no launchable
+        // URL and is absent from scoesnav), so we bucket them together under a sentinel key.
+        // The previous implementation only matched a parentscoid that was itself a key in
+        // scoesnav, so those top-level sections never received prevsibling/nextsibling and
+        // the "Previous/Next within this level" buttons did nothing (issue #63).
+        var groups = {};
+        var rootkey = '__exescorm_root__';
+        for (var mk in scoesnav) {
+            var val = scoesnav[mk];
+            if (typeof val !== "undefined") {
+                var pscoid = (typeof val.parentscoid !== 'undefined') ? val.parentscoid : rootkey;
+                if (typeof groups[pscoid] === "undefined") {
+                    groups[pscoid] = [];
                 }
+                groups[pscoid].push(mk);
             }
-            if (siblings.length > 1) {
-                scoesnav = exescorm_get_siblings(scoesnav, siblings);
+        }
+        for (var parentscoid in groups) {
+            if (groups[parentscoid].length > 1) {
+                scoesnav = exescorm_get_siblings(scoesnav, groups[parentscoid]);
             }
         }
         return scoesnav;
