@@ -168,7 +168,24 @@ fetch-editor-source:
 
 # Build static editor to dist/static/
 build-editor: check-bun fetch-editor-source
-	cd $(EDITOR_SUBMODULE_PATH) && bun install && bun run build:static
+	@# Resolve the version to embed in the editor build. The editor's build script
+	@# (scripts/build-static-bundle.ts) reads APP_VERSION/VERSION; without it the
+	@# build falls back to package.json (0.0.0-alpha). Resolution order:
+	@#   APP_VERSION -> VERSION -> EXELEARNING_EDITOR_REF (env or .env) ->
+	@#   exact git tag of the checked-out editor -> empty (dev default -> alpha)
+	@set -e; \
+	get_env() { \
+		if [ -f .env ]; then \
+			grep -E "^$$1=" .env | tail -n1 | cut -d '=' -f2-; \
+		fi; \
+	}; \
+	APP_VER="$${APP_VERSION:-$${VERSION:-$${EXELEARNING_EDITOR_REF:-$$(get_env EXELEARNING_EDITOR_REF)}}}"; \
+	if [ -z "$$APP_VER" ] || [ "$$APP_VER" = "main" ] || [ "$$APP_VER" = "master" ]; then \
+		EXACT_TAG="$$(git -C $(EDITOR_SUBMODULE_PATH) describe --tags --exact-match 2>/dev/null || true)"; \
+		if [ -n "$$EXACT_TAG" ]; then APP_VER="$$EXACT_TAG"; fi; \
+	fi; \
+	echo "Editor version input: $${APP_VER:-(default -> alpha)}"; \
+	cd $(EDITOR_SUBMODULE_PATH) && bun install && APP_VERSION="$$APP_VER" bun run build:static
 	@mkdir -p $(EDITOR_DIST_PATH)
 	@rm -rf $(EDITOR_DIST_PATH)/*
 	cp -r $(EDITOR_SUBMODULE_PATH)/dist/static/* $(EDITOR_DIST_PATH)/

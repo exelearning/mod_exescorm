@@ -47,8 +47,10 @@ jobs:
             VERSION_TAG="${RAW_TAG#v}"
             echo "RELEASE_TAG=${VERSION_TAG}" >> $GITHUB_ENV
             echo "EXELEARNING_EDITOR_REPO_URL=https://github.com/exelearning/exelearning.git" >> $GITHUB_ENV
-            echo "EXELEARNING_EDITOR_REF=main" >> $GITHUB_ENV
-            echo "EXELEARNING_EDITOR_REF_TYPE=branch" >> $GITHUB_ENV
+            # Build the editor from the matching editor tag so the embedded
+            # editor reports the final release version (not a nightly/alpha build).
+            echo "EXELEARNING_EDITOR_REF=v${VERSION_TAG}" >> $GITHUB_ENV
+            echo "EXELEARNING_EDITOR_REF_TYPE=tag" >> $GITHUB_ENV
           else
             INPUT_RELEASE="${{ github.event.inputs.release_tag }}"
             if [ -z "$INPUT_RELEASE" ]; then
