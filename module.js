@@ -288,7 +288,13 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             var nextnode = exescorm_next(exescorm_current_node, true, true);
             var skipnextnode = exescorm_skipnext(exescorm_current_node, true, true);
 
+            // "Previous within this level" only steps between same-level siblings, so it
+            // must be disabled at the first item of a level. exescorm_skipprev climbs to
+            // the parent when there is no previous sibling (plain "Previous" relies on that
+            // fallback), which would otherwise leave this button wrongly enabled at a level
+            // boundary, so gate it on the authoritative prevsibling metadata too (issue #63).
             exescorm_buttons[0].set('disabled', ((skipprevnode === null) ||
+                        (typeof scoes_nav[launch_sco].prevsibling === 'undefined') ||
                         (typeof(skipprevnode.scoid) === 'undefined') ||
                         (scoes_nav[skipprevnode.scoid].isvisible === "false") ||
                         (skipprevnode.title === null) ||
@@ -311,7 +317,12 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                         (scoes_nav[nextnode.scoid].isvisible === "false") ||
                         (scoes_nav[launch_sco].hidecontinue === 1)));
 
+            // "Next within this level" mirrors the button above: disable it at the last item
+            // of a level. exescorm_skipnext climbs to the parent's next sibling when the
+            // current item has no next sibling, which is why this button was inconsistently
+            // enabled at some level boundaries; gate it on the nextsibling metadata (issue #63).
             exescorm_buttons[4].set('disabled', ((skipnextnode === null) ||
+                        (typeof scoes_nav[launch_sco].nextsibling === 'undefined') ||
                         (skipnextnode.title === null) ||
                         (typeof(skipnextnode.scoid) === 'undefined') ||
                         (scoes_nav[skipnextnode.scoid].isvisible === "false") ||
