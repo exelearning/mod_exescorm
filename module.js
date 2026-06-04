@@ -53,17 +53,28 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
     scoes_nav = Y.JSON.parse(scoes_nav);
 
     var exescorm_update_siblings = function (scoesnav) {
-        for(var key in scoesnav ){
-            var siblings = [],
-                parentscoid = key;
-            for (var mk in scoesnav) {
-                var val = scoesnav[mk];
-                if (typeof val !== "undefined" && typeof val.parentscoid !== 'undefined' && val.parentscoid === parentscoid) {
-                    siblings.push(mk);
+        // Group every entry by its parentscoid, then link the members of each group as
+        // siblings. Top-level sections have no parentscoid at all (they are the roots of
+        // the organization being displayed; the organization node itself has no launchable
+        // URL and is absent from scoesnav), so we bucket them together under a sentinel key.
+        // The previous implementation only matched a parentscoid that was itself a key in
+        // scoesnav, so those top-level sections never received prevsibling/nextsibling and
+        // the "Previous/Next within this level" buttons did nothing (issue #63).
+        var groups = {};
+        var rootkey = '__exescorm_root__';
+        for (var mk in scoesnav) {
+            var val = scoesnav[mk];
+            if (typeof val !== "undefined") {
+                var pscoid = (typeof val.parentscoid !== 'undefined') ? val.parentscoid : rootkey;
+                if (typeof groups[pscoid] === "undefined") {
+                    groups[pscoid] = [];
                 }
+                groups[pscoid].push(mk);
             }
-            if (siblings.length > 1) {
-                scoesnav = exescorm_get_siblings(scoesnav, siblings);
+        }
+        for (var parentscoid in groups) {
+            if (groups[parentscoid].length > 1) {
+                scoesnav = exescorm_get_siblings(scoesnav, groups[parentscoid]);
             }
         }
         return scoesnav;
@@ -86,6 +97,12 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
     var exescorm_buttons = [];
     var exescorm_bloody_labelclick = false;
     var exescorm_nav_panel;
+    // Re-entry guard for `tree.after('select', ...)`. `exescorm_activate_item`
+    // collapses + re-expands the whole TreeView via `closeAll()`/`openAll()`,
+    // and YUI fires extra `select` events during that dance. Without this
+    // flag we re-entered the navigation handler with a sibling node and ended
+    // up loading the wrong page in the iframe (issue #63).
+    var exescorm_navigating = false;
 
     Y.use('button', 'dd-plugin', 'panel', 'resize', 'gallery-sm-treeview', function(Y) {
 
@@ -175,6 +192,10 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             // End of - Avoid recursive calls.
 
             exescorm_current_node = node;
+            // Suppress the 'select' re-entry the next .select()/closeAll()/openAll()
+            // calls would otherwise generate (issue #63). Cleared after openAll()
+            // below.
+            exescorm_navigating = true;
             if (!exescorm_current_node.state.selected) {
                 exescorm_current_node.select();
             }
@@ -250,6 +271,7 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                 exescorm_fixnav();
             }
             exescorm_tree_node.openAll();
+            exescorm_navigating = false;
         };
 
         mod_exescorm_activate_item = exescorm_activate_item;
@@ -266,7 +288,13 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
             var nextnode = exescorm_next(exescorm_current_node, true, true);
             var skipnextnode = exescorm_skipnext(exescorm_current_node, true, true);
 
+            // "Previous within this level" only steps between same-level siblings, so it
+            // must be disabled at the first item of a level. exescorm_skipprev climbs to
+            // the parent when there is no previous sibling (plain "Previous" relies on that
+            // fallback), which would otherwise leave this button wrongly enabled at a level
+            // boundary, so gate it on the authoritative prevsibling metadata too (issue #63).
             exescorm_buttons[0].set('disabled', ((skipprevnode === null) ||
+                        (typeof scoes_nav[launch_sco].prevsibling === 'undefined') ||
                         (typeof(skipprevnode.scoid) === 'undefined') ||
                         (scoes_nav[skipprevnode.scoid].isvisible === "false") ||
                         (skipprevnode.title === null) ||
@@ -289,7 +317,12 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
                         (scoes_nav[nextnode.scoid].isvisible === "false") ||
                         (scoes_nav[launch_sco].hidecontinue === 1)));
 
+            // "Next within this level" mirrors the button above: disable it at the last item
+            // of a level. exescorm_skipnext climbs to the parent's next sibling when the
+            // current item has no next sibling, which is why this button was inconsistently
+            // enabled at some level boundaries; gate it on the nextsibling metadata (issue #63).
             exescorm_buttons[4].set('disabled', ((skipnextnode === null) ||
+                        (typeof scoes_nav[launch_sco].nextsibling === 'undefined') ||
                         (skipnextnode.title === null) ||
                         (typeof(skipnextnode.scoid) === 'undefined') ||
                         (scoes_nav[skipnextnode.scoid].isvisible === "false") ||
@@ -691,6 +724,12 @@ M.mod_exescorm.init = function(Y, nav_display, navposition_left, navposition_top
         exescorm_tree_node = tree;
         // Trigger after instead of on, avoid recursive calls.
         tree.after('select', function(e) {
+            // Skip select events triggered by programmatic state changes inside
+            // exescorm_activate_item (closeAll/openAll). See exescorm_navigating
+            // declaration for context.
+            if (exescorm_navigating) {
+                return;
+            }
             var node = e.node;
             if (node.title == '' || node.title == null) {
                 return; //this item has no navigation
