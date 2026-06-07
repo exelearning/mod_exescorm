@@ -38,7 +38,7 @@ jobs:
           mode: append-to-description
           github-token: ${{ secrets.GITHUB_TOKEN }}
           extra-text: >
-            ⚠️ The embedded eXeLearning editor is not included in this preview.
-            You can install it from **Modules > eXeLearning SCORM > Configure**
-            using the "Download & Install Editor" button.
-            All other module features (ELPX upload, viewer, preview) work normally.
+            ℹ️ The eXeLearning editor is fetched from the shared release and
+            unpacked into the plugin when the playground boots, so the first
+            load may take a few extra seconds. ELPX upload, viewer and preview
+            work normally.
