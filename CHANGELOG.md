@@ -3,11 +3,13 @@
 ## v4.0.1 – 2026-06-09
 
 - Fix admin upgrade settings loop where the Styles upload widget was repeatedly reintroduced after upgrading to v4.0.0.
-- Fix TOC navigation loop, preventing additional iframe reloads and incorrect content rendering in nested sections.
-- Fix incorrect version reporting (`v0.0.0-alpha`) in packaged releases.
+- Fix TOC navigation loop that caused additional iframe reloads and incorrect rendering in nested sections.
+- Fix TOC menu accessibility issues and add keyboard navigation support.
+- Fix embedded editor version detection in release packages so the correct eXeLearning version is reported.
 - Fix editor modal overlay positioning in embedded and popup contexts.
-- Correct README license reference from "version 2" to "GNU GPL v3 or later", aligning documentation with LICENSE file and source `@license` headers.
-- Enable automatic loading of the embedded eXeLearning editor in Playground via a single unzip blueprint step, providing a ready-to-use editor without requiring manual installation.
+- Update `iframe` title when changing its `src` to improve accessibility.
+- Correct README license reference from "version 2" to "GNU GPL v3 or later", aligning documentation with the LICENSE file and source `@license` headers.
+- Automatically install and configure the embedded editor in Playground environments.
 
 ## v4.0.0 – 2025-04-30
 
