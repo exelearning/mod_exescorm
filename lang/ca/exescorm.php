@@ -522,8 +522,8 @@ $string['typeembedded'] = 'Crear amb eXeLearning (editor integrat)';
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Mostra el nom de l\'activitat';
 $string['displayactivityname_help'] = 'Si cal mostrar o no el nom de l\'activitat al damunt del reproductor eXeLearning';
-$string['teachermodevisible'] = 'Mostrar el selector de capa docent';
-$string['teachermodevisible_help'] = 'Si es desactiva, el selector de capa docent s\'ocultarà al contingut eXeLearning incrustat.';
+$string['teachermodevisible'] = 'Mostrar el contingut docent al professorat';
+$string['teachermodevisible_help'] = 'Els paquets d\'eXeLearning poden marcar contingut com a "només per al professorat", que el paquet amaga de manera predeterminada. Si aquesta opció està activada, el professorat (les persones que poden gestionar l\'activitat) veurà aquest contingut docent a l\'activitat; el connector demana al paquet que el mostri mitjançant el seu paràmetre d\'URL admès. L\'alumnat mai no veu el contingut docent, independentment d\'aquesta opció.';
 $string['packageempty'] = 'Aquesta activitat encara no conté contingut reproduïble. Obriu-la a l\'editor d\'eXeLearning per afegir contingut.';
 
 

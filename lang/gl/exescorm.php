@@ -516,8 +516,8 @@ $string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Amosar o nome da actividade';
 $string['displayactivityname_help'] = 'Amosar ou non o nome da actividade sobre o visor de eXeLearning.';
-$string['teachermodevisible'] = 'Amosar o selector de capa docente';
-$string['teachermodevisible_help'] = 'Se se desactiva, ocultarase o selector de capa docente no contido eXeLearning embebido.';
+$string['teachermodevisible'] = 'Amosar o contido docente ao profesorado';
+$string['teachermodevisible_help'] = 'Os paquetes de eXeLearning poden marcar contido como "só para o profesorado", que o paquete oculta de maneira predeterminada. Se esta opción está activada, o profesorado (as persoas que poden xestionar a actividade) verá ese contido docente na actividade; o complemento pídelle ao paquete que o amose mediante o seu parámetro de URL admitido. O alumnado nunca ve o contido docente, independentemente desta opción.';
 $string['packageempty'] = 'Esta actividade aínda non contén contido reproducible. Ábrea no editor de eXeLearning para engadir contido.';
 
 // Embedded editor management.

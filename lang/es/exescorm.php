@@ -119,8 +119,8 @@ $string['display'] = 'Mostrar paquete';
 $string['displayattemptstatus'] = 'Mostrar estado de intentos';
 $string['displayattemptstatus_help'] = 'Esta preferencia permite mostrar un resumen de los intentos de los usuarios en el bloque Vista general del curso en Mi Tablero y/o en la página de entrada del eXeLearning.';
 $string['displayattemptstatusdesc'] = 'Mostrar un resumen de los intentos del usuario en el bloque de descripción general del curso en el Tablero y / o la página de entrada eXeLearning.';
-$string['teachermodevisible'] = 'Mostrar el selector de capa docente';
-$string['teachermodevisible_help'] = 'Si se desactiva, se ocultará el selector de capa docente en el contenido eXeLearning embebido.';
+$string['teachermodevisible'] = 'Mostrar el contenido docente al profesorado';
+$string['teachermodevisible_help'] = 'Los paquetes de eXeLearning pueden marcar contenido como "solo para el profesorado", que el paquete oculta de forma predeterminada. Si esta opción está activada, el profesorado (las personas que pueden gestionar la actividad) verá ese contenido docente en la actividad; el plugin solicita al paquete que lo muestre mediante su parámetro de URL admitido. El alumnado nunca ve el contenido docente, independientemente de esta opción.';
 $string['displaycoursestructure'] = 'Mostrar estructura del curso en la página de entrada';
 $string['displaycoursestructure_help'] = 'Si está activado, la tabla de contenidos se mostrará en la página de resumen SCORM.';
 $string['displaycoursestructuredesc'] = 'Si está habilitado, la tabla de contenidos se mostrará en la página de resumen de la actividad.';
@@ -610,8 +610,8 @@ $string['typeexewebcreate'] = 'Crear con eXeLearning';
 $string['typeexewebedit'] = 'Editar con eXeLearning';
 $string['typelocal'] = 'Paquete subido';
 
-$string['teachermodevisible'] = 'Mostrar el selector de capa docente';
-$string['teachermodevisible_help'] = 'Si se desactiva, se ocultará el selector de capa docente dentro del recurso incrustado.';
+$string['teachermodevisible'] = 'Mostrar el contenido docente al profesorado';
+$string['teachermodevisible_help'] = 'Los paquetes de eXeLearning pueden marcar contenido como "solo para el profesorado", que el paquete oculta de forma predeterminada. Si esta opción está activada, el profesorado (las personas que pueden gestionar la actividad) verá ese contenido docente en la actividad; el plugin solicita al paquete que lo muestre mediante su parámetro de URL admitido. El alumnado nunca ve el contenido docente, independientemente de esta opción.';
 
 $string['editoruploadmissingfile'] = 'No se ha subido ningún archivo ZIP del editor.';
 

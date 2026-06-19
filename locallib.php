@@ -2322,6 +2322,23 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
         // EXESCORM does not work without slasharguments and moodle_url() encodes querystring vars.
         $scolaunchurl = "$CFG->wwwroot/pluginfile.php/$context->id/mod_exescorm/content/$exescorm->revision/$launcher";
     }
+
+    // Reveal eXeLearning's teacher-only content via the package's own URL parameter.
+    // eXeLearning core hides teacher content by default and opts in to reveal it with
+    // ?exe-teacher=1 (upstream exelearning#1772); this replaces the former parent-side
+    // CSS injection that hid the in-package teacher-mode toggle. The decision is the
+    // pure helper exescorm_should_reveal_teacher_content(): only users who can manage
+    // the activity get the reveal, and only when the per-activity setting opts in, so a
+    // student never receives the parameter and always sees the student view. Appended by
+    // hand (not moodle_url()) to preserve slasharguments and any existing query string.
+    $revealteacher = exescorm_should_reveal_teacher_content(
+        has_capability('moodle/course:manageactivities', $context),
+        !empty($exescorm->teachermodevisible)
+    );
+    if ($revealteacher && $scolaunchurl !== '') {
+        $scolaunchurl .= (strpos($scolaunchurl, '?') === false ? '?' : '&') . 'exe-teacher=1';
+    }
+
     return array($sco, $scolaunchurl);
 }
 

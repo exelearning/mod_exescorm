@@ -221,7 +221,10 @@ class mod_exescorm_mod_form extends moodleform_mod {
         $mform->setDefault('displayattemptstatus', $cfgexescorm->displayattemptstatus);
         $mform->setAdvanced('displayattemptstatus', $cfgexescorm->displayattemptstatus_adv);
 
-        // Teacher mode toggler visibility.
+        // Whether to reveal eXeLearning's teacher-only content to teachers in the
+        // activity. The package hides it by default; when this is on the plugin appends
+        // the package's supported ?exe-teacher=1 URL parameter for users who can manage
+        // the activity (students never get it). Default on.
         $mform->addElement('advcheckbox', 'teachermodevisible', get_string('teachermodevisible', 'mod_exescorm'));
         $mform->addHelpButton('teachermodevisible', 'teachermodevisible', 'mod_exescorm');
         $mform->setDefault('teachermodevisible', 1);

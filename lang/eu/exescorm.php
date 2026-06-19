@@ -516,8 +516,8 @@ $string['typeembedded'] = 'Sortu eXeLearning-ekin (editore txertatua)';
 $string['info'] = 'Informazioa';
 $string['displayactivityname'] = 'Erakutsi jardueraren izena';
 $string['displayactivityname_help'] = 'Erakutsi edo ez erakutsi jardueraren izena eXeLearning-en bisorean.';
-$string['teachermodevisible'] = 'Erakutsi irakasle-geruza hautatzailea';
-$string['teachermodevisible_help'] = 'Desaktibatuta badago, irakasle-geruza hautatzailea ezkutatuko da eXeLearning eduki txertatuan.';
+$string['teachermodevisible'] = 'Erakutsi irakasleentzako edukia irakasleei';
+$string['teachermodevisible_help'] = 'eXeLearning paketeek edukia "irakasleentzat soilik" gisa marka dezakete, eta paketeak lehenetsita ezkutatzen du. Aukera hau gaituta dagoenean, irakasleek (jarduera kudea dezaketenek) irakasleentzako eduki hori ikusiko dute jardueran; pluginak paketeari eskatzen dio eduki hori erakusteko bere URL parametro onartuaren bidez. Ikasleek ez dute inoiz irakasleentzako edukirik ikusten, aukera honetik kanpo.';
 $string['packageempty'] = 'Jarduera honek oraindik ez du eduki erreproduzigarririk. Ireki eXeLearning editorean edukia gehitzeko.';
 
 // Embedded editor management.

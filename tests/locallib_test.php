@@ -235,4 +235,83 @@ class locallib_test extends \advanced_testcase {
         // Confirm the event time was deleted.
         $this->assertEquals(0, $DB->count_records('event'));
     }
+
+    /**
+     * exescorm_should_reveal_teacher_content() reveals teacher content only when the
+     * user can manage the activity AND the per-activity setting opts in. A student
+     * (cannot manage) never gets the reveal regardless of the setting.
+     */
+    public function test_exescorm_should_reveal_teacher_content() {
+        // Teacher (can manage) + setting on -> reveal.
+        $this->assertTrue(exescorm_should_reveal_teacher_content(true, true));
+        // Teacher but setting off -> student view even for the teacher.
+        $this->assertFalse(exescorm_should_reveal_teacher_content(true, false));
+        // Student (cannot manage) is never revealed, even if the setting is on.
+        $this->assertFalse(exescorm_should_reveal_teacher_content(false, true));
+        $this->assertFalse(exescorm_should_reveal_teacher_content(false, false));
+    }
+
+    /**
+     * exescorm_get_sco_and_launch_url() appends ?exe-teacher=1 to the SCO launch URL
+     * for a user who can manage the activity when teachermodevisible is on, omits it
+     * when the setting is off, and never adds it for a student. The launch URL is what
+     * loadSCO.php navigates the package iframe to, so the loaded eXeLearning content
+     * sees the parameter on window.location.search (upstream exelearning#1772).
+     */
+    public function test_exescorm_get_sco_and_launch_url_teacher_param() {
+        global $CFG;
+        require_once($CFG->dirroot . '/mod/exescorm/locallib.php');
+
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+
+        // Reveal on: create the activity, enrol a teacher and a student.
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', array(
+            'course' => $course->id,
+            'teachermodevisible' => 1,
+        ));
+        $cm = get_coursemodule_from_instance('exescorm', $exescorm->id, $course->id);
+        $context = \context_module::instance($cm->id);
+
+        // Find a launchable SCO.
+        $sco = null;
+        foreach (exescorm_get_scoes($exescorm->id) as $candidate) {
+            if ($candidate->launch != '') {
+                $sco = $candidate;
+                break;
+            }
+        }
+        $this->assertNotNull($sco, 'The test package must expose a launchable SCO.');
+
+        $teacher = $this->getDataGenerator()->create_and_enrol($course, 'editingteacher');
+        $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
+
+        // Teacher + setting on -> parameter appended.
+        $this->setUser($teacher);
+        list(, $teacherurl) = exescorm_get_sco_and_launch_url($exescorm, $sco->id, $context);
+        $this->assertStringContainsString('exe-teacher=1', $teacherurl);
+
+        // Student + setting on -> never appended.
+        $this->setUser($student);
+        list(, $studenturl) = exescorm_get_sco_and_launch_url($exescorm, $sco->id, $context);
+        $this->assertStringNotContainsString('exe-teacher', $studenturl);
+
+        // Reveal off: even a teacher must not get the parameter.
+        $exescormoff = $this->getDataGenerator()->create_module('exescorm', array(
+            'course' => $course->id,
+            'teachermodevisible' => 0,
+        ));
+        $cmoff = get_coursemodule_from_instance('exescorm', $exescormoff->id, $course->id);
+        $contextoff = \context_module::instance($cmoff->id);
+        $scooff = null;
+        foreach (exescorm_get_scoes($exescormoff->id) as $candidate) {
+            if ($candidate->launch != '') {
+                $scooff = $candidate;
+                break;
+            }
+        }
+        $this->setUser($teacher);
+        list(, $offurl) = exescorm_get_sco_and_launch_url($exescormoff, $scooff->id, $contextoff);
+        $this->assertStringNotContainsString('exe-teacher', $offurl);
+    }
 }
