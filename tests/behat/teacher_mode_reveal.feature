@@ -1,15 +1,16 @@
 @mod @mod_exescorm @_file_upload @_switch_iframe
-Feature: Reveal eXeLearning teacher content via the package URL parameter
-  In order to keep teacher-only content hidden from students by default
-  As a teacher
-  I need the plugin to reveal teacher content only for me, via the package's own
-  ?exe-teacher=1 URL parameter, and never for students.
+Feature: Show the eXeLearning teacher-layer selector via the package URL parameter
+  In order to let viewers show or hide the teacher-only layer of an embedded
+  eXeLearning package
+  As a teacher configuring the activity
+  I need the plugin to make the package's own ?exe-teacher=1 selector available
+  when the per-activity setting is on, and absent when it is off.
 
   # Upstream exelearning#1772: eXeLearning packages hide teacher-only content by
-  # default and reveal it via ?exe-teacher=1. The plugin appends that parameter to
-  # the SCO launch URL (the URL the package iframe is navigated to) only for users
-  # who can manage the activity AND when the per-activity "Reveal teacher content to
-  # teachers" setting (teachermodevisible) is on. The plugin no longer injects CSS.
+  # default and expose a selector to show it via ?exe-teacher=1. The plugin appends
+  # that parameter to the SCO launch URL (the URL the package iframe is navigated to)
+  # whenever the per-activity "Show teacher layer selector" setting (teachermodevisible)
+  # is on — for any viewer. The plugin no longer injects CSS.
 
   Background:
     Given the following "users" exist:
@@ -43,10 +44,10 @@ Feature: Reveal eXeLearning teacher content via the package URL parameter
     Then the eXeLearning content iframe url should not contain "exe-teacher"
 
   @javascript
-  Scenario: A student never sees the exe-teacher parameter even when the reveal is on
+  Scenario: A student also sees the exe-teacher parameter when the setting is on
     When the following "activities" exist:
       | activity | course | name              | packagefilepath                            | teachermodevisible |
       | exescorm | C1     | Reveal student    | mod/exescorm/tests/packages/singlescobasic.zip | 1              |
     And I am on the "Reveal student" "exescorm activity" page logged in as student1
     And I switch to "exescorm_object" iframe
-    Then the eXeLearning content iframe url should not contain "exe-teacher"
+    Then the eXeLearning content iframe url should contain "exe-teacher=1"

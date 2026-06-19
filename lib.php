@@ -2049,28 +2049,6 @@ function exescorm_get_package_url($exescorm, $context) {
 }
 
 /**
- * Whether to reveal eXeLearning's teacher-only content in the activity view.
- *
- * eXeLearning packages hide teacher-marked content by default and opt in to reveal
- * it via the ?exe-teacher=1 URL parameter (upstream exelearning#1772). The SCO launch
- * URL gets that parameter appended (in exescorm_get_sco_and_launch_url()) when this
- * returns true. It does so only for users who can manage the activity AND when the
- * per-activity setting opts in, so a student never receives the parameter and always
- * sees the student view. This replaces the former parent-side CSS injection that hid
- * the in-package teacher-mode toggle.
- *
- * Extracted as a pure function so the decision is unit-testable without rendering the
- * player (project philosophy: extract testable pure functions).
- *
- * @param bool $canpreview Whether the user can manage the activity (teacher/editing-teacher).
- * @param bool $teachermodevisible Whether the per-activity setting opts in to revealing teacher content.
- * @return bool True when the launch URL should request the teacher view.
- */
-function exescorm_should_reveal_teacher_content(bool $canpreview, bool $teachermodevisible): bool {
-    return $canpreview && $teachermodevisible;
-}
-
-/**
  * This function extends the settings navigation block for the site.
  *
  * It is safe to rely on PAGE here as we will only ever be within the module

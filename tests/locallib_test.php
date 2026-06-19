@@ -237,24 +237,9 @@ class locallib_test extends \advanced_testcase {
     }
 
     /**
-     * exescorm_should_reveal_teacher_content() reveals teacher content only when the
-     * user can manage the activity AND the per-activity setting opts in. A student
-     * (cannot manage) never gets the reveal regardless of the setting.
-     */
-    public function test_exescorm_should_reveal_teacher_content() {
-        // Teacher (can manage) + setting on -> reveal.
-        $this->assertTrue(exescorm_should_reveal_teacher_content(true, true));
-        // Teacher but setting off -> student view even for the teacher.
-        $this->assertFalse(exescorm_should_reveal_teacher_content(true, false));
-        // Student (cannot manage) is never revealed, even if the setting is on.
-        $this->assertFalse(exescorm_should_reveal_teacher_content(false, true));
-        $this->assertFalse(exescorm_should_reveal_teacher_content(false, false));
-    }
-
-    /**
      * exescorm_get_sco_and_launch_url() appends ?exe-teacher=1 to the SCO launch URL
-     * for a user who can manage the activity when teachermodevisible is on, omits it
-     * when the setting is off, and never adds it for a student. The launch URL is what
+     * whenever the per-activity teachermodevisible setting is on — for any viewer,
+     * teacher or student — and omits it when the setting is off. The launch URL is what
      * loadSCO.php navigates the package iframe to, so the loaded eXeLearning content
      * sees the parameter on window.location.search (upstream exelearning#1772).
      */
@@ -291,10 +276,10 @@ class locallib_test extends \advanced_testcase {
         list(, $teacherurl) = exescorm_get_sco_and_launch_url($exescorm, $sco->id, $context);
         $this->assertStringContainsString('exe-teacher=1', $teacherurl);
 
-        // Student + setting on -> never appended.
+        // Student + setting on -> also appended (the setting alone controls it, not role).
         $this->setUser($student);
         list(, $studenturl) = exescorm_get_sco_and_launch_url($exescorm, $sco->id, $context);
-        $this->assertStringNotContainsString('exe-teacher', $studenturl);
+        $this->assertStringContainsString('exe-teacher=1', $studenturl);
 
         // Reveal off: even a teacher must not get the parameter.
         $exescormoff = $this->getDataGenerator()->create_module('exescorm', array(
