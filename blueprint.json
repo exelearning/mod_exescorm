@@ -30,7 +30,7 @@
       "step": "unzip",
       "comment": "Auto-load the eXeLearning static editor so the playground boots with a working editor. Fetches the shared editor release asset once through the github-proxy (CORS) and extracts it into the plugin's bundled dir. The asset wraps everything in a 'static/' folder, so extracting into 'dist' yields 'dist/static/...', which embedded_editor_source_resolver serves via its 'bundled' precedence (moodledata -> bundled -> none). Pinned to match .editor-version for deterministic previews. embedded_editor_installer stays for production/offline installs.",
       "destination": "/www/moodle/mod/exescorm/dist",
-      "data": { "url": "https://github-proxy.exelearning.dev/?repo=exelearning/exelearning&release=v4.0.0&asset=exelearning-static-v4.0.0.zip" }
+      "data": { "url": "https://github-proxy.exelearning.dev/?repo=exelearning/exelearning&release=v4.0.1&asset=exelearning-static-v4.0.1.zip" }
     },
     { "step": "setConfig", "name": "editormode", "value": "embedded", "plugin": "exescorm" },
     { "step": "setConfig", "name": "providername", "value": "Moodle", "plugin": "exescorm" },

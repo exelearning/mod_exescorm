@@ -77,11 +77,19 @@ jobs:
       - name: Update editor version marker
         if: steps.check.outputs.found == 'true'
         run: |
-          echo "${{ steps.check.outputs.tag }}" > .editor-version
+          TAG="${{ steps.check.outputs.tag }}"
+          echo "$TAG" > .editor-version
+          # Keep the playground blueprint's editor URL in sync with .editor-version,
+          # otherwise the preview stays pinned to the hardcoded version.
+          sed -i -E \
+            -e "s#(release=)v[0-9][0-9A-Za-z.-]*#\1$TAG#g" \
+            -e "s#(releases/download/)v[0-9][0-9A-Za-z.-]*#\1$TAG#g" \
+            -e "s#(exelearning-static-)v[0-9][0-9A-Za-z.-]*(\.zip)#\1$TAG\2#g" \
+            blueprint.json
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .editor-version
-          git commit -m "Update editor version to ${{ steps.check.outputs.tag }}"
+          git add .editor-version blueprint.json
+          git commit -m "Update editor version to $TAG"
           git push
 
       - name: Create GitHub Release
