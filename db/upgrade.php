@@ -62,5 +62,26 @@ function xmldb_exescorm_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2026021200, 'exescorm');
     }
 
+    // teachermodevisible now defaults to 0 (align with eXeLearning #1772: teacher
+    // content is hidden by default, opt-in to reveal). When on, the plugin appends
+    // the package's own ?exe-teacher=1 URL parameter so its teacher-layer selector
+    // is available to every viewer; when off (the new default) the package is served
+    // unchanged with teacher content hidden. Lower the default 1 -> 0 and reset
+    // existing rows to the new default.
+    if ($oldversion < 2026021201) {
+        $table = new xmldb_table('exescorm');
+
+        $DB->set_field('exescorm', 'teachermodevisible', 0);
+
+        $field = new xmldb_field('teachermodevisible', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0',
+            'displaycoursestructure');
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->change_field_default($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2026021201, 'exescorm');
+    }
+
     return true;
 }

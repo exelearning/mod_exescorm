@@ -224,10 +224,10 @@ class mod_exescorm_mod_form extends moodleform_mod {
         // Whether to show the eXeLearning teacher-layer selector in the embedded package.
         // The package hides teacher-only content by default; when this is on the plugin
         // appends the package's supported ?exe-teacher=1 URL parameter so the selector is
-        // available to every viewer. Default on.
+        // available to every viewer. Default off (teacher content hidden, opt-in to reveal).
         $mform->addElement('advcheckbox', 'teachermodevisible', get_string('teachermodevisible', 'mod_exescorm'));
         $mform->addHelpButton('teachermodevisible', 'teachermodevisible', 'mod_exescorm');
-        $mform->setDefault('teachermodevisible', 1);
+        $mform->setDefault('teachermodevisible', 0);
 
         // Availability.
         $mform->addElement('header', 'availability', get_string('availability'));
