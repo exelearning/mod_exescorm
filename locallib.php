@@ -2322,6 +2322,18 @@ function exescorm_get_sco_and_launch_url($exescorm, $scoid, $context) {
         // EXESCORM does not work without slasharguments and moodle_url() encodes querystring vars.
         $scolaunchurl = "$CFG->wwwroot/pluginfile.php/$context->id/mod_exescorm/content/$exescorm->revision/$launcher";
     }
+
+    // Make the in-package teacher-layer selector available via the package's own URL
+    // parameter. eXeLearning core hides the teacher layer by default and opts in to it
+    // with ?exe-teacher=1 (upstream exelearning#1772); this replaces the former
+    // parent-side CSS injection that hid the in-package teacher-mode toggle. The
+    // per-activity teachermodevisible setting alone controls it: when on, the selector
+    // is offered to all viewers; it does not gate on role. Appended by hand (not
+    // moodle_url()) to preserve slasharguments and any existing query string.
+    if (!empty($exescorm->teachermodevisible) && $scolaunchurl !== '') {
+        $scolaunchurl .= (strpos($scolaunchurl, '?') === false ? '?' : '&') . 'exe-teacher=1';
+    }
+
     return array($sco, $scolaunchurl);
 }
 
