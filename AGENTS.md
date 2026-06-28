@@ -46,6 +46,14 @@ make package RELEASE=1.2.3   # Create distributable ZIP
 - **Strings**: All UI strings in `lang/{ca,en,es,eu,gl}/exescorm.php` — use `get_string('key', 'mod_exescorm')`
 - **JS**: AMD modules in `amd/src/`, compiled to `amd/build/`
 
+## Agent Skills
+
+Project-level skills live in `.agents/skills/` and are invoked with `/skill-name` in Claude Code (or equivalent mechanism in other agents).
+
+| Skill | Description |
+|-------|-------------|
+| `changelog` | Draft the next CHANGELOG entry from merged GitHub PRs |
+
 ## Packaging & Release
 
 - `make package RELEASE=X.Y.Z` updates `version.php`, creates a distributable ZIP excluding everything listed in `.distignore`, then restores dev values
