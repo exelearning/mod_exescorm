@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v4.0.2 – 2026-06-28
+
+- Use eXeLearning's native `?exe-teacher=1` URL parameter to reveal teacher-layer content, replacing the previous CSS injection approach.
+- Fix settings page error when saving without uploading a template file.
+- Keep Playground blueprint editor version in sync with `.editor-version` to prevent version drift.
+- Fix Spanish translation of the "Mode" setting label.
+- Add missing Galician translations for the styles manager section.
+
 ## v4.0.1 – 2026-06-09
 
 - Fix admin upgrade settings loop where the Styles upload widget was repeatedly reintroduced after upgrading to v4.0.0.
