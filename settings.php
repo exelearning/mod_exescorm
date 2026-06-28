@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function() {
         'subdirs' => 0,
     ];
 
-    $settings->add(new admin_setting_configstoredfile('exescorm/template',
+    $settings->add(new \mod_exescorm\admin\admin_setting_optional_configstoredfile('exescorm/template',
         get_string('exescorm:template', 'mod_exescorm'),
         get_string('exescorm:template_desc', 'mod_exescorm'),
         'config', 0, $filemanageroptions
