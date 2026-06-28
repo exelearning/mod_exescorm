@@ -21,7 +21,6 @@
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 $string['toc'] = 'Taula de continguts';
 $string['navigation'] = 'Navegació';
 $string['contenttitle'] = 'Contingut';
@@ -115,7 +114,6 @@ $string['deleteattemptcheck'] = 'Està completament segur de que vol eliminar aq
 $string['deleteallattempts'] = 'Suprimeix tots els intents SCORM';
 $string['deleteselected'] = 'Suprimeix els intents seleccionats';
 $string['deleteuserattemptcheck'] = 'Esteu totalment segur de voler eliminar completament els vostres intents?';
-$string['deleteattemptcheck'] = 'Està completament segur de que vol eliminar aquests intents?';
 $string['details'] = 'Detalls de seguiment';
 $string['directories'] = 'Mostra els enllaços del directori';
 $string['disabled'] = 'Inhabilitat';
@@ -123,6 +121,8 @@ $string['display'] = 'Visualitza';
 $string['displayattemptstatus'] = 'Mostrar estat dels intents';
 $string['displayattemptstatus_help'] = 'Aquest paràmetre permet mostrar un resum dels intents de l\'usuari al bloc de resum del curs al Tauler i/o a la pàgina d\'entrada de l\'eXeLearning.';
 $string['displayattemptstatusdesc'] = 'Determina si voleu mostrar o no un resum dels intents de l\'usuari al bloc de resum del curs ubicat al Tauler i/o a la pàgina d\'entrada de l\'eXeLearning';
+$string['teachermodevisible'] = 'Mostrar el selector de capa docent';
+$string['teachermodevisible_help'] = 'Si es desactiva, el selector de capa docent s\'ocultarà al contingut eXeLearning incrustat.';
 $string['displaycoursestructure'] = 'Mostra l\'estructura del curs a la plana d\'entrada';
 $string['displaycoursestructure_help'] = 'Si esta activat, la taula de continguts es mostrarà a la plana resum SCORM';
 $string['displaycoursestructuredesc'] = 'Si està habilitat, la taula de continguts es mostra a la pàgina de resum de l\'activitat.';
@@ -499,6 +499,7 @@ $string['whatgradedesc'] = 'Si s\'enregistra en el butlletí de qualificacions l
 $string['width'] = 'Amplada';
 $string['window'] = 'Finestra';
 $string['youmustselectastatus'] = 'Ha de seleccionar un estat que serà requerit';
+
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Tipus d\'editor';
 $string['editormode'] = 'Mode d\'editor';
@@ -512,27 +513,24 @@ $string['editembedded_integrated'] = 'Integrat';
 $string['editembedded_help'] = 'Obre l\'editor eXeLearning integrat per editar el contingut directament dins de Moodle.';
 $string['editormissing'] = 'L\'editor integrat eXeLearning no està instal·lat. Contacteu amb l\'administrador.';
 $string['embeddedtypehelp'] = 'Es crearà l\'activitat i podreu editar-la amb l\'editor eXeLearning integrat des de la pàgina de visualització de l\'activitat. Opcionalment podeu pujar un fitxer .elpx per importar contingut existent.';
+$string['typeembedded'] = 'Crear amb eXeLearning (editor integrat)';
 $string['saving'] = 'Desant...';
 $string['savedsuccess'] = 'Canvis desats correctament';
 $string['savetomoodle'] = 'Desar a Moodle';
 $string['savingwait'] = 'Si us plau, espereu mentre es desa el fitxer.';
 $string['unsavedchanges'] = 'Teniu canvis sense desar. Esteu segur que voleu tancar?';
-$string['typeembedded'] = 'Crear amb eXeLearning (editor integrat)';
 
+// Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Mostra el nom de l\'activitat';
 $string['displayactivityname_help'] = 'Si cal mostrar o no el nom de l\'activitat al damunt del reproductor eXeLearning';
 $string['elpxneedsconversion'] = 'Aquesta activitat conté actualment un projecte .elpx. Obriu-lo a l\'editor eXeLearning integrat i deseu-lo per convertir-lo en un paquet SCORM 1.2 reproduïble i rastreable.';
-$string['teachermodevisible'] = 'Mostrar el selector de capa docent';
-$string['teachermodevisible_help'] = 'Si es desactiva, el selector de capa docent s\'ocultarà al contingut eXeLearning incrustat.';
 $string['packageempty'] = 'Aquesta activitat encara no conté contingut reproduïble. Obriu-la a l\'editor d\'eXeLearning per afegir contingut.';
-
 
 // Embedded editor management.
 $string['manageembeddededitor'] = 'Gestiona l\'editor incrustat';
 $string['manageembeddededitor_desc'] = 'Instal·la, actualitza o repara l\'editor incrustat d\'eXeLearning.';
 $string['embeddededitorstatus'] = 'Editor incrustat';
-$string['editorlatestversionongithub'] = 'Última versió a GitHub:';
 $string['editorsource_moodledata'] = 'Instal·lat (gestionat per administració)';
 $string['editorsource_bundled'] = 'Inclòs amb el connector';
 $string['editorsource_none'] = 'No instal·lat';
@@ -548,6 +546,7 @@ $string['editoractivesource'] = 'Origen actiu';
 $string['editormoodledatadir'] = 'Directori de dades';
 $string['editorbundleddir'] = 'Directori inclòs';
 $string['editorlatestversion'] = 'Última versió disponible';
+$string['editorlatestversionongithub'] = 'Última versió a GitHub:';
 $string['editorstatusinfo'] = 'L\'editor incrustat serveix recursos estàtics per a l\'editor integrat d\'eXeLearning. Els orígens es comproven en aquest ordre: instal·lat per administració (moodledata) i després inclòs amb el connector (dist/).';
 $string['editorgithubconnecterror'] = 'No s\'ha pogut connectar amb GitHub: {$a}';
 $string['editorgithubapierror'] = 'GitHub ha retornat l\'estat HTTP {$a}. Torneu-ho a provar més tard.';
@@ -606,7 +605,7 @@ $string['editorrepairsuccess'] = 'Editor reparat correctament';
 
 $string['editoruploadmissingfile'] = 'No s\'ha carregat cap fitxer ZIP de l\'editor.';
 
-// Gestió d'estils.
+// Style management.
 $string['stylesmanager'] = 'Estils';
 $string['stylesmanager_hint'] = 'Carrega paquets d\'estils d\'eXeLearning i controla quins estils exposa l\'editor integrat.';
 $string['stylesmanager_intro'] = 'Gestiona els estils d\'eXeLearning disponibles per a l\'editor integrat. Els estils integrats es poden ocultar individualment. Els estils carregats es poden activar, desactivar o eliminar en qualsevol moment.';

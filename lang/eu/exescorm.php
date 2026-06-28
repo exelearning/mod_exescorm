@@ -119,6 +119,8 @@ $string['display'] = 'Erakutsi paketea';
 $string['displayattemptstatus'] = 'Erakutsi saialdien egoera';
 $string['displayattemptstatus_help'] = 'Hobespen honen bidez, erabiltzaileen saialdien laburpena erakuts daiteke “ikastaroaren ikuspegi orokorra” blokean (Nire Taula) eta/edo eXeLearningen sarrerako orrian.';
 $string['displayattemptstatusdesc'] = 'Erakutsi erabiltzailearen saialdien laburpena “ikastaroaren deskribapen orokorra” blokean (Nire Taula) eta/edo eXeLearningen sarrerako orrian.';
+$string['teachermodevisible'] = 'Erakutsi irakasle-geruza hautatzailea';
+$string['teachermodevisible_help'] = 'Desaktibatuta badago, irakasle-geruza hautatzailea ezkutatuko da eXeLearning eduki txertatuan.';
 $string['displaycoursestructure'] = 'Erakutsi ikastaroaren egitura sarrerako orrian';
 $string['displaycoursestructure_help'] = 'Aktibatua badago, edukien taula SCORM laburpen-orrian agertuko da.';
 $string['displaycoursestructuredesc'] = 'Gaitua badago, edukien taula SCORM eskema-orrian agertzen da.';
@@ -230,7 +232,6 @@ $string['grademethod_help'] = 'Kalifikazio-metodoak esaten du nola zehazten den 
 * Kalifikazio altuena: Egindako objektu guztien artean gehienez lortutako puntuazioa
 * Batez besteko kalifikazioa: Puntuazio guztien batez bestekoa
 * Kalifikazioak batuta: puntuazio guztien batura ';
-
 $string['grademethoddesc'] = 'Kalifikazio-metodoak esaten du nola zehazten den jardueraren nota saialdi bakar baterako.';
 $string['gradenoun'] = 'Kalifikazioa';
 $string['gradereported'] = 'Kalifikazio informatua';
@@ -505,27 +506,24 @@ $string['editembedded_integrated'] = 'Integratua';
 $string['editembedded_help'] = 'Ireki eXeLearning editore txertatua edukia zuzenean Moodle-n editatzeko.';
 $string['editormissing'] = 'eXeLearning editore txertatua ez dago instalatuta. Jarri harremanetan administratzailearekin.';
 $string['embeddedtypehelp'] = 'Jarduera sortuko da eta eXeLearning editore txertatuarekin editatu ahal izango duzu jardueraren ikuspegi-orritik. Aukeran .elpx fitxategi bat igo dezakezu lehendik dagoen edukia inportatzeko.';
+$string['typeembedded'] = 'Sortu eXeLearning-ekin (editore txertatua)';
 $string['saving'] = 'Gordetzen...';
 $string['savedsuccess'] = 'Aldaketak ondo gorde dira';
 $string['savetomoodle'] = 'Moodle-n gorde';
 $string['savingwait'] = 'Mesedez, itxaron fitxategia gordetzen den bitartean.';
 $string['unsavedchanges'] = 'Gorde gabeko aldaketak dituzu. Ziur zaude itxi nahi duzula?';
-$string['typeembedded'] = 'Sortu eXeLearning-ekin (editore txertatua)';
 
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Informazioa';
 $string['displayactivityname'] = 'Erakutsi jardueraren izena';
 $string['displayactivityname_help'] = 'Erakutsi edo ez erakutsi jardueraren izena eXeLearning-en bisorean.';
 $string['elpxneedsconversion'] = 'Jarduerak gaur egun .elpx proiektu bat dauka. Ireki ezazu eXeLearning editore txertatuan eta gorde ezazu SCORM 1.2 pakete erreproduziga eta arakagarri batean bihurtzeko.';
-$string['teachermodevisible'] = 'Erakutsi irakasle-geruza hautatzailea';
-$string['teachermodevisible_help'] = 'Desaktibatuta badago, irakasle-geruza hautatzailea ezkutatuko da eXeLearning eduki txertatuan.';
 $string['packageempty'] = 'Jarduera honek oraindik ez du eduki erreproduzigarririk. Ireki eXeLearning editorean edukia gehitzeko.';
 
 // Embedded editor management.
 $string['manageembeddededitor'] = 'Kudeatu editore txertatua';
 $string['manageembeddededitor_desc'] = 'Instalatu, eguneratu edo konpondu eXeLearning editore txertatua.';
 $string['embeddededitorstatus'] = 'Editore txertatua';
-$string['editorlatestversionongithub'] = 'GitHub-eko azken bertsioa:';
 $string['editorsource_moodledata'] = 'Instalatua (administrazioak kudeatua)';
 $string['editorsource_bundled'] = 'Pluginarekin batera dator';
 $string['editorsource_none'] = 'Instalatu gabe';
@@ -541,6 +539,7 @@ $string['editoractivesource'] = 'Jatorri aktiboa';
 $string['editormoodledatadir'] = 'Datuen direktorioa';
 $string['editorbundleddir'] = 'Barneko direktorioa';
 $string['editorlatestversion'] = 'Eskuragarri dagoen azken bertsioa';
+$string['editorlatestversionongithub'] = 'GitHub-eko azken bertsioa:';
 $string['editorstatusinfo'] = 'Editore txertatuak baliabide estatikoak zerbitzatzen ditu eXeLearning editore integraturako. Jatorriak ordena honetan egiaztatzen dira: administrazioak instalatutakoa (moodledata) eta, ondoren, pluginarekin datorrena (dist/).';
 $string['editorgithubconnecterror'] = 'Ezin izan da GitHub-era konektatu: {$a}';
 $string['editorgithubapierror'] = 'GitHub-ek HTTP egoera hau itzuli du: {$a}. Saiatu berriro geroago.';
@@ -599,7 +598,7 @@ $string['editorrepairsuccess'] = 'Editorea ondo konpondu da';
 
 $string['editoruploadmissingfile'] = 'Ez da editorerako ZIP fitxategirik igo.';
 
-// Estiloen kudeaketa.
+// Style management.
 $string['stylesmanager'] = 'Estiloak';
 $string['stylesmanager_hint'] = 'Igo eXeLearning estilo-paketeak eta kontrolatu zein estilo erakusten duen editore txertatuak.';
 $string['stylesmanager_intro'] = 'Kudeatu editore txertaturako eskuragarri dauden eXeLearning estiloak. Barneko estiloak banaka ezkuta daitezke. Igotako estiloak edozein unetan gaitu, desgaitu edo ezaba daitezke.';

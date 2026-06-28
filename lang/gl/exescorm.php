@@ -108,11 +108,10 @@ $string['datadir'] = 'Erro do sistema de ficheiros: non se pode crear o director
 $string['defaultdisplaysettings'] = 'Configuración de pantalla predeterminada';
 $string['defaultgradesettings'] = 'Configuración de cualificación predeterminada';
 $string['defaultothersettings'] = 'Outras configuracións predeterminadas';
-$string['deleteattemptcheck'] = 'Está totalmente seguro que quere eliminar completamente estes intentos?';
+$string['deleteattemptcheck'] = 'Está totalmente seguro de que quere eliminar completamente estes intentos?';
 $string['deleteallattempts'] = 'Eliminar tódolos intentos SCORM';
 $string['deleteselected'] = 'Eliminar os intentos seleccionados';
 $string['deleteuserattemptcheck'] = 'Estás totalmente seguro de querer eliminar completamente os teus intentos?';
-$string['deleteattemptcheck'] = 'Está totalmente seguro de que quere eliminar completamente estes intentos?';
 $string['details'] = 'Detalles do rastrexo SCO';
 $string['directories'] = 'Amosar ligazóns de directorio';
 $string['disabled'] = 'Desactivado';
@@ -120,6 +119,8 @@ $string['display'] = 'Amosar paquete';
 $string['displayattemptstatus'] = 'Amosar estado de intentos';
 $string['displayattemptstatus_help'] = 'Esta preferencia permite amosar un resumen dos intentos das persoas usuarias no bloque Vista xeral do curso no Meu Taboleiro e/ou na páxina de entrada do eXeLearning.';
 $string['displayattemptstatusdesc'] = 'Amosar un resumo dos intentos da persoa usuaria no bloque de descrición xeral do curso no Taboleiro e/ou a páxina de entrada eXeLearning.';
+$string['teachermodevisible'] = 'Amosar o selector de capa docente';
+$string['teachermodevisible_help'] = 'Se se desactiva, ocultarase o selector de capa docente no contido eXeLearning embebido.';
 $string['displaycoursestructure'] = 'Amosar estrutura do curso na páxina de entrada';
 $string['displaycoursestructure_help'] = 'Se está activado, a táboa de contidos amosarase na páxina de resumo SCORM.';
 $string['displaycoursestructuredesc'] = 'Se está activado, a táboa de contido amósase na páxina de esquema SCORM.';
@@ -505,20 +506,17 @@ $string['editembedded_integrated'] = 'Integrado';
 $string['editembedded_help'] = 'Abre o editor eXeLearning integrado para editar o contido directamente dentro de Moodle.';
 $string['editormissing'] = 'O editor integrado eXeLearning non está instalado. Contacte co administrador.';
 $string['embeddedtypehelp'] = 'Crearase a actividade e poderá editala usando o editor eXeLearning integrado dende a páxina de visualización da actividade. Opcionalmente pode subir un ficheiro .elpx para importar contido existente.';
+$string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
 $string['saving'] = 'Gardando...';
 $string['savedsuccess'] = 'Cambios gardados correctamente';
 $string['savetomoodle'] = 'Gardar en Moodle';
 $string['savingwait'] = 'Por favor, agarde mentres se garda o ficheiro.';
 $string['unsavedchanges'] = 'Ten cambios sen gardar. Está seguro de que desexa pechar?';
-$string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
 
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Amosar o nome da actividade';
 $string['displayactivityname_help'] = 'Amosar ou non o nome da actividade sobre o visor de eXeLearning.';
-$string['elpxneedsconversion'] = 'Esta actividade contén actualmente un proxecto .elpx. Ábreo no editor eXeLearning integrado e gárdao para convertelo nun paquete SCORM 1.2 reproducible e rastrexable.';
-$string['teachermodevisible'] = 'Amosar o selector de capa docente';
-$string['teachermodevisible_help'] = 'Se se desactiva, ocultarase o selector de capa docente no contido eXeLearning embebido.';
 $string['elpxneedsconversion'] = 'Esta actividade contén actualmente un proxecto .elpx. Ábreo no editor eXeLearning integrado e gárdao para convertelo nun paquete SCORM 1.2 reproducible e rastrexable.';
 $string['packageempty'] = 'Esta actividade aínda non contén contido reproducible. Ábrea no editor de eXeLearning para engadir contido.';
 
@@ -526,7 +524,6 @@ $string['packageempty'] = 'Esta actividade aínda non contén contido reproducib
 $string['manageembeddededitor'] = 'Xestionar editor embebido';
 $string['manageembeddededitor_desc'] = 'Instalar, actualizar ou reparar o editor embebido de eXeLearning.';
 $string['embeddededitorstatus'] = 'Editor embebido';
-$string['editorlatestversionongithub'] = 'Última versión en GitHub:';
 $string['editorsource_moodledata'] = 'Instalado (xestionado pola administración)';
 $string['editorsource_bundled'] = 'Incluído co plugin';
 $string['editorsource_none'] = 'Non instalado';
@@ -542,6 +539,7 @@ $string['editoractivesource'] = 'Orixe activa';
 $string['editormoodledatadir'] = 'Directorio de datos';
 $string['editorbundleddir'] = 'Directorio incluído';
 $string['editorlatestversion'] = 'Última versión dispoñible';
+$string['editorlatestversionongithub'] = 'Última versión en GitHub:';
 $string['editorstatusinfo'] = 'O editor embebido serve recursos estáticos para o editor integrado de eXeLearning. As orixes compróbanse nesta orde: instalado pola administración (moodledata) e despois incluído co plugin (dist/).';
 $string['editorgithubconnecterror'] = 'Non se puido conectar con GitHub: {$a}';
 $string['editorgithubapierror'] = 'GitHub devolveu o estado HTTP {$a}. Ténteo de novo máis tarde.';
@@ -600,7 +598,7 @@ $string['editorrepairsuccess'] = 'Editor reparado correctamente';
 
 $string['editoruploadmissingfile'] = 'Non se subiu ningún ficheiro ZIP do editor.';
 
-// Xestión de estilos.
+// Style management.
 $string['stylesmanager'] = 'Estilos';
 $string['stylesmanager_hint'] = 'Sube paquetes de estilos de eXeLearning e controla que estilos expón o editor integrado.';
 $string['stylesmanager_intro'] = 'Xestiona os estilos de eXeLearning dispoñibles para o editor integrado. Os estilos integrados pódense ocultar individualmente. Os estilos subidos pódense activar, desactivar ou eliminar en calquera momento.';
