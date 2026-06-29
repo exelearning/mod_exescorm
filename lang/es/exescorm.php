@@ -44,7 +44,7 @@ $string['allowtypeexternalaicc_desc'] = 'Si se habilita permite una url directa 
 $string['allowtypelocalsync'] = 'Habilitar tipo de paquete descargado';
 $string['allowtypeaicchacp'] = 'Habilitar AICC HACP externo';
 $string['allowtypeaicchacp_desc'] = 'Si se habilita permite comunicaciones externas AICC HACP sin necesidad de identidicación de usuario para peticiones de un paquete AICC externo';
-$string['apidebugmask'] = 'API debug capture mask  - use a simple regex on &lt;username&gt;:&lt;activityname&gt; e.g. admin:.* will debug for admin user only';
+$string['apidebugmask'] = 'Máscara de captura de depuración de la API: usa una expresión regular simple en &lt;username&gt;:&lt;activityname&gt;, p. ej. admin:.* solo depurará para el usuario administrador';
 $string['areacontent'] = 'Archivos de contenido';
 $string['areapackage'] = 'Archivo de paquete';
 $string['asset'] = 'Recurso';
@@ -262,7 +262,6 @@ $string['indicator:socialbreadth_help'] = 'Este indicador está basado en la amp
 $string['indicator:socialbreadthdef'] = 'SCORM Social';
 $string['indicator:socialbreadthdef_help'] = 'El participante ha alcanzado este porcentaje del compromiso social ofrecido por las actividades SCORM durante este intervalo de análisis (Niveles = Sin participación, Solo participante)';
 $string['indicator:socialbreadthdef_link'] = 'Learning_analytics_indicators#Social_breadth';
-
 $string['interactions'] = 'Interacciones';
 $string['masteryoverride'] = 'El puntaje de dominio anula el estado';
 $string['masteryoverride_help'] = 'Si está habilitado y se proporciona un puntaje de dominio, cuando se llama a LMSFinish y se ha establecido un puntaje neto, el estado se volverá a calcular utilizando el puntaje neto y el de dominio y se anulará cualquier estado proporcionado por eXeLearning (incluido "incompleto").';
@@ -321,7 +320,7 @@ $string['minimumscoregreater'] = 'La puntuación mínima debe ser mayor que 0.';
 $string['missing_attribute'] = 'Falta atributo ({$a->attr}) en marca {$a->tag}';
 $string['missingparam'] = 'Un parámetro requerido falta o es incorrecto';
 $string['missing_tag'] = 'Falta marca {$a->tag}';
-$string['mode'] = 'Moda';
+$string['mode'] = 'Modo';
 $string['modulename'] = 'eXeLearning (SCORM)';
 $string['modulename_help'] = 'Un SCORM creado con eXeLearning es un conjunto de archivos que se empaquetan conforme a una norma estándar para los objetos de aprendizaje. El módulo de actividad eXeLearning (SCORM) permite crear y editar estos SCORM.
 
@@ -496,7 +495,7 @@ $string['youmustselectastatus'] = 'Debe seleccionar un estado que será requerid
 
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Tipo de editor';
-$string['editormode'] = 'Modo de editor';
+$string['editormode'] = 'Modo del editor';
 $string['editormodedesc'] = 'Seleccione qué editor usar para crear y editar contenido eXeLearning. La configuración de conexión online solo aplica cuando se selecciona el modo "eXeLearning Online".';
 $string['editormodeonline'] = 'eXeLearning Online (servidor remoto)';
 $string['editormodeembedded'] = 'Editor integrado (embebido)';
@@ -507,12 +506,12 @@ $string['editembedded_integrated'] = 'Integrado';
 $string['editembedded_help'] = 'Abre el editor eXeLearning integrado para editar el contenido directamente dentro de Moodle.';
 $string['editormissing'] = 'El editor integrado eXeLearning no está instalado. Contacte con el administrador.';
 $string['embeddedtypehelp'] = 'Se creará la actividad y podrá editarla usando el editor eXeLearning integrado desde la página de visualización de la actividad. Opcionalmente puede subir un archivo .elpx para importar contenido existente.';
+$string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
 $string['saving'] = 'Guardando...';
 $string['savedsuccess'] = 'Cambios guardados correctamente';
 $string['savetomoodle'] = 'Guardar en Moodle';
 $string['savingwait'] = 'Por favor, espere mientras se guarda el archivo.';
 $string['unsavedchanges'] = 'Tiene cambios sin guardar. ¿Está seguro de que desea cerrar?';
-$string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
 
 // Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
@@ -525,7 +524,6 @@ $string['packageempty'] = 'Esta actividad aún no contiene contenido reproducibl
 $string['manageembeddededitor'] = 'Gestionar editor embebido';
 $string['manageembeddededitor_desc'] = 'Instalar, actualizar o reparar el editor embebido de eXeLearning.';
 $string['embeddededitorstatus'] = 'Editor embebido';
-$string['editorlatestversionongithub'] = 'Última versión en GitHub:';
 $string['editorsource_moodledata'] = 'Instalado (gestionado por administración)';
 $string['editorsource_bundled'] = 'Incluido con el plugin';
 $string['editorsource_none'] = 'No instalado';
@@ -541,6 +539,7 @@ $string['editoractivesource'] = 'Origen activo';
 $string['editormoodledatadir'] = 'Directorio de datos';
 $string['editorbundleddir'] = 'Directorio incluido';
 $string['editorlatestversion'] = 'Última versión disponible';
+$string['editorlatestversionongithub'] = 'Última versión en GitHub:';
 $string['editorstatusinfo'] = 'El editor embebido sirve recursos estáticos para el editor integrado de eXeLearning. Los orígenes se comprueban en este orden: instalado por administración (moodledata) y después incluido en el plugin (dist/).';
 $string['editorgithubconnecterror'] = 'No se pudo conectar con GitHub: {$a}';
 $string['editorgithubapierror'] = 'GitHub devolvió el estado HTTP {$a}. Inténtelo de nuevo más tarde.';
@@ -596,26 +595,10 @@ $string['editorinstalledsuccess'] = 'Editor instalado correctamente';
 $string['editoruninstalledsuccess'] = 'Editor desinstalado correctamente';
 $string['editorupdatedsuccess'] = 'Editor actualizado correctamente';
 $string['editorrepairsuccess'] = 'Editor reparado correctamente';
-$string['editormode'] = 'Modo de editor';
-$string['editormodedesc'] = 'Seleccione qué editor usar para crear y editar contenido eXeLearning. La configuración de conexión online solo aplica cuando se selecciona el modo "eXeLearning Online".';
-$string['editormodeonline'] = 'eXeLearning Online (servidor remoto)';
-$string['editormodeembedded'] = 'Editor integrado (embebido)';
-$string['saving'] = 'Guardando...';
-$string['savedsuccess'] = 'Cambios guardados correctamente';
-$string['savetomoodle'] = 'Guardar en Moodle';
-$string['savingwait'] = 'Por favor, espere mientras se guarda el archivo.';
-$string['unsavedchanges'] = 'Tiene cambios sin guardar. ¿Está seguro de que desea cerrar?';
-$string['typeembedded'] = 'Crear con eXeLearning (editor integrado)';
-$string['typeexewebcreate'] = 'Crear con eXeLearning';
-$string['typeexewebedit'] = 'Editar con eXeLearning';
-$string['typelocal'] = 'Paquete subido';
-
-$string['teachermodevisible'] = 'Mostrar el selector de capa docente';
-$string['teachermodevisible_help'] = 'Si se desactiva, se ocultará el selector de capa docente dentro del recurso incrustado.';
 
 $string['editoruploadmissingfile'] = 'No se ha subido ningún archivo ZIP del editor.';
 
-// Gestión de estilos.
+// Style management.
 $string['stylesmanager'] = 'Estilos';
 $string['stylesmanager_hint'] = 'Sube paquetes de estilos de eXeLearning y controla qué estilos expone el editor integrado.';
 $string['stylesmanager_intro'] = 'Gestiona los estilos de eXeLearning disponibles para el editor integrado. Los estilos integrados se pueden ocultar de forma individual. Los estilos subidos se pueden habilitar, deshabilitar o eliminar en cualquier momento.';

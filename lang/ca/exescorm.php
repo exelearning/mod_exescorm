@@ -21,7 +21,6 @@
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 $string['toc'] = 'Taula de continguts';
 $string['navigation'] = 'Navegació';
 $string['contenttitle'] = 'Contingut';
@@ -115,7 +114,6 @@ $string['deleteattemptcheck'] = 'Està completament segur de que vol eliminar aq
 $string['deleteallattempts'] = 'Suprimeix tots els intents SCORM';
 $string['deleteselected'] = 'Suprimeix els intents seleccionats';
 $string['deleteuserattemptcheck'] = 'Esteu totalment segur de voler eliminar completament els vostres intents?';
-$string['deleteattemptcheck'] = 'Està completament segur de que vol eliminar aquests intents?';
 $string['details'] = 'Detalls de seguiment';
 $string['directories'] = 'Mostra els enllaços del directori';
 $string['disabled'] = 'Inhabilitat';
@@ -123,6 +121,8 @@ $string['display'] = 'Visualitza';
 $string['displayattemptstatus'] = 'Mostrar estat dels intents';
 $string['displayattemptstatus_help'] = 'Aquest paràmetre permet mostrar un resum dels intents de l\'usuari al bloc de resum del curs al Tauler i/o a la pàgina d\'entrada de l\'eXeLearning.';
 $string['displayattemptstatusdesc'] = 'Determina si voleu mostrar o no un resum dels intents de l\'usuari al bloc de resum del curs ubicat al Tauler i/o a la pàgina d\'entrada de l\'eXeLearning';
+$string['teachermodevisible'] = 'Mostrar el selector de capa docent';
+$string['teachermodevisible_help'] = 'Si es desactiva, el selector de capa docent s\'ocultarà al contingut eXeLearning incrustat.';
 $string['displaycoursestructure'] = 'Mostra l\'estructura del curs a la plana d\'entrada';
 $string['displaycoursestructure_help'] = 'Si esta activat, la taula de continguts es mostrarà a la plana resum SCORM';
 $string['displaycoursestructuredesc'] = 'Si està habilitat, la taula de continguts es mostra a la pàgina de resum de l\'activitat.';
@@ -499,6 +499,7 @@ $string['whatgradedesc'] = 'Si s\'enregistra en el butlletí de qualificacions l
 $string['width'] = 'Amplada';
 $string['window'] = 'Finestra';
 $string['youmustselectastatus'] = 'Ha de seleccionar un estat que serà requerit';
+
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Tipus d\'editor';
 $string['editormode'] = 'Mode d\'editor';
@@ -512,26 +513,24 @@ $string['editembedded_integrated'] = 'Integrat';
 $string['editembedded_help'] = 'Obre l\'editor eXeLearning integrat per editar el contingut directament dins de Moodle.';
 $string['editormissing'] = 'L\'editor integrat eXeLearning no està instal·lat. Contacteu amb l\'administrador.';
 $string['embeddedtypehelp'] = 'Es crearà l\'activitat i podreu editar-la amb l\'editor eXeLearning integrat des de la pàgina de visualització de l\'activitat. Opcionalment podeu pujar un fitxer .elpx per importar contingut existent.';
+$string['typeembedded'] = 'Crear amb eXeLearning (editor integrat)';
 $string['saving'] = 'Desant...';
 $string['savedsuccess'] = 'Canvis desats correctament';
 $string['savetomoodle'] = 'Desar a Moodle';
 $string['savingwait'] = 'Si us plau, espereu mentre es desa el fitxer.';
 $string['unsavedchanges'] = 'Teniu canvis sense desar. Esteu segur que voleu tancar?';
-$string['typeembedded'] = 'Crear amb eXeLearning (editor integrat)';
 
+// Deprecated since Moodle 4.0.
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Mostra el nom de l\'activitat';
 $string['displayactivityname_help'] = 'Si cal mostrar o no el nom de l\'activitat al damunt del reproductor eXeLearning';
-$string['teachermodevisible'] = 'Mostrar el selector de capa docent';
-$string['teachermodevisible_help'] = 'Si es desactiva, el selector de capa docent s\'ocultarà al contingut eXeLearning incrustat.';
+$string['elpxneedsconversion'] = 'Aquesta activitat conté actualment un projecte .elpx. Obriu-lo a l\'editor eXeLearning integrat i deseu-lo per convertir-lo en un paquet SCORM 1.2 reproduïble i rastreable.';
 $string['packageempty'] = 'Aquesta activitat encara no conté contingut reproduïble. Obriu-la a l\'editor d\'eXeLearning per afegir contingut.';
-
 
 // Embedded editor management.
 $string['manageembeddededitor'] = 'Gestiona l\'editor incrustat';
 $string['manageembeddededitor_desc'] = 'Instal·la, actualitza o repara l\'editor incrustat d\'eXeLearning.';
 $string['embeddededitorstatus'] = 'Editor incrustat';
-$string['editorlatestversionongithub'] = 'Última versió a GitHub:';
 $string['editorsource_moodledata'] = 'Instal·lat (gestionat per administració)';
 $string['editorsource_bundled'] = 'Inclòs amb el connector';
 $string['editorsource_none'] = 'No instal·lat';
@@ -547,6 +546,7 @@ $string['editoractivesource'] = 'Origen actiu';
 $string['editormoodledatadir'] = 'Directori de dades';
 $string['editorbundleddir'] = 'Directori inclòs';
 $string['editorlatestversion'] = 'Última versió disponible';
+$string['editorlatestversionongithub'] = 'Última versió a GitHub:';
 $string['editorstatusinfo'] = 'L\'editor incrustat serveix recursos estàtics per a l\'editor integrat d\'eXeLearning. Els orígens es comproven en aquest ordre: instal·lat per administració (moodledata) i després inclòs amb el connector (dist/).';
 $string['editorgithubconnecterror'] = 'No s\'ha pogut connectar amb GitHub: {$a}';
 $string['editorgithubapierror'] = 'GitHub ha retornat l\'estat HTTP {$a}. Torneu-ho a provar més tard.';
@@ -602,16 +602,58 @@ $string['editorinstalledsuccess'] = 'Editor instal·lat correctament';
 $string['editoruninstalledsuccess'] = 'Editor desinstal·lat correctament';
 $string['editorupdatedsuccess'] = 'Editor actualitzat correctament';
 $string['editorrepairsuccess'] = 'Editor reparat correctament';
-$string['editormode'] = 'Mode d\'editor';
-$string['editormodedesc'] = 'Seleccioneu quin editor voleu utilitzar per crear i editar contingut eXeLearning. La configuració de connexió online només s\'aplica quan es selecciona el mode "eXeLearning Online".';
-$string['editormodeonline'] = 'eXeLearning Online (servidor remot)';
-$string['editormodeembedded'] = 'Editor integrat (incrustat)';
-$string['saving'] = 'Desant...';
-$string['savedsuccess'] = 'Canvis desats correctament';
-$string['savetomoodle'] = 'Desar a Moodle';
-$string['savingwait'] = 'Si us plau, espereu mentre es desa l\'arxiu.';
-$string['unsavedchanges'] = 'Teniu canvis sense desar. Esteu segurs que voleu tancar?';
-$string['typeembedded'] = 'Crear amb eXeLearning (editor integrat)';
-$string['typeexewebcreate'] = 'Crear con eXeLearning';
-$string['typeexewebedit'] = 'Editar con eXeLearning';
-$string['typelocal'] = 'Paquete subido';
+
+$string['editoruploadmissingfile'] = 'No s\'ha carregat cap fitxer ZIP de l\'editor.';
+
+// Style management.
+$string['stylesmanager'] = 'Estils';
+$string['stylesmanager_hint'] = 'Carrega paquets d\'estils d\'eXeLearning i controla quins estils exposa l\'editor integrat.';
+$string['stylesmanager_intro'] = 'Gestiona els estils d\'eXeLearning disponibles per a l\'editor integrat. Els estils integrats es poden ocultar individualment. Els estils carregats es poden activar, desactivar o eliminar en qualsevol moment.';
+$string['stylesmanager_manage'] = 'Gestionar els estils instal·lats';
+$string['stylesmanager_manage_hint'] = 'Obre la pàgina d\'estils per activar o desactivar els estils integrats, o per eliminar els estils carregats.';
+$string['stylesonlywhenembedded'] = 'L\'editor integrat no està activat. Els estils gestionats aquí només s\'apliquen quan el mode de l\'editor és «incrustat».';
+$string['stylesblockimport'] = 'Bloquejar els estils importats per l\'usuari';
+$string['stylesblockimport_desc'] = 'Quan està activat, l\'editor integrat oculta la pestanya «Estils d\'usuari» i refusa instal·lar un estil inclòs en un projecte .elpx importat. L\'usuari només podrà triar de la llista aprovada per l\'administrador. Equivalent al comportament d\'eXeLearning ONLINE_THEMES_INSTALL=false.';
+$string['stylesupload_label'] = 'Paquet ZIP d\'estil';
+$string['stylesupload_submit'] = 'Carregar estil';
+$string['stylesupload_hint'] = 'Mida màxima: {$a}. Només s\'accepten paquets .zip amb un config.xml vàlid.';
+$string['stylesupload_success'] = 'Estil «{$a}» instal·lat.';
+$string['stylesupload_success_many'] = 'Instal·lats: {$a}';
+$string['stylesupload_goto_settings'] = 'Carregar estils des de la pàgina de configuració del connector';
+$string['stylesupload_failed'] = 'La càrrega de l\'estil ha fallat.';
+$string['stylesupload_missing'] = 'El fitxer carregat no existeix o no es pot llegir.';
+$string['stylesupload_empty'] = 'El fitxer carregat és buit.';
+$string['stylesupload_toolarge'] = 'L\'estil carregat supera la mida màxima permesa de {$a}.';
+$string['stylesupload_nozip'] = 'L\'extensió PHP ZipArchive no està disponible.';
+$string['stylesupload_badzip'] = 'El fitxer carregat no és un ZIP vàlid.';
+$string['stylesupload_badentry'] = 'L\'arxiu ZIP conté entrades que no es poden llegir.';
+$string['stylesupload_unsafe'] = 'Entrada d\'arxiu no segura rebutjada: {$a}';
+$string['stylesupload_multiconfig'] = 'L\'arxiu conté més d\'un config.xml.';
+$string['stylesupload_noconfig'] = 'El paquet d\'estil no té config.xml.';
+$string['stylesupload_mixedroots'] = 'L\'arxiu ha de contenir una única carpeta arrel o tenir tots els fitxers a l\'arrel.';
+$string['stylesupload_badext'] = 'Tipus de fitxer no permès al paquet d\'estil: {$a}';
+$string['stylesupload_configread'] = 'No s\'ha pogut llegir config.xml de l\'arxiu.';
+$string['stylesupload_badxml'] = 'config.xml no és XML vàlid.';
+$string['stylesupload_noname'] = 'config.xml ha de declarar un element <name>.';
+$string['stylesupload_traversal'] = 'S\'ha blocat un intent d\'escalada de directoris durant l\'extracció.';
+$string['stylesupload_readfailed'] = 'No s\'ha pogut llegir un fitxer del ZIP durant l\'extracció.';
+$string['stylesupload_writefailed'] = 'No s\'ha pogut escriure un fitxer extret.';
+$string['stylesnocss'] = 'L\'estil carregat no conté cap full d\'estils.';
+$string['stylesinstallfailed'] = 'No s\'ha pogut instal·lar l\'estil: {$a}';
+$string['stylesuploaded'] = 'Estils carregats';
+$string['stylesuploaded_empty'] = 'Encara no hi ha estils carregats.';
+$string['stylesuploaded_hint'] = 'Activeu o desactiveu els estils carregats. Desmarqueu-los per ocultar-los de l\'editor; elimineu-los per suprimir-los definitivament.';
+$string['stylesbuiltin'] = 'Estils integrats';
+$string['stylesbuiltin_empty'] = 'Els estils integrats no estan disponibles perquè l\'editor integrat no està instal·lat.';
+$string['stylesbuiltin_hint'] = 'Desmarqueu un estil per ocultar-lo de l\'editor. Els estils integrats desactivats no s\'eliminen; el projecte sempre pot recórrer a l\'estil per defecte.';
+$string['stylestable_title'] = 'Títol';
+$string['stylestable_id'] = 'Id';
+$string['stylestable_version'] = 'Versió';
+$string['stylestable_installed'] = 'Instal·lat';
+$string['stylestable_enabled'] = 'Activat';
+$string['stylestable_actions'] = 'Accions';
+$string['stylesenable'] = 'Activar';
+$string['stylesdisable'] = 'Desactivar';
+$string['stylesdelete'] = 'Eliminar';
+$string['stylesdelete_confirm'] = 'Eliminar aquest estil? Aquesta acció no es pot desfer.';
+$string['stylesdelete_success'] = 'Estil eliminat.';
