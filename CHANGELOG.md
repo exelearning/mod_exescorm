@@ -2,12 +2,14 @@
 
 ## v4.0.2 – 2026-07-07
 
-- Use eXeLearning's native `?exe-teacher=1` URL parameter to reveal teacher-layer content instead of the previous CSS injection approach.
 - Allow saving the plugin settings page without requiring an optional package template file.
+- Use eXeLearning's native `?exe-teacher=1` URL parameter to reveal teacher-layer content instead of the previous CSS injection approach.
 - Fix Playground environments loading an outdated embedded editor version when `.editor-version` had already been updated.
 - Automatically keep the Playground blueprint editor URL in sync with `.editor-version` on each release.
 - Review and complete the Spanish (es) translation.
 - Review all language packs and add placeholder translations for newly introduced strings in incomplete translations.
+
+---
 
 ## v4.0.1 – 2026-06-09
 
@@ -19,6 +21,8 @@
 - Update `iframe` title when changing its `src` to improve accessibility.
 - Correct README license reference from "version 2" to "GNU GPL v3 or later", aligning documentation with the LICENSE file and source `@license` headers.
 - Automatically install and configure the embedded editor in Playground environments.
+
+---
 
 ## v4.0.0 – 2025-04-30
 
@@ -43,6 +47,8 @@
 - Update activity icons to align with the latest eXeLearning design.
 - Resolve HTML validation issues in Mustache templates by correcting form attribute usage.
 - Correct PHPDoc annotations and complete parameter definitions across multiple components.
+
+---
 
 ## v1.1 – 2025-06-18
 
