@@ -27,7 +27,7 @@ This plugin works on every supported Moodle release from **Moodle 4.2** (the min
 | 5.1.x                 | Supported                             |
 | 5.2.x (latest stable) | Supported                             |
 
-Older Moodle releases (3.x, 4.0 and 4.1) are **not** supported. The plugin is expected to keep working with newer Moodle releases as they appear; if you find an incompatibility please open an issue at <https://github.com/exelearning/mod_exescorm/issues>.
+Older Moodle releases (3.x, 4.0 and 4.1) are **not** supported. The plugin is expected to keep working with newer Moodle releases as they appear; if you find an incompatibility please open an issue at <https://github.com/exelearning/exelearning/issues> (label `moodle`).
 
 ### Requirements
 
@@ -105,8 +105,11 @@ For development setup, build instructions, and contributing guidelines, see [DEV
 
 ## Support
 
-Please report bugs and feature requests on the GitHub issue tracker:
-<https://github.com/exelearning/mod_exescorm/issues>
+Issue tracking for this plugin is centralized in the main
+[`exelearning/exelearning`](https://github.com/exelearning/exelearning) repository.
+Please [open new issues there](https://github.com/exelearning/exelearning/issues/new),
+and browse [existing `moodle`-labeled issues](https://github.com/exelearning/exelearning/issues?q=is%3Aissue+label%3Amoodle)
+before reporting a bug or requesting a feature.
 
 ## About
 
