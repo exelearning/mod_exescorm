@@ -1,8 +1,7 @@
 ---
-
 name: changelog
 description: Generate a draft CHANGELOG entry for the next release from merged GitHub pull requests. Asks the user for the target version before starting.
-----------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Skill: Generate CHANGELOG draft
 
@@ -87,6 +86,16 @@ Follow the **exact style** of the existing changelog entries in `CHANGELOG.md`.
 * Avoid technical jargon unless it is already common in the existing changelog (e.g. `blob:`, `asset://`, `SCORM`).
 * Dependency upgrades: `package-name: OLD → NEW` (lowercase, `→`, no extra words).
 * Group related entries together.
+
+### Releases with no functional changes
+
+When the merged PRs contain no user-visible functional change — a version bump to stay aligned with eXeLearning, documentation-only updates, CI or tooling work — open the entry with this standard bullet:
+
+> Maintenance release with no functional changes: version bumped to keep numbering aligned with eXeLearning for consistency across related projects.
+
+Use it as the **only** bullet when nothing else qualifies. If there are minor but genuinely user-facing changes (e.g. README or support-link updates), keep it as the first bullet and list those below it.
+
+Also warn the user when a release would consist solely of this bullet, so they can decide whether to publish it or wait for more changes.
 
 ### What NOT to include
 
