@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v4.0.3 – 2026-08-06
+
+- Maintenance release with no functional changes: version bumped to keep numbering aligned with eXeLearning for consistency across related projects.
+
+---
+
 ## v4.0.2 – 2026-07-07
 
 - Allow saving the plugin settings page without requiring an optional package template file.
