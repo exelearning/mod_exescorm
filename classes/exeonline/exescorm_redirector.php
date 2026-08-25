@@ -69,7 +69,8 @@ class exescorm_redirector {
      *
      * @param integer $cmid
      * @param string|null $action
-     * @param moodle_url|null $returnto
+     * @param moodle_url|null $returnto Where the user's browser ends up once eXeLearning sends the
+     *                                  package back. Defaults to the activity's course.
      *
      * @return moodle_url
      * @throws dml_exception
@@ -77,14 +78,16 @@ class exescorm_redirector {
      * @throws moodle_exception
      */
     public static function get_redirection_url(int $cmid, moodle_url $returnto = null, string $action = null) {
-        global $CFG, $USER;
+        global $USER;
         $action = $action ?? self::$action;
         $target = $action === 'add' ? '/new_ode' : '/edit_ode';
-        $returnto = $returnto ?? self::$returnto ?? new moodle_url($CFG->wwwroot);
-        if (strpos($returnto->get_path(), 'mod/exescorm') !== false) {
+        $returnto = $returnto ?? self::$returnto;
+        if ($returnto !== null && strpos($returnto->get_path(), 'mod/exescorm') !== false) {
             // Ensure return url has a valid cmid if it is a module view url.
             $returnto->params(['id' => $cmid]);
         } else {
+            // Any other destination, and the no-destination case that lands on the activity's
+            // course, has to travel through the module's return script.
             $returnto = self::get_returnto_url($cmid, $returnto);
         }
         // Get remote URL from config.
@@ -122,21 +125,27 @@ class exescorm_redirector {
      * "Could not build platform integration URL from return URL". RETURNTO_SCRIPT does live under the
      * module path, so it is accepted, and it forwards the browser to the real destination.
      *
+     * A destination that is null, the bare site root, or outside this Moodle carries no parameter,
+     * which makes the return script fall back to the activity's course.
+     *
      * @param integer $cmid
-     * @param moodle_url $returnto Final destination for the user's browser.
+     * @param moodle_url|null $returnto Final destination for the user's browser.
      * @return moodle_url
      */
-    private static function get_returnto_url(int $cmid, moodle_url $returnto) {
+    private static function get_returnto_url(int $cmid, moodle_url $returnto = null) {
+        global $CFG;
+
         $params = ['id' => $cmid];
-        try {
-            $localurl = $returnto->out_as_local_url(false);
-            if ($localurl !== '') {
-                $params[self::RETURNTO_PARAM] = $localurl;
+        if ($returnto !== null) {
+            $destination = $returnto->out(false);
+            // Only a destination inside this Moodle can be forwarded to. Mirrors the roots accepted
+            // by moodle_url::out_as_local_url(), without using its exception as control flow.
+            foreach ([$CFG->wwwroot, str_replace('http://', 'https://', $CFG->wwwroot)] as $root) {
+                if (strpos($destination, $root . '/') === 0) {
+                    $params[self::RETURNTO_PARAM] = substr($destination, strlen($root));
+                    break;
+                }
             }
-        } catch (moodle_exception $e) {
-            // Destination is not part of this Moodle, so it can't be forwarded to.
-            // Drop it and let the return script fall back to the activity's course.
-            $params = ['id' => $cmid];
         }
 
         return new moodle_url(self::RETURNTO_SCRIPT, $params);

@@ -84,13 +84,47 @@ class exescorm_redirector_test extends \advanced_testcase {
         $this->assertStringContainsString(rawurlencode('/course/view.php?id=7'), str_replace('&amp;', '&', $returnurl));
     }
 
-    public function test_default_return_url_is_routed_through_the_module(): void {
+    public function test_default_return_url_resolves_to_the_activity_course(): void {
         global $CFG;
 
-        // No explicit destination: the redirector defaults to the site home, which is
-        // still outside the module and would break the eXeLearning callback.
-        $returnurl = $this->get_payload_returnurl(exescorm_redirector::get_redirection_url(self::CMID));
-        $this->assertStringStartsWith($CFG->wwwroot . '/mod/exescorm/returnto.php', $returnurl);
+        require_once($CFG->dirroot . '/course/lib.php');
+
+        $course = $this->getDataGenerator()->create_course();
+
+        // No explicit destination. The wrapped url carries no destination at all, which is what
+        // makes the return script land the user on the activity's course rather than the site home.
+        $wrapped = new moodle_url($this->get_payload_returnurl(
+            exescorm_redirector::get_redirection_url(self::CMID)
+        ));
+
+        $this->assertSame($CFG->wwwroot . '/mod/exescorm/returnto.php', $wrapped->out_omit_querystring());
+        $this->assertSame(self::CMID, (int)$wrapped->param('id'));
+        $this->assertNull($wrapped->param(exescorm_redirector::RETURNTO_PARAM));
+        $this->assertSame(
+            course_get_url($course)->out(false),
+            exescorm_redirector::resolve_returnto_url('', $course)->out(false)
+        );
+    }
+
+    public function test_external_return_url_is_dropped_and_resolves_to_the_course(): void {
+        global $CFG;
+
+        require_once($CFG->dirroot . '/course/lib.php');
+
+        $course = $this->getDataGenerator()->create_course();
+
+        // A destination outside this Moodle can't be forwarded to, so it is discarded instead of
+        // being handed to returnto.php.
+        $wrapped = new moodle_url($this->get_payload_returnurl(
+            exescorm_redirector::get_redirection_url(self::CMID, new moodle_url('https://not-this-moodle.invalid/foo'))
+        ));
+
+        $this->assertSame($CFG->wwwroot . '/mod/exescorm/returnto.php', $wrapped->out_omit_querystring());
+        $this->assertNull($wrapped->param(exescorm_redirector::RETURNTO_PARAM));
+        $this->assertSame(
+            course_get_url($course)->out(false),
+            exescorm_redirector::resolve_returnto_url('', $course)->out(false)
+        );
     }
 
     public function test_resolve_returnto_url_restores_the_carried_destination(): void {
