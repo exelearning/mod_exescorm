@@ -4,7 +4,12 @@
  * This script does not access editor internals. It talks to eXe exclusively
  * through EmbeddingBridge postMessage protocol (OPEN_FILE / REQUEST_EXPORT).
  *
- * @module      mod_exescorm/moodle_exe_bridge
+ * It is a plain script (not an AMD module) injected into the embedded editor
+ * page by editor/index.php. It must NOT live under amd/, because Moodle serves
+ * every amd/build module of the site in a single bundle in production, which
+ * would run this file on every page instead of only inside the editor iframe.
+ *
+ * @package     mod_exescorm
  * @copyright   2025 eXeLearning
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
