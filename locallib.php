@@ -749,16 +749,14 @@ function exescorm_grade_user_attempt($exescorm, $userid, $attempt=1) {
             if (($userdata->status == 'completed') || ($userdata->status == 'passed')) {
                 $attemptscore->scoes++;
             }
-            if (!empty($userdata->score_raw) ||
-                (isset($exescorm->type) && $exescorm->type == 'sco' && isset($userdata->score_raw))
-            ) {
+            // A raw score of 0 is a real score, so only SCOes that reported no score at all must be
+            // skipped (exescorm_format_interactions() defaults score_raw to an empty string in that case).
+            if (isset($userdata->score_raw) && $userdata->score_raw !== '') {
                 $attemptscore->values++;
                 $attemptscore->sum += $userdata->score_raw;
                 $attemptscore->max = ($userdata->score_raw > $attemptscore->max) ? $userdata->score_raw : $attemptscore->max;
                 if (isset($userdata->timemodified) && ($userdata->timemodified > $attemptscore->lastmodify)) {
                     $attemptscore->lastmodify = $userdata->timemodified;
-                } else {
-                    $attemptscore->lastmodify = 0;
                 }
             }
         }

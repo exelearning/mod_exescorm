@@ -299,4 +299,67 @@ class locallib_test extends \advanced_testcase {
         list(, $offurl) = exescorm_get_sco_and_launch_url($exescormoff, $scooff->id, $contextoff);
         $this->assertStringNotContainsString('exe-teacher', $offurl);
     }
+    /**
+     * A raw score of 0 is a real score and must count towards the average.
+     *
+     * Three SCOes scoring 10, 5 and 0 must average 5, not 7.5: before the fix the zero was
+     * treated like "no score reported" and dropped from both the sum and the divisor. A SCO
+     * that reports no score at all must still be left out of the divisor.
+     */
+    public function test_exescorm_grade_user_attempt_average_counts_zero_scores() {
+        global $CFG, $DB;
+        require_once($CFG->dirroot . '/mod/exescorm/locallib.php');
+
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $exescorm = $this->getDataGenerator()->create_module('exescorm', array(
+            'course' => $course->id,
+            'grademethod' => EXESCORM_GRADEAVERAGE,
+            'maxattempt' => 1,
+        ));
+        $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
+
+        // Add three SCOes and track one score each: 10, 5 and 0.
+        $scoids = array();
+        foreach (array(10, 5, 0) as $index => $score) {
+            $sco = new \stdClass();
+            $sco->exescorm = $exescorm->id;
+            $sco->manifest = '';
+            $sco->organization = '';
+            $sco->parent = '/';
+            $sco->identifier = 'item_' . $index;
+            $sco->launch = 'index.html';
+            $sco->exescormtype = 'sco';
+            $sco->title = 'Item ' . $index;
+            $sco->sortorder = $index + 1;
+            $scoids[] = $scoid = $DB->insert_record('exescorm_scoes', $sco);
+
+            exescorm_insert_track($student->id, $exescorm->id, $scoid, 1, 'cmi.core.lesson_status', 'completed');
+            exescorm_insert_track($student->id, $exescorm->id, $scoid, 1, 'cmi.core.score.raw', (string) $score);
+        }
+
+        $this->assertEquals(5, exescorm_grade_user_attempt($exescorm, $student->id, 1));
+
+        // A SCO that reports no score at all stays out of the average.
+        $sco = new \stdClass();
+        $sco->exescorm = $exescorm->id;
+        $sco->manifest = '';
+        $sco->organization = '';
+        $sco->parent = '/';
+        $sco->identifier = 'item_noscore';
+        $sco->launch = 'index.html';
+        $sco->exescormtype = 'sco';
+        $sco->title = 'Item without score';
+        $sco->sortorder = 4;
+        $noscoreid = $DB->insert_record('exescorm_scoes', $sco);
+        exescorm_insert_track($student->id, $exescorm->id, $noscoreid, 1, 'cmi.core.lesson_status', 'completed');
+
+        $this->assertEquals(5, exescorm_grade_user_attempt($exescorm, $student->id, 1));
+
+        // The zero must not disturb the other grading methods either.
+        $exescorm->grademethod = EXESCORM_GRADEHIGHEST;
+        $this->assertEquals(10, exescorm_grade_user_attempt($exescorm, $student->id, 1));
+        $exescorm->grademethod = EXESCORM_GRADESUM;
+        $this->assertEquals(15, exescorm_grade_user_attempt($exescorm, $student->id, 1));
+    }
 }
