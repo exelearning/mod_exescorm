@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v4.0.4 – 2026-09-10
+
+- Fix average score grading, which treated a score of 0 as "no score" and excluded it from the average.
+- Fix the "Edit on eXeLearning and return to course" button, which failed to send the package back to Moodle.
+- Fix a `[moodle-exe-bridge] Missing __MOODLE_EXE_CONFIG__` console error logged on every page load.
+
+---
+
 ## v4.0.3 – 2026-08-06
 
 - Maintenance release with no functional changes: version bumped to keep numbering aligned with eXeLearning for consistency across related projects.
