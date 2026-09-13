@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v4.0.4 – 2026-09-10
+## v4.0.4 – 2026-09-15
 
 - Fix average score grading, which treated a score of 0 as "no score" and excluded it from the average.
 - Fix the "Edit on eXeLearning and return to course" button, which failed to send the package back to Moodle.
