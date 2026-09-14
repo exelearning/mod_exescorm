@@ -162,9 +162,18 @@ document.addEventListener("DOMContentLoaded", function() {
         get_string('exescorm:sendtemplate', 'mod_exescorm'), get_string('exescorm:sendtemplate_desc', 'mod_exescorm'), 0));
 
     // The eXescorm package validation rules.
-    $mandatoryfilesre = implode("\n", [
-	'/^content(v\d+)?\.xml$/',
-    ]);
+    //
+    // No file is mandatory by default. SCORM validity is enforced separately by
+    // exescorm_validate_package(), which requires a root imsmanifest.xml (or an
+    // AICC .cst), so this list is purely a site policy knob: add
+    // '/^content(v\d+)?\.xml$/' to accept eXeLearning-authored packages only.
+    // It used to default to that, which rejected every plain SCORM package --
+    // including one eXeLearning itself produces when the author turns the
+    // "Editable export" property off, see
+    // https://github.com/exelearning/exelearning/issues/2415. Such a package
+    // plays fine here; it simply cannot be edited, and the "Edit in eXeLearning"
+    // button is not offered for uploaded packages anyway.
+    $mandatoryfilesre = '';
     $forbiddenfilesre = implode("\n", [
         '/.*\.php$/',
     ]);

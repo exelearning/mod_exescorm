@@ -142,6 +142,19 @@ if (!empty($errors)) {
     echo json_encode($resultmsg);
     exit(1);
 }
+// This path is the embedded editor saving, and the editor re-opens this exact
+// package on the next edit (editor/bridge.js, importPackageFromMoodle), so it
+// must carry the eXeLearning source. Uploaded packages are only played and are
+// deliberately not held to this -- see settings.php mandatoryfileslist. Refuse
+// a source-less save rather than strand the activity with nothing to edit; the
+// editor asks for forceEditableSource precisely so this never fires.
+$packer = get_file_packer('application/zip');
+if (!\mod_exescorm\exescorm_package::has_editable_source($tmpfile->list_files($packer))) {
+    $tmpfile->delete();
+    $resultmsg['description'] = 'KO. Package has no eXeLearning source to edit.';
+    echo json_encode($resultmsg);
+    exit(1);
+}
 // Drop any previous package on the same itemid before moving the validated file in.
 // We can't keep both because mod_exescorm stores its package at itemid 0 and Moodle
 // rejects two files sharing the same {itemid, filepath, filename} triple. Deferring this

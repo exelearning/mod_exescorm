@@ -83,5 +83,23 @@ function xmldb_exescorm_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2026021201, 'exescorm');
     }
 
+    // The mandatory-files rule no longer requires an eXeLearning content.xml by
+    // default: exescorm_validate_package() already enforces SCORM validity (a root
+    // imsmanifest.xml or an AICC .cst), so the rule only rejected plain SCORM
+    // packages -- including one eXeLearning produces when the author turns the
+    // "Editable export" property off (exelearning/exelearning#2415). Such a
+    // package plays here and simply is not editable.
+    //
+    // Only clear the stored value when it is still the old default, byte for byte.
+    // A site that customised the list keeps its own policy.
+    if ($oldversion < 2026091400) {
+        $oldmandatory = '/^content(v\d+)?\.xml$/';
+        if (get_config('exescorm', 'mandatoryfileslist') === $oldmandatory) {
+            set_config('mandatoryfileslist', '', 'exescorm');
+        }
+
+        upgrade_mod_savepoint(true, 2026091400, 'exescorm');
+    }
+
     return true;
 }

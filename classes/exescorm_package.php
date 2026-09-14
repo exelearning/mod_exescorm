@@ -56,6 +56,32 @@ class exescorm_package {
         return false;
     }
 
+    /**
+     * Whether a package carries the eXeLearning source the embedded editor needs.
+     *
+     * The editor re-opens the stored package on the next edit, so a package saved
+     * through editor/save.php must contain a root `content.xml` (or a legacy
+     * `contentvN.xml`). An uploaded package does not: it is played, never edited,
+     * and the "Edit in eXeLearning" button is not offered for it.
+     *
+     * @param array $filelist Entries as returned by \stored_file::list_files().
+     * @return bool True when a root eXeLearning source file is present.
+     */
+    public static function has_editable_source($filelist) {
+        if (!is_array($filelist)) {
+            return false;
+        }
+        foreach ($filelist as $info) {
+            if (!empty($info->is_directory)) {
+                continue;
+            }
+            if (preg_match('/^content(v\d+)?\.xml$/', $info->pathname)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static function validate_file_list($filelist) {
         $errors = [];
 
