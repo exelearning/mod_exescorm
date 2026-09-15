@@ -524,6 +524,8 @@ $string['unsavedchanges'] = 'Teniu canvis sense desar. Esteu segur que voleu tan
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Mostra el nom de l\'activitat';
 $string['displayactivityname_help'] = 'Si cal mostrar o no el nom de l\'activitat al damunt del reproductor eXeLearning';
+$string['nosourcetoedit'] = 'El paquet d\'aquesta activitat no conté un projecte d\'eXeLearning, per la qual cosa no es pot obrir a l\'editor integrat. Continua funcionant com a paquet SCORM.';
+$string['nosourcetosave'] = 'El paquet exportat no conté un projecte d\'eXeLearning, per la qual cosa no s\'ha desat. L\'activitat conserva el paquet anterior.';
 $string['elpxneedsconversion'] = 'Aquesta activitat conté actualment un projecte .elpx. Obriu-lo a l\'editor eXeLearning integrat i deseu-lo per convertir-lo en un paquet SCORM 1.2 reproduïble i rastreable.';
 $string['packageempty'] = 'Aquesta activitat encara no conté contingut reproduïble. Obriu-la a l\'editor d\'eXeLearning per afegir contingut.';
 
