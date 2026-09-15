@@ -134,9 +134,9 @@ class validatepackage_test extends \advanced_testcase {
     /**
      * has_editable_source() finds the source the embedded editor needs.
      *
-     * set_ode.php refuses a save without one, because the editor re-opens the
-     * package it wrote. Only a root file counts: an editor that reads the
-     * archive root would not find one nested in a directory.
+     * editor/save.php and set_ode.php refuse a save without one, because the
+     * editor re-opens the package it wrote. Only a root file counts: an editor
+     * that reads the archive root would not find one nested in a directory.
      *
      * @covers \mod_exescorm\exescorm_package::has_editable_source
      */
@@ -159,6 +159,32 @@ class validatepackage_test extends \advanced_testcase {
         $this->assertFalse(exescorm_package::has_editable_source([$entry('content.xml.bak')]));
         $this->assertFalse(exescorm_package::has_editable_source([]));
         $this->assertFalse(exescorm_package::has_editable_source(null));
+    }
+
+    /**
+     * The package the editor exports with its source passes both save-time checks.
+     *
+     * editor/save.php runs exescorm_validate_package() and has_editable_source()
+     * on the exported ZIP before touching the stored package. A real archive is
+     * used here, not synthetic entries, so the pathnames list_files() returns
+     * are what the root-only match is exercised against.
+     *
+     * @covers \mod_exescorm\exescorm_package::has_editable_source
+     * @covers ::exescorm_validate_package
+     */
+    public function test_editor_export_with_source_passes_save_checks(): void {
+        $this->resetAfterTest(true);
+
+        $packer = get_file_packer('application/zip');
+        $file = $packer->archive_to_storage([
+            'imsmanifest.xml' => ['<manifest/>'],
+            'content.xml' => ['<ode/>'],
+            'index.html' => ['<html></html>'],
+        ], \context_system::instance()->id, 'mod_exescorm', 'unittest', 0, '/', 'export.zip');
+        $this->assertInstanceOf(\stored_file::class, $file);
+
+        $this->assertEmpty(exescorm_validate_package($file));
+        $this->assertTrue(exescorm_package::has_editable_source($file->list_files($packer)));
     }
 }
 

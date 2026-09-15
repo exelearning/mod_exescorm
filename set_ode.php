@@ -142,12 +142,13 @@ if (!empty($errors)) {
     echo json_encode($resultmsg);
     exit(1);
 }
-// This path is the embedded editor saving, and the editor re-opens this exact
-// package on the next edit (editor/bridge.js, importPackageFromMoodle), so it
-// must carry the eXeLearning source. Uploaded packages are only played and are
+// This is the callback of the external eXeOnline flow: exescorm_redirector sends
+// the author to exeonlinebaseuri, eXeLearning posts the package back here, and
+// get_ode.php hands this exact package back to it on the next edit, so it must
+// carry the eXeLearning source. Uploaded packages are only played and are
 // deliberately not held to this -- see settings.php mandatoryfileslist. Refuse
-// a source-less save rather than strand the activity with nothing to edit; the
-// editor asks for forceEditableSource precisely so this never fires.
+// a source-less save rather than strand the activity with nothing to edit.
+// editor/save.php runs the same check for the embedded editor.
 $packer = get_file_packer('application/zip');
 if (!\mod_exescorm\exescorm_package::has_editable_source($tmpfile->list_files($packer))) {
     $tmpfile->delete();
