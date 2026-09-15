@@ -517,6 +517,8 @@ $string['unsavedchanges'] = 'Ten cambios sen gardar. Está seguro de que desexa 
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Amosar o nome da actividade';
 $string['displayactivityname_help'] = 'Amosar ou non o nome da actividade sobre o visor de eXeLearning.';
+$string['nosourcetoedit'] = 'O paquete desta actividade non contén un proxecto de eXeLearning, polo que non se pode abrir no editor integrado. Segue funcionando como paquete SCORM.';
+$string['nosourcetosave'] = 'O paquete exportado non contén un proxecto de eXeLearning, polo que non se gardou. A actividade conserva o seu paquete anterior.';
 $string['elpxneedsconversion'] = 'Esta actividade contén actualmente un proxecto .elpx. Ábreo no editor eXeLearning integrado e gárdao para convertelo nun paquete SCORM 1.2 reproducible e rastrexable.';
 $string['packageempty'] = 'Esta actividade aínda non contén contido reproducible. Ábrea no editor de eXeLearning para engadir contido.';
 

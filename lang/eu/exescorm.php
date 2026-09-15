@@ -517,6 +517,8 @@ $string['unsavedchanges'] = 'Gorde gabeko aldaketak dituzu. Ziur zaude itxi nahi
 $string['info'] = 'Informazioa';
 $string['displayactivityname'] = 'Erakutsi jardueraren izena';
 $string['displayactivityname_help'] = 'Erakutsi edo ez erakutsi jardueraren izena eXeLearning-en bisorean.';
+$string['nosourcetoedit'] = 'Jarduera honen paketeak ez du eXeLearning proiekturik, beraz ezin da editore txertatuan ireki. SCORM pakete gisa funtzionatzen jarraitzen du.';
+$string['nosourcetosave'] = 'Esportatutako paketeak ez du eXeLearning proiekturik, beraz ez da gorde. Jarduerak aurreko paketea mantentzen du.';
 $string['elpxneedsconversion'] = 'Jarduerak gaur egun .elpx proiektu bat dauka. Ireki ezazu eXeLearning editore txertatuan eta gorde ezazu SCORM 1.2 pakete erreproduziga eta arakagarri batean bihurtzeko.';
 $string['packageempty'] = 'Jarduera honek oraindik ez du eduki erreproduzigarririk. Ireki eXeLearning editorean edukia gehitzeko.';
 
