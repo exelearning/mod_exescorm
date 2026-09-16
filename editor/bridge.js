@@ -278,6 +278,15 @@
             var exportResponse = await postToEditor('REQUEST_EXPORT', {
                 format: 'scorm12',
                 filename: 'package.zip',
+                // This activity stores the SCORM package AS the project: the
+                // save below is the only copy, and importPackageFromMoodle()
+                // re-opens it on the next edit. eXeLearning otherwise omits
+                // the re-editable content.xml when the author turns the
+                // "Editable export" project property off; editor/save.php
+                // refuses such a package rather than strand the activity
+                // with no source to edit.
+                // See https://github.com/exelearning/exelearning/issues/2415.
+                options: {forceEditableSource: true},
             }, null, 120000);
 
             var bytes = exportResponse.bytes;

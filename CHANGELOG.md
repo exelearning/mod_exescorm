@@ -5,6 +5,7 @@
 - Fix average score grading, which treated a score of 0 as "no score" and excluded it from the average.
 - Fix the "Edit on eXeLearning and return to course" button, which failed to send the package back to Moodle.
 - Fix a `[moodle-exe-bridge] Missing __MOODLE_EXE_CONFIG__` console error logged on every page load.
+- Allow uploading SCORM packages without an eXeLearning source, and prevent loss of editable content when saving from the embedded editor.
 
 ---
 

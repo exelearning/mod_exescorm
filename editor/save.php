@@ -17,8 +17,10 @@
 /**
  * AJAX endpoint for saving SCORM packages from the embedded eXeLearning editor.
  *
- * Receives an uploaded SCORM ZIP file, saves it to the package filearea,
- * and calls exescorm_parse() to extract content and parse the manifest.
+ * Receives an uploaded SCORM ZIP file, checks it is a valid SCORM package that
+ * carries the eXeLearning source the editor needs to re-open it, saves it to the
+ * package filearea and calls exescorm_parse() to extract content and parse the
+ * manifest.
  *
  * @package    mod_exescorm
  * @copyright  2025 eXeLearning
@@ -67,15 +69,14 @@ try {
     }
 
     $fs = get_file_storage();
-    $exescorm->timemodified = time();
 
-    // Overwrite current package.
-    $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
-
+    // Stage the upload in the temppackage area, as set_ode.php does, so the
+    // package the activity already has is untouched if this one is refused.
+    $fs->delete_area_files($context->id, 'mod_exescorm', 'temppackage');
     $fileinfo = [
         'contextid' => $context->id,
         'component' => 'mod_exescorm',
-        'filearea' => 'package',
+        'filearea' => 'temppackage',
         'itemid' => 0,
         'filepath' => '/',
         'filename' => $filename,
@@ -84,9 +85,37 @@ try {
         'author' => fullname($USER),
         'license' => 'unknown',
     ];
-    $fs->create_file_from_pathname($fileinfo, $uploadedfile['tmp_name']);
+    $tmpfile = $fs->create_file_from_pathname($fileinfo, $uploadedfile['tmp_name']);
+
+    // The editor re-opens this exact package on the next edit (bridge.js,
+    // importPackageFromMoodle), so besides being a valid SCORM package it must
+    // carry the eXeLearning source. mod_form.php skips validation for the
+    // embedded type, so this is the only gate on that path. The editor exports
+    // with forceEditableSource so the source check never fires; if it ever
+    // does, refusing the save is what keeps the activity editable.
+    // See https://github.com/exelearning/exelearning/issues/2415.
+    $errors = exescorm_validate_package($tmpfile);
+    if (empty($errors)) {
+        $filelist = $tmpfile->list_files(get_file_packer('application/zip'));
+        if (!\mod_exescorm\exescorm_package::has_editable_source($filelist)) {
+            $errors['packagefile'] = get_string('nosourcetosave', 'mod_exescorm');
+        }
+    }
+    if (!empty($errors)) {
+        $tmpfile->delete();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => reset($errors)]);
+        exit;
+    }
+
+    // Overwrite current package.
+    $fs->delete_area_files($context->id, 'mod_exescorm', 'package');
+    $fileinfo['filearea'] = 'package';
+    $fs->create_file_from_storedfile($fileinfo, $tmpfile);
+    $fs->delete_area_files($context->id, 'mod_exescorm', 'temppackage');
 
     // Keep package name in SCORM reference and trigger re-parse.
+    $exescorm->timemodified = time();
     $exescorm->reference = $filename;
     $DB->update_record('exescorm', $exescorm);
     exescorm_parse($exescorm, true);

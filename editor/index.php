@@ -81,6 +81,24 @@ $context = context_module::instance($cm->id);
 require_capability('moodle/course:manageactivities', $context);
 require_sesskey();
 
+// The editor imports the stored package and saves it back, so it can only open
+// a package that carries an eXeLearning source. A plain SCORM package is a valid
+// activity here -- it is played, not edited -- and the view page offers no "Edit
+// in eXeLearning" button for one; refuse the direct URL too, with a reason,
+// instead of letting the editor load and fail at import time. An activity with
+// no package yet is fine: there is nothing to import.
+// See https://github.com/exelearning/exelearning/issues/2415.
+$fs = get_file_storage();
+$packagefile = $exescorm->reference
+    ? $fs->get_file($context->id, 'mod_exescorm', 'package', 0, '/', $exescorm->reference)
+    : false;
+if ($packagefile) {
+    $filelist = $packagefile->list_files(get_file_packer('application/zip'));
+    if (is_array($filelist) && !\mod_exescorm\exescorm_package::has_editable_source($filelist)) {
+        exescorm_editor_error_page(get_string('nosourcetoedit', 'mod_exescorm'));
+    }
+}
+
 // Build the package URL for the editor to import.
 $packageurl = exescorm_get_package_url($exescorm, $context);
 

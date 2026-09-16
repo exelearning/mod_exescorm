@@ -518,6 +518,8 @@ $string['unsavedchanges'] = 'You have unsaved changes. Are you sure you want to 
 $string['info'] = 'Info';
 $string['displayactivityname'] = 'Display activity name';
 $string['displayactivityname_help'] = 'Whether or not to display the activity name above the eXeLearning player.';
+$string['nosourcetoedit'] = 'This activity\'s package does not contain an eXeLearning source, so it cannot be opened in the embedded editor. It still works as a SCORM package.';
+$string['nosourcetosave'] = 'The exported package does not contain an eXeLearning source, so it was not saved. The activity keeps its previous package.';
 $string['elpxneedsconversion'] = 'This activity currently contains an .elpx project. Open it in the embedded eXeLearning editor and save to convert it to a SCORM 1.2 package for playback and tracking.';
 $string['packageempty'] = 'This activity does not contain any playable content yet. Open it in the eXeLearning editor to add content.';
 
