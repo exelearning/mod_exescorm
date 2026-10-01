@@ -59,6 +59,42 @@ class exescorm_redirector_test extends \advanced_testcase {
         return $payload->returnurl;
     }
 
+    /**
+     * Editing must not send the teacher to /edit_ode?ode_id=<cmid>.
+     *
+     * eXeLearning resolves that cmid to the project of whoever saved the activity last and denies it
+     * to every other teacher (exelearning/exelearning#2498). Entering through /new_ode makes
+     * eXeLearning open a project owned by the current user and load the package from get_ode.php.
+     */
+    public function test_edit_opens_a_project_loaded_from_moodle(): void {
+        $url = exescorm_redirector::get_redirection_url(self::CMID, null, 'edit');
+
+        $this->assertSame('https://exelearning.example.com/new_ode', $url->out_omit_querystring());
+        $this->assertNull($url->param('ode_id'));
+
+        $payload = token_manager::validate_jwt_token($url->param('jwt_token'));
+        $this->assertIsObject($payload);
+        $this->assertSame('/new_ode', $payload->action);
+        $this->assertSame(self::CMID, $payload->cmid);
+        $this->assertSame('scorm', $payload->pkgtype);
+    }
+
+    public function test_default_action_is_an_edit_and_also_opens_a_project_loaded_from_moodle(): void {
+        // The modedit hack builds the redirector with the default 'edit' action.
+        $redirector = new exescorm_redirector();
+        $url = $redirector->get_management_url(new moodle_url('/mod/exescorm/view.php', ['id' => self::CMID]));
+
+        $this->assertSame('https://exelearning.example.com/new_ode', $url->out_omit_querystring());
+        $this->assertNull($url->param('ode_id'));
+    }
+
+    public function test_add_opens_a_project_loaded_from_moodle(): void {
+        $url = exescorm_redirector::get_redirection_url(self::CMID, null, 'add');
+
+        $this->assertSame('https://exelearning.example.com/new_ode', $url->out_omit_querystring());
+        $this->assertNull($url->param('ode_id'));
+    }
+
     public function test_module_return_url_is_kept_and_gets_the_cmid(): void {
         $url = exescorm_redirector::get_redirection_url(
             self::CMID,
