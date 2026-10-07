@@ -1,28 +1,34 @@
-.git
-.github
-.gitignore
-.agents
-.aider*
-.claude
+# Release ZIP exclusions, read by `make package` (rsync --exclude-from, or
+# scripts/package.py when rsync/zip are unavailable). A leading "/" anchors a
+# pattern to the plugin root; without it the pattern matches at ANY depth.
+# Anchor every root-only entry: the built editor under dist/static/ ships whole
+# and contains nested vendor/ directories (e.g. the SCORM 1.2 pipwerks wrapper)
+# that an unanchored "vendor/" silently drops.
 .DS_Store
-.distignore
-.editor-version
-.env
-.env.dist
-.omc
-exelearning/
-vendor/
-node_modules/
-phpmd-rules.xml
-phpmd.xml
-Makefile
-docker-compose.yml
-Dockerfile
-composer.json
-composer.lock
-composer.phar
-CLAUDE.md
-AGENTS.md
-scripts/
-NUL
-mod_exescorm-*.zip
+/.git
+/.github
+/.gitignore
+/.agents
+/.aider*
+/.claude
+/.distignore
+/.editor-version
+/.env
+/.env.dist
+/.omc
+/exelearning/
+/vendor/
+/node_modules/
+/phpmd-rules.xml
+/phpmd.xml
+/Makefile
+/docker-compose.yml
+/Dockerfile
+/composer.json
+/composer.lock
+/composer.phar
+/CLAUDE.md
+/AGENTS.md
+/scripts/
+/NUL
+/mod_exescorm-*.zip

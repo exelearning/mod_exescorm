@@ -16,17 +16,20 @@ def main():
 
     with open('.distignore') as f:
         patterns = [
-            line.strip().rstrip('/')
+            line.strip()
             for line in f
             if line.strip() and not line.startswith('#')
         ]
+    # Same semantics as rsync --exclude-from: "/x" matches only at the plugin
+    # root, a bare "x" matches a file or directory name at any depth.
+    anchored = [p.strip('/') for p in patterns if p.startswith('/')]
+    floating = [p.rstrip('/') for p in patterns if not p.startswith('/')]
 
     def is_excluded(relpath):
         relpath = relpath.replace(os.sep, '/')
-        top = relpath.split('/')[0]
-        return any(
-            fnmatch.fnmatch(top, p) or fnmatch.fnmatch(relpath, p)
-            for p in patterns
+        name = relpath.rsplit('/', 1)[-1]
+        return any(fnmatch.fnmatch(relpath, p) for p in anchored) or any(
+            fnmatch.fnmatch(name, p) for p in floating
         )
 
     output = f'{plugin_name}-{release}.zip'
