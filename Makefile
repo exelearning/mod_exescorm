@@ -237,6 +237,19 @@ package:
 	@echo "Restoring development values in version.php..."
 	$(SED_INPLACE) "s/\(plugin->version[[:space:]]*=[[:space:]]*\)[0-9]*/\19999999999/" version.php
 	$(SED_INPLACE) "s/\(plugin->release[[:space:]]*=[[:space:]]*'\)[^']*/\1dev/" version.php
+	@# The built editor ships whole: fail if .distignore dropped any of its files
+	@# (an unanchored "vendor/" once removed the SCORM 1.2 pipwerks wrapper).
+	@if [ -d $(EDITOR_DIST_PATH) ] && command -v unzip > /dev/null 2>&1; then \
+		CONTENTS=$$(mktemp); \
+		unzip -Z1 "$(PLUGIN_NAME)-$(RELEASE).zip" | sed -n 's#^exescorm/##p' > "$$CONTENTS"; \
+		MISSING=$$(find $(EDITOR_DIST_PATH) -type f ! -name .DS_Store | grep -vxF -f "$$CONTENTS"); \
+		rm -f "$$CONTENTS"; \
+		if [ -n "$$MISSING" ]; then \
+			echo "Error: built editor files missing from $(PLUGIN_NAME)-$(RELEASE).zip:"; \
+			echo "$$MISSING"; \
+			exit 1; \
+		fi; \
+	fi
 	@echo "Package created: $(PLUGIN_NAME)-$(RELEASE).zip"
 # -------------------------------------------------------
 
