@@ -46,7 +46,21 @@ class exescorm_redirector {
     public const RETURNTO_PARAM = 'returnurl';
 
     /**
+     * eXeLearning entry point used both to add and to edit an activity.
+     *
+     * eXeLearning resolves /edit_ode?ode_id=<cmid> to the project of whoever sent the activity back
+     * to Moodle last and then applies its own owner check, so every other teacher who may edit the
+     * activity in Moodle gets "Access denied" (exelearning/exelearning#2498). /new_ode always opens a
+     * project owned by the current eXeLearning user and loads the package from get_ode.php, so Moodle,
+     * which holds the current package and already checked mod/exescorm:addinstance, stays the
+     * authority on what is edited and by whom.
+     */
+    private const TARGET = '/new_ode';
+
+    /**
      * Keeps if editing or adding instance.
+     *
+     * Both actions use the same entry point (see TARGET); it is kept for callers that pass it.
      *
      * @var string
      */
@@ -68,9 +82,9 @@ class exescorm_redirector {
      * Builds moodle url object needed to redirect to eXeLearnig Online.
      *
      * @param integer $cmid
-     * @param string|null $action
      * @param moodle_url|null $returnto Where the user's browser ends up once eXeLearning sends the
      *                                  package back. Defaults to the activity's course.
+     * @param string|null $action 'add' or 'edit'. Both open the same entry point (see TARGET).
      *
      * @return moodle_url
      * @throws dml_exception
@@ -79,8 +93,6 @@ class exescorm_redirector {
      */
     public static function get_redirection_url(int $cmid, moodle_url $returnto = null, string $action = null) {
         global $USER;
-        $action = $action ?? self::$action;
-        $target = $action === 'add' ? '/new_ode' : '/edit_ode';
         $returnto = $returnto ?? self::$returnto;
         if ($returnto !== null && strpos($returnto->get_path(), 'mod/exescorm') !== false) {
             // Ensure return url has a valid cmid if it is a module view url.
@@ -93,7 +105,7 @@ class exescorm_redirector {
         // Get remote URL from config.
         $exeonlineurl = get_config('exescorm', 'exeonlinebaseuri');
         $payload = [
-            'action' => $target,
+            'action' => self::TARGET,
             'cmid' => $cmid,
             'pkgtype' => 'scorm',
             'returnurl' => $returnto->out(false),
@@ -108,10 +120,7 @@ class exescorm_redirector {
             'user' => $USER->id,
             'jwt_token' => $jwttoken,
         ];
-        if ($target === '/edit_ode') {
-            $params['ode_id'] = $cmid;
-        }
-        $url = $exeonlineurl . $target;
+        $url = $exeonlineurl . self::TARGET;
 
         return new moodle_url($url, $params);
     }
