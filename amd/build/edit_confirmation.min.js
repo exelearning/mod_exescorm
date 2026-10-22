@@ -20,19 +20,78 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright 3iPunt <https://www.tresipunt.com/>
  */
-define(['core/str', 'core/modal_factory', 'core/modal_events'], function(Str, ModalFactory, ModalEvents) {
+define(['core/str', 'core/modal_events', 'core/log', 'require'], function(Str, ModalEvents, Log, require) {
+
+    var modalPromise = null;
+    var modalIsOpen = false;
+    var currentTargetUrl = null;
+    var initialized = false;
 
     /**
      * Initialize the edit confirmation functionality.
      */
     var init = function() {
+        if (initialized) {
+            return;
+        }
+        initialized = true;
+
         var editButtons = document.querySelectorAll('[data-action="edit-exescorm"]');
 
         editButtons.forEach(function(button) {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 var targetUrl = button.getAttribute('data-editurl');
-                showConfirmation(targetUrl);
+                showConfirmation(targetUrl).catch(function(error) {
+                    Log.error('Failed to show the eXeLearning edit confirmation.', error);
+                });
+            });
+        });
+    };
+
+    /**
+     * Load an AMD module dynamically.
+     *
+     * @param {string} moduleName The AMD module name
+     * @returns {Promise}
+     */
+    var loadModule = function(moduleName) {
+        return new Promise(function(resolve, reject) {
+            require([moduleName], resolve, reject);
+        });
+    };
+
+    /**
+     * Create a save/cancel modal using the API available in this Moodle version.
+     *
+     * @param {Array} strings The localized modal strings
+     * @param {string} bodyContent The modal body
+     * @returns {Promise}
+     */
+    var createModal = function(strings, bodyContent) {
+        if (window.M && window.M.cfg && Number(window.M.cfg.version) >= 2023100900) {
+            return loadModule('core/modal_save_cancel').then(function(ModalSaveCancel) {
+                return ModalSaveCancel.create({
+                    title: strings[0],
+                    body: bodyContent,
+                    buttons: {
+                        save: strings[1],
+                        cancel: strings[2],
+                    },
+                    removeOnClose: true,
+                });
+            });
+        }
+
+        return loadModule('core/modal_factory').then(function(ModalFactory) {
+            return ModalFactory.create({
+                type: ModalFactory.types.SAVE_CANCEL,
+                title: strings[0],
+                body: bodyContent,
+                buttons: {
+                    save: strings[1],
+                    cancel: strings[2],
+                },
             });
         });
     };
@@ -43,7 +102,14 @@ define(['core/str', 'core/modal_factory', 'core/modal_events'], function(Str, Mo
      * @param {string} targetUrl The URL to redirect to if confirmed
      */
     var showConfirmation = function(targetUrl) {
-        Promise.all([
+        if (modalIsOpen) {
+            return Promise.resolve();
+        }
+
+        currentTargetUrl = targetUrl;
+        modalIsOpen = true;
+
+        modalPromise = Promise.all([
             Str.get_string('edit', 'core'),
             Str.get_string('yes', 'core'),
             Str.get_string('cancel', 'core'),
@@ -51,34 +117,30 @@ define(['core/str', 'core/modal_factory', 'core/modal_events'], function(Str, Mo
             Str.get_string('editdialogcontent:caution', 'mod_exescorm'),
             Str.get_string('editdialogcontent:continue', 'mod_exescorm'),
         ]).then(function(strings) {
-            // Center the body content using a div with text-center class.
             var warnIcon = '<i class="fa fa-circle-exclamation text-danger"></i> ';
             var bodyContent = strings[3] + '<br><br><strong>' + warnIcon + strings[4] +
-                '</strong><br><br>' + '<div class="text-center">' + strings[5] +
-                '</div>';
-            return ModalFactory.create({
-                type: ModalFactory.types.SAVE_CANCEL,
-                title: strings[0],
-                body: bodyContent,
-                buttons: {
-                    save: strings[1],
-                    cancel: strings[2],
-                },
-            });
+                '</strong><br><br><div class="text-center">' + strings[5] + '</div>';
+            return createModal(strings, bodyContent);
         }).then(function(modal) {
             modal.getRoot().on(ModalEvents.save, function() {
-                window.location.href = targetUrl;
+                window.location.href = currentTargetUrl;
             });
 
-            modal.getRoot().on(ModalEvents.cancel, function() {
-                modal.hide();
+            modal.getRoot().on(ModalEvents.hidden, function() {
+                modalIsOpen = false;
+                currentTargetUrl = null;
             });
 
+            modalPromise = null;
             modal.show();
-            return modal;
-        }).catch(function() {
-            window.location.href = targetUrl;
+        }).catch(function(error) {
+            modalPromise = null;
+            modalIsOpen = false;
+            currentTargetUrl = null;
+            throw error;
         });
+
+        return modalPromise;
     };
 
     return {

@@ -41,9 +41,8 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
     var getString = Str.get_string;
 
     /**
-     * Resolve the topmost same-origin window so the overlay can cover the full
-     * viewport even when the modal is opened from inside a small frame
-     * (e.g. a popup-mode launcher or an embedded iframe).
+     * Resolve the topmost same-origin window for fullscreen overlays.
+     *
      * @returns {Window}
      */
     var getHostWindow = function() {
@@ -56,6 +55,36 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
             // Cross-origin parent — stay where we are.
         }
         return candidate;
+    };
+
+    var getOverlayHost = function() {
+        var candidate = getHostWindow();
+        if (candidate === window) {
+            return {
+                window: candidate,
+                document: candidate.document,
+            };
+        }
+
+        // A same-origin wrapper may not load the Moodle page's plugin styles.
+        var probe = candidate.document.createElement('div');
+        probe.className = 'exescorm-editor-overlay';
+        probe.style.visibility = 'hidden';
+        candidate.document.body.appendChild(probe);
+        var stylesLoaded = candidate.getComputedStyle(probe).display === 'flex';
+        probe.remove();
+
+        if (!stylesLoaded) {
+            return {
+                window: window,
+                document: document,
+            };
+        }
+
+        return {
+            window: candidate,
+            document: candidate.document,
+        };
     };
 
     /**
@@ -294,8 +323,12 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
             return;
         }
 
+        var overlayHost = getOverlayHost();
+        hostWindow = overlayHost.window;
+        hostDocument = overlayHost.document;
+
         // Create the overlay container.
-        overlay = document.createElement('div');
+        overlay = hostDocument.createElement('div');
         overlay.id = 'exescorm-editor-overlay';
         overlay.className = 'exescorm-editor-overlay';
 
@@ -345,11 +378,6 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
         iframe.setAttribute('frameborder', '0');
         overlay.appendChild(iframe);
 
-        // Attach the overlay to the topmost same-origin window so the modal covers
-        // the full viewport even when triggered from inside a small frame
-        // (e.g. a popup-mode launcher or an embedded iframe).
-        hostWindow = getHostWindow();
-        hostDocument = hostWindow.document;
         hostDocument.body.appendChild(overlay);
         hostDocument.body.style.overflow = 'hidden';
 

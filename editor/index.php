@@ -241,11 +241,11 @@ $configscript = <<<EOT
                     : null;
                 navigator.serviceWorker.register = function(scriptURL, options) {
                     if (typeof scriptURL === "string" && scriptURL.indexOf("preview-sw.js") !== -1) {
-                        return Promise.resolve({ scope: "" });
+                        return Promise.reject(new Error("Preview service worker is disabled in the embedded editor."));
                     }
                     return registerOriginal
                         ? registerOriginal(scriptURL, options)
-                        : Promise.resolve({ scope: "" });
+                        : Promise.reject(new Error("Service worker registration is unavailable in this browser."));
                 };
             } catch (e) {
                 // Some embeds make navigator.serviceWorker non-writable; ignore.
