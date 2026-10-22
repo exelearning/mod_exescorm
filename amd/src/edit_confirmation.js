@@ -74,11 +74,11 @@ define(['core/str', 'core/modal_events', 'core/log', 'require'], function(Str, M
                 return ModalSaveCancel.create({
                     title: strings[0],
                     body: bodyContent,
-                }).then(function(modal) {
-                    var root = modal.getRoot();
-                    root.find('[data-action="save"]').text(strings[1]);
-                    root.find('[data-action="cancel"]').text(strings[2]);
-                    return modal;
+                    buttons: {
+                        save: strings[1],
+                        cancel: strings[2],
+                    },
+                    removeOnClose: true,
                 });
             });
         }
@@ -109,45 +109,38 @@ define(['core/str', 'core/modal_events', 'core/log', 'require'], function(Str, M
         currentTargetUrl = targetUrl;
         modalIsOpen = true;
 
-        if (!modalPromise) {
-            modalPromise = Promise.all([
-                Str.get_string('edit', 'core'),
-                Str.get_string('yes', 'core'),
-                Str.get_string('cancel', 'core'),
-                Str.get_string('editdialogcontent', 'mod_exescorm'),
-                Str.get_string('editdialogcontent:caution', 'mod_exescorm'),
-                Str.get_string('editdialogcontent:continue', 'mod_exescorm'),
-            ]).then(function(strings) {
-                var warnIcon = '<i class="fa fa-circle-exclamation text-danger"></i> ';
-                var bodyContent = strings[3] + '<br><br><strong>' + warnIcon + strings[4] +
-                    '</strong><br><br><div class="text-center">' + strings[5] + '</div>';
-                return createModal(strings, bodyContent);
-            }).then(function(modal) {
-                modal.getRoot().on(ModalEvents.save, function() {
-                    window.location.href = currentTargetUrl;
-                });
+        modalPromise = Promise.all([
+            Str.get_string('edit', 'core'),
+            Str.get_string('yes', 'core'),
+            Str.get_string('cancel', 'core'),
+            Str.get_string('editdialogcontent', 'mod_exescorm'),
+            Str.get_string('editdialogcontent:caution', 'mod_exescorm'),
+            Str.get_string('editdialogcontent:continue', 'mod_exescorm'),
+        ]).then(function(strings) {
+            var warnIcon = '<i class="fa fa-circle-exclamation text-danger"></i> ';
+            var bodyContent = strings[3] + '<br><br><strong>' + warnIcon + strings[4] +
+                '</strong><br><br><div class="text-center">' + strings[5] + '</div>';
+            return createModal(strings, bodyContent);
+        }).then(function(modal) {
+            modal.getRoot().on(ModalEvents.save, function() {
+                window.location.href = currentTargetUrl;
+            });
 
-                modal.getRoot().on(ModalEvents.cancel, function() {
-                    modal.hide();
-                });
-
-                modal.getRoot().on(ModalEvents.hidden, function() {
-                    modalIsOpen = false;
-                    currentTargetUrl = null;
-                });
-
-                return modal;
-            }).catch(function(error) {
-                modalPromise = null;
+            modal.getRoot().on(ModalEvents.hidden, function() {
                 modalIsOpen = false;
                 currentTargetUrl = null;
-                throw error;
             });
-        }
 
-        return modalPromise.then(function(modal) {
+            modalPromise = null;
             modal.show();
+        }).catch(function(error) {
+            modalPromise = null;
+            modalIsOpen = false;
+            currentTargetUrl = null;
+            throw error;
         });
+
+        return modalPromise;
     };
 
     return {
