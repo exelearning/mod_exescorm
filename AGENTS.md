@@ -53,6 +53,7 @@ Project-level skills live in `.agents/skills/` and are invoked with `/skill-name
 | Skill | Description |
 |-------|-------------|
 | `changelog` | Draft the next CHANGELOG entry from merged GitHub PRs |
+| `release` | Prepare a release: CHANGELOG entry, version and twin-plugin checks, package audit (no tagging or publishing) |
 
 ## Packaging & Release
 
