@@ -5,8 +5,8 @@
 - Fix "Edit with eXeLearning" in eXeLearning Cloud showing "Access denied" when another teacher was the last to send the activity back from eXeLearning.
 - eXeLearning Cloud now always opens the activity's latest package from Moodle instead of a potentially outdated copy.
 - Fix missing embedded editor files in release packages, which made "Save to Moodle" fail in the embedded editor and broke the edicuatex menu editor.
-- Fix the embedded editor failing to load in Playground environments running Moodle 5.1 or later.
-- Review eXeLearning edition names in language strings and documentation.
+- Fix embedded editor loading in Playground environments running Moodle 5.1 or later.
+- The remote editor mode is now labelled "eXeLearning Cloud" in the settings and documentation.
 
 ---
 

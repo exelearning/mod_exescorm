@@ -33,7 +33,7 @@ require_once(__DIR__ . '/../../config.php');
 
 // TODO: Add a security measure to prevent unauthorized access adding ip whitelist.
 
-// Get ode_data param sended by eXeLearning Online by POST and
+// Get ode_data param sended by eXeLearning Cloud by POST and
 // x-www-form-urlencoded we'll use Moodle's params functions.
 $odedata = required_param('ode_data', PARAM_RAW);
 

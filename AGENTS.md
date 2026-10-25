@@ -4,7 +4,7 @@ This file provides guidance to coding agents (Claude Code, Codex, etc.) when wor
 
 ## Project Overview
 
-Moodle activity module (`mod_exescorm`) — an eXeLearning-aware fork of `mod_scorm` that lets teachers author SCORM content with eXeLearning. Packages can be uploaded locally, edited via eXeLearning Online (remote editor), or authored with the embedded static editor.
+Moodle activity module (`mod_exescorm`) — an eXeLearning-aware fork of `mod_scorm` that lets teachers author SCORM content with eXeLearning. Packages can be uploaded locally, edited via eXeLearning Cloud (remote editor), or authored with the embedded static editor.
 
 **Component**: `mod_exescorm`
 **Moodle compatibility**: 4.2+
@@ -48,7 +48,7 @@ make package RELEASE=1.2.3   # Create distributable ZIP
 
 ## Agent Skills
 
-Project-level skills live in `.agents/skills/` and are invoked with `/skill-name` in Claude Code (or equivalent mechanism in other agents).
+Project-level skills live in `.agents/skills/`. They are not mirrored in `.claude/skills/`, so Claude Code does not offer them as slash commands: ask the agent to follow the skill file instead.
 
 | Skill | Description |
 |-------|-------------|
@@ -58,8 +58,8 @@ Project-level skills live in `.agents/skills/` and are invoked with `/skill-name
 ## Packaging & Release
 
 - `make package RELEASE=X.Y.Z` updates `version.php`, creates a distributable ZIP excluding everything listed in `.distignore`, then restores dev values
-- GitHub Actions `release.yml` triggers on git tags: fetches editor, builds, packages, uploads to GitHub Release
-- `check-editor-releases.yml` runs daily to auto-release when new editor versions appear
+- `check-editor-releases.yml` runs daily: when the latest eXeLearning release tag differs from `.editor-version`, it builds the editor, packages the current `main`, updates `.editor-version` and `blueprint.json`, and creates the GitHub Release with the ZIP attached. Merge release preparation PRs before the matching eXeLearning release
+- `release.yml` runs on `release: published` and `workflow_dispatch`: builds the editor, packages and uploads the ZIP. It does not run for the automatic releases above, which are created with `GITHUB_TOKEN`
 
 ## Twin-plugin checks (mod_exescorm ↔ mod_exeweb)
 

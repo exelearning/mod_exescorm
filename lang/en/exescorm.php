@@ -497,7 +497,7 @@ $string['youmustselectastatus'] = 'You must select a status to require';
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Editor type';
 $string['editormode'] = 'Editor mode';
-$string['editormodedesc'] = 'Select which editor to use for creating and editing eXeLearning content. Online connection settings only apply when "eXeLearning Cloud" mode is selected.';
+$string['editormodedesc'] = 'Select which editor to use for creating and editing eXeLearning content. eXeLearning server connection settings only apply when "eXeLearning Cloud" mode is selected.';
 $string['editormodeonline'] = 'eXeLearning Cloud (remote server)';
 $string['editormodeembedded'] = 'Integrated editor (embedded)';
 $string['embeddednotinstalledcontactadmin'] = 'The embedded editor files are not installed. Please contact your site administrator to install it.';

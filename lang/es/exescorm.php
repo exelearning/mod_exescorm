@@ -496,7 +496,7 @@ $string['youmustselectastatus'] = 'Debe seleccionar un estado que será requerid
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Tipo de editor';
 $string['editormode'] = 'Modo del editor';
-$string['editormodedesc'] = 'Seleccione qué editor usar para crear y editar contenido eXeLearning. La configuración de conexión online solo aplica cuando se selecciona el modo "eXeLearning Cloud".';
+$string['editormodedesc'] = 'Seleccione qué editor usar para crear y editar contenido eXeLearning. La configuración de la conexión con el servidor eXeLearning solo aplica cuando se selecciona el modo "eXeLearning Cloud".';
 $string['editormodeonline'] = 'eXeLearning Cloud (servidor remoto)';
 $string['editormodeembedded'] = 'Editor integrado (embebido)';
 $string['embeddednotinstalledcontactadmin'] = 'Los archivos del editor integrado no están instalados. Contacte con el administrador del sitio para instalarlo.';
