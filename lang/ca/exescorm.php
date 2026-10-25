@@ -503,8 +503,8 @@ $string['youmustselectastatus'] = 'Ha de seleccionar un estat que serà requerit
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Tipus d\'editor';
 $string['editormode'] = 'Mode d\'editor';
-$string['editormodedesc'] = 'Seleccioneu quin editor voleu utilitzar per crear i editar contingut eXeLearning. La configuració de connexió online només s\'aplica quan es selecciona el mode "eXeLearning Online".';
-$string['editormodeonline'] = 'eXeLearning Online (servidor remot)';
+$string['editormodedesc'] = 'Seleccioneu quin editor voleu utilitzar per crear i editar contingut eXeLearning. La configuració de connexió online només s\'aplica quan es selecciona el mode "eXeLearning Cloud".';
+$string['editormodeonline'] = 'eXeLearning Cloud (servidor remot)';
 $string['editormodeembedded'] = 'Editor integrat (incrustat)';
 $string['embeddednotinstalledcontactadmin'] = 'Els fitxers de l\'editor integrat no estan instal·lats. Contacteu amb l\'administrador del lloc per instal·lar-lo.';
 $string['embeddednotinstalledadmin'] = 'Els fitxers de l\'editor integrat no estan instal·lats. Podeu instal·lar-lo des de la configuració del connector.';

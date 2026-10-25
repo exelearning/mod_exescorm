@@ -496,8 +496,8 @@ $string['youmustselectastatus'] = 'Eskatuko den egoera bat hautatu behar duzu';
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Editore mota';
 $string['editormode'] = 'Editore modua';
-$string['editormodedesc'] = 'Aukeratu zein editore erabili eXeLearning edukia sortu eta editatzeko. Online konexio-ezarpenak soilik aplikatzen dira "eXeLearning Online" modua hautatzen denean.';
-$string['editormodeonline'] = 'eXeLearning Online (urruneko zerbitzaria)';
+$string['editormodedesc'] = 'Aukeratu zein editore erabili eXeLearning edukia sortu eta editatzeko. Online konexio-ezarpenak soilik aplikatzen dira "eXeLearning Cloud" modua hautatzen denean.';
+$string['editormodeonline'] = 'eXeLearning Cloud (urruneko zerbitzaria)';
 $string['editormodeembedded'] = 'Editore txertatua (integratua)';
 $string['embeddednotinstalledcontactadmin'] = 'Editore txertatuaren fitxategiak ez daude instalatuta. Jarri harremanetan guneko administratzailearekin instalatzeko.';
 $string['embeddednotinstalledadmin'] = 'Editore txertatuaren fitxategiak ez daude instalatuta. Pluginaren ezarpenetan instala dezakezu.';
