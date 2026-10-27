@@ -48,8 +48,12 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
     var getHostWindow = function() {
         var candidate = window;
         try {
-            while (candidate.parent && candidate.parent !== candidate && candidate.parent.document) {
-                candidate = candidate.parent;
+            while (candidate.parent !== candidate) {
+                var parent = candidate.parent;
+                if (!parent.document) {
+                    break;
+                }
+                candidate = parent;
             }
         } catch (e) {
             // Cross-origin parent — stay where we are.
@@ -57,34 +61,71 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
         return candidate;
     };
 
-    var getOverlayHost = function() {
-        var candidate = getHostWindow();
-        if (candidate === window) {
-            return {
-                window: candidate,
-                document: candidate.document,
-            };
+    /**
+     * Copy the stylesheet containing the editor overlay rules into the host document.
+     */
+    var copyOverlayStyles = function() {
+        if (hostDocument === document || hostDocument.querySelector('[data-mod-exescorm-overlay-styles]')) {
+            return;
         }
 
-        // A same-origin wrapper may not load the Moodle page's plugin styles.
-        var probe = candidate.document.createElement('div');
-        probe.className = 'exescorm-editor-overlay';
-        probe.style.visibility = 'hidden';
-        candidate.document.body.appendChild(probe);
-        var stylesLoaded = candidate.getComputedStyle(probe).display === 'flex';
-        probe.remove();
-
-        if (!stylesLoaded) {
-            return {
-                window: window,
-                document: document,
-            };
-        }
-
-        return {
-            window: candidate,
-            document: candidate.document,
+        var isOverlayRule = function(rule) {
+            var selector = rule.selectorText || '';
+            return selector.indexOf('.exescorm-editor-') !== -1 ||
+                selector.indexOf('.exescorm-loading-modal') !== -1 || rule.name === 'exescorm-spin';
         };
+        var hasOverlayRules = function(rules) {
+            return Array.prototype.some.call(rules, function(rule) {
+                return isOverlayRule(rule) || (rule.cssRules && hasOverlayRules(rule.cssRules));
+            });
+        };
+        var hostHasOverlayStyles = Array.prototype.some.call(hostDocument.styleSheets, function(stylesheet) {
+            try {
+                return hasOverlayRules(stylesheet.cssRules);
+            } catch (e) {
+                // Cross-origin stylesheets cannot be inspected.
+            }
+            return false;
+        });
+        if (hostHasOverlayStyles) {
+            return;
+        }
+
+        var overlayRules = [];
+        var collectOverlayRules = function(rules) {
+            Array.prototype.forEach.call(rules, function(rule) {
+                if (isOverlayRule(rule)) {
+                    overlayRules.push(rule.cssText);
+                } else if (rule.cssRules) {
+                    collectOverlayRules(rule.cssRules);
+                }
+            });
+        };
+        Array.prototype.some.call(document.styleSheets, function(stylesheet) {
+            try {
+                if (hasOverlayRules(stylesheet.cssRules)) {
+                    collectOverlayRules(stylesheet.cssRules);
+                    return true;
+                }
+            } catch (e) {
+                // Cross-origin stylesheets cannot be inspected.
+            }
+            return false;
+        });
+
+        if (!overlayRules.length) {
+            Log.error('[editor_modal] Unable to locate the editor overlay stylesheet.');
+            return;
+        }
+
+        var stylesheetNode = hostDocument.createElement('style');
+        stylesheetNode.setAttribute('data-mod-exescorm-overlay-styles', 'true');
+        stylesheetNode.textContent = overlayRules.join('\n');
+        var nonceStyle = hostDocument.querySelector('style[nonce]');
+        if (nonceStyle) {
+            stylesheetNode.setAttribute('nonce', nonceStyle.getAttribute('nonce'));
+        }
+        hostDocument.head.appendChild(stylesheetNode);
     };
 
     /**
@@ -323,9 +364,9 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
             return;
         }
 
-        var overlayHost = getOverlayHost();
-        hostWindow = overlayHost.window;
-        hostDocument = overlayHost.document;
+        hostWindow = getHostWindow();
+        hostDocument = hostWindow.document;
+        copyOverlayStyles();
 
         // Create the overlay container.
         overlay = hostDocument.createElement('div');
@@ -333,19 +374,19 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
         overlay.className = 'exescorm-editor-overlay';
 
         // Build the header bar.
-        var header = document.createElement('div');
+        var header = hostDocument.createElement('div');
         header.className = 'exescorm-editor-header';
 
-        var title = document.createElement('span');
+        var title = hostDocument.createElement('span');
         title.className = 'exescorm-editor-title';
         title.textContent = activityName || '';
         header.appendChild(title);
 
-        var buttonGroup = document.createElement('div');
+        var buttonGroup = hostDocument.createElement('div');
         buttonGroup.className = 'exescorm-editor-buttons';
 
         // Save button.
-        saveBtn = document.createElement('button');
+        saveBtn = hostDocument.createElement('button');
         saveBtn.className = 'btn btn-primary mr-2';
         saveBtn.id = 'exescorm-editor-save';
         saveBtn.disabled = true;
@@ -353,7 +394,7 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
         saveBtn.addEventListener('click', triggerSave);
 
         // Close button.
-        var closeBtn = document.createElement('button');
+        var closeBtn = hostDocument.createElement('button');
         closeBtn.className = 'btn btn-secondary';
         closeBtn.id = 'exescorm-editor-close';
         getString('closebuttontitle', 'core').then(function(text) {
@@ -371,7 +412,7 @@ define(['core/str', 'core/log', 'core/prefetch'], function(Str, Log, Prefetch) {
         overlay.appendChild(header);
 
         // Create the iframe.
-        iframe = document.createElement('iframe');
+        iframe = hostDocument.createElement('iframe');
         iframe.className = 'exescorm-editor-iframe';
         iframe.src = editorUrl;
         iframe.setAttribute('allow', 'fullscreen');
