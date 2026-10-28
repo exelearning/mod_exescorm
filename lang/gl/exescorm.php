@@ -178,7 +178,7 @@ $string['exescormtype_help'] = 'Este axuste determina como se inclúe o paquete 
 * Editar con eXeLearning - Crea a actividade e lévate a eXeLearning para editar o contido. Ao rematar, eXeLearning enviarao de volta a Moodle.';
 $string['exescorm:viewreport'] = 'Ver informes';
 $string['exescorm:viewscores'] = 'Ver puntuacións';
-$string['exeonline:connectionsettings'] = 'Configuración da conexión con eXeLearning';
+$string['exeonline:connectionsettings'] = 'Configuración da conexión co servidor eXeLearning';
 $string['exeonline:baseuri'] = 'URI remoto';
 $string['exeonline:baseuri_desc'] = 'URL de eXeLearning';
 $string['exeonline:hmackey1'] = 'Clave de sinatura';

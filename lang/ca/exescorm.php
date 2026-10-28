@@ -180,7 +180,7 @@ $string['exescormtype_help'] = 'Aquest ajustament determina com s\'inclou el paq
 * Editar amb eXeLearning - Crea l\'activitat i et porta a eXeLearning per editar el contingut. En finalitzar, eXeLearning el retornarà a Moodle.';
 $string['exescorm:viewreport'] = 'Veure informes';
 $string['exescorm:viewscores'] = 'Veure puntuacions';
-$string['exeonline:connectionsettings'] = 'Configuració de la connexió amb eXeLearning';
+$string['exeonline:connectionsettings'] = 'Configuració de la connexió amb el servidor eXeLearning';
 $string['exeonline:baseuri'] = 'URI remot';
 $string['exeonline:baseuri_desc'] = 'URL d\'eXeLearning';
 $string['exeonline:hmackey1'] = 'Clau de signatura';

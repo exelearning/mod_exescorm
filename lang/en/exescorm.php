@@ -178,7 +178,7 @@ $string['exescormtype_help'] = 'This setting determines how the package is inclu
 * Edit with eXeLearning - Creates the activity and takes you to eXeLearning to edit the content. When done, eXeLearning will send it back to Moodle.';
 $string['exescorm:viewreport'] = 'View reports';
 $string['exescorm:viewscores'] = 'View scores';
-$string['exeonline:connectionsettings'] = 'eXeLearning connection settings';
+$string['exeonline:connectionsettings'] = 'eXeLearning server connection settings';
 $string['exeonline:baseuri'] = 'Remote URI';
 $string['exeonline:baseuri_desc'] = 'eXeLearning URL';
 $string['exeonline:hmackey1'] = 'Signing key';

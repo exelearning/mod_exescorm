@@ -178,7 +178,7 @@ $string['exescormtype_help'] = 'Doikuntza honek zehazten du nola sartzen den pak
 * eXeLearningekin editatu- Jarduera sortu eta eXeLearningera eramango zaitu edukia editatzeko. Amaitzean, eXeLearningek Moodlera bidaliko du.';
 $string['exescorm:viewreport'] = 'Ikusi txostenak';
 $string['exescorm:viewscores'] = 'Ikusi puntuazioak';
-$string['exeonline:connectionsettings'] = 'Konexioa eXeLearningekin konfiguratu';
+$string['exeonline:connectionsettings'] = 'eXeLearning zerbitzariarekiko konexio-ezarpenak';
 $string['exeonline:baseuri'] = 'Urrutiko URIa';
 $string['exeonline:baseuri_desc'] = 'eXeLearningen URLa';
 $string['exeonline:hmackey1'] = 'Sinadura-gakoa';
