@@ -63,7 +63,7 @@ Project-level skills live in `.agents/skills/`. They are not mirrored in `.claud
 
 ## Twin-plugin checks (mod_exescorm ↔ mod_exeweb)
 
-`mod_exescorm` and [`mod_exeweb`](https://github.com/exelearning/mod_exeweb) share large amounts of code, history, and bug surface (embedded editor, action bar, packaging pipeline, online callbacks, etc.). **Before closing a fix, always cross-check the sibling plugin:**
+`mod_exescorm` and [`mod_exeweb`](https://github.com/exelearning/mod_exeweb) share large amounts of code, history, and bug surface (embedded editor, action bar, packaging pipeline, Cloud callbacks, etc.). **Before closing a fix, always cross-check the sibling plugin:**
 
 1. **Search the sibling repo for a matching issue.** Examples:
    - `gh issue list --repo exelearning/mod_exeweb --search "<keywords>"`
