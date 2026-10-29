@@ -180,7 +180,7 @@ $string['exescormtype_help'] = 'Aquest ajustament determina com s\'inclou el paq
 * Editar amb eXeLearning - Crea l\'activitat i et porta a eXeLearning per editar el contingut. En finalitzar, eXeLearning el retornarà a Moodle.';
 $string['exescorm:viewreport'] = 'Veure informes';
 $string['exescorm:viewscores'] = 'Veure puntuacions';
-$string['exeonline:connectionsettings'] = 'Configuració de la connexió amb eXeLearning';
+$string['exeonline:connectionsettings'] = 'Configuració de la connexió amb el servidor eXeLearning';
 $string['exeonline:baseuri'] = 'URI remot';
 $string['exeonline:baseuri_desc'] = 'URL d\'eXeLearning';
 $string['exeonline:hmackey1'] = 'Clau de signatura';
@@ -503,8 +503,8 @@ $string['youmustselectastatus'] = 'Ha de seleccionar un estat que serà requerit
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Tipus d\'editor';
 $string['editormode'] = 'Mode d\'editor';
-$string['editormodedesc'] = 'Seleccioneu quin editor voleu utilitzar per crear i editar contingut eXeLearning. La configuració de connexió online només s\'aplica quan es selecciona el mode "eXeLearning Online".';
-$string['editormodeonline'] = 'eXeLearning Online (servidor remot)';
+$string['editormodedesc'] = 'Seleccioneu quin editor voleu utilitzar per crear i editar contingut eXeLearning. La configuració de la connexió amb el servidor eXeLearning només s\'aplica quan es selecciona el mode "eXeLearning Cloud".';
+$string['editormodeonline'] = 'eXeLearning Cloud (servidor remot)';
 $string['editormodeembedded'] = 'Editor integrat (incrustat)';
 $string['embeddednotinstalledcontactadmin'] = 'Els fitxers de l\'editor integrat no estan instal·lats. Contacteu amb l\'administrador del lloc per instal·lar-lo.';
 $string['embeddednotinstalledadmin'] = 'Els fitxers de l\'editor integrat no estan instal·lats. Podeu instal·lar-lo des de la configuració del connector.';

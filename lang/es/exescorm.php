@@ -178,7 +178,7 @@ $string['exescormtype_help'] = 'Este ajuste determina cómo se incluye el paquet
 * Editar con eXeLearning - Crea la actividad y te lleva a eXeLearning para editar el contenido. Al terminar, eXeLearning lo enviará de vuelta a Moodle.';
 $string['exescorm:viewreport'] = 'Ver informes';
 $string['exescorm:viewscores'] = 'Ver puntuaciones';
-$string['exeonline:connectionsettings'] = 'Configuración de la conexión con eXeLearning';
+$string['exeonline:connectionsettings'] = 'Configuración de la conexión con el servidor eXeLearning';
 $string['exeonline:baseuri'] = 'URI remoto';
 $string['exeonline:baseuri_desc'] = 'URL de eXeLearning';
 $string['exeonline:hmackey1'] = 'Clave de firma';
@@ -496,8 +496,8 @@ $string['youmustselectastatus'] = 'Debe seleccionar un estado que será requerid
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Tipo de editor';
 $string['editormode'] = 'Modo del editor';
-$string['editormodedesc'] = 'Seleccione qué editor usar para crear y editar contenido eXeLearning. La configuración de conexión online solo aplica cuando se selecciona el modo "eXeLearning Online".';
-$string['editormodeonline'] = 'eXeLearning Online (servidor remoto)';
+$string['editormodedesc'] = 'Seleccione qué editor usar para crear y editar contenido eXeLearning. La configuración de la conexión con el servidor eXeLearning solo aplica cuando se selecciona el modo "eXeLearning Cloud".';
+$string['editormodeonline'] = 'eXeLearning Cloud (servidor remoto)';
 $string['editormodeembedded'] = 'Editor integrado (embebido)';
 $string['embeddednotinstalledcontactadmin'] = 'Los archivos del editor integrado no están instalados. Contacte con el administrador del sitio para instalarlo.';
 $string['embeddednotinstalledadmin'] = 'Los archivos del editor integrado no están instalados. Puede instalarlo desde la configuración del plugin.';

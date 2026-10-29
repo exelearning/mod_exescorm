@@ -700,7 +700,7 @@ class mod_exescorm_mod_form extends moodleform_mod {
             }
         }
 
-        // Exescorm hack to get redirected to eXeLearning Online to edit package.
+        // Exescorm hack to get redirected to eXeLearning Cloud to edit package.
         if ($data->exescormtype === EXESCORM_TYPE_EXESCORMNET ) {
             if (! isset($data->showgradingmanagement)) {
                 if (isset($data->exebutton)) {

@@ -178,7 +178,7 @@ $string['exescormtype_help'] = 'Doikuntza honek zehazten du nola sartzen den pak
 * eXeLearningekin editatu- Jarduera sortu eta eXeLearningera eramango zaitu edukia editatzeko. Amaitzean, eXeLearningek Moodlera bidaliko du.';
 $string['exescorm:viewreport'] = 'Ikusi txostenak';
 $string['exescorm:viewscores'] = 'Ikusi puntuazioak';
-$string['exeonline:connectionsettings'] = 'Konexioa eXeLearningekin konfiguratu';
+$string['exeonline:connectionsettings'] = 'eXeLearning zerbitzariarekiko konexio-ezarpenak';
 $string['exeonline:baseuri'] = 'Urrutiko URIa';
 $string['exeonline:baseuri_desc'] = 'eXeLearningen URLa';
 $string['exeonline:hmackey1'] = 'Sinadura-gakoa';
@@ -496,8 +496,8 @@ $string['youmustselectastatus'] = 'Eskatuko den egoera bat hautatu behar duzu';
 // Embedded editor strings.
 $string['embeddededitorsettings'] = 'Editore mota';
 $string['editormode'] = 'Editore modua';
-$string['editormodedesc'] = 'Aukeratu zein editore erabili eXeLearning edukia sortu eta editatzeko. Online konexio-ezarpenak soilik aplikatzen dira "eXeLearning Online" modua hautatzen denean.';
-$string['editormodeonline'] = 'eXeLearning Online (urruneko zerbitzaria)';
+$string['editormodedesc'] = 'Aukeratu zein editore erabili eXeLearning edukia sortu eta editatzeko. eXeLearning zerbitzariarekiko konexio-ezarpenak soilik aplikatzen dira "eXeLearning Cloud" modua hautatzen denean.';
+$string['editormodeonline'] = 'eXeLearning Cloud (urruneko zerbitzaria)';
 $string['editormodeembedded'] = 'Editore txertatua (integratua)';
 $string['embeddednotinstalledcontactadmin'] = 'Editore txertatuaren fitxategiak ez daude instalatuta. Jarri harremanetan guneko administratzailearekin instalatzeko.';
 $string['embeddednotinstalledadmin'] = 'Editore txertatuaren fitxategiak ez daude instalatuta. Pluginaren ezarpenetan instala dezakezu.';

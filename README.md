@@ -8,7 +8,7 @@ Activity-type module to create and edit SCORM packages with eXeLearning inside M
 
 The plugin can run in either of two editing modes, selected by the site administrator under _Site administration > Plugins > Activity modules > eXeLearning (SCORM) > Editor mode_:
 
-* **eXeLearning Online (remote server, default)** — connects to an existing eXeLearning Online instance using its base URL and signing key. This is the default mode shipped by the plugin and the recommended choice when an organisation operates a shared eXeLearning Online deployment.
+* **eXeLearning Cloud (remote server, default)** — connects to an existing eXeLearning Cloud instance using its base URL and signing key. This is the default mode shipped by the plugin and the recommended choice when an organisation operates a shared eXeLearning Cloud deployment.
 * **Embedded editor (integrated)** — a self-contained build of the eXeLearning editor ships with the plugin (or can be installed by an administrator from the plugin settings page). It runs directly inside Moodle, so **no external server is required**.
 
 Both modes produce the same kind of activity; pick the one that best fits your infrastructure.
@@ -35,7 +35,7 @@ Older Moodle releases (3.x, 4.0 and 4.1) are **not** supported. The plugin is ex
 * **PHP**: any version required by the Moodle release in use — the plugin does not add extra PHP requirements on top of Moodle's own.
 * **Database**: any database supported by the Moodle release in use.
 * **Browser**: any modern, evergreen browser with JavaScript enabled.
-* **Required for _eXeLearning Online_ mode (default)**: an eXeLearning Online instance and access to its configuration files / signing key. Not needed when running the plugin in _Embedded editor_ mode.
+* **Required for _eXeLearning Cloud_ mode (default)**: an eXeLearning Cloud instance and access to its configuration files / signing key. Not needed when running the plugin in _Embedded editor_ mode.
 
 ## Installation
 
@@ -70,7 +70,7 @@ Go to the URL:
     {your/moodle/dirroot}/admin/settings.php?section=modsettingexescorm
 
   * Remote URI: *exescorm  | exeonlinebaseuri*
-    * eXeLearning (online) base URI
+    * eXeLearning Cloud base URI
 
   * Signing Key: *exescorm | hmackey1*
     * Key used to sign data sent to the eXeLearning server, to check the data origin. Use up to 32 characters.
