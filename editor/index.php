@@ -228,11 +228,9 @@ $configscript = <<<EOT
     // the Yjs theme bind and leaves the editor unresponsive. WP and Omeka-S
     // ship the same workaround: swallow 404s on .css / idevices URLs and
     // return an empty stylesheet so the editor keeps booting.
-    // Disable any new service-worker registration (the static editor's
-    // preview-sw.js is served from the same static.php router; environments
-    // that proxy or cache that router — e.g. moodle-playground — return a
-    // 404 there and the registration error spams the console without
-    // blocking anything).
+    // Disable preview service-worker registration in the embedded editor.
+    // The editor catches this rejection and falls back to blob URLs for
+    // previews; it may report the expected registration failure to the console.
     (function() {
         if ("serviceWorker" in navigator) {
             try {
@@ -241,11 +239,11 @@ $configscript = <<<EOT
                     : null;
                 navigator.serviceWorker.register = function(scriptURL, options) {
                     if (typeof scriptURL === "string" && scriptURL.indexOf("preview-sw.js") !== -1) {
-                        return Promise.resolve({ scope: "" });
+                        return Promise.reject(new Error("Preview service worker is disabled in the embedded editor."));
                     }
                     return registerOriginal
                         ? registerOriginal(scriptURL, options)
-                        : Promise.resolve({ scope: "" });
+                        : Promise.reject(new Error("Service worker registration is unavailable in this browser."));
                 };
             } catch (e) {
                 // Some embeds make navigator.serviceWorker non-writable; ignore.
