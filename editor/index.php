@@ -228,30 +228,13 @@ $configscript = <<<EOT
     // the Yjs theme bind and leaves the editor unresponsive. WP and Omeka-S
     // ship the same workaround: swallow 404s on .css / idevices URLs and
     // return an empty stylesheet so the editor keeps booting.
-    // Disable any new service-worker registration (the static editor's
-    // preview-sw.js is served from the same static.php router; environments
-    // that proxy or cache that router — e.g. moodle-playground — return a
-    // 404 there and the registration error spams the console without
-    // blocking anything).
+    // navigator.serviceWorker.register is deliberately left untouched: the
+    // editor serves its new-tab (fullscreen) preview only through its
+    // preview-sw.js, and a stubbed registration left that button dead
+    // (exelearning/exelearning issue 2774). Where the worker cannot register
+    // (e.g. moodle-playground) the editor catches the rejection and falls
+    // back to the blob: preview on its own.
     (function() {
-        if ("serviceWorker" in navigator) {
-            try {
-                var registerOriginal = navigator.serviceWorker.register
-                    ? navigator.serviceWorker.register.bind(navigator.serviceWorker)
-                    : null;
-                navigator.serviceWorker.register = function(scriptURL, options) {
-                    if (typeof scriptURL === "string" && scriptURL.indexOf("preview-sw.js") !== -1) {
-                        return Promise.resolve({ scope: "" });
-                    }
-                    return registerOriginal
-                        ? registerOriginal(scriptURL, options)
-                        : Promise.resolve({ scope: "" });
-                };
-            } catch (e) {
-                // Some embeds make navigator.serviceWorker non-writable; ignore.
-            }
-        }
-
         var originalFetch = window.fetch;
         if (originalFetch) {
             window.fetch = function(input, init) {
