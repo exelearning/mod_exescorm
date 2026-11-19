@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+- Fix "Edit with eXeLearning" in eXeLearning Cloud failing with large packages: the package is now sent to eXeLearning in pieces instead of being loaded in memory, so its size is no longer limited by the PHP `memory_limit`.
+
+---
+
 ## v4.0.6 – 2026-10-29
 
 - Fix "Edit with eXeLearning" in eXeLearning Cloud showing "Access denied" when another teacher was the last to send the activity back from eXeLearning.
