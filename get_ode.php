@@ -26,6 +26,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+ use mod_exescorm\exeonline\ode_response;
  use \mod_exescorm\exeonline\token_manager;
 
 // @codingStandardsIgnoreLine as we validate via account id, HMAC keys, etc.
@@ -106,9 +107,7 @@ if (! has_capability('mod/exescorm:addinstance', $context, $user)) {
 $fs = get_file_storage();
 $files = $fs->get_area_files($context->id, 'mod_exescorm', 'package', 0, '', false);
 $file = reset($files);
-if ($file) {
-    $contents = $file->get_content();
-} else {
+if (!$file) {
     $resultmsg['description'] = 'KO. Not found.';
     echo json_encode($errormsg);
     exit(1);
@@ -118,19 +117,25 @@ $response = [
     'status' => '0',
     'ode_id' => $payload->cmid,
     'ode_filename' => $file->get_filename(),
-    'ode_file' => base64_encode($contents),
     'ode_uri' => $payload->returnurl,
     'ode_user' => $payload->userid,
 ];
 
-// Send it.
-$response = json_encode($response);
-if ($response !== false) {
-    header('Content-Length: ' . strlen($response));
-    echo $response;
+// Send it. The package is streamed: holding it in memory fails with large packages.
+$package = $file->get_content_file_handle();
+if ($package !== false) {
+    header('Content-Length: ' . ode_response::content_length($response, $file->get_filesize()));
+    // Output buffers would collect the whole response in memory.
+    while (ob_get_level() > 0) {
+        ob_end_flush();
+    }
+    $out = fopen('php://output', 'wb');
+    ode_response::send($response, $package, $out);
+    fclose($out);
+    fclose($package);
     exit(0);
 }
 
-// Error encoding json.
+// Error reading the package.
 echo json_encode($errormsg);
 exit(1);
